@@ -1,0 +1,78 @@
+{
+  "global": {
+    "app-errors": {
+      "exception-title": "Erreur",
+      "exception-message": "Une erreur s'est produite. Veuillez réessayer ou relancer l'application."
+    },
+    "rest-errors": {
+      "noaccess-title": "Aucun accès",
+      "noaccess-message": "Une ressource n'est pas accessible.",
+      "notfound-title": "Aucun résultat",
+      "notfound-message": "Aucune ressource n'a été trouvée.",
+      "unavailable-title": "Le serveur n'est pas disponible.",
+      "unavailable-message": "Le serveur est momentanément indisponible ou surchargé. Veuillez réessayer plus tard.",
+      "conflict-title": "Données non valides",
+      "conflict-message": "Les données que vous souhaitez enregistrer ne sont pas valides.",
+      "server-title": "Erreur du serveur",
+      "server-message": "Une erreur s'est produite lors de la connexion au serveur."
+    },
+    "validation-errors": {
+      "required": "Ce champ doit être rempli.",
+      "maxlength": "Le texte ne peut pas dépasser {{requiredLength}} caractères ; il en contient actuellement {{actualLength}}.",
+      "confirmationvaluerequired": "Veuillez sélectionner un motif d'absence.",
+      "email": "Adresse électronique non valide"
+    },
+    "pagination": {
+      "load-more": "Charger plus de données"
+    }
+  },
+  "unauthenticated": {
+    "message": "Vous n'avez pas les droits d'accès de l'enseignant-e."
+  }, 
+  "my-notifications": {
+    "title": "Notifications",
+    "deleteAll": "Tout effacer",
+    "none": "Aucune notification"
+  },
+  "shared": {
+    "date-select": {
+      "default-placeholder": "Sélectionner la date..."
+    },
+    "daysDifference": {
+      "today": "Ajourd'hui",
+      "tomorrow": "Demain",
+      "yesterday": "Hier",
+      "ago": "il y a {{count}} jours",
+      "in": "dans {{count}} jours"
+    },
+    "lesson-presences-update": {
+      "error": "Une erreur s'est produite lors de l'enregistrement des modifications."
+    },
+    "profile": {
+      "student-address": "Adresse",
+      "correspondence-address": "Adresse de correspondance",
+      "billing-address": "Adresse de facturation",
+      "legal-representation": "Représentants légaux",
+      "apprenticeship-company": "Entreprise formatrice",
+      "apprenticeship-period": "Durée de l'apprentissage",
+      "job-trainer": "Formateur/trice",
+      "checkable-absences": "Absences annoncées",
+      "open-absences": "Absences en suspens",
+      "excused-absences": "Absences excusées",
+      "unexcused-absences": "Absences non excusées",
+      "incidents": "Incidents",
+      "half-days": "Demi-journées libres",
+      "no-profile": "Le profil n'a pas été trouvé.",
+      "no-absences": "Aucune donnée disponible"
+    },
+    "select": {
+      "empty-option": "Sélectionner..."
+    },
+    "multiselect": {
+      "all-option": "Tous"
+    },
+    "typeahead": {
+      "default-placeholder": "Rechercher..."
+    }
+  }
+}

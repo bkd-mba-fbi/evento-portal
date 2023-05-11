@@ -1,0 +1,9 @@
+{
+    "APPTITLE": "Room Reservation",
+    "HELLO": "Bonjour {{value}}",
+    "WELCOME": "bienvenue",
+    "LANGUAGE": "langue",
+    "de-CH": "Deutsch",
+    "fr-CH": "Français",
+    "en-US": "English"
+}

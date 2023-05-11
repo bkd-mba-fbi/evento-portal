@@ -1,0 +1,44 @@
+<div class="dialogBody">
+    {{outlet "navigation"}}
+    <table class="borderTable">
+        <thead>
+            <tr>
+                <th>{{translate "event"}}</th>
+                <th>{{translate "name"}}</th>
+                <th>{{translate "subscriptionDetail"}}</th>
+                <th>{{translate "oldValue"}}</th>
+                <th>{{translate "newValue"}}</th>
+                <th>{{translate "status"}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each model.subscriptionDetails as |subscriptionDetail|}}
+            {{#unless subscriptionDetail.error}}
+            <tr>
+                <td>{{subscriptionDetail.event}}</td>
+                <td>{{subscriptionDetail.name}}</td>
+                <td>{{subscriptionDetail.subscriptionDetail}}</td>
+                <td>{{subscriptionDetail.oldValue}}</td>
+                <td>{{subscriptionDetail.newValue}}</td>
+                <td>
+                    <div class="center-text">
+                        {{icon (if subscriptionDetail.uploaded "checkmark" "loadingAnimation")}}
+                    </div>
+                </td>
+            </tr>
+            {{/unless}}
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+<div class="dialogFooter">
+    {{#if model.everythingHasBeenSent}}
+    <div class="dialogIcon">{{icon 'info'}}</div>{{translate "goBackToStart"}}
+    {{/if}}
+    <div class="buttonDiv">
+        {{#link-to "input" tagName="button" class="textButton" disabledWhen=(if model.everythingHasBeenSent false true)}}
+            {{icon 'continue'}}
+            <div>{{translate "input"}}</div>
+        {{/link-to}}
+    </div>
+</div>
