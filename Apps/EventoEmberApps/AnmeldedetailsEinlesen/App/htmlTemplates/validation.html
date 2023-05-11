@@ -1,0 +1,53 @@
+<div class="dialogBody">
+    {{outlet "navigation"}}
+    <table class="borderTable">
+        <thead>
+            <tr>
+                <th>{{translate "event"}}</th>
+                <th>{{translate "name"}}</th>
+                <th>{{translate "subscriptionDetail"}}</th>
+                <th>{{translate "oldValue"}}</th>
+                <th>{{translate "newValue"}}</th>
+                <th>{{translate "status"}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each model.subscriptionDetails as |subscriptionDetail|}}
+            <tr>
+                {{#if subscriptionDetail.checked}}
+                <td>{{subscriptionDetail.event}}</td>
+                <td>{{subscriptionDetail.name}}</td>
+                <td>{{subscriptionDetail.subscriptionDetail}}</td>
+                <td>{{subscriptionDetail.oldValue}}</td>
+                <td>{{subscriptionDetail.newValue}}</td>
+                <td>
+                    {{#if subscriptionDetail.error}}
+                    <div class="center-text" title={{subscriptionDetail.error}}>{{icon "cross"}}</div>
+                    {{else}}
+                    <div class="center-text">{{icon "checkmark"}}</div>
+                    {{/if}}
+                </td>
+                {{else}}
+                {{! we don't yet know the values of the other fields }}
+                <td colspan="6">{{icon "loadingAnimation"}}</td>
+                {{/if}}
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+<div class="dialogFooter">
+    <div class="dialogIcon">{{icon 'info'}}</div>{{translate "continueWithErrors"}}
+    <div class="buttonDiv">
+        {{#link-to "result" tagName="button" class="textButton" disabledWhen=cannotContinue}}
+            {{icon 'continue'}}
+            <div>{{translate "submit"}}</div>
+        {{/link-to}}
+    </div>
+    <div class="buttonDiv">
+        {{#link-to "input" tagName="button" class="textButton" disabledWhen=cannotGoBack}}
+            {{icon "back"}}
+            <div>{{translate "correct"}}</div>
+        {{/link-to}}
+    </div>
+</div>

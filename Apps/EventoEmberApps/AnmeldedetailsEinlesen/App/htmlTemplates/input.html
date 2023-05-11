@@ -1,0 +1,18 @@
+<div class="dialogBody">
+    {{outlet "navigation"}}
+    <div class="dialogBlockFixed">
+        <p>{{translate "readSubscriptionDetailsInfo"}}<br><pre>{{translate "readSubscriptionDetailsFields"}}</pre></p>
+        {{textarea value=textareaValue rows=30 spellcheck=false class=(if showError "textarea--error")}}   
+    </div>
+</div>
+<div class="dialogFooter">
+    {{#if showError}}
+    <div class="dialogIcon">{{icon "cross"}}</div><span class="error">{{translate "incorrectFormat"}}</span>
+    {{/if}}
+    <div class="buttonDiv">
+        {{#link-to "validation" tagName="button" class="textButton" disabledWhen=cannotContinue}}
+            {{icon "continue"}}
+            <div>{{translate "validate"}}</div>
+        {{/link-to}}
+    </div>
+</div>
