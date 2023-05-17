@@ -1,6 +1,6 @@
 describe("template spec", () => {
   it("passes", () => {
-    cy.visit("/");
-    cy.contains("Vite + Lit");
+    cy.visit("/index.html");
+    cy.contains("Willkommen bei Evento");
   });
 });

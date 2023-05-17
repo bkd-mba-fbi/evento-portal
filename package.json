@@ -12,12 +12,16 @@
     "lint:ts": "tsc --noEmit",
     "lint": "npm run lint:eslint && npm run lint:ts",
     "cy:run": "cypress run --browser chromium",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "locale:extract": "lit-localize extract",
+    "locale:build": "lit-localize build"
   },
   "dependencies": {
+    "@lit/localize": "^0.11.4",
     "lit": "^2.6.1"
   },
   "devDependencies": {
+    "@lit/localize-tools": "^0.6.9",
     "@typescript-eslint/eslint-plugin": "^5.59.6",
     "@typescript-eslint/parser": "^5.59.6",
     "cypress": "^12.12.0",
