@@ -1,5 +1,8 @@
 # Evento Portal
 
+[![Linting & Testing ✨](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml)
+[![Build & Deployment 🚀](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/build.yml/badge.svg)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/build.yml)
+
 The _Evento Portal_ is used to integrate various applications for school administration in a single portal with a common look and feel.
 
 This project is realised with:
@@ -7,6 +10,8 @@ This project is realised with:
 - [Vite](https://vitejs.dev/)
 - [Lit](https://lit.dev/) and [lit-localize](https://lit.dev/docs/localization/overview/)
 - [Cypress](https://www.cypress.io/)
+
+Download the [latest build](https://bkd-mba-fbi.github.io/evento-portal/evento-portal.zip).
 
 ## Getting Started
 

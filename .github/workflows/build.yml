@@ -1,0 +1,40 @@
+name: evento-portal Build 🚀
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18]
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
+          cache: "npm"
+
+      - name: Install dependencies 🔧
+        run: npm ci
+
+      - name: Build 🏭
+        run: |
+          npm run build
+          mv dist evento-portal
+          mkdir dist
+          mv evento-portal dist
+          cd dist && zip --recurse-paths evento-portal.zip *
+          rm -rf evento-portal
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
