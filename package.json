@@ -14,7 +14,9 @@
     "cy:run": "cypress run --browser chromium",
     "cy:open": "cypress open",
     "locale:extract": "lit-localize extract",
-    "locale:build": "lit-localize build"
+    "locale:build": "lit-localize build",
+    "format": "prettier --write --ignore-unknown \"./**/*.*\"",
+    "format:upgrade": "npm install --save-exact prettier@latest && npm run format"
   },
   "dependencies": {
     "@lit/localize": "^0.11.4",
