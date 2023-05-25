@@ -1,6 +1,6 @@
 # Evento Portal
 
-The _Evento Portal_ is used to provide various applications for school administration in a single portal with a common look and feel.
+The _Evento Portal_ is used to integrate various applications for school administration in a single portal with a common look and feel.
 
 This project is realised with:
 
@@ -10,13 +10,13 @@ This project is realised with:
 
 ## Getting Started
 
-Install the dependencies
+Install the dependencies:
 
 ```
 npm install
 ```
 
-and start the development server
+Start the development server:
 
 ```
 npm run dev
@@ -24,17 +24,25 @@ npm run dev
 
 The application is now available at http://localhost:3000
 
-## Testing
+## Linting & Testing
 
-### E2E
+### Linting
 
-Run the e2e tests interactively
+Run TypeScript compiler & ESLint:
+
+```
+npm run lint
+```
+
+### E2E Tests
+
+Run E2E tests interactively:
 
 ```
 npm run cy:open
 ```
 
-or headless
+Run E2E tests headless:
 
 ```
 npm run cy:run
@@ -44,18 +52,20 @@ For more information, see [Cypress](https://www.cypress.io/).
 
 ## I18n
 
-Update the translation file by extracting the german texts from the source files
+The portal is translated using [lit-localize](https://lit.dev/docs/localization/overview/). The texts of the base language (german) are contained in the source files. The other languages (currently only french) can be translated using a [XLIFF](https://en.wikipedia.org/wiki/XLIFF) file.
+
+### Translation Workflow
+
+Update the french translation file by extracting the base language texts from the source files:
 
 ```
 npm run locale:extract
 ```
 
-The generated translation file `xliff/fr.xlf` can be edited manually with a text editor or with [Poedit](https://poedit.net/).
+The generated translation file `xliff/fr.xlf` can then be edited manually with a text editor or more conveniently with a XLIFF-compatible editor like [Poedit](https://poedit.net/) (open source).
 
-When finished, generate the locale artifacts
+When all texts are translated, generate the locale artifacts:
 
 ```
 npm run locale:build
 ```
-
-For more information, see [lit-localize](https://lit.dev/docs/localization/overview/).
