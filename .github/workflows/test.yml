@@ -1,0 +1,31 @@
+name: evento-portal Test ✨
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
+          cache: "npm"
+
+      - name: Install dependencies 🔧
+        run: npm ci
+
+      - name: Lint 🔍
+        run: npm run lint
+
+      - name: Cypress 🔬
+        uses: cypress-io/github-action@v5
+        with:
+          build: npm run build
+          start: npx http-server dist/ -p 3000 -s
+          wait-on: http://localhost:3000
+          config: baseUrl=http://localhost:3000
