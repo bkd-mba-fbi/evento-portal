@@ -1,0 +1,41 @@
+{
+  "name": "evento-portal",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "prepare": "husky install",
+    "lint:eslint": "eslint src/**/*.ts",
+    "lint:ts": "tsc --noEmit",
+    "lint": "npm run lint:eslint && npm run lint:ts",
+    "cy:run": "cypress run --browser chromium",
+    "cy:open": "cypress open",
+    "locale:extract": "lit-localize extract",
+    "locale:build": "lit-localize build",
+    "format": "prettier --write --ignore-unknown \"./**/*.*\"",
+    "format:upgrade": "npm install --save-exact prettier@latest && npm run format"
+  },
+  "dependencies": {
+    "@lit/localize": "^0.11.4",
+    "lit": "^2.6.1"
+  },
+  "devDependencies": {
+    "@lit/localize-tools": "^0.6.9",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
+    "cypress": "^12.12.0",
+    "eslint": "^8.40.0",
+    "eslint-config-prettier": "^8.8.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "prettier": "2.8.8",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}
