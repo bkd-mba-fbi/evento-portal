@@ -1,8 +1,8 @@
-name: evento-portal Build 🚀
+name: Build & Deployment 🚀
 
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   build:
