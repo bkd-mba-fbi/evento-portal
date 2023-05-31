@@ -74,3 +74,11 @@ When all texts are translated, generate the locale artifacts:
 ```
 npm run locale:build
 ```
+
+## Responsive Design
+
+Mobile breakpoints:
+
+- > 1920px content centered
+- < 1200px hamburger menu
+- < 767px mobile compact
