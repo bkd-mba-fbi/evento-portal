@@ -1,4 +1,4 @@
-name: evento-portal Test ✨
+name: Linting & Testing ✨
 
 on: [push, pull_request]
 
