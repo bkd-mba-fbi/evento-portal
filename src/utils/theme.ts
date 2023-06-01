@@ -29,6 +29,10 @@ export const customProperties = css`
   --bkd-func-bg-red: rgba(208, 16, 24, 1);
   --bkd-func-bg-green: rgba(61, 134, 8, 1);
 
+  /* Component-specific Colors */
+  --bkd-language-switcher-active-border: rgba(234, 22, 31, 0.77);
+  --bkd-footer-border: rgba(238, 238, 238, 1);
+
   /* Fonts */
   --bkd-font-family: "Roboto", sans-serif;
   --bkd-font-size-base: 16px;
@@ -116,3 +120,12 @@ export const theme = css`
     display: block;
   }
 `;
+
+/**
+ * Register CSS in light DOM
+ */
+export function registerLightDomStyles(styles: string) {
+  const lightStyle = document.createElement("style");
+  lightStyle.innerText = styles;
+  document.querySelector("body")?.appendChild(lightStyle);
+}
