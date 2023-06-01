@@ -1,36 +1,62 @@
-<!doctype html>
-<html>
+<div id="fbi-root"></div>
+</div>
+<script>
+window._RoomReservationConfig = {
+"tokenType": "urn:ietf:params:oauth:token-type:jwt-bearer",
+"webBaseUrl": "",
+"apiUrl": location.protocol + '//' + location.host + '/restApi',
+"oauthUrl": location.protocol + '//' + location.host + '/OAuth',
+"clientId": "Roomreservation",
+"instanceId": 0,
+"appScope": "NG",
+"useAutoLogin": true,
+"useLanguageDetection": true,
+"debug": false,
+"availableLanguages": [
+"de-CH",
+"fr-CH"
+],
+"copyright": "EFHG Evento Fachhochschulgremium",
+"qrCodeBaseUrl": "",
+"showRoomReservation": true,
+"showDeviceReservation": true,
+"language": "<%= Clx.Evento.Common.Language.LanguageUtils.CurrentCulture.Name %>",
+"initialPath": location.href.search('ressourceidra=3') > 0 ? 'devices' : '',
+"ShowAvailableRoomsChecked": true,
+"DefaultTimePeriod": 45,
+"DefaultTimeFragmentation": 5
+};
 
-<head>
-  <meta charset="utf-8">
+</script>
+<script src="../JSModules/Raumreservation/embed.js"></script>
+<script>
+    var root = document.getElementById('fbi-root');
+    var appRoot = document.getElementsByTagName('app-root')[0];
+    root.insertBefore(appRoot, null);
+      document.head.childNodes.forEach( element => {
+        if (element.nodeName === 'LINK') {
 
-  <!-- to be adjusted by customer -->
-  <meta name="theme-color" content="#106AFE">
-  <base href="./"> 
+            if (element.href.search('bootstrap-clx.min.css') > 0) {
+                element.href = element.href.replace('bootstrap-clx.min.css','fbi.css');
+            }
+            else if (element.href.search('JSModules/CSS/main.css') > 0) {
+                element.remove();
+            }        
+        }
+        
+    });
 
-  <!-- CLX -->
-  <link rel="stylesheet" type="text/css" href="./assets/css/fbi.css">
-
-  <link href="../Raumreservation/assets/icons/open-iconic/css/open-iconic-bootstrap.min.css?bust=19.7.20190628033524" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-  <title>Raumreservation</title>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="./favicon.ico">
-  <link rel="icon" sizes="64x64" href="../assets/icons/appicon.png">
-  <link rel="stylesheet" href="../Raumreservation/styles.css?bust=19.7.20190628033524"></head>
-
-<body>
-
-  <app-root>
-    <!-- initial bootstrap loading spinner -->
-    <div class="text-center" style="margin-top: 10rem;">
-      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
-    </div>
-  </app-root>
-
-  <script type="text/javascript" src="../Raumreservation/runtime.js?bust=19.7.20190628033524"></script>
-  <script type="text/javascript" src="../Raumreservation/polyfills.js?bust=19.7.20190628033524"></script>
-  <script type="text/javascript" src="../Raumreservation/main.js?bust=19.7.20190628033524"></script>
-</body>
-</html>
+    //Workaround evtl. gibt es eine bessere Lösung
+    setInterval(function(){
+        document.getElementsByTagName('nav')[0].className = 'navbar navbar-expand-md';
+        //add type button if not exists
+        let bt = document.getElementsByTagName('button');
+        for (let item of bt) {
+            
+            var type = item.getAttribute('type');
+            if(type !== 'Button') {
+                item.setAttribute('type','button');
+            } 
+        }  
+    },500);
+</script>
