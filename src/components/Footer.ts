@@ -77,6 +77,11 @@ export class Footer extends LitElement {
         :host {
           --bkd-footer-padding-horizontal: var(--bkd-margin-horizontal-small);
         }
+
+        footer {
+          flex-direction: column-reverse;
+          gap: 20px;
+        }
       }
     `,
   ];
