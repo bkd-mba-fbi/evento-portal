@@ -62,13 +62,15 @@ export class Portal extends LitElement {
   }
 
   render() {
+    const currentLocale = getLocale();
+
     return html`
       <bkd-header
-        currentLocale=${getLocale()}
+        currentLocale=${currentLocale}
         @bkdlocalechange=${this.handleLocaleChange.bind(this)}
       ></bkd-header>
       <bkd-content></bkd-content>
-      <bkd-footer currentLocale=${getLocale()}></bkd-footer>
+      <bkd-footer currentLocale=${currentLocale}></bkd-footer>
     `;
   }
 }
