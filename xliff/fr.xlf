@@ -6,6 +6,24 @@
   <source>Willkommen bei Evento</source>
   <target state="translated">Bienvenue chez Evento</target>
 </trans-unit>
+<trans-unit id="s321998fa37fe89be">
+  <source>© Bildungs- und Kulturdirektion</source>
+  <target state="translated">© Direction de l'instruction publique et de la culture</target>
+</trans-unit>
+<trans-unit id="sc874744fb4632e62">
+  <source>Rechtliche Hinweise</source>
+  <target state="translated">Mentions légales</target>
+</trans-unit>
+<trans-unit id="sd11a46c2e7022f58">
+  <source>Impressum</source>
+  <target state="translated">Impressum</target>
+</trans-unit>
+<trans-unit id="sc265a7e29e120db0">
+  <source>Evento</source>
+</trans-unit>
+<trans-unit id="s6d8b7baee47fca15">
+  <source>Menü</source>
+</trans-unit>
 </body>
 </file>
 </xliff>
