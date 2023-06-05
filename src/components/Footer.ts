@@ -93,10 +93,12 @@ export class Footer extends LitElement {
         <div class="footer-nav">
           <a
             href=${`https://www.bkd.be.ch/${this.currentLocale}/tools/rechtliches.html`}
+            target="_blank"
             >${msg("Rechtliche Hinweise")}</a
           >
           <a
             href=${`https://www.bkd.be.ch/${this.currentLocale}/tools/impressum.html`}
+            target="_blank"
             >${msg("Impressum")}</a
           >
         </div>
