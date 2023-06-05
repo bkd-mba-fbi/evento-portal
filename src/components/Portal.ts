@@ -68,7 +68,7 @@ export class Portal extends LitElement {
         @bkdlocalechange=${this.handleLocaleChange.bind(this)}
       ></bkd-header>
       <bkd-content></bkd-content>
-      <bkd-footer></bkd-footer>
+      <bkd-footer currentLocale=${getLocale()}></bkd-footer>
     `;
   }
 }

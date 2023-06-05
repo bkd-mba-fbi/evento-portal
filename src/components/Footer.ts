@@ -1,11 +1,14 @@
 import { css, html, LitElement } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { theme } from "../utils/theme";
 
 @customElement("bkd-footer")
 @localized()
 export class Footer extends LitElement {
+  @property()
+  currentLocale = "de";
+
   static styles = [
     theme,
     css`
@@ -40,9 +43,10 @@ export class Footer extends LitElement {
         letter-spacing: 0.01rem;
         word-spacing: 0.025rem;
         line-height: 1.5;
+        color: var(--bkd-func-fg-black);
+        text-decoration: none !important;
         display: inline-block;
         margin: 0 calc(0.5vw + 30px) 0 0;
-        cursor: pointer;
       }
 
       a:after {
@@ -82,8 +86,14 @@ export class Footer extends LitElement {
       <footer>
         <div class="copyright">${msg("© Bildungs- und Kulturdirektion")}</div>
         <div class="footer-nav">
-          <a>${msg("Rechtliche Hinweise")}</a>
-          <a>${msg("Impressum")}</a>
+          <a
+            href=${`https://www.bkd.be.ch/${this.currentLocale}/tools/rechtliches.html`}
+            >${msg("Rechtliche Hinweise")}</a
+          >
+          <a
+            href=${`https://www.bkd.be.ch/${this.currentLocale}/tools/impressum.html`}
+            >${msg("Impressum")}</a
+          >
         </div>
       </footer>
     `;
