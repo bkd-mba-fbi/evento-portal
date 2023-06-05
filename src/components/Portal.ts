@@ -7,6 +7,12 @@ import {
   registerLightDomStyles,
   theme,
 } from "../utils/theme.ts";
+import {
+  activateTokenForScope,
+  createOAuthClient,
+  ensureAuthenticated,
+} from "../utils/auth.ts";
+import { settings } from "../settings.ts";
 
 // Make custom properties available globally in light DOM
 registerLightDomStyles(
@@ -44,10 +50,37 @@ export class Portal extends LitElement {
     `,
   ];
 
+  private oAuthClient = createOAuthClient();
+
   constructor() {
     super();
 
     this.updateDocumentLang(getLocale());
+    ensureAuthenticated(this.oAuthClient, this.getScopeFromState());
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    window.addEventListener("popstate", this.handleStateChange);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    window.removeEventListener("popstate", this.handleStateChange);
+  }
+
+  private handleStateChange = (event: PopStateEvent) => {
+    activateTokenForScope(this.oAuthClient, event.state.scope);
+  };
+
+  private getScopeFromState(): string {
+    const url = new URL(location.href);
+    const app = url.searchParams.get("app");
+
+    return (
+      (app && settings.apps.find(({ key }) => key === app)?.scope) ||
+      settings.apps[0].scope
+    );
   }
 
   private handleLocaleChange(event: CustomEvent): void {
