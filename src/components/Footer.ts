@@ -37,16 +37,20 @@ export class Footer extends LitElement {
         word-spacing: 0.05rem;
       }
 
+      .footer-nav {
+        display: flex;
+        gap: 2.5rem;
+      }
+
       .footer-nav a {
-        font-size: 14px;
+        font-size: 0.875rem;
         font-weight: 400;
         letter-spacing: 0.01rem;
         word-spacing: 0.025rem;
         line-height: 1.5;
         color: var(--bkd-func-fg-black);
-        text-decoration: none !important;
+        text-decoration: none;
         display: inline-block;
-        margin: 0 calc(0.5vw + 30px) 0 0;
       }
 
       a:after {
@@ -72,7 +76,7 @@ export class Footer extends LitElement {
 
         footer {
           flex-direction: column-reverse;
-          gap: 20px;
+          gap: 2.25rem;
         }
       }
 
