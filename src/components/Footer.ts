@@ -22,11 +22,41 @@ export class Footer extends LitElement {
         color: var(--bkd-func-fg-black);
       }
 
+      footer {
+        display: flex;
+        justify-content: space-between;
+      }
+
       .copyright {
         font-size: 0.8125rem;
         font-weight: 300;
         letter-spacing: 0.02rem;
         word-spacing: 0.05rem;
+      }
+
+      .footer-nav a {
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 0.01rem;
+        word-spacing: 0.025rem;
+        line-height: 1.5;
+        display: inline-block;
+        margin: 0 calc(0.5vw + 30px) 0 0;
+        cursor: pointer;
+      }
+
+      a:after {
+        display: block;
+        content: "";
+        border-bottom: 2px solid var(--bkd-func-fg-black);
+        transform: scaleX(0);
+        transition: transform 100ms ease-in-out;
+      }
+
+      a:hover::after,
+      a:focus::after,
+      a:active::after {
+        transform: scaleX(1);
       }
 
       /* Medium screen */
@@ -51,6 +81,10 @@ export class Footer extends LitElement {
     return html`
       <footer>
         <div class="copyright">${msg("© Bildungs- und Kulturdirektion")}</div>
+        <div class="footer-nav">
+          <a>${msg("Rechtliche Hinweise")}</a>
+          <a>${msg("Impressum")}</a>
+        </div>
       </footer>
     `;
   }
