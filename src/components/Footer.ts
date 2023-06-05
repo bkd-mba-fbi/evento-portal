@@ -69,6 +69,11 @@ export class Footer extends LitElement {
         :host {
           --bkd-footer-padding-horizontal: var(--bkd-margin-horizontal-medium);
         }
+
+        footer {
+          flex-direction: column-reverse;
+          gap: 20px;
+        }
       }
 
       /* Small screen */
@@ -76,11 +81,6 @@ export class Footer extends LitElement {
       @media screen and (max-width: 767px) {
         :host {
           --bkd-footer-padding-horizontal: var(--bkd-margin-horizontal-small);
-        }
-
-        footer {
-          flex-direction: column-reverse;
-          gap: 20px;
         }
       }
     `,
