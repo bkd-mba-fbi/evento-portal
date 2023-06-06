@@ -100,8 +100,7 @@ export const theme = css`
   }
 
   /* Reset */
-  :host,
-  :host * {
+  * {
     box-sizing: border-box;
 
     font-family: var(--bkd-font-family);
