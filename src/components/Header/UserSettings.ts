@@ -1,5 +1,5 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { theme } from "../../utils/theme.ts";
 
@@ -8,6 +8,9 @@ import { theme } from "../../utils/theme.ts";
 export class UserSettings extends LitElement {
   @property()
   currentLocale = "de";
+
+  @state()
+  protected _open = false;
 
   static styles = [
     theme,
@@ -23,7 +26,6 @@ export class UserSettings extends LitElement {
       }
 
       ul {
-        display: none;
         position: absolute;
         border: 1px solid var(--bkd-func-bg-grey);
         list-style-type: none;
@@ -47,24 +49,34 @@ export class UserSettings extends LitElement {
     `,
   ];
 
-  menu() {
-    return html`<ul>
+  menuItems() {
+    return html`
       <li>Mein Profil</li>
       <li>Einstellungen</li>
       <li>Video-Tutorials</li>
       <li>Logout</li>
-    </ul>`;
+    `;
   }
 
   render() {
     const icon = "/icons/settings.svg";
 
     return html`
-      <button type="button" aria-label=${msg("Menü Benutzereinstellungen")}>
+      <button
+        type="button"
+        @click=${() => this.toggleMenu()}
+        aria-label=${msg("Menü Benutzereinstellungen")}
+      >
         <img src=${icon} alt="" width="32" height="32" />
       </button>
-      ${this.menu()}
+      <ul ?hidden=${!this._open}>
+        ${this.menuItems()}
+      </ul>
     `;
+  }
+
+  private toggleMenu() {
+    this._open = !this._open;
   }
 }
 
