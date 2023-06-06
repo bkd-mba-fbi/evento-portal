@@ -1,6 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
-import { localized } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
 import { theme } from "../utils/theme";
 
 @customElement("bkd-content")
@@ -9,17 +9,23 @@ export class Content extends LitElement {
   static styles = [
     theme,
     css`
+      /* Large screen */
+
       :host {
         --bkd-header-margin-horizontal: var(--bkd-margin-horizontal-large);
 
         margin: 0 var(--bkd-header-margin-horizontal);
       }
 
+      /* Medium screen */
+
       @media screen and (max-width: 1200px) {
         :host {
           --bkd-header-margin-horizontal: var(--bkd-margin-horizontal-medium);
         }
       }
+
+      /* Small screen */
 
       @media screen and (max-width: 767px) {
         :host {
@@ -30,7 +36,7 @@ export class Content extends LitElement {
   ];
 
   render() {
-    return html` <main>content</main> `;
+    return html` <main>${msg("Willkommen bei Evento")}</main> `;
   }
 }
 
