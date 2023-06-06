@@ -51,10 +51,10 @@ export class UserSettings extends LitElement {
 
   menuItems() {
     return html`
-      <li>Mein Profil</li>
-      <li>Einstellungen</li>
-      <li>Video-Tutorials</li>
-      <li>Logout</li>
+      <li>${msg("Mein Profil")}</li>
+      <li>${msg("Einstellungen")}</li>
+      <li>${msg("Video-Tutorials")}</li>
+      <li>${msg("Logout")}</li>
     `;
   }
 
