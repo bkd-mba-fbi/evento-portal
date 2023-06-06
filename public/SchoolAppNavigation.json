@@ -1,0 +1,184 @@
+{
+    "instanceName": "{CONST_Schulename}",
+    "navigation": [
+        {
+            "label": "Unterricht",
+            "allowedRolesOrPermissions": ["TeacherRole", "ClassTeacherRole"],
+            "inactivInstanceIds ": null,
+            "items": [
+                {
+                    "key": "presenceControl",
+                    "allowedRolesOrPermissions": ["TeacherRole"],
+                    "label": "Präsenzkontrolle",
+                    "appKey": "schulverwaltung",
+                    "appPath": "#/presence-control"
+                },
+                {
+                    "key": "currentEvents",
+                    "allowedRolesOrPermissions": ["TeacherRole", "ClassTeacherRole"],
+                    "label": "Aktuelle Fächer",
+                    "appKey": "schulverwaltung",
+                    "appPath": "#/current-events"
+                },
+                {
+                    "key": "tests",
+                    "allowedRolesOrPermissions": ["TeacherRole"],
+                    "label": "Tests und Bewertung",
+                    "appKey": "schulverwaltung",
+                    "appPath": "#/tests"
+                },
+                {
+                    "key": "substitutionsAssign",
+                    "allowedRolesOrPermissions": ["TeacherRole"],
+                    "label": "Stellvertretung",
+                    "appKey": "stellvertretung",
+                    "appPath": "#/substitutions/assign"
+                }
+            ]
+        },
+        {
+            "label": "Absenzen",
+            "allowedRolesOrPermissions": ["TeacherRole", "ClassTeacherRole","AbsenceAdministrator"],
+            "inactivInstanceIds ": null,
+            "items": [
+                {
+                    "key": "openAbsences",
+                    "allowedRolesOrPermissions": ["TeacherRole", "ClassTeacherRole"],
+                    "label": "Offene Absenzen entschuldigen",
+                    "appKey": "schulverwaltung",
+                    "appPath": "#/open-absences"
+                },
+                {
+                    "key": "editAbsences",
+                    "allowedRolesOrPermissions": ["TeacherRole", "ClassTeacherRole","AbsenceAdministrator"],
+                    "label": "Absenzen bearbeiten",
+                    "appKey": "schulverwaltung",
+                    "appPath": "#/edit-absences"
+                },
+                {
+                    "key": "evaluateAbsences",
+                    "allowedRolesOrPermissions": ["TeacherRole", "ClassTeacherRole","AbsenceAdministrator"],
+                    "label": "Absenzen auswerten",
+                    "appKey": "schulverwaltung",
+                    "appPath": "#/evaluate-absences"
+                }
+            ]
+        },
+        {
+            "label": "Angebote",
+            "allowedRolesOrPermissions": null,
+            "inactivInstanceIds ": null,
+            "items": [
+                {
+                    "key": "coursesAndEvents",
+                    "allowedRolesOrPermissions": null,
+                    "label": "Kurse und Veranstaltungen",
+                    "appKey": "kursausschreibung",
+                    "appPath": "#/"
+                },
+                {
+                    "key": "internalTraining",
+                    "allowedRolesOrPermissions": ["TeacherRole", "ClassTeacherRole","AbsenceAdministrator","SubstituteAdministrator"],
+                    "label": "Schulinterne Weiterbildung",
+                    "appKey": "kursausschreibung",
+                    "appPath": "#/"
+                },
+                {
+                    "key": "reservations",
+                    "allowedRolesOrPermissions": null,
+                    "label": "Räume und Geräte reservieren",
+                    "appKey": "reservation",
+                    "appPath": "#/"
+                }
+            ]
+        },
+        {
+            "label": "Aus-/Weiterbildungen",
+            "allowedRolesOrPermissions": ["Student"],
+            "inactivInstanceIds ": null,
+            "items": [
+                {
+                    "key": "myAbsences",
+                    "allowedRolesOrPermissions": ["Student"],
+                    "label": "Absenzen",
+                    "appKey": "schulverwaltung",
+                    "appPath": "#/my-absences"
+                },
+                {
+                    "key": "myGrades",
+                    "allowedRolesOrPermissions": ["Student"],
+                    "label": "Noten",
+                    "appKey": "schulverwaltung",
+                    "appPath": "#/"
+                },
+                {
+                    "key": "schedule",
+                    "allowedRolesOrPermissions": ["Student"],
+                    "label": "Stundenplan",
+                    "appKey": "schulverwaltung",
+                    "appPath": "#/"
+                }
+            ]
+        },
+        {
+            "label": "Administration",
+            "allowedRolesOrPermissions": ["SubstituteAdministrator","PersonRight","RegistrationRight"],
+            "inactivInstanceIds ": null,
+            "items": [
+                {
+                    "key": "substitutionsAdmin",
+                    "allowedRolesOrPermissions": ["SubstituteAdministrator"],
+                    "label": "Stellvertretungen administrieren",
+                    "appKey": "stellvertretung",
+                    "appPath": "#/substitutions/admin"
+                },
+                {
+                    "key": "personSearch",
+                    "allowedRolesOrPermissions": ["PersonRight"],
+                    "label": "Personen und Institutionen suchen",
+                    "appKey": "schulleiterPersonen",
+                    "appPath": "#/persons"
+                },
+                {
+                    "key": "eventRegistration",
+                    "allowedRolesOrPermissions": ["PersonRight","RegistrationRight*"],
+                    "label": "Anmeldedetails einlesen",
+                    "appKey": "anmeldedetailsEinlesen",
+                    "appPath": "#/input/"
+                }
+            ]
+        }
+    ],
+    "apps": [
+        {
+            "key": "schulverwaltung",
+            "scope": "Tutoring",
+            "root": "Apps/webapp-schulverwaltung/index.html"
+        },
+        {
+            "key": "anmeldedetailsEinlesen",
+            "scope": "NG",
+            "root": "Apps/EmberApps/AnmeldedetailsEinlesen/index.html"
+        },
+        {
+            "key": "schulleiterPersonen",
+            "scope": "NG",
+            "root": "Apps/EmberApps/SchulleiterPersonen/index.html"
+        },
+        {
+            "key": "kursausschreibung",
+            "scope": "Public",
+            "root": "Apps/Kursausschreibung/index.html"
+        },
+        {
+            "key": "stellvertretung",
+            "scope": "Tutoring",
+            "root": "Apps/Stellvertretung/index.html"
+        },
+        {
+            "key": "reservation",
+            "scope": "NG",
+            "root": "Apps/Raumreservation/index.html"
+        }
+    ]
+}
