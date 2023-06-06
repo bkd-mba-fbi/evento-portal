@@ -50,10 +50,21 @@ export class UserSettings extends LitElement {
   ];
 
   menuItems() {
+    const playlist =
+      this.currentLocale === "de"
+        ? "PLLDtLiOuctbx-_EQWgWqTO1MRbX845OEf"
+        : "PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU";
+
     return html`
       <li>${msg("Mein Profil")}</li>
       <li>${msg("Einstellungen")}</li>
-      <li>${msg("Video-Tutorials")}</li>
+      <li>
+        <a
+          href=${`https://www.youtube.com/playlist?list=${playlist}`}
+          target="_blank"
+          >${msg("Video-Tutorials")}</a
+        >
+      </li>
       <li>${msg("Logout")}</li>
     `;
   }
