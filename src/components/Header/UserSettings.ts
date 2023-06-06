@@ -1,11 +1,14 @@
 import { css, html, LitElement } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { theme } from "../../utils/theme.ts";
 
 @customElement("bkd-user-settings")
 @localized()
 export class UserSettings extends LitElement {
+  @property()
+  currentLocale = "de";
+
   static styles = [
     theme,
     css`
