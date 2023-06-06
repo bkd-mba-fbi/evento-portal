@@ -1,12 +1,35 @@
-import { html, LitElement } from "lit";
+import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
-import { localized } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
+import { theme } from "../../utils/theme.ts";
 
 @customElement("bkd-user-settings")
 @localized()
 export class UserSettings extends LitElement {
+  static styles = [
+    theme,
+    css`
+      :host {
+        display: flex;
+      }
+
+      button {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+      }
+    `,
+  ];
+
   render() {
-    return html`<div>Einstellungen</div>`;
+    const icon = "/icons/settings.svg";
+
+    return html`<button
+      type="button"
+      aria-label=${msg("Menü Benutzereinstellungen")}
+    >
+      <img src=${icon} alt="" width="32" height="32" />
+    </button>`;
   }
 }
 
