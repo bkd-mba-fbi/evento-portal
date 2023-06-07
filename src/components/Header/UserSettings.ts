@@ -35,7 +35,7 @@ export class UserSettings extends LitElement {
         margin-top: calc(32px + 0.5rem);
         background: var(--bkd-func-bg-white);
         z-index: 1;
-        min-width: 10rem;
+        min-width: 12rem;
       }
 
       a {
@@ -46,11 +46,17 @@ export class UserSettings extends LitElement {
         font-weight: 400;
         line-height: 2.5;
         padding: 0 1.5rem;
-        display: inline-block;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
         height: 100%;
         width: 100%;
         text-decoration: none;
         color: var(--bkd-func-fg-black);
+      }
+
+      a img {
+        margin-left: -5.25px;
       }
 
       a:hover {
@@ -69,6 +75,9 @@ export class UserSettings extends LitElement {
         ? "PLLDtLiOuctbx-_EQWgWqTO1MRbX845OEf"
         : "PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU";
 
+    const iconLogout = "/icons/logout.svg";
+    const iconExternalLink = "/icons/external-link.svg";
+
     return html`
       <li><a href="">${msg("Mein Profil")}</a></li>
       <li><a href="">${msg("Einstellungen")}</a></li>
@@ -76,10 +85,18 @@ export class UserSettings extends LitElement {
         <a
           href=${`https://www.youtube.com/playlist?list=${playlist}`}
           target="_blank"
-          >${msg("Video-Tutorials")}</a
+          ><img src=${iconExternalLink} alt="" width="24" height="24" /> ${msg(
+            "Video-Tutorials"
+          )}</a
         >
       </li>
-      <li><a href="">${msg("Logout")}</a></li>
+      <li>
+        <a href=""
+          ><img src=${iconLogout} alt="" width="24" height="24" />${msg(
+            "Logout"
+          )}</a
+        >
+      </li>
     `;
   }
 
