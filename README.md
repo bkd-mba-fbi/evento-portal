@@ -11,7 +11,18 @@ This project is realised with:
 - [Lit](https://lit.dev/) and [lit-localize](https://lit.dev/docs/localization/overview/)
 - [Cypress](https://www.cypress.io/)
 
-Download the [latest build](https://bkd-mba-fbi.github.io/evento-portal/evento-portal.zip).
+Download the [latest build](https://bkd-mba-fbi.github.io/evento-portal/evento-portal.zip**.
+
+## Terminology
+
+- **Evento API** \
+  A [backend](https://clx-evento.bitbucket.io/master_eventodoc/Api/) by [Swiss Learning Hub](https://www.swisslearninghub.com/) that provides access to school-related data and handles aspects like authorization.
+- **Evento Portal** \
+  A frontend application that takes care of login/authentication using the _Evento API_, renders the base layout & the role-specific navigation and integrates various _apps_. This is the main entry point for the users.
+- **Apps** \
+  Various mini applications – like [webapp-schulverwaltung](https://github.com/bkd-mba-fbi/webapp-schulverwaltung) (Angular) or [kursausschreibung](https://github.com/bkd-mba-fbi/kursausschreibung) (Ember) – that provide a frontend for different aspects of the daily school routine. They are managed & integrated by the _Evento Portal_ and use the provided access token to access the _Evento API_.
+- **Modules** \
+  The _apps_ may consist of multiple _modules_ like _presence control_ or _tests_ that are individually integrated in the _Evento Portal_'s navigation.
 
 ## Getting Started
 
