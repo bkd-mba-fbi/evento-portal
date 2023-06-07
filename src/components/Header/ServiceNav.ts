@@ -28,6 +28,10 @@ export class ServiceNav extends LitElement {
       /* Medium screen */
 
       @media screen and (max-width: 1200px) {
+        bkd-user-settings {
+          display: none;
+        }
+
         bkd-language-switcher {
           display: none;
         }
