@@ -17,6 +17,7 @@ export class UserSettings extends LitElement {
     css`
       :host {
         display: flex;
+        position: relative;
       }
 
       button {
@@ -27,10 +28,11 @@ export class UserSettings extends LitElement {
 
       ul {
         position: absolute;
+        right: 0;
         border: 1px solid var(--bkd-func-bg-grey);
         list-style-type: none;
         padding: 0.625rem 0;
-        margin-top: 32px;
+        margin-top: calc(32px + 0.5rem);
         background: var(--bkd-func-bg-white);
         z-index: 1;
         min-width: 10rem;
@@ -54,9 +56,9 @@ export class UserSettings extends LitElement {
       a:hover {
         color: var(--bkd-brand-red);
         background: var(--bkd-brand-light-sand);
-        border-left: 0.375rem solid var(--bkd-brand-red);
+        border-left: 6px solid var(--bkd-brand-red);
         font-weight: 700;
-        padding: 0 calc(1.5rem - 0.375rem);
+        padding: 0 calc(1.5rem - 6px);
       }
     `,
   ];
