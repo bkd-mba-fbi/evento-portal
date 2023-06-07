@@ -33,18 +33,30 @@ export class UserSettings extends LitElement {
         margin-top: 32px;
         background: var(--bkd-func-bg-white);
         z-index: 1;
+        min-width: 10rem;
       }
 
-      li {
+      a {
         font-size: 0.875rem;
         letter-spacing: 0.01rem;
         word-spacing: 0.025rem;
         font-style: normal;
         font-weight: 400;
-        color: var(--bkd-func-fg-black);
-        text-decoration: none;
         line-height: 2.5;
-        margin: 0 1.5rem;
+        padding: 0 1.5rem;
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+        text-decoration: none;
+        color: var(--bkd-func-fg-black);
+      }
+
+      a:hover {
+        color: var(--bkd-brand-red);
+        background: var(--bkd-brand-light-sand);
+        border-left: 0.375rem solid var(--bkd-brand-red);
+        font-weight: 700;
+        padding: 0 calc(1.5rem - 0.375rem);
       }
     `,
   ];
@@ -56,8 +68,8 @@ export class UserSettings extends LitElement {
         : "PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU";
 
     return html`
-      <li>${msg("Mein Profil")}</li>
-      <li>${msg("Einstellungen")}</li>
+      <li><a href="">${msg("Mein Profil")}</a></li>
+      <li><a href="">${msg("Einstellungen")}</a></li>
       <li>
         <a
           href=${`https://www.youtube.com/playlist?list=${playlist}`}
@@ -65,7 +77,7 @@ export class UserSettings extends LitElement {
           >${msg("Video-Tutorials")}</a
         >
       </li>
-      <li>${msg("Logout")}</li>
+      <li><a href="">${msg("Logout")}</a></li>
     `;
   }
 
