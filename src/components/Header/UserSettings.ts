@@ -69,50 +69,54 @@ export class UserSettings extends LitElement {
     `,
   ];
 
-  menuItems() {
+  profile() {
+    return html`<a href="#">${msg("Mein Profil")}</a>`;
+  }
+
+  settings() {
+    return html`<a href="#">${msg("Einstellungen")}</a>`;
+  }
+
+  videos() {
     const playlist =
       this.currentLocale === "de"
         ? "PLLDtLiOuctbx-_EQWgWqTO1MRbX845OEf"
         : "PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU";
 
-    const iconLogout = "/icons/logout.svg";
-    const iconExternalLink = "/icons/external-link.svg";
+    return html`<a
+      href=${`https://www.youtube.com/playlist?list=${playlist}`}
+      target="_blank"
+      ><img src=${"/icons/external-link.svg"} alt="" width="24" height="24" />
+      ${msg("Video-Tutorials")}</a
+    >`;
+  }
 
-    return html`
-      <li><a href="">${msg("Mein Profil")}</a></li>
-      <li><a href="">${msg("Einstellungen")}</a></li>
-      <li>
-        <a
-          href=${`https://www.youtube.com/playlist?list=${playlist}`}
-          target="_blank"
-          ><img src=${iconExternalLink} alt="" width="24" height="24" /> ${msg(
-            "Video-Tutorials"
-          )}</a
-        >
-      </li>
-      <li>
-        <a href=""
-          ><img src=${iconLogout} alt="" width="24" height="24" />${msg(
-            "Logout"
-          )}</a
-        >
-      </li>
-    `;
+  logout() {
+    return html`<a href="#"
+      ><img src=${"/icons/logout.svg"} alt="" width="24" height="24" />${msg(
+        "Logout"
+      )}</a
+    >`;
   }
 
   render() {
-    const icon = "/icons/settings.svg";
-
     return html`
       <button
         type="button"
         @click=${() => this.toggleMenu()}
         aria-label=${msg("Menü Benutzereinstellungen")}
       >
-        <img src=${icon} alt="" width="32" height="32" />
+        <img src=${"/icons/settings.svg"} alt="" width="32" height="32" />
       </button>
       <ul ?hidden=${!this._open}>
-        ${this.menuItems()}
+        ${html`${[
+          this.profile(),
+          this.settings(),
+          this.videos(),
+          this.logout(),
+        ].map(
+          (link) => html`<li @click=${() => this.toggleMenu()}>${link}</li>`
+        )} `}
       </ul>
     `;
   }
