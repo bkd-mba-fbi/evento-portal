@@ -103,7 +103,7 @@ export class UserSettings extends LitElement {
     return html`
       <button
         type="button"
-        @click=${() => this.toggleMenu()}
+        @click=${() => this.handleClick()}
         aria-label=${msg("Menü Benutzereinstellungen")}
       >
         <img src=${"/icons/settings.svg"} alt="" width="32" height="32" />
@@ -115,14 +115,30 @@ export class UserSettings extends LitElement {
           this.videos(),
           this.logout(),
         ].map(
-          (link) => html`<li @click=${() => this.toggleMenu()}>${link}</li>`
+          (link) => html`<li @click=${() => this.handleClick()}>${link}</li>`
         )} `}
       </ul>
     `;
   }
 
-  private toggleMenu() {
+  private handleClick() {
     this._open = !this._open;
+  }
+
+  private handleKeydown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      this._open = false;
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener("keydown", (e) => this.handleKeydown(e));
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener("keydown", (e) => this.handleKeydown(e));
+    super.disconnectedCallback();
   }
 }
 
