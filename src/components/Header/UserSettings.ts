@@ -1,5 +1,5 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, state, query } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { theme } from "../../utils/theme.ts";
 
@@ -10,7 +10,10 @@ export class UserSettings extends LitElement {
   currentLocale = "de";
 
   @state()
-  protected _open = false;
+  protected open = false;
+
+  @query("button")
+  private menuButton: any;
 
   static styles = [
     theme,
@@ -103,43 +106,49 @@ export class UserSettings extends LitElement {
     return html`
       <button
         type="button"
-        @click=${() => this.handleClick()}
+        @click=${() => this.toggle()}
         aria-label=${msg("Menü Benutzereinstellungen")}
       >
         <img src=${"/icons/settings.svg"} alt="" width="32" height="32" />
       </button>
-      <ul ?hidden=${!this._open}>
+      <ul ?hidden=${!this.open}>
         ${html`${[
           this.profile(),
           this.settings(),
           this.videos(),
           this.logout(),
-        ].map(
-          (link) => html`<li @click=${() => this.handleClick()}>${link}</li>`
-        )} `}
+        ].map((link) => html`<li>${link}</li>`)} `}
       </ul>
     `;
   }
 
-  private handleClick() {
-    this._open = !this._open;
-  }
-
-  private handleKeydown(e: KeyboardEvent) {
-    if (e.key === "Escape") {
-      this._open = false;
+  private toggle() {
+    this.open = !this.open;
+    if (this.open) {
+      document.addEventListener("keydown", this.handleKeydown);
+      document.addEventListener("click", this.handleClick);
+    } else {
+      document.removeEventListener("keydown", this.handleKeydown);
+      document.removeEventListener("click", this.handleClick);
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    window.addEventListener("keydown", (e) => this.handleKeydown(e));
-  }
+  private handleClick = (e: MouseEvent) => {
+    const target = e.composedPath()[0];
+    if (
+      target !== this.menuButton &&
+      !this.menuButton.contains(target) &&
+      this.open
+    ) {
+      this.toggle();
+    }
+  };
 
-  disconnectedCallback() {
-    window.removeEventListener("keydown", (e) => this.handleKeydown(e));
-    super.disconnectedCallback();
-  }
+  private handleKeydown = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      this.toggle();
+    }
+  };
 }
 
 declare global {
