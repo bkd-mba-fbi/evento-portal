@@ -9,6 +9,9 @@ export class ServiceNav extends LitElement {
   @property()
   currentLocale = "de";
 
+  @property()
+  mobileNavOpen = false;
+
   static styles = [
     theme,
     css`
@@ -65,7 +68,10 @@ export class ServiceNav extends LitElement {
       <bkd-language-switcher
         currentLocale=${this.currentLocale}
       ></bkd-language-switcher>
-      <bkd-hamburger></bkd-hamburger>
+      <bkd-hamburger
+        id="mobile-nav-toggle"
+        .open=${this.mobileNavOpen}
+      ></bkd-hamburger>
     `;
   }
 }

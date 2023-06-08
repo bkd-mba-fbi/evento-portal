@@ -1,3 +1,5 @@
+import { storeToken } from "../../src/utils/storage";
+
 /// <reference types="cypress" />
 // ***********************************************
 // This example commands.ts shows you how to
@@ -35,3 +37,76 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add("login", () => {
+  ["Tutoring", "Public", "NG"].forEach((scope) => {
+    const token = createToken(scope);
+    storeToken(scope, {
+      accessToken: token,
+      expiresAt: Math.floor(Date.now() / 1000) + 60 * 60,
+      refreshToken: token,
+    });
+  });
+});
+
+/**
+ * Creates a mock token for testing purposes.
+ */
+function createToken(
+  scope: string,
+  { lang = "de", roles = ["LessonTeacherRole", "TeacherRole"] } = {}
+) {
+  const header = {
+    typ: "JWT",
+    alg: "HS256",
+  };
+
+  const nextHour = Math.floor(Date.now() / 1000) + 60 * 60;
+  const body = {
+    iss: "oauthpublic",
+    aud: "https://cypress/",
+    nbf: nextHour,
+    exp: nextHour,
+    token_purpose: "User",
+    scope,
+    consumer_id: "cypress",
+    instance_id: "BsTest",
+    username: "1234",
+    culture_info: `${lang}-CH`,
+    redirect_uri: "http://localhost:3000",
+    id_mandant: "960",
+    id_person: "1234",
+    fullname: "Somebody",
+    roles: roles.join(";"),
+    token_id: "123456",
+  };
+
+  return `${btoa(JSON.stringify(header))}.${btoa(
+    JSON.stringify(body)
+  )}.signature`;
+}
+
+Cypress.Commands.add("resizeToDesktop", () => {
+  cy.viewport("macbook-16");
+});
+
+Cypress.Commands.add("resizeToMobile", () => {
+  cy.viewport("iphone-8");
+});
+
+Cypress.Commands.add(
+  "ariaExpanded",
+  { prevSubject: true },
+  (subject, expanded) =>
+    cy
+      .wrap(subject)
+      .invoke("attr", "aria-expanded")
+      .then((value) => {
+        if (expanded) {
+          expect(value).to.eq("true");
+        } else {
+          expect(value).to.be.oneOf(["false", "", undefined]);
+        }
+        return subject;
+      })
+);
