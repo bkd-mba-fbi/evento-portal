@@ -1,5 +1,11 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property, state, query } from "lit/decorators.js";
+import {
+  customElement,
+  property,
+  query,
+  queryAll,
+  state,
+} from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { theme } from "../../utils/theme.ts";
 
@@ -14,6 +20,8 @@ export class UserSettings extends LitElement {
 
   @query("button")
   private menuButton: any;
+  @queryAll("a")
+  private menuLinks: any;
 
   static styles = [
     theme,
@@ -144,9 +152,31 @@ export class UserSettings extends LitElement {
     }
   };
 
+  private activeLinkId(): number {
+    const active = this.shadowRoot?.activeElement;
+    return [...this.menuLinks].indexOf(active);
+  }
+
+  private nextLinkId(offset: number, start: number): number {
+    const activeId = this.activeLinkId();
+    return activeId + offset < 0
+      ? start
+      : (activeId + offset) % this.menuLinks.length;
+  }
+
   private handleKeydown = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
-      this.toggle();
+    switch (e.key) {
+      case "Escape":
+        this.toggle();
+        break;
+      case "ArrowDown":
+        const nextId = this.nextLinkId(1, 0);
+        this.menuLinks[nextId].focus();
+        break;
+      case "ArrowUp":
+        const previousId = this.nextLinkId(-1, 3);
+        this.menuLinks[previousId].focus();
+        break;
     }
   };
 }
