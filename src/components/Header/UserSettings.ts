@@ -81,11 +81,11 @@ export class UserSettings extends LitElement {
   ];
 
   private renderProfile() {
-    return html`<a href="#">${msg("Mein Profil")}</a>`;
+    return html`<a role="menuitem" href="#">${msg("Mein Profil")}</a>`;
   }
 
   private renderSettings() {
-    return html`<a href="#">${msg("Einstellungen")}</a>`;
+    return html`<a role="menuitem" href="#">${msg("Einstellungen")}</a>`;
   }
 
   private renderVideos() {
@@ -95,6 +95,7 @@ export class UserSettings extends LitElement {
         : "PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU";
 
     return html`<a
+      role="menuitem"
       href=${`https://www.youtube.com/playlist?list=${playlist}`}
       target="_blank"
       ><img src="/icons/external-link.svg" alt="" width="24" height="24" />
@@ -103,7 +104,7 @@ export class UserSettings extends LitElement {
   }
 
   private renderLogout() {
-    return html`<a href="#"
+    return html`<a role="menuitem" href="#"
       ><img src="/icons/logout.svg" alt="" width="24" height="24" />${msg(
         "Logout"
       )}</a
@@ -116,14 +117,16 @@ export class UserSettings extends LitElement {
         type="button"
         @click=${() => this.toggle()}
         aria-label=${msg("Menü Benutzereinstellungen")}
+        aria-expanded=${this.open}
+        aria-haspopup="menu"
       >
         <img src="/icons/settings.svg" alt="" width="32" height="32" />
       </button>
-      <ul ?hidden=${!this.open}>
-        <li>${this.renderProfile()}</li>
-        <li>${this.renderSettings()}</li>
-        <li>${this.renderVideos()}</li>
-        <li>${this.renderLogout()}</li>
+      <ul id="menu" role="menu" ?hidden=${!this.open}>
+        <li role="presentation">${this.renderProfile()}</li>
+        <li role="presentation">${this.renderSettings()}</li>
+        <li role="presentation">${this.renderVideos()}</li>
+        <li role="presentation">${this.renderLogout()}</li>
       </ul>
     `;
   }
