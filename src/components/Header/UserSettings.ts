@@ -153,16 +153,25 @@ export class UserSettings extends LitElement {
     }
   };
 
-  private activeLinkId(): number {
+  private activeLinkIndex(): number | null {
     const active = this.shadowRoot?.activeElement;
-    return [...this.menuLinks].indexOf(active);
+    const index = [...this.menuLinks].indexOf(active);
+    return index === -1 ? null : index;
   }
 
-  private nextLinkId(offset: number, start: number): number {
-    const activeId = this.activeLinkId();
-    return activeId + offset < 0
-      ? start
-      : (activeId + offset) % this.menuLinks.length;
+  private nextLinkIndex(offset: number): number {
+    const active = this.activeLinkIndex();
+    const first = 0;
+    const last = this.menuLinks.length - 1;
+
+    if (active === null) {
+      return offset > 0 ? first : last;
+    }
+
+    const next = active + offset;
+    if (next > last) return first;
+    if (next < first) return last;
+    return next;
   }
 
   private handleKeydown = (e: KeyboardEvent) => {
@@ -171,12 +180,12 @@ export class UserSettings extends LitElement {
         this.toggle();
         break;
       case "ArrowDown":
-        const nextId = this.nextLinkId(1, 0);
-        this.menuLinks[nextId].focus();
+        const next = this.nextLinkIndex(1);
+        this.menuLinks[next].focus();
         break;
       case "ArrowUp":
-        const previousId = this.nextLinkId(-1, 3);
-        this.menuLinks[previousId].focus();
+        const previous = this.nextLinkIndex(-1);
+        this.menuLinks[previous].focus();
         break;
     }
   };
