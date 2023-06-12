@@ -18,8 +18,20 @@ export type NavigationGroup = Readonly<{
 export type NavigationItem = Readonly<{
   key: string;
   label: string;
+
+  /**
+   * The navigation item will only be displayed if the user has any of
+   * these roles or permissions. If `null`, the item is visible to all
+   * users.
+   */
   allowedRolesOrPermissions: ReadonlyArray<string> | null;
+
+  /**
+   * The navigation item will be hidden if on any of these
+   * instances. If `null`, the item is visible on all instances.
+   */
   deniedInstanceIds: ReadonlyArray<string> | null;
+
   appKey: string;
   appPath: string;
 }>;

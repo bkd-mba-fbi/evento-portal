@@ -28,7 +28,12 @@ declare global {
        * Make sure the user is authenticated (i.e. add a token for
        * each scope to localStorage)
        */
-      login(): Chainable<void>;
+      login(
+        options?: Partial<{
+          lang: string;
+          roles: ReadonlyArray<string>;
+        }>
+      ): Chainable<void>;
 
       /**
        * Adjust viewport to desktop size

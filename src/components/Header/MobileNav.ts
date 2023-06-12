@@ -1,23 +1,26 @@
 import { css, html, LitElement } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { localized } from "@lit/localize";
 import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 import { theme } from "../../utils/theme";
-import { NavigationGroup, NavigationItem, settings } from "../../settings";
+import { Navigation, NavigationGroup, NavigationItem } from "../../settings";
 import arrowDownIcon from "../../assets/icons/arrow-down.svg?raw";
 import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
 
 @customElement("bkd-mobile-nav")
 @localized()
 export class MobileNav extends LitElement {
-  @state()
-  openGroup: NavigationGroup | null = settings.navigation[0];
+  @property()
+  navigation: Navigation = [];
 
   @state()
-  activeItem: NavigationItem = settings.navigation[0].items[0];
+  openGroup: NavigationGroup | null = null;
+
+  @state()
+  currentItem: NavigationItem | null = null;
 
   static styles = [
     theme,
@@ -115,16 +118,17 @@ export class MobileNav extends LitElement {
 
   private handleGroupClick(event: MouseEvent, group: NavigationGroup): void {
     event.preventDefault();
-    this.openGroup = group.label !== this.openGroup?.label ? group : null;
+    this.openGroup = group !== this.openGroup ? group : null;
   }
 
   private handleItemClick(event: MouseEvent, item: NavigationItem): void {
     event.preventDefault();
-    this.activeItem = item;
+    // TODO: perform actual navigation action
+    this.currentItem = item;
   }
 
   private renderGroup(group: NavigationGroup) {
-    const open = group.label === this.openGroup?.label;
+    const open = group === (this.openGroup ?? this.navigation[0]);
     return html`
       <li
         class=${classMap({
@@ -148,7 +152,9 @@ export class MobileNav extends LitElement {
   }
 
   private renderItem(item: NavigationItem) {
-    const active = item.key === this.activeItem.key;
+    const active = Boolean(
+      this.currentItem && item.key === this.currentItem.key
+    );
     return html`
       <li
         class=${classMap({
@@ -166,7 +172,7 @@ export class MobileNav extends LitElement {
   render() {
     return html`
       <ul class="nav">
-        ${map(settings.navigation, this.renderGroup.bind(this))}
+        ${map(this.navigation, this.renderGroup.bind(this))}
       </ul>
     `;
   }

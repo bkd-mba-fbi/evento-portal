@@ -1,14 +1,21 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { theme } from "../utils/theme";
 import { DropdownToggleController } from "../controllers/dropdown-toggle";
+import { Navigation, settings } from "../settings";
+import { filterAllowed } from "../utils/navigation";
+import { getTokenPayload } from "../utils/token";
+import { getCurrentAccessToken } from "../utils/storage";
 
 @customElement("bkd-header")
 @localized()
 export class Header extends LitElement {
   @property()
   currentLocale = "de";
+
+  @state()
+  private navigation: Navigation = [];
 
   static styles = [
     theme,
@@ -119,6 +126,16 @@ export class Header extends LitElement {
     `,
   ];
 
+  constructor() {
+    super();
+
+    const token = getCurrentAccessToken();
+    if (token) {
+      const { instanceId, roles } = getTokenPayload(token);
+      this.navigation = filterAllowed(settings.navigation, instanceId, roles);
+    }
+  }
+
   private mobileNav = new DropdownToggleController(
     this,
     "mobile-nav-toggle",
@@ -127,7 +144,14 @@ export class Header extends LitElement {
 
   private renderMobileNav() {
     if (this.mobileNav.open) {
-      return html`<bkd-mobile-nav id="mobile-nav-menu"></bkd-mobile-nav>`;
+      return html`<bkd-mobile-nav
+        id="mobile-nav-menu"
+        .navigation=${this.navigation}
+        .currentItem=${
+          /* TODO: should be determined from URL/state */
+          this.navigation[0].items[0]
+        }
+      ></bkd-mobile-nav>`;
     }
     return null;
   }
@@ -145,7 +169,7 @@ export class Header extends LitElement {
         ></bkd-service-nav>
         <img class="logo" src="logo.svg" alt=${msg("Evento Startseite")} />
         <div class="logo-caption">${portalName}</div>
-        <bkd-nav></bkd-nav>
+        <bkd-nav .navigation=${this.navigation}></bkd-nav>
         ${this.renderMobileNav()}
       </header>
     `;

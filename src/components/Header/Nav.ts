@@ -1,13 +1,15 @@
 import { css, html, LitElement } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { localized } from "@lit/localize";
 import { map } from "lit/directives/map.js";
 import { theme } from "../../utils/theme";
-import { NavigationGroup, settings } from "../../settings";
+import { Navigation, NavigationGroup } from "../../settings";
 
 @customElement("bkd-nav")
 @localized()
 export class Nav extends LitElement {
+  @property() navigation: Navigation = [];
+
   static styles = [
     theme,
     css`
@@ -39,7 +41,7 @@ export class Nav extends LitElement {
   }
 
   render() {
-    return map(settings.navigation, (group, i) =>
+    return map(this.navigation, (group, i) =>
       this.renderGroupToggle(group, i === 0 /* TODO*/)
     );
   }

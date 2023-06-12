@@ -1,7 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { localized } from "@lit/localize";
-import { classMap } from "lit/directives/class-map.js";
 import { theme } from "../../utils/theme";
 import { NavigationGroup } from "../../settings";
 

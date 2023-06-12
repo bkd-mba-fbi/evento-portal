@@ -38,23 +38,29 @@ import { storeToken } from "../../src/utils/storage";
 //   }
 // }
 
-Cypress.Commands.add("login", () => {
-  ["Tutoring", "Public", "NG"].forEach((scope) => {
-    const token = createToken(scope);
-    storeToken(scope, {
-      accessToken: token,
-      expiresAt: Math.floor(Date.now() / 1000) + 60 * 60,
-      refreshToken: token,
+Cypress.Commands.add(
+  "login",
+  ({ lang = "de", roles = ["LessonTeacherRole", "TeacherRole"] } = {}) => {
+    ["Tutoring", "Public", "NG"].forEach((scope) => {
+      const token = createToken(scope, { lang, roles });
+      storeToken(scope, {
+        accessToken: token,
+        expiresAt: Math.floor(Date.now() / 1000) + 60 * 60,
+        refreshToken: token,
+      });
     });
-  });
-});
+  }
+);
 
 /**
  * Creates a mock token for testing purposes.
  */
 function createToken(
   scope: string,
-  { lang = "de", roles = ["LessonTeacherRole", "TeacherRole"] } = {}
+  {
+    lang = "de",
+    roles = ["LessonTeacherRole", "TeacherRole"],
+  }: Partial<{ lang: string; roles: ReadonlyArray<string> }> = {}
 ) {
   const header = {
     typ: "JWT",
