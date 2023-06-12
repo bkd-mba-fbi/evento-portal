@@ -120,12 +120,10 @@ export class UserSettings extends LitElement {
         <img src="/icons/settings.svg" alt="" width="32" height="32" />
       </button>
       <ul ?hidden=${!this.open}>
-        ${html`${[
-          this.renderProfile(),
-          this.renderSettings(),
-          this.renderVideos(),
-          this.renderLogout(),
-        ].map((link) => html`<li>${link}</li>`)} `}
+        <li>${this.renderProfile()}</li>
+        <li>${this.renderSettings()}</li>
+        <li>${this.renderVideos()}</li>
+        <li>${this.renderLogout()}</li>
       </ul>
     `;
   }
