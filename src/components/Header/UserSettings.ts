@@ -80,15 +80,15 @@ export class UserSettings extends LitElement {
     `,
   ];
 
-  profile() {
+  private renderProfile() {
     return html`<a href="#">${msg("Mein Profil")}</a>`;
   }
 
-  settings() {
+  private renderSettings() {
     return html`<a href="#">${msg("Einstellungen")}</a>`;
   }
 
-  videos() {
+  private renderVideos() {
     const playlist =
       this.currentLocale === "de"
         ? "PLLDtLiOuctbx-_EQWgWqTO1MRbX845OEf"
@@ -102,7 +102,7 @@ export class UserSettings extends LitElement {
     >`;
   }
 
-  logout() {
+  private renderLogout() {
     return html`<a href="#"
       ><img src="/icons/logout.svg" alt="" width="24" height="24" />${msg(
         "Logout"
@@ -121,10 +121,10 @@ export class UserSettings extends LitElement {
       </button>
       <ul ?hidden=${!this.open}>
         ${html`${[
-          this.profile(),
-          this.settings(),
-          this.videos(),
-          this.logout(),
+          this.renderProfile(),
+          this.renderSettings(),
+          this.renderVideos(),
+          this.renderLogout(),
         ].map((link) => html`<li>${link}</li>`)} `}
       </ul>
     `;
