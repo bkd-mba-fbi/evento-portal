@@ -45,7 +45,7 @@ export class UserSettings extends LitElement {
         padding: 0.625rem 0;
         margin-top: calc(32px + 0.5rem);
         background: var(--bkd-func-bg-white);
-        z-index: 1;
+        z-index: var(--bkd-z-index-dropdown);
         min-width: 12rem;
       }
 
