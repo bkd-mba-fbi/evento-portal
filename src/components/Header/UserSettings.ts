@@ -97,14 +97,14 @@ export class UserSettings extends LitElement {
     return html`<a
       href=${`https://www.youtube.com/playlist?list=${playlist}`}
       target="_blank"
-      ><img src=${"/icons/external-link.svg"} alt="" width="24" height="24" />
+      ><img src="/icons/external-link.svg" alt="" width="24" height="24" />
       ${msg("Video-Tutorials")}</a
     >`;
   }
 
   logout() {
     return html`<a href="#"
-      ><img src=${"/icons/logout.svg"} alt="" width="24" height="24" />${msg(
+      ><img src="/icons/logout.svg" alt="" width="24" height="24" />${msg(
         "Logout"
       )}</a
     >`;
@@ -117,7 +117,7 @@ export class UserSettings extends LitElement {
         @click=${() => this.toggle()}
         aria-label=${msg("Menü Benutzereinstellungen")}
       >
-        <img src=${"/icons/settings.svg"} alt="" width="32" height="32" />
+        <img src="/icons/settings.svg" alt="" width="32" height="32" />
       </button>
       <ul ?hidden=${!this.open}>
         ${html`${[
