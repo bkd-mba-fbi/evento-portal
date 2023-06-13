@@ -40,15 +40,25 @@ import { storeToken } from "../../src/utils/storage";
 
 Cypress.Commands.add(
   "login",
-  ({ lang = "de", roles = ["LessonTeacherRole", "TeacherRole"] } = {}) => {
+  ({
+    lang = "de",
+    roles = ["LessonTeacherRole", "TeacherRole"],
+    permissions = [],
+  } = {}) => {
     ["Tutoring", "Public", "NG"].forEach((scope) => {
-      const token = createToken(scope, { lang, roles });
+      const token = createToken(scope, { lang });
       storeToken(scope, {
         accessToken: token,
         expiresAt: Math.floor(Date.now() / 1000) + 60 * 60,
         refreshToken: token,
       });
     });
+
+    cy.intercept(
+      "GET",
+      "https://eventoapp-test.erz.be.ch/restApi/UserSettings/?expand=AccessInfo",
+      { AccessInfo: { Roles: roles, Permissions: permissions } }
+    );
   }
 );
 
@@ -57,10 +67,7 @@ Cypress.Commands.add(
  */
 function createToken(
   scope: string,
-  {
-    lang = "de",
-    roles = ["LessonTeacherRole", "TeacherRole"],
-  }: Partial<{ lang: string; roles: ReadonlyArray<string> }> = {}
+  { lang = "de" }: Partial<{ lang: string; roles: ReadonlyArray<string> }> = {}
 ) {
   const header = {
     typ: "JWT",
@@ -83,7 +90,7 @@ function createToken(
     id_mandant: "960",
     id_person: "1234",
     fullname: "Somebody",
-    roles: roles.join(";"),
+    roles: [],
     token_id: "123456",
   };
 

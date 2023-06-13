@@ -15,14 +15,15 @@ import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
 export class MobileNav extends LitElement {
   @property()
   navigation: Navigation = [];
+
   @property()
   currentLocale = "de";
 
-  @state()
-  openGroup: NavigationGroup | null = null;
+  @property()
+  currentItem: NavigationItem | null = null;
 
   @state()
-  currentItem: NavigationItem | null = null;
+  openGroup: NavigationGroup | null = null;
 
   static styles = [
     theme,
@@ -129,9 +130,23 @@ export class MobileNav extends LitElement {
     `,
   ];
 
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.openGroupOfCurrentItem();
+  }
+
+  private openGroupOfCurrentItem(): void {
+    if (this.navigation && this.currentItem && !this.openGroup) {
+      this.openGroup =
+        this.navigation.find((group) =>
+          group.items.find(({ key }) => key === this.currentItem?.key)
+        ) ?? null;
+    }
+  }
+
   private handleGroupClick(event: MouseEvent, group: NavigationGroup): void {
     event.preventDefault();
-    this.openGroup = group !== this.openGroup ? group : null;
+    this.openGroup = group.label !== this.openGroup?.label ? group : null;
   }
 
   private handleItemClick(event: MouseEvent, item: NavigationItem): void {
@@ -141,7 +156,7 @@ export class MobileNav extends LitElement {
   }
 
   private renderGroup(group: NavigationGroup) {
-    const open = group === (this.openGroup ?? this.navigation[0]);
+    const open = group.label === this.openGroup?.label;
     return html`
       <li
         class=${classMap({
@@ -165,9 +180,7 @@ export class MobileNav extends LitElement {
   }
 
   private renderItem(item: NavigationItem) {
-    const active = Boolean(
-      this.currentItem && item.key === this.currentItem.key
-    );
+    const active = item.key === this.currentItem?.key;
     return html`
       <li
         class=${classMap({

@@ -14,7 +14,7 @@ export function filterAllowed(
         allowedInstance(item, instanceId) &&
         allowedRoleOrPermission(item, rolesOrPermissions)
     );
-    return items.length > 0 ? [...acc, group] : acc;
+    return items.length > 0 ? [...acc, { ...group, items }] : acc;
   }, []);
 }
 

@@ -7,6 +7,7 @@ import { Navigation, settings } from "../settings";
 import { filterAllowed } from "../utils/navigation";
 import { getTokenPayload } from "../utils/token";
 import { getCurrentAccessToken } from "../utils/storage";
+import { fetchUserAccessInfo } from "../utils/fetch";
 
 @customElement("bkd-header")
 @localized()
@@ -129,10 +130,18 @@ export class Header extends LitElement {
   constructor() {
     super();
 
+    this.initNavigation();
+  }
+
+  private async initNavigation(): Promise<void> {
     const token = getCurrentAccessToken();
     if (token) {
-      const { instanceId, roles } = getTokenPayload(token);
-      this.navigation = filterAllowed(settings.navigation, instanceId, roles);
+      const { instanceId } = getTokenPayload(token);
+      const { roles, permissions } = await fetchUserAccessInfo();
+      this.navigation = filterAllowed(settings.navigation, instanceId, [
+        ...roles,
+        ...permissions,
+      ]);
     }
   }
 

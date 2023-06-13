@@ -1,6 +1,7 @@
 import { msg } from "@lit/localize";
 
 export type Settings = Readonly<{
+  api: Readonly<{ server: string }>;
   oauth: Readonly<{ server: string; clientId: string }>;
   apps: ReadonlyArray<Readonly<SettingsApp>>;
   navigation: ReadonlyArray<NavigationGroup>;
@@ -37,6 +38,9 @@ export type NavigationItem = Readonly<{
 }>;
 
 export const settings: Settings = {
+  api: {
+    server: "https://eventoapp-test.erz.be.ch/restApi",
+  },
   oauth: {
     server: "https://eventoapp-test.erz.be.ch",
     clientId: "dev3000",
@@ -234,7 +238,7 @@ export const settings: Settings = {
           {
             key: "eventRegistration",
             label: msg("Anmeldedetails einlesen"),
-            allowedRolesOrPermissions: ["PersonRight", "RegistrationRight*"],
+            allowedRolesOrPermissions: ["PersonRight", "RegistrationRight"],
             deniedInstanceIds: null,
             appKey: "anmeldedetailsEinlesen",
             appPath: "#/input/",

@@ -32,6 +32,7 @@ declare global {
         options?: Partial<{
           lang: string;
           roles: ReadonlyArray<string>;
+          permissions: ReadonlyArray<string>;
         }>
       ): Chainable<void>;
 

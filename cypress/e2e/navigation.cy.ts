@@ -1,6 +1,8 @@
 describe("Navigation", () => {
-  describe("as lesson/class teacher", () => {
-    beforeEach(() => cy.login({ roles: ["LessonTeacherRole", "TeacherRole"] }));
+  describe("with 'LessonTeacherRole' & 'TeacherRole' roles", () => {
+    beforeEach(() =>
+      cy.login({ roles: ["LessonTeacherRole", "TeacherRole"], permissions: [] })
+    );
 
     describe("desktop", () => {
       beforeEach(() => {
@@ -89,9 +91,9 @@ describe("Navigation", () => {
     });
   });
 
-  describe("as student", () => {
+  describe("with 'Student' role", () => {
     beforeEach(() => {
-      cy.login({ roles: ["Student"] });
+      cy.login({ roles: ["Student"], permissions: [] });
       cy.resizeToMobile();
       cy.visit("/index.html");
     });
@@ -102,18 +104,25 @@ describe("Navigation", () => {
       cy.get("bkd-mobile-nav").within((mobileMenu) => {
         cy.wrap(mobileMenu).should("be.visible");
 
-        cy.contains("li > button", "Unterricht").should("not.exist");
-        cy.contains("li > button", "Absenzen").should("not.exist");
-        cy.contains("li > button", "Angebote").should("exist");
-        cy.contains("li > button", "Aus-/Weiterbildungen").should("exist");
-        cy.contains("li > button", "Administration").should("not.exist");
+        expectGroups(["Angebote", "Aus-/Weiterbildungen"]);
+
+        expectGroupItems("Angebote", [
+          "Kurse und Veranstaltungen",
+          "Räume und Geräte reservieren",
+        ]);
+
+        expectGroupItems("Aus-/Weiterbildungen", [
+          "Absenzen",
+          "Noten",
+          "Stundenplan",
+        ]);
       });
     });
   });
 
-  describe("as lesson teacher", () => {
+  describe("with 'TeacherRole' role", () => {
     beforeEach(() => {
-      cy.login({ roles: ["LessonTeacher"] });
+      cy.login({ roles: ["TeacherRole"], permissions: [] });
       cy.resizeToMobile();
       cy.visit("/index.html");
     });
@@ -124,18 +133,33 @@ describe("Navigation", () => {
       cy.get("bkd-mobile-nav").within((mobileMenu) => {
         cy.wrap(mobileMenu).should("be.visible");
 
-        cy.contains("li > button", "Unterricht").should("not.exist");
-        cy.contains("li > button", "Absenzen").should("not.exist");
-        cy.contains("li > button", "Angebote").should("exist");
-        cy.contains("li > button", "Aus-/Weiterbildungen").should("not.exist");
-        cy.contains("li > button", "Administration").should("not.exist");
+        expectGroups(["Unterricht", "Absenzen", "Angebote"]);
+
+        expectGroupItems("Unterricht", [
+          "Präsenzkontrolle",
+          "Aktuelle Fächer",
+          "Tests und Bewertung",
+          "Stellvertretung",
+        ]);
+
+        expectGroupItems("Absenzen", [
+          "Offene Absenzen entschuldigen",
+          "Absenzen bearbeiten",
+          "Absenzen auswerten",
+        ]);
+
+        expectGroupItems("Angebote", [
+          "Kurse und Veranstaltungen",
+          "Schulinterne Weiterbildung",
+          "Räume und Geräte reservieren",
+        ]);
       });
     });
   });
 
-  describe("as absence administrator", () => {
+  describe("with 'ClassTeacherRole' role", () => {
     beforeEach(() => {
-      cy.login({ roles: ["AbsenceAdministrator"] });
+      cy.login({ roles: ["ClassTeacherRole"], permissions: [] });
       cy.resizeToMobile();
       cy.visit("/index.html");
     });
@@ -146,18 +170,28 @@ describe("Navigation", () => {
       cy.get("bkd-mobile-nav").within((mobileMenu) => {
         cy.wrap(mobileMenu).should("be.visible");
 
-        cy.contains("li > button", "Unterricht").should("not.exist");
-        cy.contains("li > button", "Absenzen").should("exist");
-        cy.contains("li > button", "Angebote").should("exist");
-        cy.contains("li > button", "Aus-/Weiterbildungen").should("not.exist");
-        cy.contains("li > button", "Administration").should("not.exist");
+        expectGroups(["Unterricht", "Absenzen", "Angebote"]);
+
+        expectGroupItems("Unterricht", ["Aktuelle Fächer"]);
+
+        expectGroupItems("Absenzen", [
+          "Offene Absenzen entschuldigen",
+          "Absenzen bearbeiten",
+          "Absenzen auswerten",
+        ]);
+
+        expectGroupItems("Angebote", [
+          "Kurse und Veranstaltungen",
+          "Schulinterne Weiterbildung",
+          "Räume und Geräte reservieren",
+        ]);
       });
     });
   });
 
-  describe("as substitute administrator", () => {
+  describe("with 'AbsenceAdministrator' role", () => {
     beforeEach(() => {
-      cy.login({ roles: ["SubstituteAdministrator"] });
+      cy.login({ roles: ["AbsenceAdministrator"], permissions: [] });
       cy.resizeToMobile();
       cy.visit("/index.html");
     });
@@ -168,12 +202,124 @@ describe("Navigation", () => {
       cy.get("bkd-mobile-nav").within((mobileMenu) => {
         cy.wrap(mobileMenu).should("be.visible");
 
-        cy.contains("li > button", "Unterricht").should("not.exist");
-        cy.contains("li > button", "Absenzen").should("not.exist");
-        cy.contains("li > button", "Angebote").should("exist");
-        cy.contains("li > button", "Aus-/Weiterbildungen").should("not.exist");
-        cy.contains("li > button", "Administration").should("exist");
+        expectGroups(["Absenzen", "Angebote"]);
+
+        expectGroupItems("Absenzen", [
+          "Absenzen bearbeiten",
+          "Absenzen auswerten",
+        ]);
+
+        expectGroupItems("Angebote", [
+          "Kurse und Veranstaltungen",
+          "Schulinterne Weiterbildung",
+          "Räume und Geräte reservieren",
+        ]);
       });
     });
   });
+
+  describe("with 'SubstituteAdministrator' role", () => {
+    beforeEach(() => {
+      cy.login({ roles: ["SubstituteAdministrator"], permissions: [] });
+      cy.resizeToMobile();
+      cy.visit("/index.html");
+    });
+
+    it("only renders allowed groups & items", () => {
+      cy.get("button[aria-label='Menü']").click();
+
+      cy.get("bkd-mobile-nav").within((mobileMenu) => {
+        cy.wrap(mobileMenu).should("be.visible");
+
+        expectGroups(["Angebote", "Administration"]);
+
+        expectGroupItems("Angebote", [
+          "Kurse und Veranstaltungen",
+          "Schulinterne Weiterbildung",
+          "Räume und Geräte reservieren",
+        ]);
+
+        expectGroupItems("Administration", [
+          "Stellvertretungen administrieren",
+        ]);
+      });
+    });
+  });
+
+  describe("with 'PersonRight' permission", () => {
+    beforeEach(() => {
+      cy.login({ roles: [], permissions: ["PersonRight"] });
+      cy.resizeToMobile();
+      cy.visit("/index.html");
+    });
+
+    it("only renders allowed groups & items", () => {
+      cy.get("button[aria-label='Menü']").click();
+
+      cy.get("bkd-mobile-nav").within((mobileMenu) => {
+        cy.wrap(mobileMenu).should("be.visible");
+
+        expectGroups(["Angebote", "Administration"]);
+
+        expectGroupItems("Angebote", [
+          "Kurse und Veranstaltungen",
+          "Räume und Geräte reservieren",
+        ]);
+
+        expectGroupItems("Administration", [
+          "Personen und Institutionen suchen",
+          "Anmeldedetails einlesen",
+        ]);
+      });
+    });
+  });
+
+  describe("with 'RegistrationRight' permission", () => {
+    beforeEach(() => {
+      cy.login({ roles: [], permissions: ["RegistrationRight"] });
+      cy.resizeToMobile();
+      cy.visit("/index.html");
+    });
+
+    it("only renders allowed groups & items", () => {
+      cy.get("button[aria-label='Menü']").click();
+
+      cy.get("bkd-mobile-nav").within((mobileMenu) => {
+        cy.wrap(mobileMenu).should("be.visible");
+
+        expectGroups(["Angebote", "Administration"]);
+
+        expectGroupItems("Angebote", [
+          "Kurse und Veranstaltungen",
+          "Räume und Geräte reservieren",
+        ]);
+
+        expectGroupItems("Administration", ["Anmeldedetails einlesen"]);
+      });
+    });
+  });
+
+  function expectGroups(expectedGroups: ReadonlyArray<string>) {
+    return cy.get("li.group").then(($groups) => {
+      const groups = $groups
+        .find("button")
+        .toArray()
+        .map((groupToggle) => groupToggle.textContent?.trim());
+      expect(groups).to.deep.eq(expectedGroups);
+    });
+  }
+
+  function expectGroupItems(
+    group: string,
+    expectedItems: ReadonlyArray<string>
+  ) {
+    return cy.contains("li.group > button", group).then((groupToggle) => {
+      const items = groupToggle
+        .next("ul.items")
+        .find("li")
+        .toArray()
+        .map((item) => item.textContent?.trim());
+      expect(items).to.deep.eq(expectedItems);
+    });
+  }
 });
