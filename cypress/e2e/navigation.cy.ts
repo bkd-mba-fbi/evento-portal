@@ -274,9 +274,40 @@ describe("Navigation", () => {
     });
   });
 
-  describe("with 'RegistrationRight' permission", () => {
+  describe("with 'RegistrationRightWeiterbildungModulanlass' permission", () => {
     beforeEach(() => {
-      cy.login({ roles: [], permissions: ["RegistrationRight"] });
+      cy.login({
+        roles: [],
+        permissions: ["RegistrationRightWeiterbildungModulanlass"],
+      });
+      cy.resizeToMobile();
+      cy.visit("/index.html");
+    });
+
+    it("only renders allowed groups & items", () => {
+      cy.get("button[aria-label='Menü']").click();
+
+      cy.get("bkd-mobile-nav").within((mobileMenu) => {
+        cy.wrap(mobileMenu).should("be.visible");
+
+        expectGroups(["Angebote", "Administration"]);
+
+        expectGroupItems("Angebote", [
+          "Kurse und Veranstaltungen",
+          "Räume und Geräte reservieren",
+        ]);
+
+        expectGroupItems("Administration", ["Anmeldedetails einlesen"]);
+      });
+    });
+  });
+
+  describe("with 'RegistrationRightWeiterbildungKurs' permission", () => {
+    beforeEach(() => {
+      cy.login({
+        roles: [],
+        permissions: ["RegistrationRightWeiterbildungKurs"],
+      });
       cy.resizeToMobile();
       cy.visit("/index.html");
     });

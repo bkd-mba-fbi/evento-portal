@@ -238,7 +238,11 @@ export const settings: Settings = {
           {
             key: "eventRegistration",
             label: msg("Anmeldedetails einlesen"),
-            allowedRolesOrPermissions: ["PersonRight", "RegistrationRight"],
+            allowedRolesOrPermissions: [
+              "PersonRight",
+              "RegistrationRightWeiterbildungModulanlass",
+              "RegistrationRightWeiterbildungKurs",
+            ],
             deniedInstanceIds: null,
             appKey: "anmeldedetailsEinlesen",
             appPath: "#/input/",
