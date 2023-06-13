@@ -126,10 +126,29 @@ export class MobileNav extends LitElement {
 
       .service-nav {
         background: var(--bkd-brand-sand);
-        padding: 1rem;
+        padding: 1.25rem;
         display: flex;
         flex-direction: column;
         gap: 2rem;
+      }
+
+      .service-nav div {
+        font-size: 0.875rem;
+        letter-spacing: 0.01rem;
+        word-spacing: 0.025rem;
+        font-style: normal;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .service-nav img {
+        margin-left: -5.25px;
+      }
+
+      bkd-language-switcher {
+        padding-left: 0.75rem;
       }
     `,
   ];
@@ -200,13 +219,15 @@ export class MobileNav extends LitElement {
   }
 
   private renderEntry(entry: UserSettingEntry) {
-    return html`<li>
-      <a href=${entry.href} target=${entry.external ? "_blank" : "_self"}
-        >${entry.img
-          ? html`<img src=${entry.img} alt="" width="24" height="24" />`
-          : nothing}
-        ${msg(entry.label)}</a
-      >
+    return html`<li class="item">
+      <a href=${entry.href} target=${entry.external ? "_blank" : "_self"}>
+        <div>
+          ${entry.img
+            ? html`<img src=${entry.img} alt="" width="24" height="24" />`
+            : nothing}
+          ${msg(entry.label)}
+        </div>
+      </a>
     </li>`;
   }
 
