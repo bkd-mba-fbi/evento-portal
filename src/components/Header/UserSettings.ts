@@ -96,7 +96,7 @@ export class UserSettings extends LitElement {
       >
         <img src="/icons/settings.svg" alt="" width="32" height="32" />
       </button>
-      <ul id="menu" role="menu" ?hidden=${!this.open}>
+      <ul id="settings-menu" role="menu" ?hidden=${!this.open}>
         ${map(userSettingEntries(this.currentLocale), this.renderEntry)}
       </ul>
     `;
