@@ -33,6 +33,9 @@ export const customProperties = css`
   --bkd-language-switcher-active-border: rgba(234, 22, 31, 0.77);
   --bkd-footer-border: rgba(238, 238, 238, 1);
 
+  /* Dropdowns */
+  --bkd-z-index-dropdown: 1;
+
   /* Fonts */
   --bkd-font-family: "Roboto", sans-serif;
   --bkd-font-size-base: 16px;
@@ -100,8 +103,7 @@ export const theme = css`
   }
 
   /* Reset */
-  :host,
-  :host * {
+  * {
     box-sizing: border-box;
 
     font-family: var(--bkd-font-family);

@@ -28,6 +28,10 @@ export class ServiceNav extends LitElement {
       /* Medium screen */
 
       @media screen and (max-width: 1200px) {
+        bkd-user-settings {
+          display: none;
+        }
+
         bkd-language-switcher {
           display: none;
         }
@@ -55,9 +59,9 @@ export class ServiceNav extends LitElement {
       <div
         style="background: #000; border-radius: 50%; width: 32px; height: 32px;"
       ></div>
-      <div
-        style="background: #000; border-radius: 50%; width: 32px; height: 32px;"
-      ></div>
+      <bkd-user-settings
+        currentLocale=${this.currentLocale}
+      ></bkd-user-settings>
       <bkd-language-switcher
         currentLocale=${this.currentLocale}
       ></bkd-language-switcher>
