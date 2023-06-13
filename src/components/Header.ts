@@ -151,6 +151,7 @@ export class Header extends LitElement {
           /* TODO: should be determined from URL/state */
           this.navigation[0].items[0]
         }
+        currentLocale=${this.currentLocale}
       ></bkd-mobile-nav>`;
     }
     return null;

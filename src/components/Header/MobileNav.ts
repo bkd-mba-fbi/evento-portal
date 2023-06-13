@@ -15,6 +15,8 @@ import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
 export class MobileNav extends LitElement {
   @property()
   navigation: Navigation = [];
+  @property()
+  currentLocale = "de";
 
   @state()
   openGroup: NavigationGroup | null = null;
@@ -28,12 +30,15 @@ export class MobileNav extends LitElement {
       :host {
         position: absolute;
         width: 100vw;
+        padding: 1.25rem;
         left: 0;
         top: calc(100% + 1px); /* Place right below header */
-        height: calc(100vh - 100% - 1px);
+        max-height: calc(100vh - 100% - 1px);
         display: flex;
+        gap: 5rem;
         flex-direction: column;
         background-color: var(--bkd-func-bg-white);
+        box-shadow: 0 2px 6px -1px var(--bkd-mobile-nav-shadow);
       }
 
       a {
@@ -113,6 +118,14 @@ export class MobileNav extends LitElement {
       li.item.active a:after {
         border-color: transparent;
       }
+
+      .service-nav {
+        background: var(--bkd-brand-sand);
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
     `,
   ];
 
@@ -174,6 +187,17 @@ export class MobileNav extends LitElement {
       <ul class="nav">
         ${map(this.navigation, this.renderGroup.bind(this))}
       </ul>
+      <div class="service-nav">
+        <ul>
+          <li role="presentation">TODO</li>
+          <li role="presentation">TODO</li>
+          <li role="presentation">TODO</li>
+          <li role="presentation">TODO</li>
+        </ul>
+        <bkd-language-switcher
+          currentLocale=${this.currentLocale}
+        ></bkd-language-switcher>
+      </div>
     `;
   }
 }
