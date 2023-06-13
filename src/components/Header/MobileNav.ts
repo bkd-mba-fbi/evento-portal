@@ -1,6 +1,6 @@
-import { css, html, LitElement } from "lit";
+import { css, html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { localized } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
 import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
@@ -9,6 +9,10 @@ import { theme } from "../../utils/theme";
 import { Navigation, NavigationGroup, NavigationItem } from "../../settings";
 import arrowDownIcon from "../../assets/icons/arrow-down.svg?raw";
 import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
+import {
+  userSettingEntries,
+  UserSettingEntry,
+} from "../../utils/userSettings.ts";
 
 @customElement("bkd-mobile-nav")
 @localized()
@@ -195,6 +199,17 @@ export class MobileNav extends LitElement {
     `;
   }
 
+  private renderEntry(entry: UserSettingEntry) {
+    return html`<li>
+      <a href=${entry.href} target=${entry.external ? "_blank" : "_self"}
+        >${entry.img
+          ? html`<img src=${entry.img} alt="" width="24" height="24" />`
+          : nothing}
+        ${msg(entry.label)}</a
+      >
+    </li>`;
+  }
+
   render() {
     return html`
       <ul class="nav">
@@ -202,10 +217,7 @@ export class MobileNav extends LitElement {
       </ul>
       <div class="service-nav">
         <ul>
-          <li role="presentation">TODO</li>
-          <li role="presentation">TODO</li>
-          <li role="presentation">TODO</li>
-          <li role="presentation">TODO</li>
+          ${map(userSettingEntries(this.currentLocale), this.renderEntry)}
         </ul>
         <bkd-language-switcher
           currentLocale=${this.currentLocale}

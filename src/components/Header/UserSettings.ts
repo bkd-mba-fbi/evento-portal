@@ -1,4 +1,4 @@
-import { css, html, LitElement } from "lit";
+import { css, html, LitElement, nothing } from "lit";
 import {
   customElement,
   property,
@@ -8,6 +8,11 @@ import {
 } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { theme } from "../../utils/theme.ts";
+import { map } from "lit/directives/map.js";
+import {
+  UserSettingEntry,
+  userSettingEntries,
+} from "../../utils/userSettings.ts";
 
 @customElement("bkd-user-settings")
 @localized()
@@ -80,37 +85,6 @@ export class UserSettings extends LitElement {
     `,
   ];
 
-  private renderProfile() {
-    return html`<a role="menuitem" href="#">${msg("Mein Profil")}</a>`;
-  }
-
-  private renderSettings() {
-    return html`<a role="menuitem" href="#">${msg("Einstellungen")}</a>`;
-  }
-
-  private renderVideos() {
-    const playlist =
-      this.currentLocale === "de"
-        ? "PLLDtLiOuctbx-_EQWgWqTO1MRbX845OEf"
-        : "PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU";
-
-    return html`<a
-      role="menuitem"
-      href=${`https://www.youtube.com/playlist?list=${playlist}`}
-      target="_blank"
-      ><img src="/icons/external-link.svg" alt="" width="24" height="24" />
-      ${msg("Video-Tutorials")}</a
-    >`;
-  }
-
-  private renderLogout() {
-    return html`<a role="menuitem" href="#"
-      ><img src="/icons/logout.svg" alt="" width="24" height="24" />${msg(
-        "Logout"
-      )}</a
-    >`;
-  }
-
   render() {
     return html`
       <button
@@ -123,12 +97,23 @@ export class UserSettings extends LitElement {
         <img src="/icons/settings.svg" alt="" width="32" height="32" />
       </button>
       <ul id="menu" role="menu" ?hidden=${!this.open}>
-        <li role="presentation">${this.renderProfile()}</li>
-        <li role="presentation">${this.renderSettings()}</li>
-        <li role="presentation">${this.renderVideos()}</li>
-        <li role="presentation">${this.renderLogout()}</li>
+        ${map(userSettingEntries(this.currentLocale), this.renderEntry)}
       </ul>
     `;
+  }
+
+  private renderEntry(item: UserSettingEntry) {
+    return html`<li role="presentation">
+      <a
+        role="menuitem"
+        href=${item.href}
+        target=${item.external ? "_blank" : "_self"}
+        >${item.img
+          ? html`<img src=${item.img} alt="" width="24" height="24" />`
+          : nothing}
+        ${msg(item.label)}</a
+      >
+    </li>`;
   }
 
   private toggle() {
