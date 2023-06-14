@@ -5,6 +5,7 @@ import { classMap } from "lit/directives/class-map.js";
 import { theme } from "../../utils/theme";
 import { NavigationGroup, NavigationItem } from "../../settings";
 import { map } from "lit/directives/map.js";
+import { DropdownToggleController } from "../../controllers/dropdown-toggle.ts";
 
 @customElement("bkd-nav-group-toggle")
 @localized()
@@ -54,6 +55,12 @@ export class NavGroupToggle extends LitElement {
     `,
   ];
 
+  private groupMenu = new DropdownToggleController(
+    this,
+    "group-toggle",
+    "group-menu"
+  );
+
   private renderItem(item: NavigationItem) {
     // TODO hide nav item/group if no permission
     return html`<li role="presentation">
@@ -61,18 +68,25 @@ export class NavGroupToggle extends LitElement {
     </li>`;
   }
 
+  private toggle() {
+    this.groupMenu.toggle();
+  }
+
   render() {
     if (!this.group) return;
 
     return html`
       <a
+        id="group-toggle"
         href="#"
-        @click=${(e: MouseEvent) => e.preventDefault()}
+        @click=${this.toggle.bind(this)}
         class=${classMap({ active: Boolean(this.active) })}
+        aria-expanded=${this.groupMenu.open}
+        aria-haspopup="menu"
       >
         ${this.group.label}
       </a>
-      <ul role="menu">
+      <ul role="menu" id="group-menu" ?hidden=${!this.groupMenu.open}>
         ${map(this.group.items, this.renderItem)}
       </ul>
     `;
