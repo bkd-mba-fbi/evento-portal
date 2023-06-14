@@ -6,20 +6,38 @@ describe("Service Navigation", () => {
       cy.resizeToDesktop();
       cy.visit("/index.html");
     });
+
+    it("open/closes user settings", () => {
+      // User settings menu initially closed
+      cy.get("button[aria-label='Menü Benutzereinstellungen']")
+        .as("toggle")
+        .should("be.visible")
+        .ariaExpanded(false);
+      cy.get("#settings-menu").as("service-nav").should("not.be.visible");
+
+      // Open user settings menu
+      cy.get("@toggle").click();
+      cy.get("@toggle").ariaExpanded(true);
+      cy.get("@service-nav").should("be.visible");
+
+      // Close user settings menu
+      cy.get("@toggle").click();
+      cy.get("@toggle").ariaExpanded(false);
+      cy.get("@service-nav").should("not.be.visible");
+    });
+
     it("renders user settings in the service navigation", () => {
       // User settings menu initially closed
       cy.get("button[aria-label='Menü Benutzereinstellungen']")
         .as("toggle")
         .should("be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").should("not.be.visible");
+      cy.get("#settings-menu").as("service-nav").should("not.be.visible");
 
       // Open user settings menu
       cy.get("@toggle").click();
-      cy.get("@toggle").ariaExpanded(true);
-      cy.get("#settings-menu").as("service-nav").should("be.visible");
-
       cy.get("@service-nav")
+        .should("be.visible")
         .find("a")
         .then((links) =>
           expect(
@@ -31,6 +49,63 @@ describe("Service Navigation", () => {
             "Logout",
           ])
         );
+    });
+
+    it("closes user settings on escape", () => {
+      // User settings menu initially closed
+      cy.get("button[aria-label='Menü Benutzereinstellungen']")
+        .as("toggle")
+        .should("be.visible")
+        .ariaExpanded(false);
+      cy.get("#settings-menu").as("service-nav").should("not.be.visible");
+
+      // Open user settings menu
+      cy.get("@toggle").click();
+      cy.get("@toggle").ariaExpanded(true);
+      cy.get("@service-nav").should("be.visible");
+
+      // Close user settings menu
+      cy.document().trigger("keydown", { key: "Escape" });
+      cy.get("@toggle").ariaExpanded(false);
+      cy.get("@service-nav").should("not.be.visible");
+    });
+
+    it("closes user settings on select", () => {
+      // User settings menu initially closed
+      cy.get("button[aria-label='Menü Benutzereinstellungen']")
+        .as("toggle")
+        .should("be.visible")
+        .ariaExpanded(false);
+      cy.get("#settings-menu").as("service-nav").should("not.be.visible");
+
+      // Open user settings menu
+      cy.get("@toggle").click();
+      cy.get("@toggle").ariaExpanded(true);
+      cy.get("@service-nav").should("be.visible");
+
+      // Close user settings menu
+      cy.get("@service-nav").get("a").first().should("be.visible").click();
+      cy.get("@toggle").ariaExpanded(false);
+      cy.get("@service-nav").should("not.be.visible");
+    });
+
+    it("closes user settings on click away", () => {
+      // User settings menu initially closed
+      cy.get("button[aria-label='Menü Benutzereinstellungen']")
+        .as("toggle")
+        .should("be.visible")
+        .ariaExpanded(false);
+      cy.get("#settings-menu").as("service-nav").should("not.be.visible");
+
+      // Open user settings menu
+      cy.get("@toggle").click();
+      cy.get("@toggle").ariaExpanded(true);
+      cy.get("@service-nav").should("be.visible");
+
+      // Close user settings menu
+      cy.get('img[alt="Evento Startseite"]').should("be.visible").click();
+      cy.get("@toggle").ariaExpanded(false);
+      cy.get("@service-nav").should("not.be.visible");
     });
 
     it("renders language switcher in the service navigation", () => {
