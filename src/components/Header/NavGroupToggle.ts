@@ -1,9 +1,10 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { localized } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
 import { classMap } from "lit/directives/class-map.js";
 import { theme } from "../../utils/theme";
-import { NavigationGroup } from "../../settings";
+import { NavigationGroup, NavigationItem } from "../../settings";
+import { map } from "lit/directives/map.js";
 
 @customElement("bkd-nav-group-toggle")
 @localized()
@@ -53,6 +54,13 @@ export class NavGroupToggle extends LitElement {
     `,
   ];
 
+  private renderItem(item: NavigationItem) {
+    // TODO hide nav item/group if no permission
+    return html`<li role="presentation">
+      <a role="menuitem" href=${item.appPath}>${msg(item.label)}</a>
+    </li>`;
+  }
+
   render() {
     if (!this.group) return;
 
@@ -64,6 +72,9 @@ export class NavGroupToggle extends LitElement {
       >
         ${this.group.label}
       </a>
+      <ul role="menu">
+        ${map(this.group.items, this.renderItem)}
+      </ul>
     `;
   }
 }
