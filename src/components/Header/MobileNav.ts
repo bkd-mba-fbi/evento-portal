@@ -10,10 +10,8 @@ import { theme } from "../../utils/theme";
 import { Navigation, NavigationGroup, NavigationItem } from "../../settings";
 import arrowDownIcon from "../../assets/icons/arrow-down.svg?raw";
 import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
-import {
-  userSettingEntries,
-  UserSettingEntry,
-} from "../../utils/userSettings.ts";
+import { userSettingItems, UserSettingItem } from "../../utils/userSettings.ts";
+import { isExternalUrl } from "../../utils/url.ts";
 import { portalState } from "../../state/portal-state.ts";
 
 @customElement("bkd-mobile-nav")
@@ -176,10 +174,19 @@ export class MobileNav extends LitElement {
     this.openGroup = group.label !== this.openGroup?.label ? group : null;
   }
 
-  private handleItemClick(event: MouseEvent, item: NavigationItem): void {
+  private handleNavItemClick(event: MouseEvent, item: NavigationItem): void {
     event.preventDefault();
     // TODO: perform actual navigation action
     this.currentItem = item;
+  }
+
+  private handleSettingsItemClick(e: MouseEvent, item: UserSettingItem) {
+    e.preventDefault();
+    if (isExternalUrl(item.href, this.baseURI)) {
+      window.open(item.href, "_blank");
+    }
+    console.log("handleSettingsItemClick", item); // TODO: perform actual navigation action
+    // TODO handle dropdown toggle close
   }
 
   private renderGroup(group: NavigationGroup) {
@@ -200,13 +207,13 @@ export class MobileNav extends LitElement {
           ${unsafeHTML(open ? arrowUpIcon : arrowDownIcon)}
         </button>
         <ul class="items">
-          ${map(group.items, this.renderItem.bind(this))}
+          ${map(group.items, this.renderNavItem.bind(this))}
         </ul>
       </li>
     `;
   }
 
-  private renderItem(item: NavigationItem) {
+  private renderNavItem(item: NavigationItem) {
     const active = item.key === this.currentItem?.key;
     return html`
       <li
@@ -215,21 +222,27 @@ export class MobileNav extends LitElement {
           active,
         })}
       >
-        <a href="#" @click=${(e: MouseEvent) => this.handleItemClick(e, item)}>
+        <a
+          href="#"
+          @click=${(e: MouseEvent) => this.handleNavItemClick(e, item)}
+        >
           ${item.label}
         </a>
       </li>
     `;
   }
 
-  private renderEntry(entry: UserSettingEntry) {
+  private renderSettingsItem(item: UserSettingItem) {
     return html`<li class="item">
-      <a href=${entry.href} target=${entry.external ? "_blank" : "_self"}>
+      <a
+        href=${item.href}
+        @click=${(e: MouseEvent) => this.handleSettingsItemClick(e, item)}
+      >
         <div>
-          ${entry.img
-            ? html`<img src=${entry.img} alt="" width="24" height="24" />`
+          ${item.img
+            ? html`<img src=${item.img} alt="" width="24" height="24" />`
             : nothing}
-          ${msg(entry.label)}
+          ${msg(item.label)}
         </div>
       </a>
     </li>`;
@@ -242,7 +255,10 @@ export class MobileNav extends LitElement {
       </ul>
       <div class="service-nav">
         <ul>
-          ${map(userSettingEntries(portalState.locale), this.renderEntry)}
+          ${map(
+            userSettingItems(portalState.locale),
+            this.renderSettingsItem.bind(this)
+          )}
         </ul>
         <bkd-language-switcher></bkd-language-switcher>
       </div>

@@ -6,10 +6,8 @@ import { StateController } from "@lit-app/state";
 import { theme } from "../../utils/theme.ts";
 import { DropdownToggleController } from "../../controllers/dropdown-toggle.ts";
 import { map } from "lit/directives/map.js";
-import {
-  UserSettingEntry,
-  userSettingEntries,
-} from "../../utils/userSettings.ts";
+import { UserSettingItem, userSettingItems } from "../../utils/userSettings.ts";
+import { isExternalUrl } from "../../utils/url.ts";
 import { portalState } from "../../state/portal-state.ts";
 
 @customElement("bkd-user-settings")
@@ -77,8 +75,8 @@ export class UserSettings extends LitElement {
 
   private settingsMenu = new DropdownToggleController(
     this,
-    "service-nav-toggle",
-    "service-nav-menu"
+    "settings-toggle",
+    "settings-menu"
   );
 
   constructor() {
@@ -90,7 +88,7 @@ export class UserSettings extends LitElement {
     return html`
       <button
         type="button"
-        id="service-nav-toggle"
+        id="settings-toggle"
         @click=${this.toggle.bind(this)}
         aria-label=${msg("Menü Benutzereinstellungen")}
         aria-expanded=${this.settingsMenu.open}
@@ -99,17 +97,17 @@ export class UserSettings extends LitElement {
         <img src="/icons/settings.svg" alt="" width="32" height="32" />
       </button>
       <ul id="settings-menu" role="menu" ?hidden=${!this.settingsMenu.open}>
-        ${map(userSettingEntries(portalState.locale), this.renderEntry)}
+        ${map(userSettingItems(portalState.locale), this.renderItem.bind(this))}
       </ul>
     `;
   }
 
-  private renderEntry(item: UserSettingEntry) {
+  private renderItem(item: UserSettingItem) {
     return html`<li role="presentation">
       <a
         role="menuitem"
         href=${item.href}
-        target=${item.external ? "_blank" : "_self"}
+        @click=${(e: MouseEvent) => this.handleSettingsItemClick(e, item)}
         >${item.img
           ? html`<img src=${item.img} alt="" width="24" height="24" />`
           : nothing}
@@ -125,6 +123,15 @@ export class UserSettings extends LitElement {
     } else {
       document.removeEventListener("keydown", this.handleKeydown);
     }
+  }
+
+  private handleSettingsItemClick(e: MouseEvent, item: UserSettingItem) {
+    e.preventDefault();
+    if (isExternalUrl(item.href, this.baseURI)) {
+      window.open(item.href, "_blank");
+    }
+    console.log("handleSettingsItemClick", item); // TODO: perform actual navigation action
+    this.settingsMenu.close();
   }
 
   private activeLinkIndex(): number | null {

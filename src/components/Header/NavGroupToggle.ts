@@ -64,7 +64,12 @@ export class NavGroupToggle extends LitElement {
   private renderItem(item: NavigationItem) {
     // TODO hide nav item/group if no permission
     return html`<li role="presentation">
-      <a role="menuitem" href=${item.appPath}>${msg(item.label)}</a>
+      <a
+        role="menuitem"
+        href=${item.appPath}
+        @click=${(e: MouseEvent) => this.handleItemClick(e, item)}
+        >${msg(item.label)}</a
+      >
     </li>`;
   }
 
@@ -87,9 +92,15 @@ export class NavGroupToggle extends LitElement {
         ${this.group.label}
       </a>
       <ul role="menu" id="group-menu" ?hidden=${!this.groupMenu.open}>
-        ${map(this.group.items, this.renderItem)}
+        ${map(this.group.items, this.renderItem.bind(this))}
       </ul>
     `;
+  }
+
+  private handleItemClick(e: MouseEvent, item: NavigationItem) {
+    e.preventDefault();
+    console.log("handleItemClick", item); // TODO: perform actual navigation action
+    this.groupMenu.close();
   }
 }
 
