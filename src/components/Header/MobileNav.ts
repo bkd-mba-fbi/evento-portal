@@ -4,6 +4,7 @@ import { localized, msg } from "@lit/localize";
 import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import { StateController } from "@lit-app/state";
 
 import { theme } from "../../utils/theme";
 import { Navigation, NavigationGroup, NavigationItem } from "../../settings";
@@ -13,15 +14,13 @@ import {
   userSettingEntries,
   UserSettingEntry,
 } from "../../utils/userSettings.ts";
+import { portalState } from "../../state/portal-state.ts";
 
 @customElement("bkd-mobile-nav")
 @localized()
 export class MobileNav extends LitElement {
   @property()
   navigation: Navigation = [];
-
-  @property()
-  currentLocale = "de";
 
   @property()
   currentItem: NavigationItem | null = null;
@@ -153,6 +152,11 @@ export class MobileNav extends LitElement {
     `,
   ];
 
+  constructor() {
+    super();
+    new StateController(this, portalState);
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
     this.openGroupOfCurrentItem();
@@ -238,11 +242,9 @@ export class MobileNav extends LitElement {
       </ul>
       <div class="service-nav">
         <ul>
-          ${map(userSettingEntries(this.currentLocale), this.renderEntry)}
+          ${map(userSettingEntries(portalState.locale), this.renderEntry)}
         </ul>
-        <bkd-language-switcher
-          currentLocale=${this.currentLocale}
-        ></bkd-language-switcher>
+        <bkd-language-switcher></bkd-language-switcher>
       </div>
     `;
   }

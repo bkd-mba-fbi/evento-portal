@@ -1,14 +1,14 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
+import { StateController } from "@lit-app/state";
+
 import { theme } from "../utils/theme";
+import { portalState } from "../state/portal-state";
 
 @customElement("bkd-footer")
 @localized()
 export class Footer extends LitElement {
-  @property()
-  currentLocale = "de";
-
   static styles = [
     theme,
     css`
@@ -90,18 +90,23 @@ export class Footer extends LitElement {
     `,
   ];
 
+  constructor() {
+    super();
+    new StateController(this, portalState);
+  }
+
   render() {
     return html`
       <footer>
         <div class="copyright">${msg("© Bildungs- und Kulturdirektion")}</div>
         <div class="footer-nav">
           <a
-            href=${`https://www.bkd.be.ch/${this.currentLocale}/tools/rechtliches.html`}
+            href=${`https://www.bkd.be.ch/${portalState.locale}/tools/rechtliches.html`}
             target="_blank"
             >${msg("Rechtliche Hinweise")}</a
           >
           <a
-            href=${`https://www.bkd.be.ch/${this.currentLocale}/tools/impressum.html`}
+            href=${`https://www.bkd.be.ch/${portalState.locale}/tools/impressum.html`}
             target="_blank"
             >${msg("Impressum")}</a
           >

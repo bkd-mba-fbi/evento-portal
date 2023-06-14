@@ -1,6 +1,7 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
+import { Unsubscribe } from "@lit-app/state";
 import { theme } from "../utils/theme";
 import { DropdownToggleController } from "../controllers/dropdown-toggle";
 import { Navigation, settings } from "../settings";
@@ -8,13 +9,11 @@ import { filterAllowed } from "../utils/navigation";
 import { getTokenPayload } from "../utils/token";
 import { getCurrentAccessToken } from "../utils/storage";
 import { fetchUserAccessInfo } from "../utils/fetch";
+import { portalState } from "../state/portal-state";
 
 @customElement("bkd-header")
 @localized()
 export class Header extends LitElement {
-  @property()
-  currentLocale = "de";
-
   @state()
   private navigation: Navigation = [];
 
@@ -127,10 +126,21 @@ export class Header extends LitElement {
     `,
   ];
 
-  constructor() {
-    super();
+  private unsubscribeLocale: Unsubscribe | null = null;
+
+  connectedCallback(): void {
+    super.connectedCallback();
 
     this.initNavigation();
+    this.unsubscribeLocale = portalState.subscribeLocale(() =>
+      // Make sure to update nav when locale changes
+      this.initNavigation()
+    );
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.unsubscribeLocale && this.unsubscribeLocale();
   }
 
   private async initNavigation(): Promise<void> {
@@ -160,7 +170,6 @@ export class Header extends LitElement {
           /* TODO: should be determined from URL/state */
           (this.navigation && this.navigation[0]?.items[0]) || null
         }
-        currentLocale=${this.currentLocale}
       ></bkd-mobile-nav>`;
     }
     return null;
@@ -173,7 +182,6 @@ export class Header extends LitElement {
     return html`
       <header>
         <bkd-service-nav
-          currentLocale=${this.currentLocale}
           .mobileNavOpen=${this.mobileNav.open}
           @bkdhamburgertoggle=${() => this.mobileNav.toggle()}
         ></bkd-service-nav>

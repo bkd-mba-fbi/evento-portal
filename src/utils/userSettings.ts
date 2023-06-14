@@ -6,10 +6,10 @@ export type UserSettingEntry = Readonly<{
 }>;
 
 export function userSettingEntries(
-  currentLocale = "de"
+  locale: string
 ): ReadonlyArray<UserSettingEntry> {
   const playlist =
-    currentLocale === "de"
+    locale === "de"
       ? "PLLDtLiOuctbx-_EQWgWqTO1MRbX845OEf"
       : "PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU";
 

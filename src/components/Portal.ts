@@ -1,7 +1,8 @@
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
-import { configureLocalization, localized } from "@lit/localize";
-import { sourceLocale, targetLocales } from "../locales.ts";
+import { localized } from "@lit/localize";
+import { StateController } from "@lit-app/state";
+
 import {
   customProperties,
   registerLightDomStyles,
@@ -13,6 +14,7 @@ import {
   ensureAuthenticated,
 } from "../utils/auth.ts";
 import { settings } from "../settings.ts";
+import { portalState } from "../state/portal-state.ts";
 
 // Make custom properties available globally in light DOM
 registerLightDomStyles(
@@ -23,11 +25,11 @@ registerLightDomStyles(
   `.toString()
 );
 
-const { getLocale, setLocale } = configureLocalization({
-  sourceLocale,
-  targetLocales,
-  loadLocale: (locale) => import(/* @vite-ignore */ `/locales/${locale}.js`),
-});
+// const { getLocale, setLocale } = configureLocalization({
+//   sourceLocale,
+//   targetLocales,
+//   loadLocale: (locale) => import(/* @vite-ignore */ `/locales/${locale}.js`),
+// });
 
 @customElement("bkd-portal")
 @localized()
@@ -55,7 +57,7 @@ export class Portal extends LitElement {
   constructor() {
     super();
 
-    this.updateDocumentLang(getLocale());
+    new StateController(this, portalState);
     ensureAuthenticated(this.oAuthClient, this.getScopeFromState());
   }
 
@@ -83,27 +85,11 @@ export class Portal extends LitElement {
     );
   }
 
-  private handleLocaleChange(event: CustomEvent): void {
-    const locale = event.detail.locale;
-    setLocale(locale);
-    this.updateDocumentLang(locale);
-    // TODO: ...or just reload whole app to refetch the data in the corresponding language?
-  }
-
-  private updateDocumentLang(lang: string): void {
-    document.documentElement.lang = lang;
-  }
-
   render() {
-    const currentLocale = getLocale();
-
     return html`
-      <bkd-header
-        currentLocale=${currentLocale}
-        @bkdlocalechange=${this.handleLocaleChange.bind(this)}
-      ></bkd-header>
+      <bkd-header></bkd-header>
       <bkd-content></bkd-content>
-      <bkd-footer currentLocale=${currentLocale}></bkd-footer>
+      <bkd-footer></bkd-footer>
     `;
   }
 }

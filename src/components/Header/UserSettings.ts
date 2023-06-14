@@ -1,6 +1,8 @@
 import { css, html, LitElement, nothing } from "lit";
-import { customElement, property, queryAll } from "lit/decorators.js";
+import { customElement, queryAll } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
+import { StateController } from "@lit-app/state";
+
 import { theme } from "../../utils/theme.ts";
 import { DropdownToggleController } from "../../controllers/dropdown-toggle.ts";
 import { map } from "lit/directives/map.js";
@@ -8,13 +10,11 @@ import {
   UserSettingEntry,
   userSettingEntries,
 } from "../../utils/userSettings.ts";
+import { portalState } from "../../state/portal-state.ts";
 
 @customElement("bkd-user-settings")
 @localized()
 export class UserSettings extends LitElement {
-  @property()
-  currentLocale = "de";
-
   @queryAll("a")
   private menuLinks?: NodeListOf<HTMLElement>;
 
@@ -81,6 +81,11 @@ export class UserSettings extends LitElement {
     "service-nav-menu"
   );
 
+  constructor() {
+    super();
+    new StateController(this, portalState);
+  }
+
   render() {
     return html`
       <button
@@ -94,7 +99,7 @@ export class UserSettings extends LitElement {
         <img src="/icons/settings.svg" alt="" width="32" height="32" />
       </button>
       <ul id="settings-menu" role="menu" ?hidden=${!this.settingsMenu.open}>
-        ${map(userSettingEntries(this.currentLocale), this.renderEntry)}
+        ${map(userSettingEntries(portalState.locale), this.renderEntry)}
       </ul>
     `;
   }
