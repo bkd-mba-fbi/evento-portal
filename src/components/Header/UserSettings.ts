@@ -1,13 +1,8 @@
 import { css, html, LitElement, nothing } from "lit";
-import {
-  customElement,
-  property,
-  query,
-  queryAll,
-  state,
-} from "lit/decorators.js";
+import { customElement, property, queryAll } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { theme } from "../../utils/theme.ts";
+import { DropdownToggleController } from "../../controllers/dropdown-toggle.ts";
 import { map } from "lit/directives/map.js";
 import {
   UserSettingEntry,
@@ -20,11 +15,6 @@ export class UserSettings extends LitElement {
   @property()
   currentLocale = "de";
 
-  @state()
-  protected open = false;
-
-  @query("button")
-  private menuButton: any;
   @queryAll("a")
   private menuLinks: any;
 
@@ -85,18 +75,25 @@ export class UserSettings extends LitElement {
     `,
   ];
 
+  private settingsMenu = new DropdownToggleController(
+    this,
+    "service-nav-toggle",
+    "service-nav-menu"
+  );
+
   render() {
     return html`
       <button
         type="button"
-        @click=${() => this.toggle()}
+        id="service-nav-toggle"
+        @click=${this.toggle.bind(this)}
         aria-label=${msg("Menü Benutzereinstellungen")}
-        aria-expanded=${this.open}
+        aria-expanded=${this.settingsMenu.open}
         aria-haspopup="menu"
       >
         <img src="/icons/settings.svg" alt="" width="32" height="32" />
       </button>
-      <ul id="settings-menu" role="menu" ?hidden=${!this.open}>
+      <ul id="settings-menu" role="menu" ?hidden=${!this.settingsMenu.open}>
         ${map(userSettingEntries(this.currentLocale), this.renderEntry)}
       </ul>
     `;
@@ -117,26 +114,13 @@ export class UserSettings extends LitElement {
   }
 
   private toggle() {
-    this.open = !this.open;
-    if (this.open) {
+    this.settingsMenu.toggle();
+    if (this.settingsMenu.open) {
       document.addEventListener("keydown", this.handleKeydown);
-      document.addEventListener("click", this.handleClick);
     } else {
       document.removeEventListener("keydown", this.handleKeydown);
-      document.removeEventListener("click", this.handleClick);
     }
   }
-
-  private handleClick = (e: MouseEvent) => {
-    const target = e.composedPath()[0];
-    if (
-      target !== this.menuButton &&
-      !this.menuButton.contains(target) &&
-      this.open
-    ) {
-      this.toggle();
-    }
-  };
 
   private activeLinkIndex(): number | null {
     const active = this.shadowRoot?.activeElement;
@@ -161,9 +145,6 @@ export class UserSettings extends LitElement {
 
   private handleKeydown = (e: KeyboardEvent) => {
     switch (e.key) {
-      case "Escape":
-        this.toggle();
-        break;
       case "ArrowDown":
         const next = this.nextLinkIndex(1);
         this.menuLinks[next].focus();
