@@ -16,7 +16,7 @@ export class UserSettings extends LitElement {
   currentLocale = "de";
 
   @queryAll("a")
-  private menuLinks: any;
+  private menuLinks?: NodeListOf<HTMLElement>;
 
   static styles = [
     theme,
@@ -123,15 +123,18 @@ export class UserSettings extends LitElement {
   }
 
   private activeLinkIndex(): number | null {
-    const active = this.shadowRoot?.activeElement;
-    const index = [...this.menuLinks].indexOf(active);
+    const active = (this.shadowRoot?.activeElement ??
+      null) as HTMLElement | null;
+    const index = active
+      ? Array.from(this.menuLinks ?? []).indexOf(active)
+      : -1;
     return index === -1 ? null : index;
   }
 
   private nextLinkIndex(offset: number): number {
     const active = this.activeLinkIndex();
     const first = 0;
-    const last = this.menuLinks.length - 1;
+    const last = this.menuLinks ? this.menuLinks.length - 1 : 0;
 
     if (active === null) {
       return offset > 0 ? first : last;
@@ -144,6 +147,7 @@ export class UserSettings extends LitElement {
   }
 
   private handleKeydown = (e: KeyboardEvent) => {
+    if (!this.menuLinks) return;
     switch (e.key) {
       case "ArrowDown":
         const next = this.nextLinkIndex(1);
