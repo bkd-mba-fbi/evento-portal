@@ -1,6 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { localized, msg } from "@lit/localize";
+import { localized } from "@lit/localize";
 import { classMap } from "lit/directives/class-map.js";
 import { theme } from "../../utils/theme";
 import { NavigationGroup, NavigationItem } from "../../settings";
@@ -42,12 +42,19 @@ export class NavGroupToggle extends LitElement {
         line-height: 2.5;
       }
 
-      li.selected {
-        color: var(--bkd-brand-red);
+      li.active {
         background: var(--bkd-brand-sand);
         border-left: 6px solid var(--bkd-brand-red);
-        font-weight: 700;
         padding: 0 calc(1.5rem - 6px);
+      }
+
+      li.active a {
+        font-weight: 600;
+        color: var(--bkd-brand-red);
+      }
+
+      li.active a:after {
+        background-color: transparent;
       }
 
       a {
@@ -60,7 +67,7 @@ export class NavGroupToggle extends LitElement {
         display: inline-block;
       }
 
-      #group-menu a {
+      a[role="menuitem"] {
         font-size: 1.125rem;
       }
 
@@ -103,8 +110,9 @@ export class NavGroupToggle extends LitElement {
   }
 
   private renderItem(item: NavigationItem) {
+    const active = item.key === portalState.navigationItemKey;
     return html`
-      <li role="presentation">
+      <li role="presentation" class=${classMap({ active })}>
         <a
           role="menuitem"
           href="#"
