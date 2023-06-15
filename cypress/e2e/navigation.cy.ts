@@ -19,7 +19,21 @@ describe("Navigation", () => {
           .then(($links) =>
             expect(
               $links.toArray().map((link) => link.textContent?.trim())
-            ).to.deep.eq(["Unterricht", "Absenzen", "Angebote"])
+            ).to.deep.eq([
+              "Unterricht",
+              "Präsenzkontrolle",
+              "Aktuelle Fächer",
+              "Tests und Bewertung",
+              "Stellvertretung",
+              "Absenzen",
+              "Offene Absenzen entschuldigen",
+              "Absenzen bearbeiten",
+              "Absenzen auswerten",
+              "Angebote",
+              "Kurse und Veranstaltungen",
+              "Schulinterne Weiterbildung",
+              "Räume und Geräte reservieren",
+            ])
           );
       });
 
