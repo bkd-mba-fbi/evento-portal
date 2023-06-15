@@ -35,11 +35,19 @@ export class UserSettings extends LitElement {
         right: 0;
         border: 1px solid var(--bkd-func-bg-grey);
         list-style-type: none;
-        padding: 0.625rem 0;
+        padding: 1rem 1.5rem;
         margin-top: calc(32px + 0.5rem);
         background: var(--bkd-func-bg-white);
         z-index: var(--bkd-z-index-dropdown);
         min-width: 12rem;
+      }
+
+      li {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        height: 36px;
+        line-height: 1.5;
       }
 
       a {
@@ -50,9 +58,7 @@ export class UserSettings extends LitElement {
         word-spacing: 0.025rem;
         text-decoration: none;
         display: inline-block;
-        height: 36px;
-        line-height: 1.5;
-        padding: 0 1.5rem;
+        margin-top: 2px;
       }
 
       a:after {
@@ -113,11 +119,12 @@ export class UserSettings extends LitElement {
         role="menuitem"
         href=${item.href}
         @click=${(e: MouseEvent) => this.handleSettingsItemClick(e, item)}
-        >${item.img
-          ? html`<img src=${item.img} alt="" width="24" height="24" />`
-          : nothing}
+      >
         ${msg(item.label)}</a
       >
+      ${item.img
+        ? html`<img src=${item.img} alt="" width="24" height="24" />`
+        : nothing}
     </li>`;
   }
 
