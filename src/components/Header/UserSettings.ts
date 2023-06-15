@@ -34,8 +34,8 @@ export class UserSettings extends LitElement {
         position: absolute;
         right: 0;
         border: 1px solid var(--bkd-func-bg-grey);
+        padding: 1rem 0;
         list-style-type: none;
-        padding: 1rem 1.5rem;
         margin-top: calc(32px + 0.5rem);
         background: var(--bkd-func-bg-white);
         z-index: var(--bkd-z-index-dropdown);
@@ -43,11 +43,20 @@ export class UserSettings extends LitElement {
       }
 
       li {
+        padding: 1rem 1.5rem;
         display: flex;
         gap: 0.5rem;
         align-items: center;
         height: 36px;
         line-height: 1.5;
+      }
+
+      li.selected {
+        color: var(--bkd-brand-red);
+        background: var(--bkd-brand-sand);
+        border-left: 6px solid var(--bkd-brand-red);
+        font-weight: 700;
+        padding: 0 calc(1.5rem - 6px);
       }
 
       a {
