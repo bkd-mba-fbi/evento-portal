@@ -54,9 +54,17 @@ export class PortalState extends State {
 
   async init() {
     this.subscribe((key, value) => {
+      if (key === "locale") {
+        this.updateLocale(value);
+      }
+
       if (key === "rolesAndPermissions" || key === "locale") {
         this.updateNavigation();
         this.updateNavigationItemAndGroup(this.navigationItemKey);
+      }
+
+      if (key === "navigationItemKey") {
+        this.updateNavigationItemAndGroup(value);
       }
 
       if (key === "navigationItemKey" || key === "navigation") {
@@ -64,10 +72,6 @@ export class PortalState extends State {
         this.updateApp(this.navigationItem);
       }
     });
-
-    this.subscribeNavigationItemKey(
-      this.updateNavigationItemAndGroup.bind(this)
-    );
 
     await this.loadRolesAndPermissions();
   }
@@ -103,6 +107,12 @@ export class PortalState extends State {
       callback(this.app.scope);
     }
     return this.subscribe((_, app) => callback(app.scope), "app");
+  }
+
+  private async updateLocale(locale: PortalState["locale"]): Promise<void> {
+    await updateLocale(locale);
+    updateQueryParam(LOCALE_QUERY_PARAM, locale);
+    this.updateNavigation();
   }
 
   private async loadRolesAndPermissions(): Promise<void> {
@@ -148,10 +158,3 @@ export class PortalState extends State {
 }
 
 export const portalState = new PortalState();
-
-// Update locale if state changes
-portalState.subscribeLocale(handleLocaleChange);
-function handleLocaleChange(locale: string) {
-  updateLocale(locale);
-  updateQueryParam(LOCALE_QUERY_PARAM, locale);
-}

@@ -5,6 +5,9 @@ import { localized, msg } from "@lit/localize";
 import { theme } from "../utils/theme";
 import { DropdownToggleController } from "../controllers/dropdown-toggle";
 import { when } from "lit/directives/when.js";
+import { portalState } from "../state/portal-state";
+import { StateController } from "@lit-app/state";
+import { getUrl } from "../utils/routing";
 
 @customElement("bkd-header")
 @localized()
@@ -42,13 +45,10 @@ export class Header extends LitElement {
 
       .logo {
         grid-area: logo;
+      }
+
+      .logo > img {
         width: 150px;
-        font-size: 1rem;
-        line-height: 1rem;
-        letter-spacing: 0.01rem;
-        word-spacing: 0.025rem;
-        font-weight: 500;
-        color: var(--bkd-func-fg-black);
       }
 
       .logo-caption {
@@ -87,7 +87,7 @@ export class Header extends LitElement {
           align-self: center;
         }
 
-        .logo {
+        .logo > img {
           width: 110px;
         }
 
@@ -118,11 +118,21 @@ export class Header extends LitElement {
     `,
   ];
 
+  constructor() {
+    super();
+    new StateController(this, portalState);
+  }
+
   private mobileNav = new DropdownToggleController(
     this,
     "mobile-nav-toggle",
     "mobile-nav-menu"
   );
+
+  private handleLogoClick(event: MouseEvent) {
+    event.preventDefault();
+    portalState.navigationItemKey = "home";
+  }
 
   render() {
     const instanceName = "Berufsbildungszentrum IDM Thun";
@@ -134,7 +144,12 @@ export class Header extends LitElement {
           .mobileNavOpen=${this.mobileNav.open}
           @bkdhamburgertoggle=${() => this.mobileNav.toggle()}
         ></bkd-service-nav>
-        <img class="logo" src="logo.svg" alt=${msg("Evento Startseite")} />
+        <a class="logo" href=${getUrl("home")}
+          ><img
+            src="logo.svg"
+            alt=${msg("Evento Startseite")}
+            @click=${this.handleLogoClick.bind(this)}
+        /></a>
         <div class="logo-caption">${portalName}</div>
         <bkd-nav></bkd-nav>
         ${when(

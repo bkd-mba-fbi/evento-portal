@@ -12,8 +12,8 @@ export { getLocale };
 /**
  * Update @lit/localize locale & HTML document language
  */
-export function updateLocale(locale: string): void {
-  setLocale(locale);
+export async function updateLocale(locale: string): Promise<void> {
+  await setLocale(locale);
   document.documentElement.lang = locale;
   // TODO: ...or just reload whole app to refetch the data in the corresponding language?
 }
