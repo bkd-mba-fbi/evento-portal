@@ -39,16 +39,15 @@ export class UserSettings extends LitElement {
         margin-top: calc(32px + 0.5rem);
         background: var(--bkd-func-bg-white);
         z-index: var(--bkd-z-index-dropdown);
-        min-width: 12rem;
+        min-width: max-content;
       }
 
       li {
-        padding: 1rem 1.5rem;
+        padding: 0 1.5rem;
         display: flex;
         gap: 0.5rem;
         align-items: center;
         height: 36px;
-        line-height: 1.5;
       }
 
       li.selected {

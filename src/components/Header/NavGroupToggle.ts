@@ -19,6 +19,36 @@ export class NavGroupToggle extends LitElement {
   static styles = [
     theme,
     css`
+      :host {
+        position: relative;
+      }
+
+      ul {
+        position: absolute;
+        right: 0;
+        border: 1px solid var(--bkd-func-bg-grey);
+        padding: 1rem 0;
+        margin: 0.5rem 0;
+        list-style-type: none;
+        background: var(--bkd-func-bg-white);
+        z-index: var(--bkd-z-index-dropdown);
+        min-width: max-content;
+      }
+
+      li {
+        padding: 0 1.5rem;
+        height: 100%;
+        line-height: 2.5;
+      }
+
+      li.selected {
+        color: var(--bkd-brand-red);
+        background: var(--bkd-brand-sand);
+        border-left: 6px solid var(--bkd-brand-red);
+        font-weight: 700;
+        padding: 0 calc(1.5rem - 6px);
+      }
+
       a {
         font-size: 1.5rem;
         font-weight: 300;
@@ -27,11 +57,10 @@ export class NavGroupToggle extends LitElement {
         word-spacing: 0.025rem;
         text-decoration: none;
         display: inline-block;
-        height: 36px;
-        line-height: 1.5;
-        /*
-          margin: 0 calc(1.1vw + 12px) 0 calc(1.1vw + 12px);
-         */
+      }
+
+      #group-menu a {
+        font-size: 1.125rem;
       }
 
       a:after {
@@ -42,6 +71,7 @@ export class NavGroupToggle extends LitElement {
         transform: scaleX(0);
         transition: all 150ms ease-in-out;
       }
+
       a.active:after {
         background-color: var(--bkd-brand-red);
       }
@@ -61,6 +91,10 @@ export class NavGroupToggle extends LitElement {
     "group-menu"
   );
 
+  private toggle() {
+    this.groupMenu.toggle();
+  }
+
   private renderItem(item: NavigationItem) {
     // TODO hide nav item/group if no permission
     return html`<li role="presentation">
@@ -71,10 +105,6 @@ export class NavGroupToggle extends LitElement {
         >${msg(item.label)}</a
       >
     </li>`;
-  }
-
-  private toggle() {
-    this.groupMenu.toggle();
   }
 
   render() {
