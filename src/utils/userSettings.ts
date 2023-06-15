@@ -1,3 +1,5 @@
+import { msg } from "@lit/localize";
+
 export type UserSettingItem = Readonly<{
   href: string;
   label: string;
@@ -13,13 +15,13 @@ export function userSettingItems(
       : "PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU";
 
   return [
-    { href: "#", label: "Mein Profil" },
-    { href: "#", label: "Einstellungen" },
+    { href: "#", label: msg("Mein Profil") },
+    { href: "#", label: msg("Einstellungen") },
     {
       href: `https://www.youtube.com/playlist?list=${playlist}`,
-      label: "Video-Tutorials",
+      label: msg("Video-Tutorials"),
       img: "/icons/external-link.svg",
     },
-    { href: "#", label: "Logout", img: "/icons/logout.svg" },
+    { href: "#", label: msg("Logout"), img: "/icons/logout.svg" },
   ];
 }

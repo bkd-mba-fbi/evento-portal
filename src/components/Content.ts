@@ -2,6 +2,8 @@ import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { theme } from "../utils/theme";
+import { StateController } from "@lit-app/state";
+import { portalState } from "../state/portal-state";
 
 @customElement("bkd-content")
 @localized()
@@ -35,10 +37,15 @@ export class Content extends LitElement {
     `,
   ];
 
+  constructor() {
+    super();
+    new StateController(this, portalState);
+  }
+
   render() {
     return html`
       <main>
-        <p>${msg("Willkommen bei Evento")}</p>
+        <p>${portalState.navigationItem.label}</p>
       </main>
     `;
   }

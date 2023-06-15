@@ -117,14 +117,16 @@ export class UserSettings extends LitElement {
   private handleKeydown = (e: KeyboardEvent) => {
     if (!this.menuLinks) return;
     switch (e.key) {
-      case "ArrowDown":
+      case "ArrowDown": {
         const next = this.nextLinkIndex(1);
         this.menuLinks[next].focus();
         break;
-      case "ArrowUp":
+      }
+      case "ArrowUp": {
         const previous = this.nextLinkIndex(-1);
         this.menuLinks[previous].focus();
         break;
+      }
     }
   };
 
@@ -159,7 +161,7 @@ export class UserSettings extends LitElement {
         href=${item.href}
         @click=${(e: MouseEvent) => this.handleSettingsItemClick(e, item)}
       >
-        ${msg(item.label)}</a
+        ${item.label}</a
       >
       ${item.img
         ? html`<img src=${item.img} alt="" width="24" height="24" />`

@@ -109,7 +109,7 @@ export class NavGroupToggle extends LitElement {
           role="menuitem"
           href="#"
           @click=${(e: MouseEvent) => this.handleItemClick(e, item)}
-          >${msg(item.label)}</a
+          >${item.label}</a
         >
       </li>
     `;

@@ -80,7 +80,7 @@ export const settings: Settings = {
   ],
   navigationHome: {
     key: "home",
-    label: "",
+    label: "Home",
     allowedRolesOrPermissions: null,
     deniedInstanceIds: null,
     appKey: "schulverwaltung",

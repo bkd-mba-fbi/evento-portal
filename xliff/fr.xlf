@@ -2,10 +2,6 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 <file target-language="fr" source-language="de" original="lit-localize-inputs" datatype="plaintext">
 <body>
-<trans-unit id="s3ba73c36f5c5710f">
-  <source>Willkommen bei Evento</source>
-  <target state="translated">Bienvenue chez Evento</target>
-</trans-unit>
 <trans-unit id="sc874744fb4632e62">
   <source>Rechtliche Hinweise</source>
   <target state="translated">Mentions légales</target>
@@ -108,6 +104,7 @@
 </trans-unit>
 <trans-unit id="sc42d48a091dc3230">
   <source>Evento Startseite</source>
+  <target>Page d'accueil Evento</target>
 </trans-unit>
 <trans-unit id="s1a8b197f436e88ab">
   <source>Menü Benutzereinstellungen</source>

@@ -246,7 +246,7 @@ export class MobileNav extends LitElement {
         href=${item.href}
         @click=${(e: MouseEvent) => this.handleSettingsItemClick(e, item)}
       >
-        ${msg(item.label)}
+        ${item.label}
       </a>
       ${item.img
         ? html`<img src=${item.img} alt="" width="24" height="24" />`
