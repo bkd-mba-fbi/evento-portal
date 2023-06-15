@@ -1,6 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
-import { localized, msg } from "@lit/localize";
+import { localized } from "@lit/localize";
 import { theme } from "../utils/theme";
 import { StateController } from "@lit-app/state";
 import { portalState } from "../state/portal-state";
