@@ -27,11 +27,8 @@ export function getRefreshToken(): string | null {
 }
 
 export function storeToken(scope: string, token: OAuth2Token): void {
-  const { refreshToken, ...accessToken } = token;
-  localStorage.setItem(
-    `${ACCESS_TOKEN_KEY}_${scope}`,
-    JSON.stringify(accessToken)
-  );
+  const { refreshToken, accessToken } = token;
+  localStorage.setItem(`${ACCESS_TOKEN_KEY}_${scope}`, accessToken);
   if (refreshToken) {
     localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
   }
