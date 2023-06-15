@@ -48,7 +48,7 @@ describe("Navigation", () => {
         cy.visit("/index.html");
       });
 
-      it.skip("open/closes hamburger menu by click on hamburger", () => {
+      it("open/closes hamburger menu by click on hamburger", () => {
         // TODO activate test when initial expand and select of current menu item is implemented
         cy.get("bkd-nav").as("desktop-menu").should("not.be.visible");
 
@@ -68,7 +68,7 @@ describe("Navigation", () => {
         cy.get("@mobile-menu").within(() => {
           cy.contains("li", "Unterricht")
             .as("teachingGroup")
-            .ariaExpanded(true);
+            .ariaExpanded(false);
           cy.contains("li.group", "Absenzen")
             .as("absencesGroup")
             .ariaExpanded(false);

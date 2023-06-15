@@ -1,22 +1,14 @@
 import { css, html, LitElement } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
-import { Unsubscribe } from "@lit-app/state";
+
 import { theme } from "../utils/theme";
 import { DropdownToggleController } from "../controllers/dropdown-toggle";
-import { Navigation, settings } from "../settings";
-import { filterAllowed } from "../utils/navigation";
-import { getTokenPayload } from "../utils/token";
-import { getCurrentAccessToken } from "../utils/storage";
-import { fetchUserAccessInfo } from "../utils/fetch";
-import { portalState } from "../state/portal-state";
+import { when } from "lit/directives/when.js";
 
 @customElement("bkd-header")
 @localized()
 export class Header extends LitElement {
-  @state()
-  private navigation: Navigation = [];
-
   static styles = [
     theme,
     css`
@@ -126,54 +118,11 @@ export class Header extends LitElement {
     `,
   ];
 
-  private unsubscribeLocale: Unsubscribe | null = null;
-
-  connectedCallback(): void {
-    super.connectedCallback();
-
-    this.initNavigation();
-    this.unsubscribeLocale = portalState.subscribeLocale(() =>
-      // Make sure to update nav when locale changes
-      this.initNavigation()
-    );
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback();
-    this.unsubscribeLocale && this.unsubscribeLocale();
-  }
-
-  private async initNavigation(): Promise<void> {
-    const token = getCurrentAccessToken();
-    if (token) {
-      const { instanceId } = getTokenPayload(token);
-      const { roles, permissions } = await fetchUserAccessInfo();
-      this.navigation = filterAllowed(settings.navigation, instanceId, [
-        ...roles,
-        ...permissions,
-      ]);
-    }
-  }
-
   private mobileNav = new DropdownToggleController(
     this,
     "mobile-nav-toggle",
     "mobile-nav-menu"
   );
-
-  private renderMobileNav() {
-    if (this.mobileNav.open) {
-      return html`<bkd-mobile-nav
-        id="mobile-nav-menu"
-        .navigation=${this.navigation}
-        .currentItem=${
-          /* TODO: should be determined from URL/state */
-          (this.navigation && this.navigation[0]?.items[0]) || null
-        }
-      ></bkd-mobile-nav>`;
-    }
-    return null;
-  }
 
   render() {
     const instanceName = "Berufsbildungszentrum IDM Thun";
@@ -187,8 +136,11 @@ export class Header extends LitElement {
         ></bkd-service-nav>
         <img class="logo" src="logo.svg" alt=${msg("Evento Startseite")} />
         <div class="logo-caption">${portalName}</div>
-        <bkd-nav .navigation=${this.navigation}></bkd-nav>
-        ${this.renderMobileNav()}
+        <bkd-nav></bkd-nav>
+        ${when(
+          this.mobileNav.open,
+          () => html`<bkd-mobile-nav id="mobile-nav-menu"></bkd-mobile-nav>`
+        )}
       </header>
     `;
   }

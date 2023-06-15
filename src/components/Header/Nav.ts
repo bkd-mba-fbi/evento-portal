@@ -1,15 +1,16 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import { localized } from "@lit/localize";
 import { map } from "lit/directives/map.js";
+import { StateController } from "@lit-app/state";
+
 import { theme } from "../../utils/theme";
-import { Navigation, NavigationGroup } from "../../settings";
+import { NavigationGroup } from "../../settings";
+import { portalState } from "../../state/portal-state";
 
 @customElement("bkd-nav")
 @localized()
 export class Nav extends LitElement {
-  @property() navigation: Navigation = [];
-
   static styles = [
     theme,
     css`
@@ -31,6 +32,11 @@ export class Nav extends LitElement {
     `,
   ];
 
+  constructor() {
+    super();
+    new StateController(this, portalState);
+  }
+
   private renderGroupToggle(group: NavigationGroup, active: boolean) {
     return html`
       <bkd-nav-group-toggle
@@ -41,8 +47,11 @@ export class Nav extends LitElement {
   }
 
   render() {
-    return map(this.navigation, (group, i) =>
-      this.renderGroupToggle(group, i === 0 /* TODO*/)
+    return map(portalState.navigation, (group) =>
+      this.renderGroupToggle(
+        group,
+        group.label === portalState.navigationGroup?.label
+      )
     );
   }
 }

@@ -1,5 +1,5 @@
 import { css, html, LitElement, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
@@ -7,7 +7,7 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { StateController } from "@lit-app/state";
 
 import { theme } from "../../utils/theme";
-import { Navigation, NavigationGroup, NavigationItem } from "../../settings";
+import { NavigationGroup, NavigationItem } from "../../settings";
 import arrowDownIcon from "../../assets/icons/arrow-down.svg?raw";
 import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
 import { userSettingItems, UserSettingItem } from "../../utils/userSettings.ts";
@@ -17,12 +17,6 @@ import { portalState } from "../../state/portal-state.ts";
 @customElement("bkd-mobile-nav")
 @localized()
 export class MobileNav extends LitElement {
-  @property()
-  navigation: Navigation = [];
-
-  @property()
-  currentItem: NavigationItem | null = null;
-
   @state()
   openGroup: NavigationGroup | null = null;
 
@@ -179,11 +173,8 @@ export class MobileNav extends LitElement {
   }
 
   private openGroupOfCurrentItem(): void {
-    if (this.navigation && this.currentItem && !this.openGroup) {
-      this.openGroup =
-        this.navigation.find((group) =>
-          group.items.find(({ key }) => key === this.currentItem?.key)
-        ) ?? null;
+    if (!this.openGroup) {
+      this.openGroup = portalState.navigationGroup;
     }
   }
 
@@ -194,8 +185,7 @@ export class MobileNav extends LitElement {
 
   private handleNavItemClick(event: MouseEvent, item: NavigationItem): void {
     event.preventDefault();
-    // TODO: perform actual navigation action
-    this.currentItem = item;
+    portalState.navigationItemKey = item.key;
   }
 
   private handleSettingsItemClick(e: MouseEvent, item: UserSettingItem) {
@@ -232,7 +222,7 @@ export class MobileNav extends LitElement {
   }
 
   private renderNavItem(item: NavigationItem) {
-    const active = item.key === this.currentItem?.key;
+    const active = item.key === portalState.navigationItemKey;
     return html`
       <li
         class=${classMap({
@@ -267,7 +257,7 @@ export class MobileNav extends LitElement {
   render() {
     return html`
       <ul class="nav">
-        ${map(this.navigation, this.renderGroup.bind(this))}
+        ${map(portalState.navigation, this.renderGroup.bind(this))}
       </ul>
       <div class="service-nav">
         <ul>

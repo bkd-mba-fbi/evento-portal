@@ -1,7 +1,7 @@
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
 import { localized } from "@lit/localize";
-import { StateController } from "@lit-app/state";
+import { StateController, Unsubscribe } from "@lit-app/state";
 
 import {
   customProperties,
@@ -13,8 +13,18 @@ import {
   createOAuthClient,
   ensureAuthenticated,
 } from "../utils/auth.ts";
-import { settings } from "../settings.ts";
 import { portalState } from "../state/portal-state.ts";
+import { getScopeFromUrl } from "../utils/routing.ts";
+import { when } from "lit/directives/when.js";
+import { getCurrentAccessToken } from "../utils/storage.ts";
+
+const oAuthClient = createOAuthClient();
+
+(async function () {
+  // Start Authorization Code Flow with PKCE
+  await ensureAuthenticated(oAuthClient, getScopeFromUrl());
+  portalState.init();
+})();
 
 // Make custom properties available globally in light DOM
 registerLightDomStyles(
@@ -24,12 +34,6 @@ registerLightDomStyles(
     }
   `.toString()
 );
-
-// const { getLocale, setLocale } = configureLocalization({
-//   sourceLocale,
-//   targetLocales,
-//   loadLocale: (locale) => import(/* @vite-ignore */ `/locales/${locale}.js`),
-// });
 
 @customElement("bkd-portal")
 @localized()
@@ -52,44 +56,44 @@ export class Portal extends LitElement {
     `,
   ];
 
-  private oAuthClient = createOAuthClient();
+  private unsubscribeScope: Unsubscribe | null = null;
 
   constructor() {
     super();
 
     new StateController(this, portalState);
-    ensureAuthenticated(this.oAuthClient, this.getScopeFromState());
   }
 
   connectedCallback(): void {
     super.connectedCallback();
-    window.addEventListener("popstate", this.handleStateChange);
+    this.unsubscribeScope = portalState.subscribeScope(
+      (scope) => activateTokenForScope(oAuthClient, scope),
+      false
+    );
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
-    window.removeEventListener("popstate", this.handleStateChange);
+    if (this.unsubscribeScope) {
+      this.unsubscribeScope();
+    }
   }
 
-  private handleStateChange = (event: PopStateEvent) => {
-    activateTokenForScope(this.oAuthClient, event.state.scope);
-  };
-
-  private getScopeFromState(): string {
-    const url = new URL(location.href);
-    const app = url.searchParams.get("app");
-
-    return (
-      (app && settings.apps.find(({ key }) => key === app)?.scope) ||
-      settings.apps[0].scope
-    );
+  private isAuthenticated(): boolean {
+    const token = getCurrentAccessToken();
+    return Boolean(token);
   }
 
   render() {
     return html`
-      <bkd-header></bkd-header>
-      <bkd-content></bkd-content>
-      <bkd-footer></bkd-footer>
+      ${when(
+        this.isAuthenticated(),
+        () => html`
+          <bkd-header></bkd-header>
+          <bkd-content></bkd-content>
+          <bkd-footer></bkd-footer>
+        `
+      )}
     `;
   }
 }

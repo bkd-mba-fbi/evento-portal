@@ -6,6 +6,7 @@ import { theme } from "../../utils/theme";
 import { NavigationGroup, NavigationItem } from "../../settings";
 import { map } from "lit/directives/map.js";
 import { DropdownToggleController } from "../../controllers/dropdown-toggle.ts";
+import { portalState } from "../../state/portal-state.ts";
 
 @customElement("bkd-nav-group-toggle")
 @localized()
@@ -95,16 +96,23 @@ export class NavGroupToggle extends LitElement {
     this.groupMenu.toggle();
   }
 
+  private handleItemClick(event: MouseEvent, item: NavigationItem) {
+    event.preventDefault();
+    portalState.navigationItemKey = item.key;
+    this.groupMenu.close();
+  }
+
   private renderItem(item: NavigationItem) {
-    // TODO hide nav item/group if no permission
-    return html`<li role="presentation">
-      <a
-        role="menuitem"
-        href=${item.appPath}
-        @click=${(e: MouseEvent) => this.handleItemClick(e, item)}
-        >${msg(item.label)}</a
-      >
-    </li>`;
+    return html`
+      <li role="presentation">
+        <a
+          role="menuitem"
+          href="#"
+          @click=${(e: MouseEvent) => this.handleItemClick(e, item)}
+          >${msg(item.label)}</a
+        >
+      </li>
+    `;
   }
 
   render() {
@@ -125,12 +133,6 @@ export class NavGroupToggle extends LitElement {
         ${map(this.group.items, this.renderItem.bind(this))}
       </ul>
     `;
-  }
-
-  private handleItemClick(e: MouseEvent, item: NavigationItem) {
-    e.preventDefault();
-    console.log("handleItemClick", item); // TODO: perform actual navigation action
-    this.groupMenu.close();
   }
 }
 

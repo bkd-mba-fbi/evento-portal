@@ -3,11 +3,12 @@ import { msg } from "@lit/localize";
 export type Settings = Readonly<{
   api: Readonly<{ server: string }>;
   oauth: Readonly<{ server: string; clientId: string }>;
-  apps: ReadonlyArray<Readonly<SettingsApp>>;
+  apps: ReadonlyArray<Readonly<App>>;
+  navigationHome: NavigationItem;
   navigation: ReadonlyArray<NavigationGroup>;
 }>;
 
-export type SettingsApp = Readonly<{ key: string; scope: string }>;
+export type App = Readonly<{ key: string; scope: string; root: string }>;
 
 export type Navigation = ReadonlyArray<NavigationGroup>;
 
@@ -49,34 +50,42 @@ export const settings: Settings = {
     {
       key: "schulverwaltung",
       scope: "Tutoring",
-      // root: "Apps/webapp-schulverwaltung/index.html",
+      root: "Apps/webapp-schulverwaltung/index.html",
     },
     {
       key: "anmeldedetailsEinlesen",
       scope: "NG",
-      // root: "Apps/EmberApps/AnmeldedetailsEinlesen/index.html",
+      root: "Apps/EmberApps/AnmeldedetailsEinlesen/index.html",
     },
     {
       key: "schulleiterPersonen",
       scope: "NG",
-      // root: "Apps/EmberApps/SchulleiterPersonen/index.html",
+      root: "Apps/EmberApps/SchulleiterPersonen/index.html",
     },
     {
       key: "kursausschreibung",
       scope: "Public",
-      // root: "Apps/Kursausschreibung/index.html",
+      root: "Apps/Kursausschreibung/index.html",
     },
     {
       key: "stellvertretung",
       scope: "Tutoring",
-      // root: "Apps/Stellvertretung/index.html",
+      root: "Apps/Stellvertretung/index.html",
     },
     {
       key: "reservation",
       scope: "NG",
-      // root: "Apps/Raumreservation/index.html",
+      root: "Apps/Raumreservation/index.html",
     },
   ],
+  navigationHome: {
+    key: "home",
+    label: "",
+    allowedRolesOrPermissions: null,
+    deniedInstanceIds: null,
+    appKey: "schulverwaltung",
+    appPath: "#/portal-home",
+  },
   get navigation(): Navigation {
     return [
       {

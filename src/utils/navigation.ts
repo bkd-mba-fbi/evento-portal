@@ -1,7 +1,42 @@
-import { Navigation, NavigationItem } from "../settings";
+import {
+  App,
+  Navigation,
+  NavigationGroup,
+  NavigationItem,
+  settings,
+} from "../settings";
 
 /**
- * Returns only navigation groups/items that are permitted on the given instance or with the given roles/permissions. Groups without items are omitted.
+ * Returns navigation item (and its group) with given item key.
+ */
+export function getNavigationItem(
+  navigation: Navigation,
+  itemKey: string
+): { item: NavigationItem; group: NavigationGroup | null } {
+  for (const group of navigation) {
+    const item = group.items.find(({ key }) => key === itemKey);
+    if (item) {
+      return { item, group };
+    }
+  }
+  return { item: settings.navigationHome, group: null };
+}
+
+export function getApp(item: NavigationItem): App {
+  const app = settings.apps.find((app) => app.key === item.appKey);
+  if (!app) throw new Error(`Invalid app: ${item.appKey}`);
+  return app;
+}
+
+export function getScope(navigation: Navigation, itemKey: string): string {
+  const { item } = getNavigationItem(navigation, itemKey);
+  return getApp(item).scope;
+}
+
+/**
+ * Returns only navigation groups/items that are permitted on the
+ * given instance or with the given roles/permissions. Groups without
+ * items are omitted.
  */
 export function filterAllowed(
   navigation: Navigation,
