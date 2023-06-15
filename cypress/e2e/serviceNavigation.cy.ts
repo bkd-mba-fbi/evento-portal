@@ -86,7 +86,10 @@ describe("Service Navigation", () => {
       cy.get("@service-nav").should("be.visible");
 
       // Close user settings menu
-      cy.get("@service-nav").get("a").first().should("be.visible").click();
+      cy.get("@service-nav")
+        .contains("a", "Mein Profil")
+        .should("be.visible")
+        .click();
       cy.get("@toggle").ariaExpanded(false);
       cy.get("@service-nav").should("not.be.visible");
     });
