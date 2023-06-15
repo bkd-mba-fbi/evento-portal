@@ -6,7 +6,10 @@ import { StateController } from "@lit-app/state";
 import { theme } from "../../utils/theme.ts";
 import { DropdownToggleController } from "../../controllers/dropdown-toggle.ts";
 import { map } from "lit/directives/map.js";
-import { UserSettingItem, userSettingItems } from "../../utils/userSettings.ts";
+import {
+  UserSettingItem,
+  userSettingItems,
+} from "../../utils/user-settings.ts";
 import { isExternalUrl } from "../../utils/url.ts";
 import { portalState } from "../../state/portal-state.ts";
 

@@ -10,7 +10,10 @@ import { theme } from "../../utils/theme";
 import { NavigationGroup, NavigationItem } from "../../settings";
 import arrowDownIcon from "../../assets/icons/arrow-down.svg?raw";
 import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
-import { userSettingItems, UserSettingItem } from "../../utils/userSettings.ts";
+import {
+  userSettingItems,
+  UserSettingItem,
+} from "../../utils/user-settings.ts";
 import { isExternalUrl } from "../../utils/url.ts";
 import { portalState } from "../../state/portal-state.ts";
 
