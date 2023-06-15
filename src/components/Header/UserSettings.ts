@@ -70,10 +70,6 @@ export class UserSettings extends LitElement {
         transition: all 150ms ease-in-out;
       }
 
-      a img {
-        margin-left: -5.25px;
-      }
-
       a:hover::after,
       a:focus::after {
         transform: scaleX(1);
@@ -91,42 +87,6 @@ export class UserSettings extends LitElement {
     "settings-toggle",
     "settings-menu"
   );
-
-  render() {
-    return html`
-      <button
-        type="button"
-        id="settings-toggle"
-        @click=${this.toggle.bind(this)}
-        aria-label=${msg("Menü Benutzereinstellungen")}
-        aria-expanded=${this.settingsMenu.open}
-        aria-haspopup="menu"
-      >
-        <img src="/icons/settings.svg" alt="" width="32" height="32" />
-      </button>
-      <ul id="settings-menu" role="menu" ?hidden=${!this.settingsMenu.open}>
-        ${map(
-          userSettingItems(portalState.locale),
-          this.renderSettingsItem.bind(this)
-        )}
-      </ul>
-    `;
-  }
-
-  private renderSettingsItem(item: UserSettingItem) {
-    return html`<li role="presentation">
-      <a
-        role="menuitem"
-        href=${item.href}
-        @click=${(e: MouseEvent) => this.handleSettingsItemClick(e, item)}
-      >
-        ${msg(item.label)}</a
-      >
-      ${item.img
-        ? html`<img src=${item.img} alt="" width="24" height="24" />`
-        : nothing}
-    </li>`;
-  }
 
   private handleSettingsItemClick(e: MouseEvent, item: UserSettingItem) {
     e.preventDefault();
@@ -182,6 +142,42 @@ export class UserSettings extends LitElement {
     if (next > last) return first;
     if (next < first) return last;
     return next;
+  }
+
+  private renderSettingsItem(item: UserSettingItem) {
+    return html`<li role="presentation">
+      <a
+        role="menuitem"
+        href=${item.href}
+        @click=${(e: MouseEvent) => this.handleSettingsItemClick(e, item)}
+      >
+        ${msg(item.label)}</a
+      >
+      ${item.img
+        ? html`<img src=${item.img} alt="" width="24" height="24" />`
+        : nothing}
+    </li>`;
+  }
+
+  render() {
+    return html`
+      <button
+        type="button"
+        id="settings-toggle"
+        @click=${this.toggle.bind(this)}
+        aria-label=${msg("Menü Benutzereinstellungen")}
+        aria-expanded=${this.settingsMenu.open}
+        aria-haspopup="menu"
+      >
+        <img src="/icons/settings.svg" alt="" width="32" height="32" />
+      </button>
+      <ul id="settings-menu" role="menu" ?hidden=${!this.settingsMenu.open}>
+        ${map(
+          userSettingItems(portalState.locale),
+          this.renderSettingsItem.bind(this)
+        )}
+      </ul>
+    `;
   }
 }
 

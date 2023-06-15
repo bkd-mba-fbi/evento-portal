@@ -123,29 +123,47 @@ export class MobileNav extends LitElement {
 
       .service-nav {
         background: var(--bkd-brand-sand);
-        padding: 1.25rem;
+        padding: 1.5rem 2rem;
         display: flex;
         flex-direction: column;
         gap: 2rem;
       }
 
-      .service-nav div {
-        font-size: 0.875rem;
-        letter-spacing: 0.01rem;
-        word-spacing: 0.025rem;
-        font-style: normal;
-        font-weight: 400;
+      .service-nav li {
         display: flex;
+        gap: 0.5rem;
         align-items: center;
-        gap: 0.25rem;
+        height: 36px;
+        line-height: 1.5;
       }
 
-      .service-nav img {
-        margin-left: -5.25px;
+      .service-nav a {
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: var(--bkd-func-fg-black);
+        letter-spacing: 0.01rem;
+        word-spacing: 0.025rem;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 2px;
+      }
+
+      .service-nav a:after {
+        display: block;
+        content: "";
+        height: 2px;
+        background-color: var(--bkd-brand-black);
+        transform: scaleX(0);
+        transition: all 150ms ease-in-out;
+      }
+
+      .service-nav a:hover::after,
+      .service-nav a:focus::after {
+        transform: scaleX(1);
       }
 
       bkd-language-switcher {
-        padding-left: 0.75rem;
+        margin-left: -0.75rem;
       }
     `,
   ];
@@ -233,18 +251,16 @@ export class MobileNav extends LitElement {
   }
 
   private renderSettingsItem(item: UserSettingItem) {
-    return html`<li class="item">
+    return html`<li>
       <a
         href=${item.href}
         @click=${(e: MouseEvent) => this.handleSettingsItemClick(e, item)}
       >
-        <div>
-          ${item.img
-            ? html`<img src=${item.img} alt="" width="24" height="24" />`
-            : nothing}
-          ${msg(item.label)}
-        </div>
+        ${msg(item.label)}
       </a>
+      ${item.img
+        ? html`<img src=${item.img} alt="" width="24" height="24" />`
+        : nothing}
     </li>`;
   }
 
