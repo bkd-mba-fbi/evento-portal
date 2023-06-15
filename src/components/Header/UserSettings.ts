@@ -73,16 +73,16 @@ export class UserSettings extends LitElement {
     `,
   ];
 
+  constructor() {
+    super();
+    new StateController(this, portalState);
+  }
+
   private settingsMenu = new DropdownToggleController(
     this,
     "settings-toggle",
     "settings-menu"
   );
-
-  constructor() {
-    super();
-    new StateController(this, portalState);
-  }
 
   render() {
     return html`
@@ -116,6 +116,15 @@ export class UserSettings extends LitElement {
     </li>`;
   }
 
+  private handleSettingsItemClick(e: MouseEvent, item: UserSettingItem) {
+    e.preventDefault();
+    if (isExternalUrl(item.href, this.baseURI)) {
+      window.open(item.href, "_blank");
+    }
+    console.log("handleSettingsItemClick", item); // TODO: perform actual navigation action
+    this.settingsMenu.close();
+  }
+
   private toggle() {
     this.settingsMenu.toggle();
     if (this.settingsMenu.open) {
@@ -125,14 +134,19 @@ export class UserSettings extends LitElement {
     }
   }
 
-  private handleSettingsItemClick(e: MouseEvent, item: UserSettingItem) {
-    e.preventDefault();
-    if (isExternalUrl(item.href, this.baseURI)) {
-      window.open(item.href, "_blank");
+  private handleKeydown = (e: KeyboardEvent) => {
+    if (!this.menuLinks) return;
+    switch (e.key) {
+      case "ArrowDown":
+        const next = this.nextLinkIndex(1);
+        this.menuLinks[next].focus();
+        break;
+      case "ArrowUp":
+        const previous = this.nextLinkIndex(-1);
+        this.menuLinks[previous].focus();
+        break;
     }
-    console.log("handleSettingsItemClick", item); // TODO: perform actual navigation action
-    this.settingsMenu.close();
-  }
+  };
 
   private activeLinkIndex(): number | null {
     const active = (this.shadowRoot?.activeElement ??
@@ -157,20 +171,6 @@ export class UserSettings extends LitElement {
     if (next < first) return last;
     return next;
   }
-
-  private handleKeydown = (e: KeyboardEvent) => {
-    if (!this.menuLinks) return;
-    switch (e.key) {
-      case "ArrowDown":
-        const next = this.nextLinkIndex(1);
-        this.menuLinks[next].focus();
-        break;
-      case "ArrowUp":
-        const previous = this.nextLinkIndex(-1);
-        this.menuLinks[previous].focus();
-        break;
-    }
-  };
 }
 
 declare global {
