@@ -44,31 +44,33 @@ export class UserSettings extends LitElement {
 
       a {
         font-size: 0.875rem;
+        font-weight: 400;
+        color: var(--bkd-func-fg-black);
         letter-spacing: 0.01rem;
         word-spacing: 0.025rem;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 2.5;
-        padding: 0 1.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        height: 100%;
-        width: 100%;
         text-decoration: none;
-        color: var(--bkd-func-fg-black);
+        display: inline-block;
+        height: 36px;
+        line-height: 1.5;
+        padding: 0 1.5rem;
+      }
+
+      a:after {
+        display: block;
+        content: "";
+        height: 2px;
+        background-color: var(--bkd-brand-black);
+        transform: scaleX(0);
+        transition: all 150ms ease-in-out;
       }
 
       a img {
         margin-left: -5.25px;
       }
 
-      a:hover {
-        color: var(--bkd-brand-red);
-        background: var(--bkd-brand-light-sand);
-        border-left: 6px solid var(--bkd-brand-red);
-        font-weight: 700;
-        padding: 0 calc(1.5rem - 6px);
+      a:hover::after,
+      a:focus::after {
+        transform: scaleX(1);
       }
     `,
   ];
@@ -97,12 +99,15 @@ export class UserSettings extends LitElement {
         <img src="/icons/settings.svg" alt="" width="32" height="32" />
       </button>
       <ul id="settings-menu" role="menu" ?hidden=${!this.settingsMenu.open}>
-        ${map(userSettingItems(portalState.locale), this.renderItem.bind(this))}
+        ${map(
+          userSettingItems(portalState.locale),
+          this.renderSettingsItem.bind(this)
+        )}
       </ul>
     `;
   }
 
-  private renderItem(item: UserSettingItem) {
+  private renderSettingsItem(item: UserSettingItem) {
     return html`<li role="presentation">
       <a
         role="menuitem"

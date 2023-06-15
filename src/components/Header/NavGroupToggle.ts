@@ -21,7 +21,7 @@ export class NavGroupToggle extends LitElement {
     css`
       a {
         font-size: 1.5rem;
-        weight: 300;
+        font-weight: 300;
         color: var(--bkd-brand-black);
         letter-spacing: 0.01rem;
         word-spacing: 0.025rem;
