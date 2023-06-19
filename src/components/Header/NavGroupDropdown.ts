@@ -7,6 +7,7 @@ import { map } from "lit/directives/map.js";
 import { portalState } from "../../state/portal-state";
 import { StateController } from "@lit-app/state";
 import { classMap } from "lit/directives/class-map.js";
+import { getUrl } from "../../utils/routing";
 
 @customElement("bkd-nav-group-dropdown")
 @localized()
@@ -111,7 +112,7 @@ export class NavGroupDropdown extends LitElement {
       <li role="presentation" class=${classMap({ active })}>
         <a
           role="menuitem"
-          href="#"
+          href=${getUrl(item)}
           @click=${(e: MouseEvent) => this.handleItemClick(e, item)}
           >${item.label}</a
         >

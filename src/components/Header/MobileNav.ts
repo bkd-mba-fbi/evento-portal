@@ -16,6 +16,7 @@ import {
 } from "../../utils/user-settings.ts";
 import { isExternalUrl } from "../../utils/url.ts";
 import { portalState } from "../../state/portal-state.ts";
+import { getUrl } from "../../utils/routing.ts";
 
 @customElement("bkd-mobile-nav")
 @localized()
@@ -240,7 +241,7 @@ export class MobileNav extends LitElement {
         })}
       >
         <a
-          href="#"
+          href=${getUrl(item)}
           @click=${(e: MouseEvent) => this.handleNavItemClick(e, item)}
         >
           ${item.label}

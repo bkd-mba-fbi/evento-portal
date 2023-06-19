@@ -1,4 +1,4 @@
-import { settings } from "../settings";
+import { NavigationItem, settings } from "../settings";
 import {
   LOCALE_QUERY_PARAM,
   NAV_ITEM_QUERY_PARAM,
@@ -20,10 +20,20 @@ export function getScopeFromUrl(): string {
     : getApp(settings.navigationHome).scope;
 }
 
-export function getUrl(itemKey: string): string {
-  const { item } = getNavigationItem(portalState.navigation, itemKey);
+export function getUrl(itemKey: string): string;
+export function getUrl(item: NavigationItem): string;
+export function getUrl(itemOrKey: NavigationItem | string): string {
+  const item =
+    typeof itemOrKey === "string"
+      ? getNavigationItem(portalState.navigation, itemOrKey).item
+      : itemOrKey;
+  return getItemUrl(item).toString();
+}
+
+function getItemUrl(item: NavigationItem): URL {
   const url = new URL(location.origin);
   url.searchParams.set(LOCALE_QUERY_PARAM, portalState.locale);
   url.searchParams.set(NAV_ITEM_QUERY_PARAM, item.key);
-  return url.toString();
+  url.hash = item.appPath;
+  return url;
 }
