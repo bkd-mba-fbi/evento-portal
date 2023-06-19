@@ -127,7 +127,8 @@ export const settings: Settings = {
             allowedRolesOrPermissions: ["TeacherRole", "ClassTeacherRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
-            appPath: "#/current-events",
+            appPath: "#/events",
+            //appPath: "#/current-events", // TODO split event into current-events and tests
           },
           {
             key: "tests",
@@ -135,7 +136,8 @@ export const settings: Settings = {
             allowedRolesOrPermissions: ["TeacherRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
-            appPath: "#/tests",
+            appPath: "#/events",
+            //appPath: "#/tests", // TODO split event into current-events and tests
           },
           {
             key: "substitutionsAssign",
