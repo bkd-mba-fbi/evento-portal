@@ -68,7 +68,10 @@ export class Content extends LitElement {
     return html`
       <main>
         <h1>${portalState.navigationItem.label}</h1>
-        <iframe id="app" src=${portalState.app.root}></iframe>
+        <iframe
+          id="app"
+          src=${portalState.app.root + portalState.navigationItem.appPath}
+        ></iframe>
       </main>
     `;
   }
