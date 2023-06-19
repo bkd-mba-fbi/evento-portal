@@ -3,10 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 import { localized } from "@lit/localize";
 import { classMap } from "lit/directives/class-map.js";
 import { theme } from "../../utils/theme";
-import { NavigationGroup, NavigationItem } from "../../settings";
-import { map } from "lit/directives/map.js";
+import { NavigationGroup } from "../../settings";
 import { DropdownToggleController } from "../../controllers/dropdown-toggle.ts";
-import { portalState } from "../../state/portal-state.ts";
 
 @customElement("bkd-nav-group-toggle")
 @localized()
@@ -20,43 +18,6 @@ export class NavGroupToggle extends LitElement {
   static styles = [
     theme,
     css`
-      :host {
-        position: relative;
-      }
-
-      ul {
-        position: absolute;
-        right: 0;
-        border: 1px solid var(--bkd-func-bg-grey);
-        padding: 1rem 0;
-        margin: 0.5rem 0;
-        list-style-type: none;
-        background: var(--bkd-func-bg-white);
-        z-index: var(--bkd-z-index-dropdown);
-        min-width: max-content;
-      }
-
-      li {
-        padding: 0 1.5rem;
-        height: 100%;
-        line-height: 2.5;
-      }
-
-      li.active {
-        background: var(--bkd-brand-sand);
-        border-left: 6px solid var(--bkd-brand-red);
-        padding: 0 calc(1.5rem - 6px);
-      }
-
-      li.active a {
-        font-weight: 600;
-        color: var(--bkd-brand-red);
-      }
-
-      li.active a:after {
-        background-color: transparent;
-      }
-
       a {
         font-size: 1.5rem;
         font-weight: 300;
@@ -65,10 +26,6 @@ export class NavGroupToggle extends LitElement {
         word-spacing: 0.025rem;
         text-decoration: none;
         display: inline-block;
-      }
-
-      a[role="menuitem"] {
-        font-size: 1.125rem;
       }
 
       a:after {
@@ -99,28 +56,13 @@ export class NavGroupToggle extends LitElement {
     "group-menu"
   );
 
-  private toggle() {
+  private toggle(event: Event) {
+    event.preventDefault();
     this.groupMenu.toggle();
   }
 
-  private handleItemClick(event: MouseEvent, item: NavigationItem) {
-    event.preventDefault();
-    portalState.navigationItemKey = item.key;
+  private handleItemClick() {
     this.groupMenu.close();
-  }
-
-  private renderItem(item: NavigationItem) {
-    const active = item.key === portalState.navigationItemKey;
-    return html`
-      <li role="presentation" class=${classMap({ active })}>
-        <a
-          role="menuitem"
-          href="#"
-          @click=${(e: MouseEvent) => this.handleItemClick(e, item)}
-          >${item.label}</a
-        >
-      </li>
-    `;
   }
 
   render() {
@@ -137,9 +79,11 @@ export class NavGroupToggle extends LitElement {
       >
         ${this.group.label}
       </a>
-      <ul role="menu" id="group-menu" ?hidden=${!this.groupMenu.open}>
-        ${map(this.group.items, this.renderItem.bind(this))}
-      </ul>
+      <bkd-nav-group-dropdown
+        .group=${this.group}
+        .open=${this.groupMenu.open}
+        @bkditemclick=${this.handleItemClick.bind(this)}
+      ></bkd-nav-group-dropdown>
     `;
   }
 }

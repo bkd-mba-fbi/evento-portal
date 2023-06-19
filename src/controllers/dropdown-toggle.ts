@@ -20,6 +20,7 @@ export class DropdownToggleController implements ReactiveController {
     this.host.requestUpdate();
 
     if (this.open) {
+      this.closeOthers();
       this.addListeners();
     } else {
       this.removeListeners();
@@ -35,11 +36,19 @@ export class DropdownToggleController implements ReactiveController {
   private addListeners(): void {
     document.addEventListener("click", this.handleClick, true);
     document.addEventListener("keydown", this.handleKeydown, true);
+    document.addEventListener(
+      "bkddropdowntoggleclose",
+      this.handleCloseOthers as EventListener
+    );
   }
 
   private removeListeners(): void {
     document.removeEventListener("click", this.handleClick, true);
     document.removeEventListener("keydown", this.handleKeydown, true);
+    document.removeEventListener(
+      "bkddropdowntoggleclose",
+      this.handleCloseOthers as EventListener
+    );
   }
 
   private handleClick = (event: MouseEvent) => {
@@ -48,11 +57,29 @@ export class DropdownToggleController implements ReactiveController {
     }
   };
 
-  private handleKeydown = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
+  private handleKeydown = (event: KeyboardEvent) => {
+    if (event.key === "Escape") {
       this.close();
     }
   };
+
+  private handleCloseOthers = (
+    event: CustomEvent<{ source: DropdownToggleController }>
+  ) => {
+    const { source } = event.detail;
+    if (source !== this) {
+      this.close();
+    }
+  };
+
+  private closeOthers(): void {
+    document.dispatchEvent(
+      new CustomEvent<{ source: DropdownToggleController }>(
+        "bkddropdowntoggleclose",
+        { detail: { source: this } }
+      )
+    );
+  }
 
   /**
    * Whether the event originates from an element with any of the given ids.

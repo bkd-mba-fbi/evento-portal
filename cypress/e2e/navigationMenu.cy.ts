@@ -1,4 +1,4 @@
-describe("Navigation", () => {
+describe("Navigation Menu", () => {
   describe("with 'LessonTeacherRole' & 'TeacherRole' roles", () => {
     beforeEach(() =>
       cy.login({ roles: ["LessonTeacherRole", "TeacherRole"], permissions: [] })
@@ -19,26 +19,46 @@ describe("Navigation", () => {
           .then(($links) =>
             expect(
               $links.toArray().map((link) => link.textContent?.trim())
-            ).to.deep.eq([
-              "Unterricht",
-              "Präsenzkontrolle",
-              "Aktuelle Fächer",
-              "Tests und Bewertung",
-              "Stellvertretung",
-              "Absenzen",
-              "Offene Absenzen entschuldigen",
-              "Absenzen bearbeiten",
-              "Absenzen auswerten",
-              "Angebote",
-              "Kurse und Veranstaltungen",
-              "Schulinterne Weiterbildung",
-              "Räume und Geräte reservieren",
-            ])
+            ).to.deep.eq(["Unterricht", "Absenzen", "Angebote"])
           );
       });
 
       it("renders dropdown with navigation items and closes it on click", () => {
-        // TODO
+        cy.get("bkd-nav").within(() => {
+          cy.contains("a", "Unterricht").as("teachingGroup");
+          cy.get("@teachingGroup")
+            .next("bkd-nav-group-dropdown")
+            .shadow()
+            .find("ul[role='menu']")
+            .should("not.exist");
+
+          // Open dropdown
+          cy.get("@teachingGroup").click();
+
+          cy.get("@teachingGroup")
+            .next("bkd-nav-group-dropdown")
+            .shadow()
+            .find("ul[role='menu']")
+            .as("groupDropdown")
+            .should("be.visible");
+
+          cy.get("@groupDropdown")
+            .find("a[role='menuitem']")
+            .then(($links) => {
+              expect(
+                $links.toArray().map((link) => link.textContent?.trim())
+              ).to.deep.eq([
+                "Präsenzkontrolle",
+                "Aktuelle Fächer",
+                "Tests und Bewertung",
+                "Stellvertretung",
+              ]);
+            });
+
+          // Click away
+          cy.document().find("body").click();
+          cy.get("@groupDropdown").should("not.exist");
+        });
       });
     });
 
@@ -49,7 +69,6 @@ describe("Navigation", () => {
       });
 
       it("open/closes hamburger menu by click on hamburger", () => {
-        // TODO activate test when initial expand and select of current menu item is implemented
         cy.get("bkd-nav").as("desktop-menu").should("not.be.visible");
 
         // Hamburger menu is initially closed
@@ -64,7 +83,7 @@ describe("Navigation", () => {
         cy.get("@toggle").ariaExpanded(true);
         cy.get("bkd-mobile-nav").as("mobile-menu").should("be.visible");
 
-        // Renders contents with first group initially expanded
+        // Renders contents with all groups initially collapsed
         cy.get("@mobile-menu").within(() => {
           cy.contains("li", "Unterricht")
             .as("teachingGroup")
@@ -103,7 +122,16 @@ describe("Navigation", () => {
       });
 
       it("closes hamburger menu when clicking on navigation item", () => {
-        // TODO
+        cy.get("button[aria-label='Menü']").as("toggle").click();
+        cy.get("bkd-mobile-nav").as("mobile-menu").should("be.visible");
+        cy.contains("li", "Unterricht").as("teachingGroup").click();
+
+        cy.get("@teachingGroup")
+          .contains("li.item", "Präsenzkontrolle")
+          .find("a")
+          .click();
+        cy.get("@toggle").ariaExpanded(false);
+        cy.get("@mobile-menu").should("not.exist");
       });
     });
   });

@@ -188,7 +188,13 @@ export class MobileNav extends LitElement {
 
   private handleNavItemClick(event: MouseEvent, item: NavigationItem): void {
     event.preventDefault();
-    portalState.navigationItemKey = item.key;
+    this.dispatchEvent(
+      new CustomEvent<{ item: NavigationItem }>("bkditemclick", {
+        detail: { item },
+        composed: true,
+        bubbles: true,
+      })
+    );
   }
 
   private handleSettingsItemClick(e: MouseEvent, item: UserSettingItem) {

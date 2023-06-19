@@ -8,6 +8,7 @@ import { when } from "lit/directives/when.js";
 import { portalState } from "../state/portal-state";
 import { StateController } from "@lit-app/state";
 import { getUrl } from "../utils/routing";
+import { NavigationItem } from "../settings";
 
 @customElement("bkd-header")
 @localized()
@@ -134,6 +135,18 @@ export class Header extends LitElement {
     portalState.navigationItemKey = "home";
   }
 
+  private handleNavItemClick(
+    event: CustomEvent<{ item: NavigationItem }>
+  ): void {
+    const { item } = event.detail;
+
+    // Navigate to clicked item
+    portalState.navigationItemKey = item.key;
+
+    // When on mobile, close hamburger menu
+    this.mobileNav.close();
+  }
+
   render() {
     const instanceName = "Berufsbildungszentrum IDM Thun";
     const portalName = `${msg("Evento")} | ${instanceName}`;
@@ -151,10 +164,14 @@ export class Header extends LitElement {
             @click=${this.handleLogoClick.bind(this)}
         /></a>
         <div class="logo-caption">${portalName}</div>
-        <bkd-nav></bkd-nav>
+        <bkd-nav @bkditemclick=${this.handleNavItemClick.bind(this)}></bkd-nav>
         ${when(
           this.mobileNav.open,
-          () => html`<bkd-mobile-nav id="mobile-nav-menu"></bkd-mobile-nav>`
+          () =>
+            html`<bkd-mobile-nav
+              id="mobile-nav-menu"
+              @bkditemclick=${this.handleNavItemClick.bind(this)}
+            ></bkd-mobile-nav>`
         )}
       </header>
     `;

@@ -45,7 +45,7 @@ export class Content extends LitElement {
   render() {
     return html`
       <main>
-        <p>${portalState.navigationItem.label}</p>
+        <h1>${portalState.navigationItem.label}</h1>
       </main>
     `;
   }
