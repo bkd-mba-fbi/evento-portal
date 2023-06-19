@@ -15,8 +15,26 @@ export class Content extends LitElement {
 
       :host {
         --bkd-header-margin-horizontal: var(--bkd-margin-horizontal-large);
-
         margin: 0 var(--bkd-header-margin-horizontal);
+        display: flex;
+        height: 100%;
+      }
+
+      main {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: 3.375rem;
+        font-weight: 100;
+      }
+
+      iframe {
+        border: none;
+        height: 100%;
+        width: 100%;
       }
 
       /* Medium screen */
@@ -24,6 +42,10 @@ export class Content extends LitElement {
       @media screen and (max-width: 1200px) {
         :host {
           --bkd-header-margin-horizontal: var(--bkd-margin-horizontal-medium);
+        }
+
+        h1 {
+          font-size: 2.25rem;
         }
       }
 
@@ -46,6 +68,7 @@ export class Content extends LitElement {
     return html`
       <main>
         <h1>${portalState.navigationItem.label}</h1>
+        <iframe id="app" src=${portalState.app.root}></iframe>
       </main>
     `;
   }
