@@ -6,13 +6,13 @@ window.schulverwaltung.settings = {
   /**
    * General settings
    */
-  // API base URL without trailing slash
-  apiUrl: location.protocol + '//' + location.host + '/restApi',
+  // API base URL (without trailing slash)
+  apiUrl: 'https://eventoapp-test.erz.be.ch/restApi',
 
   // Path (without trailing slash, relative to the index.html) to the
   // JavaScript bundles and the assets directory containing image and
   // locale files
-  scriptsAndAssetsPath:  location.protocol + '//' + location.host +'/'+ window.location.pathname.split('/')[1]+'/JSModules/webapp-schulverwaltung',
+  scriptsAndAssetsPath: '.',
 
   // Maximum loaded entries per page, where pagination is in place
   paginationLimit: 200,
