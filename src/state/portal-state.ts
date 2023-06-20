@@ -66,19 +66,16 @@ export class PortalState extends State {
     await this.loadRolesAndPermissions();
   }
 
-  subscribeLocale(
-    callback: (locale: PortalState["locale"]) => void,
-    withCurrent = true
-  ) {
-    if (withCurrent) {
-      callback(this.locale);
-    }
+  subscribeLocale(callback: (locale: PortalState["locale"]) => void) {
+    callback(this.locale); // Initial value
     return this.subscribe((_, locale) => callback(locale), "locale");
   }
 
   subscribeInstanceName(
     callback: (instanceName: PortalState["instanceName"]) => void
   ) {
+    // It makes no sense to call with initial value since it is
+    // fetched asynchronously
     return this.subscribe(
       (_, instanceName) => callback(instanceName),
       "instanceName"
@@ -86,12 +83,9 @@ export class PortalState extends State {
   }
 
   subscribeNavigationItemKey(
-    callback: (itemKey: PortalState["navigationItemKey"]) => void,
-    withCurrent = true
+    callback: (itemKey: PortalState["navigationItemKey"]) => void
   ) {
-    if (withCurrent) {
-      callback(this.navigationItemKey);
-    }
+    callback(this.navigationItemKey); // Initial value
     return this.subscribe(
       (_, itemKey) => callback(itemKey),
       "navigationItemKey"
@@ -99,21 +93,18 @@ export class PortalState extends State {
   }
 
   subscribeNavigationItem(
-    callback: (item: PortalState["navigationItem"]) => void,
-    withCurrent = true
+    callback: (item: PortalState["navigationItem"]) => void
   ) {
-    if (withCurrent) {
-      callback(this.navigationItem);
-    }
+    callback(this.navigationItem); // Initial value
     return this.subscribe((_, item) => callback(item), "navigationItem");
   }
 
   subscribeScope(
     callback: (scope: PortalState["app"]["scope"]) => void,
-    withCurrent = true
+    skipInitial = false
   ) {
-    if (withCurrent) {
-      callback(this.app.scope);
+    if (!skipInitial) {
+      callback(this.app.scope); // Initial value
     }
     return this.subscribe((_, app) => callback(app.scope), "app");
   }

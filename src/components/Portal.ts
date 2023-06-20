@@ -71,7 +71,7 @@ export class Portal extends LitElement {
     this.subscriptions.push(
       portalState.subscribeScope(
         (scope) => activateTokenForScope(oAuthClient, scope),
-        false
+        true
       )
     );
     this.subscriptions.push(
