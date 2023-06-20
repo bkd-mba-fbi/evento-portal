@@ -8,7 +8,7 @@ import {
   NavigationItem,
   settings,
 } from "../settings";
-import { getCurrentAccessToken } from "../utils/storage";
+import { getCurrentAccessToken, storeLocale } from "../utils/storage";
 import { getTokenPayload } from "../utils/token";
 import { fetchInstanceName, fetchUserAccessInfo } from "../utils/fetch";
 import { filterAllowed, getApp, getNavigationItem } from "../utils/navigation";
@@ -142,6 +142,10 @@ export class PortalState extends State {
     if (key === "locale") {
       this.updateLocale(value);
       this.loadInstanceName();
+    }
+
+    if (key === "locale" || key === "navigationItemKey") {
+      storeLocale(this.locale);
     }
 
     if (key === "rolesAndPermissions" || key === "locale") {
