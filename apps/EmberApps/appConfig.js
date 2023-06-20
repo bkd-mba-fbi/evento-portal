@@ -6,7 +6,7 @@
         // the token type
         tokenType: 'urn:ietf:params:oauth:token-type:jwt-bearer',
         // API base URL without trailing slash
-        apiUrl: location.protocol + '//' + location.host + '/restApi',
+        apiUrl: 'https://eventoapp-test.erz.be.ch/restApi',
         // base Url of the web application without trailing slash (also the redirect url for public clients)
         webBaseUrl: '../',
         // url to a page that handles login without trailing slash. Provide a value here, if you are not using
