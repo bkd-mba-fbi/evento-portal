@@ -9,6 +9,7 @@ import { portalState } from "../state/portal-state";
 import { StateController } from "@lit-app/state";
 import { getUrl } from "../utils/routing";
 import { NavigationItem } from "../settings";
+import { UserSettingsItem } from "../utils/user-settings";
 
 @customElement("bkd-header")
 @localized()
@@ -147,12 +148,34 @@ export class Header extends LitElement {
     this.mobileNav.close();
   }
 
+  private handleSettingsItemClick(
+    event: CustomEvent<{ item: UserSettingsItem; event: Event }>
+  ): void {
+    const { item, event: sourceEvent } = event.detail;
+
+    if (!item.external) {
+      sourceEvent.preventDefault();
+      if (item.key === "logout") {
+        document.dispatchEvent(
+          new CustomEvent<void>("bkdlogout", { composed: true, bubbles: true })
+        );
+      } else {
+        // Internal navigation
+        portalState.navigate(new URL(item.href));
+      }
+    }
+
+    // When on mobile, close hamburger menu
+    this.mobileNav.close();
+  }
+
   render() {
     return html`
       <header>
         <bkd-service-nav
           .mobileNavOpen=${this.mobileNav.open}
           @bkdhamburgertoggle=${() => this.mobileNav.toggle()}
+          @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
         ></bkd-service-nav>
         <a class="logo" href=${getUrl("home")}
           ><img
@@ -161,13 +184,16 @@ export class Header extends LitElement {
             @click=${this.handleLogoClick.bind(this)}
         /></a>
         <div class="logo-caption">${portalState.instanceName}</div>
-        <bkd-nav @bkditemclick=${this.handleNavItemClick.bind(this)}></bkd-nav>
+        <bkd-nav
+          @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
+        ></bkd-nav>
         ${when(
           this.mobileNav.open,
           () =>
             html`<bkd-mobile-nav
               id="mobile-nav-menu"
-              @bkditemclick=${this.handleNavItemClick.bind(this)}
+              @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
+              @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
             ></bkd-mobile-nav>`
         )}
       </header>

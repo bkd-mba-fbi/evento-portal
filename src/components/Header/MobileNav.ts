@@ -10,13 +10,12 @@ import { theme } from "../../utils/theme";
 import { NavigationGroup, NavigationItem } from "../../settings";
 import arrowDownIcon from "../../assets/icons/arrow-down.svg?raw";
 import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
-import {
-  userSettingItems,
-  UserSettingItem,
-} from "../../utils/user-settings.ts";
-import { isExternalUrl } from "../../utils/url.ts";
 import { portalState } from "../../state/portal-state.ts";
 import { getUrl } from "../../utils/routing.ts";
+import {
+  UserSettingsItem,
+  userSettingsItems,
+} from "../../utils/user-settings.ts";
 
 @customElement("bkd-mobile-nav")
 @localized()
@@ -190,7 +189,7 @@ export class MobileNav extends LitElement {
   private handleNavItemClick(event: MouseEvent, item: NavigationItem): void {
     event.preventDefault();
     this.dispatchEvent(
-      new CustomEvent<{ item: NavigationItem }>("bkditemclick", {
+      new CustomEvent<{ item: NavigationItem }>("bkdnavitemclick", {
         detail: { item },
         composed: true,
         bubbles: true,
@@ -198,13 +197,20 @@ export class MobileNav extends LitElement {
     );
   }
 
-  private handleSettingsItemClick(e: MouseEvent, item: UserSettingItem) {
-    e.preventDefault();
-    if (isExternalUrl(item.href, this.baseURI)) {
-      window.open(item.href, "_blank");
-    }
-    console.log("handleSettingsItemClick", item); // TODO: perform actual navigation action
-    // TODO handle dropdown toggle close
+  private handleSettingsItemClick(
+    event: MouseEvent,
+    item: UserSettingsItem
+  ): void {
+    this.dispatchEvent(
+      new CustomEvent<{ item: UserSettingsItem; event: Event }>(
+        "bkdsettingsitemclick",
+        {
+          detail: { item, event },
+          composed: true,
+          bubbles: true,
+        }
+      )
+    );
   }
 
   private renderGroup(group: NavigationGroup) {
@@ -250,10 +256,11 @@ export class MobileNav extends LitElement {
     `;
   }
 
-  private renderSettingsItem(item: UserSettingItem) {
+  private renderSettingsItem(item: UserSettingsItem) {
     return html`<li>
       <a
         href=${item.href}
+        target=${item.external ? "_blank" : "_self"}
         @click=${(e: MouseEvent) => this.handleSettingsItemClick(e, item)}
       >
         ${item.label}
@@ -272,7 +279,7 @@ export class MobileNav extends LitElement {
       <div class="service-nav">
         <ul>
           ${map(
-            userSettingItems(portalState.locale),
+            userSettingsItems(portalState.locale),
             this.renderSettingsItem.bind(this)
           )}
         </ul>

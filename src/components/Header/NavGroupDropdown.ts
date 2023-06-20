@@ -98,7 +98,7 @@ export class NavGroupDropdown extends LitElement {
   private handleItemClick(event: MouseEvent, item: NavigationItem) {
     event.preventDefault();
     this.dispatchEvent(
-      new CustomEvent<{ item: NavigationItem }>("bkditemclick", {
+      new CustomEvent<{ item: NavigationItem }>("bkdnavitemclick", {
         detail: { item },
         composed: true,
         bubbles: true,

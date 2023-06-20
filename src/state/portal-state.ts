@@ -17,6 +17,8 @@ import { msg } from "@lit/localize";
 export const LOCALE_QUERY_PARAM = "locale";
 export const NAV_ITEM_QUERY_PARAM = "module";
 
+const QUERY_PARAMS = [LOCALE_QUERY_PARAM, NAV_ITEM_QUERY_PARAM];
+
 export class PortalState extends State {
   @query({ parameter: LOCALE_QUERY_PARAM })
   @property({ value: getLocale() })
@@ -57,7 +59,7 @@ export class PortalState extends State {
   app!: App;
 
   private initialized = false;
-  private redirectUrl: URL | null = null;
+  private pendingUrl: URL | null = null;
 
   async init() {
     // Update initially
@@ -67,7 +69,7 @@ export class PortalState extends State {
     this.subscribe(this.handleStateChange.bind(this));
 
     await this.loadRolesAndPermissions();
-    this.handleRedirectUrl();
+    this.applyPendingUrl();
 
     this.initialized = true;
   }
@@ -116,16 +118,16 @@ export class PortalState extends State {
   }
 
   /**
-   * Update the state according to the given redirect URL (typically
-   * after login) instead of doing a full page refresh.
+   * Update the state according to the given URL (typically after
+   * login or when navigating) instead of doing a full page refresh.
    */
-  setRedirectUrl(url: URL): void {
-    this.redirectUrl = url;
+  navigate(url: URL): void {
+    this.pendingUrl = url;
 
     if (this.initialized) {
       // If `init()` already has been called handle it right away,
       // otherwise in `init()`
-      this.handleRedirectUrl();
+      this.applyPendingUrl();
     }
   }
 
@@ -203,25 +205,25 @@ export class PortalState extends State {
   }
 
   /**
-   * Cosume the `redirectUrl` if present and update the state
+   * Cosume the `pendingUrl` if present and update the state
    * according to its query params.
    */
-  private handleRedirectUrl(): void {
-    if (!this.redirectUrl) return;
+  private applyPendingUrl(): void {
+    if (!this.pendingUrl) return;
 
     // Remove all current query params
-    clearQueryParams();
+    clearQueryParams(QUERY_PARAMS);
 
     // Set new state from `redirectUrl`
     this.locale =
-      this.redirectUrl.searchParams.get(LOCALE_QUERY_PARAM) || getLocale();
+      this.pendingUrl.searchParams.get(LOCALE_QUERY_PARAM) || getLocale();
     this.navigationItemKey =
-      this.redirectUrl.searchParams.get(NAV_ITEM_QUERY_PARAM) ??
+      this.pendingUrl.searchParams.get(NAV_ITEM_QUERY_PARAM) ??
       settings.navigationHome.key;
 
     // TODO: apply app path as well (as `path` query param?)
 
-    this.redirectUrl = null;
+    this.pendingUrl = null;
   }
 }
 

@@ -6,12 +6,11 @@ import { StateController } from "@lit-app/state";
 import { theme } from "../../utils/theme.ts";
 import { DropdownToggleController } from "../../controllers/dropdown-toggle.ts";
 import { map } from "lit/directives/map.js";
-import {
-  UserSettingItem,
-  userSettingItems,
-} from "../../utils/user-settings.ts";
-import { isExternalUrl } from "../../utils/url.ts";
 import { portalState } from "../../state/portal-state.ts";
+import {
+  UserSettingsItem,
+  userSettingsItems,
+} from "../../utils/user-settings.ts";
 
 @customElement("bkd-user-settings")
 @localized()
@@ -99,13 +98,19 @@ export class UserSettings extends LitElement {
     "settings-menu"
   );
 
-  private handleSettingsItemClick(e: MouseEvent, item: UserSettingItem) {
-    e.preventDefault();
-    if (isExternalUrl(item.href, this.baseURI)) {
-      window.open(item.href, "_blank");
-    }
-    console.log("handleSettingsItemClick", item); // TODO: perform actual navigation action
+  private handleSettingsItemClick(event: MouseEvent, item: UserSettingsItem) {
     this.settingsMenu.close();
+
+    this.dispatchEvent(
+      new CustomEvent<{ item: UserSettingsItem; event: Event }>(
+        "bkdsettingsitemclick",
+        {
+          detail: { item, event },
+          composed: true,
+          bubbles: true,
+        }
+      )
+    );
   }
 
   private toggle() {
@@ -157,11 +162,12 @@ export class UserSettings extends LitElement {
     return next;
   }
 
-  private renderSettingsItem(item: UserSettingItem) {
+  private renderSettingsItem(item: UserSettingsItem) {
     return html`<li role="presentation">
       <a
         role="menuitem"
         href=${item.href}
+        target=${item.external ? "_blank" : "_self"}
         @click=${(e: MouseEvent) => this.handleSettingsItemClick(e, item)}
       >
         ${item.label}</a
@@ -186,7 +192,7 @@ export class UserSettings extends LitElement {
       </button>
       <ul id="settings-menu" role="menu" ?hidden=${!this.settingsMenu.open}>
         ${map(
-          userSettingItems(portalState.locale),
+          userSettingsItems(portalState.locale),
           this.renderSettingsItem.bind(this)
         )}
       </ul>

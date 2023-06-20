@@ -6,11 +6,14 @@ import {
 } from "../state/portal-state";
 import { getApp, getNavigationItem, getScope } from "./navigation";
 
-export function clearQueryParams(): void {
+export function clearQueryParams(excludeKeys: ReadonlyArray<string>): void {
   const url = new URL(location.href);
-  for (const key of url.searchParams.keys()) {
-    url.searchParams.delete(key);
-  }
+  const keys = Array.from(url.searchParams.keys());
+  keys.forEach((key) => {
+    if (!excludeKeys.includes(key)) {
+      url.searchParams.delete(key);
+    }
+  });
   history.replaceState({}, "", url);
 }
 

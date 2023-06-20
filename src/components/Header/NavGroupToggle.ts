@@ -82,7 +82,7 @@ export class NavGroupToggle extends LitElement {
       <bkd-nav-group-dropdown
         .group=${this.group}
         .open=${this.groupMenu.open}
-        @bkditemclick=${this.handleItemClick.bind(this)}
+        @bkdnavitemclick=${this.handleItemClick.bind(this)}
       ></bkd-nav-group-dropdown>
     `;
   }

@@ -59,6 +59,12 @@ Cypress.Commands.add(
       "https://eventoapp-test.erz.be.ch/restApi/UserSettings/?expand=AccessInfo",
       { AccessInfo: { Roles: roles, Permissions: permissions } }
     );
+
+    cy.intercept(
+      "GET",
+      "https://eventoapp-test.erz.be.ch/restApi/Configurations/SchoolAppNavigation",
+      { instanceName: "Test" }
+    );
   }
 );
 

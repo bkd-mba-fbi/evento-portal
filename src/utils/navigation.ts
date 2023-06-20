@@ -13,13 +13,21 @@ export function getNavigationItem(
   navigation: Navigation,
   itemKey: string
 ): { item: NavigationItem; group: NavigationGroup | null } {
-  for (const group of navigation) {
-    const item = group.items.find(({ key }) => key === itemKey);
-    if (item) {
-      return { item, group };
+  switch (itemKey) {
+    case settings.navigationMyProfile.key:
+      return { item: settings.navigationMyProfile, group: null };
+    case settings.navigationMySettings.key:
+      return { item: settings.navigationMySettings, group: null };
+    default: {
+      for (const group of navigation) {
+        const item = group.items.find(({ key }) => key === itemKey);
+        if (item) {
+          return { item, group };
+        }
+      }
+      return { item: settings.navigationHome, group: null };
     }
   }
-  return { item: settings.navigationHome, group: null };
 }
 
 export function getApp(item: NavigationItem): App {

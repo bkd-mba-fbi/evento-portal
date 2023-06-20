@@ -1,27 +1,43 @@
 import { msg } from "@lit/localize";
+import { getUrl } from "./routing";
 
-export type UserSettingItem = Readonly<{
-  href: string;
+export type UserSettingsItem = Readonly<{
+  key: string;
   label: string;
+  href: string;
   img?: string;
+  external?: boolean;
 }>;
 
-export function userSettingItems(
+export function userSettingsItems(
   locale: string
-): ReadonlyArray<UserSettingItem> {
-  const playlist =
-    locale === "de"
-      ? "PLLDtLiOuctbx-_EQWgWqTO1MRbX845OEf"
-      : "PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU";
-
+): ReadonlyArray<UserSettingsItem> {
   return [
-    { href: "#", label: msg("Mein Profil") },
-    { href: "#", label: msg("Einstellungen") },
     {
-      href: `https://www.youtube.com/playlist?list=${playlist}`,
-      label: msg("Video-Tutorials"),
-      img: "/icons/external-link.svg",
+      key: "myProfile",
+      label: msg("Mein Profil"),
+      href: getUrl("myProfile"),
     },
-    { href: "#", label: msg("Logout"), img: "/icons/logout.svg" },
+    {
+      key: "mySettings",
+      label: msg("Einstellungen"),
+      href: getUrl("mySettings"),
+    },
+    {
+      key: "videos",
+      label: msg("Video-Tutorials"),
+      href:
+        locale === "de"
+          ? "https://www.youtube.com/playlist?list=PLLDtLiOuctbx-_EQWgWqTO1MRbX845OEf"
+          : "https://www.youtube.com/playlist?list=PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU",
+      img: "/icons/external-link.svg",
+      external: true,
+    },
+    {
+      key: "logout",
+      label: msg("Logout"),
+      href: "#",
+      img: "/icons/logout.svg",
+    },
   ];
 }

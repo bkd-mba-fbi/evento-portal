@@ -5,6 +5,8 @@ export type Settings = Readonly<{
   oauth: Readonly<{ server: string; clientId: string }>;
   apps: ReadonlyArray<Readonly<App>>;
   navigationHome: NavigationItem;
+  navigationMyProfile: NavigationItem;
+  navigationMySettings: NavigationItem;
   navigation: ReadonlyArray<NavigationGroup>;
 }>;
 
@@ -85,6 +87,26 @@ export const settings: Settings = {
     deniedInstanceIds: null,
     appKey: "schulverwaltung",
     appPath: "#/portal-home",
+  },
+  get navigationMyProfile() {
+    return {
+      key: "myProfile",
+      label: msg("Mein Profil"),
+      allowedRolesOrPermissions: null,
+      deniedInstanceIds: null,
+      appKey: "schulverwaltung",
+      appPath: "#/my-profile",
+    };
+  },
+  get navigationMySettings() {
+    return {
+      key: "mySettings",
+      label: msg("Einstellungen"),
+      allowedRolesOrPermissions: null,
+      deniedInstanceIds: null,
+      appKey: "schulverwaltung",
+      appPath: "#/my-settings",
+    };
   },
   get navigation(): Navigation {
     return [
