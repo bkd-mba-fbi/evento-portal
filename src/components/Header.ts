@@ -148,9 +148,6 @@ export class Header extends LitElement {
   }
 
   render() {
-    const instanceName = "Berufsbildungszentrum IDM Thun";
-    const portalName = `${msg("Evento")} | ${instanceName}`;
-
     return html`
       <header>
         <bkd-service-nav
@@ -163,7 +160,7 @@ export class Header extends LitElement {
             alt=${msg("Evento Startseite")}
             @click=${this.handleLogoClick.bind(this)}
         /></a>
-        <div class="logo-caption">${portalName}</div>
+        <div class="logo-caption">${portalState.instanceName}</div>
         <bkd-nav @bkditemclick=${this.handleNavItemClick.bind(this)}></bkd-nav>
         ${when(
           this.mobileNav.open,

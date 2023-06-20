@@ -17,6 +17,7 @@ import { portalState } from "../state/portal-state.ts";
 import { getScopeFromUrl } from "../utils/routing.ts";
 import { when } from "lit/directives/when.js";
 import { getCurrentAccessToken } from "../utils/storage.ts";
+import { settings } from "../settings.ts";
 
 const oAuthClient = createOAuthClient();
 
@@ -56,7 +57,7 @@ export class Portal extends LitElement {
     `,
   ];
 
-  private unsubscribeScope: Unsubscribe | null = null;
+  private subscriptions: Array<Unsubscribe> = [];
 
   constructor() {
     super();
@@ -66,22 +67,40 @@ export class Portal extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
-    this.unsubscribeScope = portalState.subscribeScope(
-      (scope) => activateTokenForScope(oAuthClient, scope),
-      false
+
+    this.subscriptions.push(
+      portalState.subscribeScope(
+        (scope) => activateTokenForScope(oAuthClient, scope),
+        false
+      )
+    );
+    this.subscriptions.push(
+      portalState.subscribeInstanceName(this.updateTitle.bind(this))
+    );
+    this.subscriptions.push(
+      portalState.subscribeNavigationItem(this.updateTitle.bind(this))
     );
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
-    if (this.unsubscribeScope) {
-      this.unsubscribeScope();
-    }
+    this.subscriptions.forEach((unsubscribe) => unsubscribe());
   }
 
   private isAuthenticated(): boolean {
     const token = getCurrentAccessToken();
     return Boolean(token);
+  }
+
+  /**
+   * Update the document title based on the current state
+   */
+  private updateTitle(): void {
+    const { instanceName, navigationItem: item } = portalState;
+    const hasItem = item?.label && item?.key !== settings.navigationHome.key;
+    document.title = hasItem
+      ? [item?.label, instanceName].join(" ― ")
+      : instanceName;
   }
 
   render() {

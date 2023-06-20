@@ -10,8 +10,9 @@ import {
 } from "../settings";
 import { getCurrentAccessToken } from "../utils/storage";
 import { getTokenPayload } from "../utils/token";
-import { fetchUserAccessInfo } from "../utils/fetch";
+import { fetchInstanceName, fetchUserAccessInfo } from "../utils/fetch";
 import { filterAllowed, getApp, getNavigationItem } from "../utils/navigation";
+import { msg } from "@lit/localize";
 
 export const LOCALE_QUERY_PARAM = "locale";
 export const NAV_ITEM_QUERY_PARAM = "module";
@@ -24,11 +25,14 @@ export class PortalState extends State {
   @property({ value: [] })
   rolesAndPermissions!: ReadonlyArray<string>;
 
+  @property({ value: "" })
+  instanceName!: string;
+
   @property({ value: [] })
   navigation!: Navigation;
 
   @query({ parameter: NAV_ITEM_QUERY_PARAM })
-  @property({ value: settings.navigationHome.key })
+  @property({ value: null })
   navigationItemKey!: string;
 
   /**
@@ -53,25 +57,11 @@ export class PortalState extends State {
   app!: App;
 
   async init() {
-    this.subscribe((key, value) => {
-      if (key === "locale") {
-        this.updateLocale(value);
-      }
+    // Update initially
+    this.handleStateChange("locale", this.locale);
 
-      if (key === "rolesAndPermissions" || key === "locale") {
-        this.updateNavigation();
-        this.updateNavigationItemAndGroup(this.navigationItemKey);
-      }
-
-      if (key === "navigationItemKey") {
-        this.updateNavigationItemAndGroup(value);
-      }
-
-      if (key === "navigationItemKey" || key === "navigation") {
-        this.updateNavigationItemAndGroup(this.navigationItemKey);
-        this.updateApp(this.navigationItem);
-      }
-    });
+    // Update on state change
+    this.subscribe(this.handleStateChange.bind(this));
 
     await this.loadRolesAndPermissions();
   }
@@ -84,6 +74,15 @@ export class PortalState extends State {
       callback(this.locale);
     }
     return this.subscribe((_, locale) => callback(locale), "locale");
+  }
+
+  subscribeInstanceName(
+    callback: (instanceName: PortalState["instanceName"]) => void
+  ) {
+    return this.subscribe(
+      (_, instanceName) => callback(instanceName),
+      "instanceName"
+    );
   }
 
   subscribeNavigationItemKey(
@@ -99,6 +98,16 @@ export class PortalState extends State {
     );
   }
 
+  subscribeNavigationItem(
+    callback: (item: PortalState["navigationItem"]) => void,
+    withCurrent = true
+  ) {
+    if (withCurrent) {
+      callback(this.navigationItem);
+    }
+    return this.subscribe((_, item) => callback(item), "navigationItem");
+  }
+
   subscribeScope(
     callback: (scope: PortalState["app"]["scope"]) => void,
     withCurrent = true
@@ -109,18 +118,31 @@ export class PortalState extends State {
     return this.subscribe((_, app) => callback(app.scope), "app");
   }
 
+  private handleStateChange(key: string, value: any): void {
+    if (key === "locale") {
+      this.updateLocale(value);
+      this.loadInstanceName();
+    }
+
+    if (key === "rolesAndPermissions" || key === "locale") {
+      this.updateNavigation();
+      this.updateNavigationItemAndGroup(this.navigationItemKey);
+    }
+
+    if (key === "navigationItemKey") {
+      this.updateNavigationItemAndGroup(value);
+    }
+
+    if (key === "navigationItemKey" || key === "navigation") {
+      this.updateNavigationItemAndGroup(this.navigationItemKey);
+      this.updateApp(this.navigationItem);
+    }
+  }
+
   private async updateLocale(locale: PortalState["locale"]): Promise<void> {
     await updateLocale(locale);
     updateQueryParam(LOCALE_QUERY_PARAM, locale);
     this.updateNavigation();
-  }
-
-  private async loadRolesAndPermissions(): Promise<void> {
-    const token = getCurrentAccessToken();
-    if (!token) return;
-
-    const { roles, permissions } = await fetchUserAccessInfo();
-    this.rolesAndPermissions = [...roles, ...permissions];
   }
 
   private updateNavigation(): void {
@@ -154,6 +176,24 @@ export class PortalState extends State {
 
   private updateApp(item: PortalState["navigationItem"]): void {
     this.app = getApp(item);
+  }
+
+  private async loadRolesAndPermissions(): Promise<void> {
+    const token = getCurrentAccessToken();
+    if (!token) return;
+
+    const { roles, permissions } = await fetchUserAccessInfo();
+    this.rolesAndPermissions = [...roles, ...permissions];
+  }
+
+  private async loadInstanceName(): Promise<void> {
+    const token = getCurrentAccessToken();
+    if (!token) return;
+
+    const instanceName = await fetchInstanceName();
+    this.instanceName = [msg("Evento"), instanceName]
+      .filter(Boolean)
+      .join(" | ");
   }
 }
 

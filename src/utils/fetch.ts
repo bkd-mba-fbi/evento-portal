@@ -17,6 +17,13 @@ export async function fetchUserAccessInfo(): Promise<UserAccessInfo> {
   };
 }
 
+export async function fetchInstanceName(): Promise<string | null> {
+  const url = `${settings.api.server}/Configurations/SchoolAppNavigation`;
+  const result = await fetchApi<{ instanceName: string }>(url);
+
+  return result?.instanceName || null;
+}
+
 async function fetchApi<T = unknown>(
   url: string | URL,
   { method = "GET" } = {}
