@@ -1,5 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
+import { keyed } from "lit/directives/keyed.js";
 import { localized } from "@lit/localize";
 import { theme } from "../utils/theme";
 import { StateController } from "@lit-app/state";
@@ -68,10 +69,13 @@ export class Content extends LitElement {
     return html`
       <main>
         <h1>${portalState.navigationItem.label}</h1>
-        <iframe
-          id="app"
-          src=${portalState.app.root + portalState.navigationItem.appPath}
-        ></iframe>
+        ${keyed(
+          portalState.app.root,
+          html`<iframe
+            id="app"
+            src=${portalState.app.root + portalState.navigationItem.appPath}
+          ></iframe>`
+        )}
       </main>
     `;
   }
