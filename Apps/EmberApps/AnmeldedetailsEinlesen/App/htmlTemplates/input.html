@@ -7,11 +7,10 @@
 </div>
 <div class="dialogFooter">
     {{#if showError}}
-    <div class="dialogIcon">{{icon "cross"}}</div><span class="error">{{translate "incorrectFormat"}}</span>
+    <i class="material-icons" title={{subscriptionDetail.error}}>cancel</i><span class="error">{{translate "incorrectFormat"}}</span>
     {{/if}}
-    <div class="buttonDiv">
-        {{#link-to "validation" tagName="button" class="textButton" disabledWhen=cannotContinue}}
-            {{icon "continue"}}
+    <div>
+        {{#link-to "validation" tagName="button" class="btn btn-primary" disabledWhen=cannotContinue}}
             <div>{{translate "validate"}}</div>
         {{/link-to}}
     </div>

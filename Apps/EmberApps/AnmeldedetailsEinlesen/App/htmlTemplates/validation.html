@@ -22,9 +22,9 @@
                 <td>{{subscriptionDetail.newValue}}</td>
                 <td>
                     {{#if subscriptionDetail.error}}
-                    <div class="center-text" title={{subscriptionDetail.error}}>{{icon "cross"}}</div>
+                    <i class="material-icons" title={{subscriptionDetail.error}}>cancel</i>
                     {{else}}
-                    <div class="center-text">{{icon "checkmark"}}</div>
+                    <i class="material-icons">check_circle</i>
                     {{/if}}
                 </td>
                 {{else}}
@@ -37,16 +37,14 @@
     </table>
 </div>
 <div class="dialogFooter">
-    <div class="dialogIcon">{{icon 'info'}}</div>{{translate "continueWithErrors"}}
-    <div class="buttonDiv">
-        {{#link-to "result" tagName="button" class="textButton" disabledWhen=cannotContinue}}
-            {{icon 'continue'}}
+    <i class="material-icons-outlined">info</i>{{translate "continueWithErrors"}}
+    <div>
+        {{#link-to "result" tagName="button" class="btn btn-primary" disabledWhen=cannotContinue}}
             <div>{{translate "submit"}}</div>
         {{/link-to}}
     </div>
-    <div class="buttonDiv">
-        {{#link-to "input" tagName="button" class="textButton" disabledWhen=cannotGoBack}}
-            {{icon "back"}}
+    <div class="">
+        {{#link-to "input" tagName="button" class="btn btn-primary" disabledWhen=cannotGoBack}}
             <div>{{translate "correct"}}</div>
         {{/link-to}}
     </div>

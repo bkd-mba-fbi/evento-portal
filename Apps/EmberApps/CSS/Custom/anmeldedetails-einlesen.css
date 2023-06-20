@@ -16,6 +16,9 @@
     padding: 0.5rem !important;
 }
 
+.readSubscriptionDetails .input-colum {
+    font-variant-caps: all-petite-caps;
+}
 
 /* loadinganimation */
 .readSubscriptionDetails .loadingAnimation {
@@ -66,11 +69,12 @@
 /* navigation styling */
 .readSubscriptionDetails .dialogBody a {
     color: #666;
+    font-weight: 400;
 }
 
 
 .readSubscriptionDetails .dialogBody a.active {
-    color: #e98200;
+    font-weight: 600;
 }
 
 /* by default the loadingAnimation is too high */

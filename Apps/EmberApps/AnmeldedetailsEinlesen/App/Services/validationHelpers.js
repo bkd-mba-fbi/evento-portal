@@ -19,6 +19,9 @@ define([
                 case constants.vssType.MemoText:
                     return true;
 
+                case constants.vssType.Currency:
+                    return !isNaN(value);
+
                 default:
                     return false;
             }
@@ -166,9 +169,10 @@ define([
 
                 var raw = subscriptionDetailForStudent.raw;
 
-                if (raw.VssStyle !== 'TX' || (
-                    raw.VssTypEx !== constants.vssType.IntField &&
-                    raw.VssTypEx !== constants.vssType.Text &&
+                if (raw.VssStyle !== 'TX' || raw.VssInternet !== 'E' && (
+                    raw.VssTypEx !== constants.vssType.IntField ||
+                    raw.VssTypEx !== constants.vssType.Currency ||
+                    raw.VssTypEx !== constants.vssType.Text ||
                     raw.VssTypEx !== constants.vssType.MemoText
                 )) {
                     // the subscriptiondetails is not (yet) meant to be edited on the internet

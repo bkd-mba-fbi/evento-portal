@@ -22,7 +22,11 @@
                 <td>{{subscriptionDetail.newValue}}</td>
                 <td>
                     <div class="center-text">
-                        {{icon (if subscriptionDetail.uploaded "checkmark" "loadingAnimation")}}
+                        {{#if subscriptionDetail.uploaded}}
+                        <i class="material-icons">check_circle</i>
+                        {{else}}
+                        {{icon "loadingAnimation"}}
+                        {{/if}}
                     </div>
                 </td>
             </tr>
@@ -33,11 +37,10 @@
 </div>
 <div class="dialogFooter">
     {{#if model.everythingHasBeenSent}}
-    <div class="dialogIcon">{{icon 'info'}}</div>{{translate "goBackToStart"}}
+    <i class="material-icons-outlined">info</i>{{translate "goBackToStart"}}
     {{/if}}
-    <div class="buttonDiv">
-        {{#link-to "input" tagName="button" class="textButton" disabledWhen=(if model.everythingHasBeenSent false true)}}
-            {{icon 'continue'}}
+    <div>
+        {{#link-to "input" tagName="button" class="btn btn-primary" disabledWhen=(if model.everythingHasBeenSent false true)}}
             <div>{{translate "input"}}</div>
         {{/link-to}}
     </div>
