@@ -10,17 +10,17 @@ describe("Navigation & Routing", () => {
 
     it("does not select any menu entry per default", () => {
       cy.visit("/index.html");
-      cy.get("bkd-nav").as("desktop-menu").should("be.visible");
+      cy.get("bkd-nav").as("desktopMenu").should("be.visible");
 
       // No group activated
-      cy.get("@desktop-menu")
+      cy.get("@desktopMenu")
         .contains("a", "Unterricht")
         .as("teachingGroup")
         .should("not.have.class", "active");
-      cy.get("@desktop-menu")
+      cy.get("@desktopMenu")
         .contains("a", "Absenzen")
         .should("not.have.class", "active");
-      cy.get("@desktop-menu")
+      cy.get("@desktopMenu")
         .contains("a", "Angebote")
         .should("not.have.class", "active");
 
@@ -57,17 +57,17 @@ describe("Navigation & Routing", () => {
 
     it("selects menu entry from URL", () => {
       cy.visit("/index.html?module=presenceControl");
-      cy.get("bkd-nav").as("desktop-menu").should("be.visible");
+      cy.get("bkd-nav").as("desktopMenu").should("be.visible");
 
       // Activates navigation group
-      cy.get("@desktop-menu")
+      cy.get("@desktopMenu")
         .contains("a", "Unterricht")
         .as("teachingGroup")
         .should("have.class", "active");
-      cy.get("@desktop-menu")
+      cy.get("@desktopMenu")
         .contains("a", "Absenzen")
         .should("not.have.class", "active");
-      cy.get("@desktop-menu")
+      cy.get("@desktopMenu")
         .contains("a", "Angebote")
         .should("not.have.class", "active");
 
@@ -102,7 +102,7 @@ describe("Navigation & Routing", () => {
       cy.get("main").contains("h1", "Präsenzkontrolle");
 
       // Does not redirect to home
-      cy.window().then((window) => {
+      cy.window().should((window) => {
         const url = new URL(window.location.href);
         expect(url.searchParams.get("module")).to.eq("presenceControl");
       });
@@ -110,17 +110,17 @@ describe("Navigation & Routing", () => {
 
     it("redirects to home for invalid item key in URL", () => {
       cy.visit("/index.html?module=asdf");
-      cy.get("bkd-nav").as("desktop-menu").should("be.visible");
+      cy.get("bkd-nav").as("desktopMenu").should("be.visible");
 
       // No group activated
-      cy.get("@desktop-menu")
+      cy.get("@desktopMenu")
         .contains("a", "Unterricht")
         .as("teachingGroup")
         .should("not.have.class", "active");
-      cy.get("@desktop-menu")
+      cy.get("@desktopMenu")
         .contains("a", "Absenzen")
         .should("not.have.class", "active");
-      cy.get("@desktop-menu")
+      cy.get("@desktopMenu")
         .contains("a", "Angebote")
         .should("not.have.class", "active");
 
@@ -155,7 +155,7 @@ describe("Navigation & Routing", () => {
       cy.get("main").contains("h1", "Home");
 
       // Does not redirect to home
-      cy.window().then((window) => {
+      cy.window().should((window) => {
         const url = new URL(window.location.href);
         expect(url.searchParams.get("module")).to.eq("home");
       });
@@ -163,10 +163,10 @@ describe("Navigation & Routing", () => {
 
     it("applies menu entry selection to URL", () => {
       cy.visit("/index.html");
-      cy.get("bkd-nav").as("desktop-menu").should("be.visible");
+      cy.get("bkd-nav").as("desktopMenu").should("be.visible");
 
       // Group not active
-      cy.get("@desktop-menu")
+      cy.get("@desktopMenu")
         .contains("a", "Unterricht")
         .as("teachingGroup")
         .should("not.have.class", "active");
@@ -175,7 +175,7 @@ describe("Navigation & Routing", () => {
       cy.get("main").contains("h1", "Home");
 
       // Updates URL to ?module=home
-      cy.window().then((window) => {
+      cy.window().should((window) => {
         const url = new URL(window.location.href);
         expect(url.searchParams.get("module")).to.eq("home");
       });
@@ -212,7 +212,7 @@ describe("Navigation & Routing", () => {
       cy.get("@presenceControlItem").parent().should("have.class", "active");
 
       // Updates URL to ?module=presenceControl
-      cy.window().then((window) => {
+      cy.window().should((window) => {
         const url = new URL(window.location.href);
         expect(url.searchParams.get("module")).to.eq("presenceControl");
       });
@@ -229,13 +229,14 @@ describe("Navigation & Routing", () => {
 
     it("selects menu item from URL and expands its group", () => {
       cy.visit("/index.html?module=presenceControl");
+      cy.get("main").contains("h1", "Präsenzkontrolle");
       cy.get("button[aria-label='Menü']").as("toggle").should("be.visible");
 
       // Open menu
       cy.get("@toggle").click();
-      cy.get("bkd-mobile-nav").as("mobile-menu").should("be.visible");
+      cy.get("bkd-mobile-nav").as("mobileMenu").should("be.visible");
 
-      cy.get("@mobile-menu").within(() => {
+      cy.get("@mobileMenu").within(() => {
         cy.contains("li", "Unterricht").as("teachingGroup").ariaExpanded(true);
         cy.get("@teachingGroup")
           .contains("li.item", "Präsenzkontrolle")

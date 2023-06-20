@@ -13,17 +13,17 @@ describe("Service Navigation", () => {
         .as("toggle")
         .should("be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").as("service-nav").should("not.be.visible");
+      cy.get("#settings-menu").as("serviceNav").should("not.be.visible");
 
       // Open user settings menu
       cy.get("@toggle").click();
       cy.get("@toggle").ariaExpanded(true);
-      cy.get("@service-nav").should("be.visible");
+      cy.get("@serviceNav").should("be.visible");
 
       // Close user settings menu
       cy.get("@toggle").click();
       cy.get("@toggle").ariaExpanded(false);
-      cy.get("@service-nav").should("not.be.visible");
+      cy.get("@serviceNav").should("not.be.visible");
     });
 
     it("renders user settings in the service navigation", () => {
@@ -32,14 +32,14 @@ describe("Service Navigation", () => {
         .as("toggle")
         .should("be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").as("service-nav").should("not.be.visible");
+      cy.get("#settings-menu").as("serviceNav").should("not.be.visible");
 
       // Open user settings menu
       cy.get("@toggle").click();
-      cy.get("@service-nav")
+      cy.get("@serviceNav")
         .should("be.visible")
         .find("a")
-        .then((links) =>
+        .should((links) =>
           expect(
             links.toArray().map((link) => link.textContent?.trim())
           ).to.deep.eq([
@@ -59,17 +59,17 @@ describe("Service Navigation", () => {
         .as("toggle")
         .should("be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").as("service-nav").should("not.be.visible");
+      cy.get("#settings-menu").as("serviceNav").should("not.be.visible");
 
       // Open user settings menu
       cy.get("@toggle").click();
       cy.get("@toggle").ariaExpanded(true);
-      cy.get("@service-nav").should("be.visible");
+      cy.get("@serviceNav").should("be.visible");
 
       // Close user settings menu
       cy.document().trigger("keydown", { key: "Escape" });
       cy.get("@toggle").ariaExpanded(false);
-      cy.get("@service-nav").should("not.be.visible");
+      cy.get("@serviceNav").should("not.be.visible");
     });
 
     it("closes user settings on select", () => {
@@ -78,20 +78,20 @@ describe("Service Navigation", () => {
         .as("toggle")
         .should("be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").as("service-nav").should("not.be.visible");
+      cy.get("#settings-menu").as("serviceNav").should("not.be.visible");
 
       // Open user settings menu
       cy.get("@toggle").click();
       cy.get("@toggle").ariaExpanded(true);
-      cy.get("@service-nav").should("be.visible");
+      cy.get("@serviceNav").should("be.visible");
 
       // Close user settings menu
-      cy.get("@service-nav")
+      cy.get("@serviceNav")
         .contains("a", "Mein Profil")
         .should("be.visible")
         .click();
       cy.get("@toggle").ariaExpanded(false);
-      cy.get("@service-nav").should("not.be.visible");
+      cy.get("@serviceNav").should("not.be.visible");
     });
 
     it("closes user settings on click away", () => {
@@ -100,23 +100,23 @@ describe("Service Navigation", () => {
         .as("toggle")
         .should("be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").as("service-nav").should("not.be.visible");
+      cy.get("#settings-menu").as("serviceNav").should("not.be.visible");
 
       // Open user settings menu
       cy.get("@toggle").click();
       cy.get("@toggle").ariaExpanded(true);
-      cy.get("@service-nav").should("be.visible");
+      cy.get("@serviceNav").should("be.visible");
 
       // Close user settings menu
       cy.get('img[alt="Evento Startseite"]').should("be.visible").click();
       cy.get("@toggle").ariaExpanded(false);
-      cy.get("@service-nav").should("not.be.visible");
+      cy.get("@serviceNav").should("not.be.visible");
     });
 
     it("renders language switcher in the service navigation", () => {
       cy.get("bkd-language-switcher")
         .find("a")
-        .then((links) =>
+        .should((links) =>
           expect(
             links.toArray().map((link) => link.textContent.trim())
           ).to.deep.eq(["de", "fr"])
@@ -141,11 +141,11 @@ describe("Service Navigation", () => {
       cy.get("button[aria-label='Menü']").as("toggle");
       cy.get("@toggle").click();
       cy.get("@toggle").ariaExpanded(true);
-      cy.get(".service-nav").as("service-nav").should("be.visible");
+      cy.get(".service-nav").as("serviceNav").should("be.visible");
 
-      cy.get("@service-nav")
+      cy.get("@serviceNav")
         .find("a")
-        .then((links) =>
+        .should((links) =>
           expect(
             links.toArray().map((link) => link.textContent?.trim())
           ).to.deep.eq([

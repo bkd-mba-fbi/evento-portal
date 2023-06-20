@@ -58,7 +58,7 @@ Cypress.Commands.add(
       "GET",
       "https://eventoapp-test.erz.be.ch/restApi/UserSettings/?expand=AccessInfo",
       { AccessInfo: { Roles: roles, Permissions: permissions } }
-    );
+    ).as("fetchAccessInfo");
 
     cy.intercept(
       "GET",
@@ -105,6 +105,13 @@ function createToken(
   )}.signature`;
 }
 
+Cypress.Commands.overwrite("visit", (originalFn, ...args) => {
+  const result = originalFn(...args);
+
+  // Wait for roles & permissions to be loaded
+  return cy.wait("@fetchAccessInfo").then(() => result);
+});
+
 Cypress.Commands.add("resizeToDesktop", () => {
   cy.viewport("macbook-16");
 });
@@ -120,7 +127,7 @@ Cypress.Commands.add(
     cy
       .wrap(subject)
       .invoke("attr", "aria-expanded")
-      .then((value) => {
+      .should((value) => {
         if (expanded) {
           expect(value).to.eq("true");
         } else {

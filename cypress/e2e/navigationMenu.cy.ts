@@ -12,15 +12,15 @@ describe("Navigation Menu", () => {
 
       it("renders main navigation", () => {
         cy.get("button[aria-label='Menü']").should("not.be.visible");
-        cy.get("bkd-nav").as("desktop-menu").should("be.visible");
+        cy.get("bkd-nav").as("desktopMenu").should("be.visible");
 
-        cy.get("@desktop-menu")
+        cy.get("@desktopMenu")
           .find("a")
-          .then(($links) =>
+          .should(($links) => {
             expect(
               $links.toArray().map((link) => link.textContent?.trim())
-            ).to.deep.eq(["Unterricht", "Absenzen", "Angebote"])
-          );
+            ).to.deep.eq(["Unterricht", "Absenzen", "Angebote"]);
+          });
       });
 
       it("renders dropdown with navigation items and closes it on click", () => {
@@ -44,7 +44,7 @@ describe("Navigation Menu", () => {
 
           cy.get("@groupDropdown")
             .find("a[role='menuitem']")
-            .then(($links) => {
+            .should(($links) => {
               expect(
                 $links.toArray().map((link) => link.textContent?.trim())
               ).to.deep.eq([
@@ -69,7 +69,7 @@ describe("Navigation Menu", () => {
       });
 
       it("open/closes hamburger menu by click on hamburger", () => {
-        cy.get("bkd-nav").as("desktop-menu").should("not.be.visible");
+        cy.get("bkd-nav").as("desktopMenu").should("not.be.visible");
 
         // Hamburger menu is initially closed
         cy.get("button[aria-label='Menü']")
@@ -81,10 +81,10 @@ describe("Navigation Menu", () => {
         // Open menu
         cy.get("@toggle").click();
         cy.get("@toggle").ariaExpanded(true);
-        cy.get("bkd-mobile-nav").as("mobile-menu").should("be.visible");
+        cy.get("bkd-mobile-nav").as("mobileMenu").should("be.visible");
 
         // Renders contents with all groups initially collapsed
-        cy.get("@mobile-menu").within(() => {
+        cy.get("@mobileMenu").within(() => {
           cy.contains("li", "Unterricht")
             .as("teachingGroup")
             .ariaExpanded(false);
@@ -106,7 +106,7 @@ describe("Navigation Menu", () => {
         // Close menu by click on hamburger
         cy.get("@toggle").click();
         cy.get("@toggle").ariaExpanded(false);
-        cy.get("@mobile-menu").should("not.exist");
+        cy.get("@mobileMenu").should("not.exist");
       });
 
       // Apparently the triggering of the 'keydown' event does not
@@ -114,16 +114,16 @@ describe("Navigation Menu", () => {
       it.skip("closes hamburger menu on 'ESC' keypress", () => {
         cy.get("button[aria-label='Menü']").as("toggle").click();
         cy.get("@toggle").ariaExpanded(true);
-        cy.get("bkd-mobile-nav").as("mobile-menu").should("be.visible");
+        cy.get("bkd-mobile-nav").as("mobileMenu").should("be.visible");
 
         cy.document().trigger("keydown", { key: "Escape" });
         cy.get("@toggle").ariaExpanded(false);
-        cy.get("@mobile-menu").should("not.exist");
+        cy.get("@mobileMenu").should("not.exist");
       });
 
       it("closes hamburger menu when clicking on navigation item", () => {
         cy.get("button[aria-label='Menü']").as("toggle").click();
-        cy.get("bkd-mobile-nav").as("mobile-menu").should("be.visible");
+        cy.get("bkd-mobile-nav").as("mobileMenu").should("be.visible");
         cy.contains("li", "Unterricht").as("teachingGroup").click();
 
         cy.get("@teachingGroup")
@@ -131,7 +131,7 @@ describe("Navigation Menu", () => {
           .find("a")
           .click();
         cy.get("@toggle").ariaExpanded(false);
-        cy.get("@mobile-menu").should("not.exist");
+        cy.get("@mobileMenu").should("not.exist");
       });
     });
   });
@@ -376,7 +376,7 @@ describe("Navigation Menu", () => {
   });
 
   function expectGroups(expectedGroups: ReadonlyArray<string>) {
-    return cy.get("li.group").then(($groups) => {
+    return cy.get("li.group").should(($groups) => {
       const groups = $groups
         .find("button")
         .toArray()
@@ -389,7 +389,7 @@ describe("Navigation Menu", () => {
     group: string,
     expectedItems: ReadonlyArray<string>
   ) {
-    return cy.contains("li.group > button", group).then((groupToggle) => {
+    return cy.contains("li.group > button", group).should((groupToggle) => {
       const items = groupToggle
         .next("ul.items")
         .find("li")
