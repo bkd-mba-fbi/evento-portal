@@ -3,7 +3,7 @@ window.kursausschreibung.appConfig = {
     // the token type
     "tokenType": "urn:ietf:params:oauth:token-type:jwt-bearer",
     // API base URL without trailing slash
-    "apiUrl": location.protocol + '//' + location.host + '/restApi', // "https://b17eb32d-b72d-4238-a677-74639b5dbf20.mock.pstmn.io"
+    "apiUrl": 'https://eventoapp-test.erz.be.ch/restApi', // "https://b17eb32d-b72d-4238-a677-74639b5dbf20.mock.pstmn.io"
     // base Url of the web application without trailing slash (also the redirect url for public clients)
     "webBaseUrl": null,
     // url to a page that handles login without trailing slash. If there is no login page on the website, this
