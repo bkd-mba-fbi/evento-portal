@@ -5,7 +5,8 @@
 <link rel="stylesheet" href="assets/kursausschreibungOverwrite.css">
 <!--set uiCulture in ""-->
 <script>
-    localStorage.setItem('uiCulture','"'+localStorage.getItem('uiCulture')+'"');
+    const locale = localStorage.getItem('uiCulture');
+    if(!locale.includes("\"")) localStorage.setItem('uiCulture', '"'+locale+'"');
 </script>
 <!-- configuration -->
 <script src="settings.js"></script>
