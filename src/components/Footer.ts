@@ -42,7 +42,7 @@ export class Footer extends LitElement {
         gap: 2.5rem;
       }
 
-      .footer-nav a {
+      a {
         font-size: 0.875rem;
         font-weight: 400;
         letter-spacing: 0.01rem;
