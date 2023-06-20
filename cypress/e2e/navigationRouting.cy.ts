@@ -100,6 +100,65 @@ describe("Navigation & Routing", () => {
 
       // Displays item's content
       cy.get("main").contains("h1", "Präsenzkontrolle");
+
+      // Does not redirect to home
+      cy.window().then((window) => {
+        const url = new URL(window.location.href);
+        expect(url.searchParams.get("module")).to.eq("presenceControl");
+      });
+    });
+
+    it("redirects to home for invalid item key in URL", () => {
+      cy.visit("/index.html?module=asdf");
+      cy.get("bkd-nav").as("desktop-menu").should("be.visible");
+
+      // No group activated
+      cy.get("@desktop-menu")
+        .contains("a", "Unterricht")
+        .as("teachingGroup")
+        .should("not.have.class", "active");
+      cy.get("@desktop-menu")
+        .contains("a", "Absenzen")
+        .should("not.have.class", "active");
+      cy.get("@desktop-menu")
+        .contains("a", "Angebote")
+        .should("not.have.class", "active");
+
+      // Open dropdown
+      cy.get("@teachingGroup").click();
+      cy.get("@teachingGroup")
+        .next("bkd-nav-group-dropdown")
+        .shadow()
+        .find("ul[role='menu']")
+        .as("groupDropdown")
+        .should("be.visible");
+
+      // No Item activated
+      cy.get("@groupDropdown")
+        .contains("a[role='menuitem']", "Präsenzkontrolle")
+        .parent()
+        .should("not.have.class", "active");
+      cy.get("@groupDropdown")
+        .contains("a[role='menuitem']", "Aktuelle Fächer")
+        .parent()
+        .should("not.have.class", "active");
+      cy.get("@groupDropdown")
+        .contains("a[role='menuitem']", "Tests und Bewertung")
+        .parent()
+        .should("not.have.class", "active");
+      cy.get("@groupDropdown")
+        .contains("a[role='menuitem']", "Stellvertretung")
+        .parent()
+        .should("not.have.class", "active");
+
+      // Displays home content
+      cy.get("main").contains("h1", "Home");
+
+      // Does not redirect to home
+      cy.window().then((window) => {
+        const url = new URL(window.location.href);
+        expect(url.searchParams.get("module")).to.eq("home");
+      });
     });
 
     it("applies menu entry selection to URL", () => {

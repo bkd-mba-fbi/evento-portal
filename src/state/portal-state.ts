@@ -118,6 +118,7 @@ export class PortalState extends State {
     return this.subscribe((_, app) => callback(app.scope), "app");
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handleStateChange(key: string, value: any): void {
     if (key === "locale") {
       this.updateLocale(value);
@@ -126,11 +127,6 @@ export class PortalState extends State {
 
     if (key === "rolesAndPermissions" || key === "locale") {
       this.updateNavigation();
-      this.updateNavigationItemAndGroup(this.navigationItemKey);
-    }
-
-    if (key === "navigationItemKey") {
-      this.updateNavigationItemAndGroup(value);
     }
 
     if (key === "navigationItemKey" || key === "navigation") {
@@ -142,7 +138,6 @@ export class PortalState extends State {
   private async updateLocale(locale: PortalState["locale"]): Promise<void> {
     await updateLocale(locale);
     updateQueryParam(LOCALE_QUERY_PARAM, locale);
-    this.updateNavigation();
   }
 
   private updateNavigation(): void {
@@ -165,8 +160,8 @@ export class PortalState extends State {
       this.navigationItem = item;
       this.navigationGroup = group;
 
-      // The returned item might be home, if non-existing
-      if (item.key !== itemKey) {
+      // For invalid item key's redirect to home
+      if (item.key === settings.navigationHome.key && item.key !== itemKey) {
         this.navigationItemKey = item.key;
       }
     }
