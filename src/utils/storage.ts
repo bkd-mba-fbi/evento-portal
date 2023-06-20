@@ -27,11 +27,8 @@ export function getRefreshToken(): string | null {
 }
 
 export function storeToken(scope: string, token: OAuth2Token): void {
-  const { refreshToken, ...accessToken } = token;
-  localStorage.setItem(
-    `${ACCESS_TOKEN_KEY}_${scope}`,
-    JSON.stringify(accessToken)
-  );
+  const { refreshToken, accessToken } = token;
+  localStorage.setItem(`${ACCESS_TOKEN_KEY}_${scope}`, accessToken);
   if (refreshToken) {
     localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
   }
@@ -40,7 +37,10 @@ export function storeToken(scope: string, token: OAuth2Token): void {
 export function resetAllTokens(): void {
   new Array(localStorage.length).fill(undefined).forEach((_, i) => {
     const key = localStorage.key(i);
-    if (key && key.startsWith(ACCESS_TOKEN_KEY)) {
+    if (
+      key &&
+      (key.startsWith(ACCESS_TOKEN_KEY) || key === REFRESH_TOKEN_KEY)
+    ) {
       localStorage.removeItem(key);
     }
   });

@@ -9,6 +9,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "prepare": "husky install",
+    "analyze": "npx vite-bundle-visualizer",
     "lint:eslint": "eslint src/**/*.ts",
     "lint:ts": "tsc --noEmit",
     "lint": "npm run lint:eslint && npm run lint:ts",
@@ -21,6 +22,7 @@
   },
   "dependencies": {
     "@badgateway/oauth2-client": "^2.2.0",
+    "@lit-app/state": "^0.8.4",
     "@lit/localize": "^0.11.4",
     "lit": "^2.6.1"
   },

@@ -7,7 +7,7 @@ import { theme } from "../../utils/theme";
 @localized()
 export class ServiceNav extends LitElement {
   @property()
-  currentLocale = "de";
+  mobileNavOpen = false;
 
   static styles = [
     theme,
@@ -59,13 +59,12 @@ export class ServiceNav extends LitElement {
       <div
         style="background: #000; border-radius: 50%; width: 32px; height: 32px;"
       ></div>
-      <bkd-user-settings
-        currentLocale=${this.currentLocale}
-      ></bkd-user-settings>
-      <bkd-language-switcher
-        currentLocale=${this.currentLocale}
-      ></bkd-language-switcher>
-      <bkd-hamburger></bkd-hamburger>
+      <bkd-user-settings></bkd-user-settings>
+      <bkd-language-switcher></bkd-language-switcher>
+      <bkd-hamburger
+        id="mobile-nav-toggle"
+        .open=${this.mobileNavOpen}
+      ></bkd-hamburger>
     `;
   }
 }

@@ -122,3 +122,7 @@ Apparently, at the time writing this, the _Evento API_ does not provide any way 
 
 - If the refresh token expired, redirect to the login page.
 - If the access token half expired, redirect to the [refresh token endpoint](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/RefreshToken/) to get a new one. Like this, we try to make sure that the token does not expire during usage of the _apps_. If they do expire, the user must reload the app and a new token is fetched.
+
+### Login with BrowserStack
+
+For untrusted IP ranges, the OAuth provider requires 2FA to login with the test users (i.e. you can't login). If you are in a trusted IP range and want to test the _Evento Portal_ using BrowserStack, you can use [local testing](https://www.browserstack.com/docs/live/local-testing) and activate the _Resolve all URLs through my network_ option.

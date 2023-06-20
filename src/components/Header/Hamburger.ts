@@ -24,6 +24,16 @@ export class Hamburger extends LitElement {
     `,
   ];
 
+  private toggle(): void {
+    // this.open = !this.open;
+    this.dispatchEvent(
+      new CustomEvent("bkdhamburgertoggle", {
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
   render() {
     const icon = this.open ? "/icons/close.svg" : "/icons/hamburger.svg";
     return html`
@@ -31,8 +41,9 @@ export class Hamburger extends LitElement {
         class="hamburger"
         aria-expanded=${this.open}
         aria-label=${msg("Menü")}
+        @click=${this.toggle.bind(this)}
       >
-        <img src=${icon} alt="Hamburger" width="32" height="32" />
+        <img src=${icon} alt="" width="32" height="32" />
       </button>
     `;
   }

@@ -1,16 +1,16 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import { localized } from "@lit/localize";
+import { classMap } from "lit/directives/class-map.js";
+import { StateController } from "@lit-app/state";
+
 import { theme } from "../../utils/theme";
 import { allLocales } from "../../locales";
-import { classMap } from "lit/directives/class-map.js";
+import { portalState } from "../../state/portal-state";
 
 @customElement("bkd-language-switcher")
 @localized()
 export class LanguageSwitcher extends LitElement {
-  @property()
-  currentLocale = "de";
-
   static styles = [
     theme,
     css`
@@ -71,15 +71,15 @@ export class LanguageSwitcher extends LitElement {
     `,
   ];
 
+  constructor() {
+    super();
+
+    new StateController(this, portalState);
+  }
+
   private handleLocaleChange(event: MouseEvent, locale: string): void {
     event.preventDefault();
-    this.dispatchEvent(
-      new CustomEvent("bkdlocalechange", {
-        bubbles: true,
-        composed: true,
-        detail: { locale },
-      })
-    );
+    portalState.locale = locale;
   }
 
   render() {
@@ -89,8 +89,8 @@ export class LanguageSwitcher extends LitElement {
           html`<li>
             <a
               href="#"
-              class=${classMap({ active: locale === this.currentLocale })}
-              aria-current=${locale === this.currentLocale}
+              class=${classMap({ active: locale === portalState.locale })}
+              aria-current=${locale === portalState.locale}
               @click=${(event: MouseEvent) =>
                 this.handleLocaleChange(event, locale)}
             >

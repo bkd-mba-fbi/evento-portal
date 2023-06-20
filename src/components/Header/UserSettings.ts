@@ -1,27 +1,22 @@
-import { css, html, LitElement } from "lit";
-import {
-  customElement,
-  property,
-  query,
-  queryAll,
-  state,
-} from "lit/decorators.js";
+import { css, html, LitElement, nothing } from "lit";
+import { customElement, queryAll } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
+import { StateController } from "@lit-app/state";
+
 import { theme } from "../../utils/theme.ts";
+import { DropdownToggleController } from "../../controllers/dropdown-toggle.ts";
+import { map } from "lit/directives/map.js";
+import { portalState } from "../../state/portal-state.ts";
+import {
+  UserSettingsItem,
+  userSettingsItems,
+} from "../../utils/user-settings.ts";
 
 @customElement("bkd-user-settings")
 @localized()
 export class UserSettings extends LitElement {
-  @property()
-  currentLocale = "de";
-
-  @state()
-  protected open = false;
-
-  @query("button")
-  private menuButton: any;
   @queryAll("a")
-  private menuLinks: any;
+  private menuLinks?: NodeListOf<HTMLElement>;
 
   static styles = [
     theme,
@@ -41,128 +36,121 @@ export class UserSettings extends LitElement {
         position: absolute;
         right: 0;
         border: 1px solid var(--bkd-func-bg-grey);
+        padding: 1rem 0;
         list-style-type: none;
-        padding: 0.625rem 0;
         margin-top: calc(32px + 0.5rem);
         background: var(--bkd-func-bg-white);
         z-index: var(--bkd-z-index-dropdown);
-        min-width: 12rem;
+        min-width: max-content;
       }
 
-      a {
-        font-size: 0.875rem;
-        letter-spacing: 0.01rem;
-        word-spacing: 0.025rem;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 2.5;
+      li {
         padding: 0 1.5rem;
         display: flex;
+        gap: 0.5rem;
         align-items: center;
-        gap: 0.25rem;
-        height: 100%;
-        width: 100%;
-        text-decoration: none;
-        color: var(--bkd-func-fg-black);
+        height: 36px;
       }
 
-      a img {
-        margin-left: -5.25px;
-      }
-
-      a:hover {
+      li.selected {
         color: var(--bkd-brand-red);
-        background: var(--bkd-brand-light-sand);
+        background: var(--bkd-brand-sand);
         border-left: 6px solid var(--bkd-brand-red);
         font-weight: 700;
         padding: 0 calc(1.5rem - 6px);
       }
+
+      a {
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: var(--bkd-func-fg-black);
+        letter-spacing: 0.01rem;
+        word-spacing: 0.025rem;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 2px;
+      }
+
+      a:after {
+        display: block;
+        content: "";
+        height: 2px;
+        background-color: var(--bkd-brand-black);
+        transform: scaleX(0);
+        transition: all 150ms ease-in-out;
+      }
+
+      a:hover::after,
+      a:focus::after {
+        transform: scaleX(1);
+      }
     `,
   ];
 
-  private renderProfile() {
-    return html`<a role="menuitem" href="#">${msg("Mein Profil")}</a>`;
+  constructor() {
+    super();
+    new StateController(this, portalState);
   }
 
-  private renderSettings() {
-    return html`<a role="menuitem" href="#">${msg("Einstellungen")}</a>`;
-  }
+  private settingsMenu = new DropdownToggleController(
+    this,
+    "settings-toggle",
+    "settings-menu"
+  );
 
-  private renderVideos() {
-    const playlist =
-      this.currentLocale === "de"
-        ? "PLLDtLiOuctbx-_EQWgWqTO1MRbX845OEf"
-        : "PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU";
+  private handleSettingsItemClick(event: MouseEvent, item: UserSettingsItem) {
+    this.settingsMenu.close();
 
-    return html`<a
-      role="menuitem"
-      href=${`https://www.youtube.com/playlist?list=${playlist}`}
-      target="_blank"
-      ><img src="/icons/external-link.svg" alt="" width="24" height="24" />
-      ${msg("Video-Tutorials")}</a
-    >`;
-  }
-
-  private renderLogout() {
-    return html`<a role="menuitem" href="#"
-      ><img src="/icons/logout.svg" alt="" width="24" height="24" />${msg(
-        "Logout"
-      )}</a
-    >`;
-  }
-
-  render() {
-    return html`
-      <button
-        type="button"
-        @click=${() => this.toggle()}
-        aria-label=${msg("Menü Benutzereinstellungen")}
-        aria-expanded=${this.open}
-        aria-haspopup="menu"
-      >
-        <img src="/icons/settings.svg" alt="" width="32" height="32" />
-      </button>
-      <ul id="menu" role="menu" ?hidden=${!this.open}>
-        <li role="presentation">${this.renderProfile()}</li>
-        <li role="presentation">${this.renderSettings()}</li>
-        <li role="presentation">${this.renderVideos()}</li>
-        <li role="presentation">${this.renderLogout()}</li>
-      </ul>
-    `;
+    this.dispatchEvent(
+      new CustomEvent<{ item: UserSettingsItem; event: Event }>(
+        "bkdsettingsitemclick",
+        {
+          detail: { item, event },
+          composed: true,
+          bubbles: true,
+        }
+      )
+    );
   }
 
   private toggle() {
-    this.open = !this.open;
-    if (this.open) {
+    this.settingsMenu.toggle();
+    if (this.settingsMenu.open) {
       document.addEventListener("keydown", this.handleKeydown);
-      document.addEventListener("click", this.handleClick);
     } else {
       document.removeEventListener("keydown", this.handleKeydown);
-      document.removeEventListener("click", this.handleClick);
     }
   }
 
-  private handleClick = (e: MouseEvent) => {
-    const target = e.composedPath()[0];
-    if (
-      target !== this.menuButton &&
-      !this.menuButton.contains(target) &&
-      this.open
-    ) {
-      this.toggle();
+  private handleKeydown = (e: KeyboardEvent) => {
+    if (!this.menuLinks) return;
+    switch (e.key) {
+      case "ArrowDown": {
+        const next = this.nextLinkIndex(1);
+        this.menuLinks[next].focus();
+        break;
+      }
+      case "ArrowUp": {
+        const previous = this.nextLinkIndex(-1);
+        this.menuLinks[previous].focus();
+        break;
+      }
     }
   };
 
   private activeLinkIndex(): number | null {
-    const active = this.shadowRoot?.activeElement;
-    const index = [...this.menuLinks].indexOf(active);
+    const active = (this.shadowRoot?.activeElement ??
+      null) as HTMLElement | null;
+    const index = active
+      ? Array.from(this.menuLinks ?? []).indexOf(active)
+      : -1;
     return index === -1 ? null : index;
   }
 
   private nextLinkIndex(offset: number): number {
     const active = this.activeLinkIndex();
     const first = 0;
-    const last = this.menuLinks.length - 1;
+    const last = this.menuLinks ? this.menuLinks.length - 1 : 0;
 
     if (active === null) {
       return offset > 0 ? first : last;
@@ -174,21 +162,42 @@ export class UserSettings extends LitElement {
     return next;
   }
 
-  private handleKeydown = (e: KeyboardEvent) => {
-    switch (e.key) {
-      case "Escape":
-        this.toggle();
-        break;
-      case "ArrowDown":
-        const next = this.nextLinkIndex(1);
-        this.menuLinks[next].focus();
-        break;
-      case "ArrowUp":
-        const previous = this.nextLinkIndex(-1);
-        this.menuLinks[previous].focus();
-        break;
-    }
-  };
+  private renderSettingsItem(item: UserSettingsItem) {
+    return html`<li role="presentation">
+      <a
+        role="menuitem"
+        href=${item.href}
+        target=${item.external ? "_blank" : "_self"}
+        @click=${(e: MouseEvent) => this.handleSettingsItemClick(e, item)}
+      >
+        ${item.label}</a
+      >
+      ${item.img
+        ? html`<img src=${item.img} alt="" width="24" height="24" />`
+        : nothing}
+    </li>`;
+  }
+
+  render() {
+    return html`
+      <button
+        type="button"
+        id="settings-toggle"
+        @click=${this.toggle.bind(this)}
+        aria-label=${msg("Menü Benutzereinstellungen")}
+        aria-expanded=${this.settingsMenu.open}
+        aria-haspopup="menu"
+      >
+        <img src="/icons/settings.svg" alt="" width="32" height="32" />
+      </button>
+      <ul id="settings-menu" role="menu" ?hidden=${!this.settingsMenu.open}>
+        ${map(
+          userSettingsItems(portalState.locale),
+          this.renderSettingsItem.bind(this)
+        )}
+      </ul>
+    `;
+  }
 }
 
 declare global {

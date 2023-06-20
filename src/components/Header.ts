@@ -1,14 +1,19 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
+
 import { theme } from "../utils/theme";
+import { DropdownToggleController } from "../controllers/dropdown-toggle";
+import { when } from "lit/directives/when.js";
+import { portalState } from "../state/portal-state";
+import { StateController } from "@lit-app/state";
+import { getUrl } from "../utils/routing";
+import { NavigationItem } from "../settings";
+import { UserSettingsItem } from "../utils/user-settings";
 
 @customElement("bkd-header")
 @localized()
 export class Header extends LitElement {
-  @property()
-  currentLocale = "de";
-
   static styles = [
     theme,
     css`
@@ -19,6 +24,7 @@ export class Header extends LitElement {
         --bkd-header-margin-bottom: calc(2 * var(--bkd-header-margin-top));
         --bkd-header-margin-horizontal: var(--bkd-margin-horizontal-large);
 
+        position: relative;
         padding: var(--bkd-header-margin-top)
           var(--bkd-header-margin-horizontal) var(--bkd-header-margin-bottom)
           var(--bkd-header-margin-horizontal);
@@ -31,7 +37,7 @@ export class Header extends LitElement {
         grid-template-areas:
           "service-nav service-nav"
           "logo ."
-          "logo-caption main-nav";
+          "logo-caption nav";
       }
 
       bkd-service-nav {
@@ -41,24 +47,29 @@ export class Header extends LitElement {
 
       .logo {
         grid-area: logo;
+      }
+
+      .logo > img {
         width: 150px;
-        font-size: 1rem;
-        line-height: 1rem;
-        letter-spacing: 0.01rem;
-        word-spacing: 0.025rem;
-        font-weight: 500;
-        color: var(--bkd-func-fg-black);
       }
 
       .logo-caption {
         grid-area: logo-caption;
         align-self: baseline;
+        max-width: 21rem;
       }
 
-      bkd-main-nav {
-        grid-area: main-nav;
+      bkd-nav {
+        grid-area: nav;
         align-self: baseline;
         justify-self: end;
+      }
+
+      /* Hide mobile nav on large screens */
+      @media screen and (min-width: 1201px) {
+        bkd-mobile-nav {
+          display: none;
+        }
       }
 
       /* Medium screen */
@@ -78,7 +89,7 @@ export class Header extends LitElement {
           align-self: center;
         }
 
-        .logo {
+        .logo > img {
           width: 110px;
         }
 
@@ -86,9 +97,10 @@ export class Header extends LitElement {
           margin-top: 12px;
           font-size: 0.75rem;
           line-height: 0.75rem;
+          max-width: 13.125rem;
         }
 
-        bkd-main-nav {
+        bkd-nav {
           display: none;
         }
       }
@@ -110,18 +122,80 @@ export class Header extends LitElement {
 
   constructor() {
     super();
+    new StateController(this, portalState);
+  }
+
+  private mobileNav = new DropdownToggleController(
+    this,
+    "mobile-nav-toggle",
+    "mobile-nav-menu"
+  );
+
+  private handleLogoClick(event: MouseEvent) {
+    event.preventDefault();
+    portalState.navigationItemKey = "home";
+  }
+
+  private handleNavItemClick(
+    event: CustomEvent<{ item: NavigationItem }>
+  ): void {
+    const { item } = event.detail;
+
+    // Navigate to clicked item
+    portalState.navigationItemKey = item.key;
+
+    // When on mobile, close hamburger menu
+    this.mobileNav.close();
+  }
+
+  private handleSettingsItemClick(
+    event: CustomEvent<{ item: UserSettingsItem; event: Event }>
+  ): void {
+    const { item, event: sourceEvent } = event.detail;
+
+    if (!item.external) {
+      sourceEvent.preventDefault();
+      if (item.key === "logout") {
+        this.dispatchEvent(
+          new CustomEvent<void>("bkdlogout", { composed: true, bubbles: true })
+        );
+      } else {
+        // Internal navigation
+        portalState.navigationItemKey = item.key;
+      }
+    }
+
+    // When on mobile, close hamburger menu
+    this.mobileNav.close();
   }
 
   render() {
-    const instanceName = "Berufsbildungszentrum IDM Thun";
-    const portalName = `${msg("Evento")} | ${instanceName}`;
-
     return html`
       <header>
-        <bkd-service-nav currentLocale=${this.currentLocale}></bkd-service-nav>
-        <img class="logo" src="logo.svg" alt=${msg("Evento Startseite")} />
-        <div class="logo-caption">${portalName}</div>
-        <bkd-main-nav></bkd-main-nav>
+        <bkd-service-nav
+          .mobileNavOpen=${this.mobileNav.open}
+          @bkdhamburgertoggle=${() => this.mobileNav.toggle()}
+          @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
+        ></bkd-service-nav>
+        <a class="logo" href=${getUrl("home")}
+          ><img
+            src="logo.svg"
+            alt=${msg("Evento Startseite")}
+            @click=${this.handleLogoClick.bind(this)}
+        /></a>
+        <div class="logo-caption">${portalState.instanceName}</div>
+        <bkd-nav
+          @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
+        ></bkd-nav>
+        ${when(
+          this.mobileNav.open,
+          () =>
+            html`<bkd-mobile-nav
+              id="mobile-nav-menu"
+              @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
+              @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
+            ></bkd-mobile-nav>`
+        )}
       </header>
     `;
   }

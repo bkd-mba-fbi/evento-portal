@@ -20,6 +20,7 @@ import {
 } from "./storage";
 import { getTokenPayload, isTokenExpired, isTokenHalfExpired } from "./token";
 import { settings } from "../settings";
+import { portalState } from "../state/portal-state";
 
 /**
  * Returns a new OAuth client instance
@@ -121,12 +122,25 @@ export async function logout(
   const instance = getInstance();
   if (!instance) throw new Error("No instance available");
 
-  // Logout & reset tokens
-  await request(client, `/OAuth/Authorization/${instance}/Logout`);
-  resetAllTokens();
+  const token = getCurrentAccessToken();
+  if (!token) return;
 
-  // Redirct to login
-  await redirect(client, defaultScope, loginUrl);
+  // Logout & reset tokens
+  try {
+    await request(client, `/OAuth/Authorization/${instance}/Logout`, {
+      access_token: token,
+    });
+  } catch (e) {
+    // Only catch if JSON syntax error (API responds with HTML)
+    if (!(e instanceof SyntaxError)) {
+      throw e;
+    }
+  } finally {
+    resetAllTokens();
+
+    // Redirct to login
+    await redirect(client, defaultScope, loginUrl);
+  }
 }
 
 function getAuthorizationEndpoint(): string {
@@ -244,8 +258,7 @@ function handleLoginResult(
   storeInstance(instanceId);
 
   if (loginState?.redirectUri) {
-    // TODO: don't actually reload, just update the state via history API
-    document.location = loginState.redirectUri;
+    portalState.navigate(new URL(loginState.redirectUri));
   }
 }
 

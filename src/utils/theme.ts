@@ -32,6 +32,7 @@ export const customProperties = css`
   /* Component-specific Colors */
   --bkd-language-switcher-active-border: rgba(234, 22, 31, 0.77);
   --bkd-footer-border: rgba(238, 238, 238, 1);
+  --bkd-mobile-nav-shadow: rgba(0, 0, 0, 0.16);
 
   /* Dropdowns */
   --bkd-z-index-dropdown: 1;

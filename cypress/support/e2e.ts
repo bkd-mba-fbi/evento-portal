@@ -18,3 +18,38 @@ import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+///// Typings for custom Cypress commands /////
+
+declare global {
+  namespace Cypress {
+    interface Chainable<Subject> {
+      /**
+       * Make sure the user is authenticated (i.e. add a token for
+       * each scope to localStorage)
+       */
+      login(
+        options?: Partial<{
+          lang: string;
+          roles: ReadonlyArray<string>;
+          permissions: ReadonlyArray<string>;
+        }>
+      ): Chainable<void>;
+
+      /**
+       * Adjust viewport to desktop size
+       */
+      resizeToDesktop(): Chainable<void>;
+
+      /**
+       * Adjust viewport to mobile size
+       */
+      resizeToMobile(): Chainable<void>;
+
+      /**
+       * Expect the `aria-expanded` attribute of the current subject to have the given value.
+       */
+      ariaExpanded(expanded: boolean): Chainable<Subject>;
+    }
+  }
+}

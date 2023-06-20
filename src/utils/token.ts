@@ -1,7 +1,6 @@
 export type TokenPayload = {
   instanceId: string;
   scope: string;
-  roles: ReadonlyArray<string>;
   issueTime: number;
   expirationTime: number;
 };
@@ -13,7 +12,6 @@ export type RawTokenPayload = {
   // id_mandant: string,
   // id_person: string;
   // fullname: string;
-  roles: string;
   // token_id: string
   nbf: number;
   exp: number;
@@ -23,14 +21,12 @@ export function getTokenPayload(token: string): TokenPayload {
   const {
     instance_id: instanceId,
     scope,
-    roles,
     nbf: issueTime,
     exp: expirationTime,
   } = parseTokenPayload(token);
   return {
     instanceId,
     scope,
-    roles: roles.split(";"),
     issueTime,
     expirationTime,
   };
