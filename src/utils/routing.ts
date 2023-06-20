@@ -6,11 +6,11 @@ import {
 } from "../state/portal-state";
 import { getApp, getNavigationItem, getScope } from "./navigation";
 
-export function clearQueryParams(excludeKeys: ReadonlyArray<string>): void {
+export function cleanupQueryParams(paramsToKeep: ReadonlyArray<string>): void {
   const url = new URL(location.href);
   const keys = Array.from(url.searchParams.keys());
   keys.forEach((key) => {
-    if (!excludeKeys.includes(key)) {
+    if (!paramsToKeep.includes(key)) {
       url.searchParams.delete(key);
     }
   });

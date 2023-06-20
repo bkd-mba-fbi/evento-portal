@@ -156,12 +156,12 @@ export class Header extends LitElement {
     if (!item.external) {
       sourceEvent.preventDefault();
       if (item.key === "logout") {
-        document.dispatchEvent(
+        this.dispatchEvent(
           new CustomEvent<void>("bkdlogout", { composed: true, bubbles: true })
         );
       } else {
         // Internal navigation
-        portalState.navigate(new URL(item.href));
+        portalState.navigationItemKey = item.key;
       }
     }
 

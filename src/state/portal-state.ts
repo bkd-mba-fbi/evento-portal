@@ -1,6 +1,6 @@
 import { State, property, query } from "@lit-app/state";
 import { getLocale, updateLocale } from "../utils/locale";
-import { clearQueryParams, updateQueryParam } from "../utils/routing";
+import { cleanupQueryParams, updateQueryParam } from "../utils/routing";
 import {
   App,
   Navigation,
@@ -58,8 +58,10 @@ export class PortalState extends State {
   @property({ value: getApp(settings.navigationHome) })
   app!: App;
 
-  private initialized = false;
-  private pendingUrl: URL | null = null;
+  private setInitialized: () => void = () => undefined;
+  private initialized = new Promise(
+    (resolve) => (this.setInitialized = () => resolve(null))
+  );
 
   async init() {
     // Update initially
@@ -69,9 +71,8 @@ export class PortalState extends State {
     this.subscribe(this.handleStateChange.bind(this));
 
     await this.loadRolesAndPermissions();
-    this.applyPendingUrl();
 
-    this.initialized = true;
+    this.setInitialized();
   }
 
   subscribeLocale(callback: (locale: PortalState["locale"]) => void) {
@@ -122,13 +123,18 @@ export class PortalState extends State {
    * login or when navigating) instead of doing a full page refresh.
    */
   navigate(url: URL): void {
-    this.pendingUrl = url;
+    this.initialized.then(() => {
+      // Remove unused query params
+      cleanupQueryParams(QUERY_PARAMS);
 
-    if (this.initialized) {
-      // If `init()` already has been called handle it right away,
-      // otherwise in `init()`
-      this.applyPendingUrl();
-    }
+      // Set new state from `redirectUrl`
+      this.locale = url.searchParams.get(LOCALE_QUERY_PARAM) || getLocale();
+      this.navigationItemKey =
+        url.searchParams.get(NAV_ITEM_QUERY_PARAM) ??
+        settings.navigationHome.key;
+
+      // TODO: apply app path as well (as `path` query param?)
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -202,28 +208,6 @@ export class PortalState extends State {
     this.instanceName = [msg("Evento"), instanceName]
       .filter(Boolean)
       .join(" | ");
-  }
-
-  /**
-   * Cosume the `pendingUrl` if present and update the state
-   * according to its query params.
-   */
-  private applyPendingUrl(): void {
-    if (!this.pendingUrl) return;
-
-    // Remove all current query params
-    clearQueryParams(QUERY_PARAMS);
-
-    // Set new state from `redirectUrl`
-    this.locale =
-      this.pendingUrl.searchParams.get(LOCALE_QUERY_PARAM) || getLocale();
-    this.navigationItemKey =
-      this.pendingUrl.searchParams.get(NAV_ITEM_QUERY_PARAM) ??
-      settings.navigationHome.key;
-
-    // TODO: apply app path as well (as `path` query param?)
-
-    this.pendingUrl = null;
   }
 }
 

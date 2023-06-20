@@ -81,14 +81,11 @@ export class Portal extends LitElement {
     this.subscriptions.push(
       portalState.subscribeNavigationItem(this.updateTitle.bind(this))
     );
-
-    document.addEventListener("bkdlogout", this.handleLogout);
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
     this.subscriptions.forEach((unsubscribe) => unsubscribe());
-    document.removeEventListener("bkdlogout", this.handleLogout);
   }
 
   private isAuthenticated(): boolean {
@@ -107,16 +104,16 @@ export class Portal extends LitElement {
       : instanceName;
   }
 
-  private handleLogout = () => {
+  private handleLogout() {
     logout(oAuthClient, portalState.app.scope);
-  };
+  }
 
   render() {
     return html`
       ${when(
         this.isAuthenticated(),
         () => html`
-          <bkd-header></bkd-header>
+          <bkd-header @bkdlogout=${this.handleLogout.bind(this)}></bkd-header>
           <bkd-content></bkd-content>
           <bkd-footer></bkd-footer>
         `
