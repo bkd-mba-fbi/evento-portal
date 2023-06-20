@@ -237,7 +237,7 @@ export const settings: Settings = {
             allowedRolesOrPermissions: ["StudentRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
-            appPath: "#/",
+            appPath: "#/my-grades",
           },
           {
             key: "schedule",
@@ -245,7 +245,7 @@ export const settings: Settings = {
             allowedRolesOrPermissions: ["StudentRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
-            appPath: "#/",
+            appPath: "#/schedule", // TODO not implemented yet
           },
         ],
       },
