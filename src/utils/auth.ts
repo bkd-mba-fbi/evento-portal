@@ -20,6 +20,7 @@ import {
 } from "./storage";
 import { getTokenPayload, isTokenExpired, isTokenHalfExpired } from "./token";
 import { settings } from "../settings";
+import { portalState } from "../state/portal-state";
 
 /**
  * Returns a new OAuth client instance
@@ -244,8 +245,7 @@ function handleLoginResult(
   storeInstance(instanceId);
 
   if (loginState?.redirectUri) {
-    // TODO: don't actually reload, just update the state via history API
-    document.location = loginState.redirectUri;
+    portalState.setRedirectUrl(new URL(loginState.redirectUri));
   }
 }
 

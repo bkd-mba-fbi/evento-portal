@@ -6,10 +6,36 @@ import {
 } from "../state/portal-state";
 import { getApp, getNavigationItem, getScope } from "./navigation";
 
-export function updateQueryParam(key: string, value: string): void {
+export function clearQueryParams(): void {
+  const url = new URL(location.href);
+  for (const key of url.searchParams.keys()) {
+    url.searchParams.delete(key);
+  }
+  history.replaceState({}, "", url);
+}
+
+export function updateQueryParam(
+  key: string,
+  value: string,
+  replace = false
+): void {
   const url = new URL(location.href);
   url.searchParams.set(key, value);
-  history.pushState({}, "", url);
+  if (replace) {
+    history.replaceState({}, "", url);
+  } else {
+    history.pushState({}, "", url);
+  }
+}
+
+export function updateHash(hash: string, replace = false): void {
+  const url = new URL(location.href);
+  url.hash = hash;
+  if (replace) {
+    history.replaceState({}, "", url);
+  } else {
+    history.pushState({}, "", url);
+  }
 }
 
 export function getScopeFromUrl(): string {

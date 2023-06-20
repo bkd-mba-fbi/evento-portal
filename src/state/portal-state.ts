@@ -1,6 +1,6 @@
 import { State, property, query } from "@lit-app/state";
 import { getLocale, updateLocale } from "../utils/locale";
-import { updateQueryParam } from "../utils/routing";
+import { clearQueryParams, updateQueryParam } from "../utils/routing";
 import {
   App,
   Navigation,
@@ -56,6 +56,9 @@ export class PortalState extends State {
   @property({ value: getApp(settings.navigationHome) })
   app!: App;
 
+  private initialized = false;
+  private redirectUrl: URL | null = null;
+
   async init() {
     // Update initially
     this.handleStateChange("locale", this.locale);
@@ -64,6 +67,9 @@ export class PortalState extends State {
     this.subscribe(this.handleStateChange.bind(this));
 
     await this.loadRolesAndPermissions();
+    this.handleRedirectUrl();
+
+    this.initialized = true;
   }
 
   subscribeLocale(callback: (locale: PortalState["locale"]) => void) {
@@ -107,6 +113,20 @@ export class PortalState extends State {
       callback(this.app.scope); // Initial value
     }
     return this.subscribe((_, app) => callback(app.scope), "app");
+  }
+
+  /**
+   * Update the state according to the given redirect URL (typically
+   * after login) instead of doing a full page refresh.
+   */
+  setRedirectUrl(url: URL): void {
+    this.redirectUrl = url;
+
+    if (this.initialized) {
+      // If `init()` already has been called handle it right away,
+      // otherwise in `init()`
+      this.handleRedirectUrl();
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -180,6 +200,28 @@ export class PortalState extends State {
     this.instanceName = [msg("Evento"), instanceName]
       .filter(Boolean)
       .join(" | ");
+  }
+
+  /**
+   * Cosume the `redirectUrl` if present and update the state
+   * according to its query params.
+   */
+  private handleRedirectUrl(): void {
+    if (!this.redirectUrl) return;
+
+    // Remove all current query params
+    clearQueryParams();
+
+    // Set new state from `redirectUrl`
+    this.locale =
+      this.redirectUrl.searchParams.get(LOCALE_QUERY_PARAM) || getLocale();
+    this.navigationItemKey =
+      this.redirectUrl.searchParams.get(NAV_ITEM_QUERY_PARAM) ??
+      settings.navigationHome.key;
+
+    // TODO: apply app path as well (as `path` query param?)
+
+    this.redirectUrl = null;
   }
 }
 
