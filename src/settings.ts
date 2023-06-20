@@ -52,32 +52,32 @@ export const settings: Settings = {
     {
       key: "schulverwaltung",
       scope: "Tutoring",
-      root: "Apps/webapp-schulverwaltung/index.html",
+      root: "apps/webapp-schulverwaltung/index.html",
     },
     {
       key: "anmeldedetailsEinlesen",
       scope: "NG",
-      root: "Apps/EmberApps/AnmeldedetailsEinlesen/index.html",
+      root: "apps/EmberApps/AnmeldedetailsEinlesen/index.html",
     },
     {
       key: "schulleiterPersonen",
       scope: "NG",
-      root: "Apps/EmberApps/SchulleiterPersonen/index.html",
+      root: "apps/EmberApps/SchulleiterPersonen/index.html",
     },
     {
       key: "kursausschreibung",
       scope: "Public",
-      root: "Apps/Kursausschreibung/index.html",
+      root: "apps/Kursausschreibung/index.html",
     },
     {
       key: "stellvertretung",
       scope: "Tutoring",
-      root: "Apps/Stellvertretung/index.html",
+      root: "apps/Stellvertretung/index.html",
     },
     {
       key: "reservation",
       scope: "NG",
-      root: "Apps/Raumreservation/index.html",
+      root: "apps/Raumreservation/index.html",
     },
   ],
   navigationHome: {
