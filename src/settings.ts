@@ -164,7 +164,7 @@ export const settings: Settings = {
             allowedRolesOrPermissions: [
               "TeacherRole",
               "ClassTeacherRole",
-              "AbsenceAdministrator",
+              "AbsenceAdministratorRole",
             ],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
@@ -176,7 +176,7 @@ export const settings: Settings = {
             allowedRolesOrPermissions: [
               "TeacherRole",
               "ClassTeacherRole",
-              "AbsenceAdministrator",
+              "AbsenceAdministratorRole",
             ],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
@@ -211,7 +211,7 @@ export const settings: Settings = {
           {
             key: "reservations",
             label: msg("Räume und Geräte reservieren"),
-            allowedRolesOrPermissions: null,
+            allowedRolesOrPermissions: ["Reservations"],
             deniedInstanceIds: null,
             appKey: "reservation",
             appPath: "#/",
@@ -224,7 +224,7 @@ export const settings: Settings = {
           {
             key: "myAbsences",
             label: msg("Absenzen"),
-            allowedRolesOrPermissions: ["Student"],
+            allowedRolesOrPermissions: ["StudentRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
             appPath: "#/my-absences",
@@ -232,7 +232,7 @@ export const settings: Settings = {
           {
             key: "myGrades",
             label: msg("Noten"),
-            allowedRolesOrPermissions: ["Student"],
+            allowedRolesOrPermissions: ["StudentRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
             appPath: "#/",
@@ -240,7 +240,7 @@ export const settings: Settings = {
           {
             key: "schedule",
             label: msg("Stundenplan"),
-            allowedRolesOrPermissions: ["Student"],
+            allowedRolesOrPermissions: ["StudentRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
             appPath: "#/",
@@ -253,7 +253,7 @@ export const settings: Settings = {
           {
             key: "substitutionsAdmin",
             label: msg("Stellvertretungen administrieren"),
-            allowedRolesOrPermissions: ["SubstituteAdministrator"],
+            allowedRolesOrPermissions: ["SubstituteAdministratorRole"],
             deniedInstanceIds: null,
             appKey: "stellvertretung",
             appPath: "#/substitutions/admin",
