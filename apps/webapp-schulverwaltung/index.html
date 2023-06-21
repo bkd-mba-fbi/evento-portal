@@ -16,5 +16,19 @@
 <script src="runtime.js" type="module"></script>
 <script src="polyfills.js" type="module"></script>
 <script src="main.js" type="module"></script>
+<script>
+  const htmlElement = document.querySelector("html");
+
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      const height = entry.contentBoxSize ? entry.contentBoxSize[0].blockSize : entry.contentRect.height;
+      parent.window.postMessage({ height}, window.parent.origin); // TODO target
+    }
+  });
+
+  window.onload = () => {
+    resizeObserver.observe(htmlElement);
+  };
+</script>
 </body>
 </html>

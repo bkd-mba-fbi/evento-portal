@@ -1,14 +1,17 @@
 import { css, html, LitElement } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, query } from "lit/decorators.js";
+import { StateController } from "@lit-app/state";
+import { portalState } from "../state/portal-state";
 import { keyed } from "lit/directives/keyed.js";
 import { localized } from "@lit/localize";
 import { theme } from "../utils/theme";
-import { StateController } from "@lit-app/state";
-import { portalState } from "../state/portal-state";
 
 @customElement("bkd-content")
 @localized()
 export class Content extends LitElement {
+  @query("iframe")
+  private iframe?: HTMLIFrameElement;
+
   static styles = [
     theme,
     css`
@@ -17,14 +20,6 @@ export class Content extends LitElement {
       :host {
         --bkd-header-margin-horizontal: var(--bkd-margin-horizontal-large);
         margin: 0 var(--bkd-header-margin-horizontal);
-        display: flex;
-        height: 100%;
-      }
-
-      main {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
       }
 
       h1 {
@@ -34,7 +29,6 @@ export class Content extends LitElement {
 
       iframe {
         border: none;
-        height: 100%;
         width: 100%;
       }
 
@@ -65,6 +59,23 @@ export class Content extends LitElement {
     new StateController(this, portalState);
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener("message", this.handleResize, true);
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener("message", this.handleResize, true);
+    super.disconnectedCallback();
+  }
+
+  private handleResize = (event: MessageEvent) => {
+    const { height } = event.data;
+    if (this.iframe) {
+      this.iframe.height = height;
+    }
+  };
+
   render() {
     return html`
       <main>
@@ -73,6 +84,7 @@ export class Content extends LitElement {
           portalState.app.root,
           html`<iframe
             id="app"
+            title=${portalState.app.key}
             src=${portalState.app.root + portalState.navigationItem.appPath}
           ></iframe>`
         )}
