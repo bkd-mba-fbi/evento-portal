@@ -201,8 +201,8 @@ export const settings: Settings = {
             allowedRolesOrPermissions: [
               "TeacherRole",
               "ClassTeacherRole",
-              "AbsenceAdministrator",
-              "SubstituteAdministrator",
+              "AbsenceAdministratorRole",
+              "SubstituteAdministratorRole",
             ],
             deniedInstanceIds: null,
             appKey: "kursausschreibung",
