@@ -152,8 +152,7 @@ describe("Navigation Menu", () => {
         expectGroups(["Angebote", "Aus-/Weiterbildungen"]);
 
         expectGroupItems("Angebote", [
-          "Kurse und Veranstaltungen",
-          "Räume und Geräte reservieren",
+          "Kurse und Veranstaltungen"
         ]);
 
         expectGroupItems("Aus-/Weiterbildungen", [
@@ -195,8 +194,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", [
           "Kurse und Veranstaltungen",
-          "Schulinterne Weiterbildung",
-          "Räume und Geräte reservieren",
+          "Schulinterne Weiterbildung"
         ]);
       });
     });
@@ -227,8 +225,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", [
           "Kurse und Veranstaltungen",
-          "Schulinterne Weiterbildung",
-          "Räume und Geräte reservieren",
+          "Schulinterne Weiterbildung"
         ]);
       });
     });
@@ -256,8 +253,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", [
           "Kurse und Veranstaltungen",
-          "Schulinterne Weiterbildung",
-          "Räume und Geräte reservieren",
+          "Schulinterne Weiterbildung"
         ]);
       });
     });
@@ -280,8 +276,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", [
           "Kurse und Veranstaltungen",
-          "Schulinterne Weiterbildung",
-          "Räume und Geräte reservieren",
+          "Schulinterne Weiterbildung"
         ]);
 
         expectGroupItems("Administration", [
@@ -307,8 +302,7 @@ describe("Navigation Menu", () => {
         expectGroups(["Angebote", "Administration"]);
 
         expectGroupItems("Angebote", [
-          "Kurse und Veranstaltungen",
-          "Räume und Geräte reservieren",
+          "Kurse und Veranstaltungen"
         ]);
 
         expectGroupItems("Administration", [
@@ -338,8 +332,7 @@ describe("Navigation Menu", () => {
         expectGroups(["Angebote", "Administration"]);
 
         expectGroupItems("Angebote", [
-          "Kurse und Veranstaltungen",
-          "Räume und Geräte reservieren",
+          "Kurse und Veranstaltungen"
         ]);
 
         expectGroupItems("Administration", ["Anmeldedetails einlesen"]);
@@ -366,8 +359,7 @@ describe("Navigation Menu", () => {
         expectGroups(["Angebote", "Administration"]);
 
         expectGroupItems("Angebote", [
-          "Kurse und Veranstaltungen",
-          "Räume und Geräte reservieren",
+          "Kurse und Veranstaltungen"
         ]);
 
         expectGroupItems("Administration", ["Anmeldedetails einlesen"]);
