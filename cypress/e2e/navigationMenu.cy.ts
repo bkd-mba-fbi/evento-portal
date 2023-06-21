@@ -136,9 +136,9 @@ describe("Navigation Menu", () => {
     });
   });
 
-  describe("with 'Student' role", () => {
+  describe("with 'StudentRole' role", () => {
     beforeEach(() => {
-      cy.login({ roles: ["Student"], permissions: [] });
+      cy.login({ roles: ["StudentRole"], permissions: [] });
       cy.resizeToMobile();
       cy.visit("/index.html");
     });
@@ -234,9 +234,9 @@ describe("Navigation Menu", () => {
     });
   });
 
-  describe("with 'AbsenceAdministrator' role", () => {
+  describe("with 'AbsenceAdministratorRole' role", () => {
     beforeEach(() => {
-      cy.login({ roles: ["AbsenceAdministrator"], permissions: [] });
+      cy.login({ roles: ["AbsenceAdministratorRole"], permissions: [] });
       cy.resizeToMobile();
       cy.visit("/index.html");
     });
@@ -263,9 +263,9 @@ describe("Navigation Menu", () => {
     });
   });
 
-  describe("with 'SubstituteAdministrator' role", () => {
+  describe("with 'SubstituteAdministratorRole' role", () => {
     beforeEach(() => {
-      cy.login({ roles: ["SubstituteAdministrator"], permissions: [] });
+      cy.login({ roles: ["SubstituteAdministratorRole"], permissions: [] });
       cy.resizeToMobile();
       cy.visit("/index.html");
     });
