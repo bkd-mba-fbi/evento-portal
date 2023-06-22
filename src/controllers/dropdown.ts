@@ -1,12 +1,34 @@
 import { ReactiveController, ReactiveControllerHost } from "lit";
 
-export class DropdownToggleController implements ReactiveController {
+export class DropdownController implements ReactiveController {
   open = false;
+
+  private get items(): ReadonlyArray<HTMLElement> {
+    const items = this.itemQueries?.queryItems && this.itemQueries.queryItems();
+    return Array.from(items ?? []);
+  }
+
+  private get focusedItem(): HTMLElement | null {
+    return this.itemQueries?.queryFocused
+      ? this.itemQueries.queryFocused()
+      : null;
+  }
 
   constructor(
     private host: ReactiveControllerHost,
     private toggleButtonId: string,
-    private menuId: string
+    private menuId: string,
+    private itemQueries?: {
+      /**
+       * Returns all dropdown items
+       */
+      queryItems: () => NodeListOf<HTMLElement> | null;
+
+      /**
+       * Returns the currently focused item
+       */
+      queryFocused: () => HTMLElement | null;
+    }
   ) {
     this.host.addController(this);
   }
@@ -58,13 +80,46 @@ export class DropdownToggleController implements ReactiveController {
   };
 
   private handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === "Escape") {
-      this.close();
+    switch (event.key) {
+      case "Escape": {
+        this.close();
+        break;
+      }
+      case "ArrowDown": {
+        const next = this.items[this.nextLinkIndex(1)];
+        next?.focus();
+        break;
+      }
+      case "ArrowUp": {
+        const previous = this.items[this.nextLinkIndex(-1)];
+        previous?.focus();
+        break;
+      }
     }
   };
 
+  private activeLinkIndex(): number | null {
+    const index = this.focusedItem ? this.items.indexOf(this.focusedItem) : -1;
+    return index === -1 ? null : index;
+  }
+
+  private nextLinkIndex(offset: number): number {
+    const active = this.activeLinkIndex();
+    const first = 0;
+    const last = this.items.length - 1;
+
+    if (active === null) {
+      return offset > 0 ? first : last;
+    }
+
+    const next = active + offset;
+    if (next > last) return first;
+    if (next < first) return last;
+    return next;
+  }
+
   private handleCloseOthers = (
-    event: CustomEvent<{ source: DropdownToggleController }>
+    event: CustomEvent<{ source: DropdownController }>
   ) => {
     const { source } = event.detail;
     if (source !== this) {
@@ -74,7 +129,7 @@ export class DropdownToggleController implements ReactiveController {
 
   private closeOthers(): void {
     document.dispatchEvent(
-      new CustomEvent<{ source: DropdownToggleController }>(
+      new CustomEvent<{ source: DropdownController }>(
         "bkddropdowntoggleclose",
         { detail: { source: this } }
       )

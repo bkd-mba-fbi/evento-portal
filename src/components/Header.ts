@@ -3,7 +3,7 @@ import { customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 
 import { theme } from "../utils/theme";
-import { DropdownToggleController } from "../controllers/dropdown-toggle";
+import { DropdownController } from "../controllers/dropdown";
 import { when } from "lit/directives/when.js";
 import { portalState } from "../state/portal-state";
 import { StateController } from "@lit-app/state";
@@ -125,7 +125,7 @@ export class Header extends LitElement {
     new StateController(this, portalState);
   }
 
-  private mobileNav = new DropdownToggleController(
+  private mobileNav = new DropdownController(
     this,
     "mobile-nav-toggle",
     "mobile-nav-menu"
