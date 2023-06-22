@@ -1,14 +1,19 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { localized } from "@lit/localize";
 import { classMap } from "lit/directives/class-map.js";
+
 import { theme } from "../../utils/theme";
 import { NavigationGroup } from "../../settings";
-import { DropdownToggleController } from "../../controllers/dropdown-toggle.ts";
+import { DropdownController } from "../../controllers/dropdown";
+import { NavGroupDropdown } from "./NavGroupDropdown";
 
 @customElement("bkd-nav-group-toggle")
 @localized()
 export class NavGroupToggle extends LitElement {
+  @query("bkd-nav-group-dropdown")
+  dropdownElement?: NavGroupDropdown;
+
   @property()
   group?: NavigationGroup;
 
@@ -50,19 +55,28 @@ export class NavGroupToggle extends LitElement {
     `,
   ];
 
-  private groupMenu = new DropdownToggleController(
+  private dropdown = new DropdownController(
     this,
     "group-toggle",
-    "group-menu"
+    "group-menu",
+    {
+      queryItems: () =>
+        this.dropdownElement?.shadowRoot?.querySelectorAll<HTMLElement>(
+          "a[role='menuitem']"
+        ) ?? null,
+      queryFocused: () =>
+        (this.dropdownElement?.shadowRoot?.activeElement ??
+          null) as HTMLElement | null,
+    }
   );
 
   private toggle(event: Event) {
     event.preventDefault();
-    this.groupMenu.toggle();
+    this.dropdown.toggle();
   }
 
   private handleItemClick() {
-    this.groupMenu.close();
+    this.dropdown.close();
   }
 
   render() {
@@ -74,14 +88,14 @@ export class NavGroupToggle extends LitElement {
         href="#"
         @click=${this.toggle.bind(this)}
         class=${classMap({ active: Boolean(this.active) })}
-        aria-expanded=${this.groupMenu.open}
+        aria-expanded=${this.dropdown.open}
         aria-haspopup="menu"
       >
         ${this.group.label}
       </a>
       <bkd-nav-group-dropdown
         .group=${this.group}
-        .open=${this.groupMenu.open}
+        .open=${this.dropdown.open}
         @bkdnavitemclick=${this.handleItemClick.bind(this)}
       ></bkd-nav-group-dropdown>
     `;
