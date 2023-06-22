@@ -1,23 +1,17 @@
 import { css, html, LitElement, nothing } from "lit";
-import { customElement, queryAll } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
-
-import { theme } from "../../utils/theme.ts";
-import { DropdownToggleController } from "../../controllers/dropdown-toggle.ts";
 import { map } from "lit/directives/map.js";
-import { portalState } from "../../state/portal-state.ts";
-import {
-  UserSettingsItem,
-  userSettingsItems,
-} from "../../utils/user-settings.ts";
+
+import { theme } from "../../utils/theme";
+import { DropdownController } from "../../controllers/dropdown";
+import { portalState } from "../../state/portal-state";
+import { UserSettingsItem, userSettingsItems } from "../../utils/user-settings";
 
 @customElement("bkd-user-settings")
 @localized()
 export class UserSettings extends LitElement {
-  @queryAll("a")
-  private menuLinks?: NodeListOf<HTMLElement>;
-
   static styles = [
     theme,
     css`
@@ -87,19 +81,26 @@ export class UserSettings extends LitElement {
     `,
   ];
 
+  private dropdown = new DropdownController(
+    this,
+    "settings-toggle",
+    "settings-menu",
+    {
+      queryItems: () =>
+        this.shadowRoot?.querySelectorAll<HTMLElement>("a[role='menuitem']") ??
+        null,
+      queryFocused: () =>
+        (this.shadowRoot?.activeElement ?? null) as HTMLElement | null,
+    }
+  );
+
   constructor() {
     super();
     new StateController(this, portalState);
   }
 
-  private settingsMenu = new DropdownToggleController(
-    this,
-    "settings-toggle",
-    "settings-menu"
-  );
-
   private handleSettingsItemClick(event: MouseEvent, item: UserSettingsItem) {
-    this.settingsMenu.close();
+    this.dropdown.close();
 
     this.dispatchEvent(
       new CustomEvent<{ item: UserSettingsItem; event: Event }>(
@@ -111,55 +112,6 @@ export class UserSettings extends LitElement {
         }
       )
     );
-  }
-
-  private toggle() {
-    this.settingsMenu.toggle();
-    if (this.settingsMenu.open) {
-      document.addEventListener("keydown", this.handleKeydown);
-    } else {
-      document.removeEventListener("keydown", this.handleKeydown);
-    }
-  }
-
-  private handleKeydown = (e: KeyboardEvent) => {
-    if (!this.menuLinks) return;
-    switch (e.key) {
-      case "ArrowDown": {
-        const next = this.nextLinkIndex(1);
-        this.menuLinks[next].focus();
-        break;
-      }
-      case "ArrowUp": {
-        const previous = this.nextLinkIndex(-1);
-        this.menuLinks[previous].focus();
-        break;
-      }
-    }
-  };
-
-  private activeLinkIndex(): number | null {
-    const active = (this.shadowRoot?.activeElement ??
-      null) as HTMLElement | null;
-    const index = active
-      ? Array.from(this.menuLinks ?? []).indexOf(active)
-      : -1;
-    return index === -1 ? null : index;
-  }
-
-  private nextLinkIndex(offset: number): number {
-    const active = this.activeLinkIndex();
-    const first = 0;
-    const last = this.menuLinks ? this.menuLinks.length - 1 : 0;
-
-    if (active === null) {
-      return offset > 0 ? first : last;
-    }
-
-    const next = active + offset;
-    if (next > last) return first;
-    if (next < first) return last;
-    return next;
   }
 
   private renderSettingsItem(item: UserSettingsItem) {
@@ -183,14 +135,14 @@ export class UserSettings extends LitElement {
       <button
         type="button"
         id="settings-toggle"
-        @click=${this.toggle.bind(this)}
+        @click=${() => this.dropdown.toggle()}
         aria-label=${msg("Menü Benutzereinstellungen")}
-        aria-expanded=${this.settingsMenu.open}
+        aria-expanded=${this.dropdown.open}
         aria-haspopup="menu"
       >
         <img src="/icons/settings.svg" alt="" width="32" height="32" />
       </button>
-      <ul id="settings-menu" role="menu" ?hidden=${!this.settingsMenu.open}>
+      <ul id="settings-menu" role="menu" ?hidden=${!this.dropdown.open}>
         ${map(
           userSettingsItems(portalState.locale),
           this.renderSettingsItem.bind(this)
