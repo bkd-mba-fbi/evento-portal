@@ -70,6 +70,11 @@ export const settings: Settings = {
       root: "apps/Kursausschreibung/index.html",
     },
     {
+      key: "kursausschreibungIntern",
+      scope: "Public",
+      root: "apps/Kursausschreibung/indexIntern.html",
+    },
+    {
       key: "stellvertretung",
       scope: "Tutoring",
       root: "apps/Stellvertretung/index.html",
@@ -207,7 +212,7 @@ export const settings: Settings = {
               "SubstituteAdministratorRole",
             ],
             deniedInstanceIds: null,
-            appKey: "kursausschreibung",
+            appKey: "kursausschreibungIntern",
             appPath: "#/",
           },
           {
