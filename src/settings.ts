@@ -52,32 +52,37 @@ export const settings: Settings = {
     {
       key: "schulverwaltung",
       scope: "Tutoring",
-      root: "Apps/webapp-schulverwaltung/index.html",
+      root: "apps/webapp-schulverwaltung/index.html",
     },
     {
       key: "anmeldedetailsEinlesen",
       scope: "NG",
-      root: "Apps/EmberApps/AnmeldedetailsEinlesen/index.html",
+      root: "apps/EmberApps/AnmeldedetailsEinlesen/index.html",
     },
     {
       key: "schulleiterPersonen",
       scope: "NG",
-      root: "Apps/EmberApps/SchulleiterPersonen/index.html",
+      root: "apps/EmberApps/SchulleiterPersonen/index.html",
     },
     {
       key: "kursausschreibung",
       scope: "Public",
-      root: "Apps/Kursausschreibung/index.html",
+      root: "apps/Kursausschreibung/index.html",
+    },
+    {
+      key: "kursausschreibungIntern",
+      scope: "Public",
+      root: "apps/Kursausschreibung/indexIntern.html",
     },
     {
       key: "stellvertretung",
       scope: "Tutoring",
-      root: "Apps/Stellvertretung/index.html",
+      root: "apps/Stellvertretung/index.html",
     },
     {
       key: "reservation",
       scope: "NG",
-      root: "Apps/Raumreservation/index.html",
+      root: "apps/Raumreservation/index.html",
     },
   ],
   navigationHome: {
@@ -127,7 +132,8 @@ export const settings: Settings = {
             allowedRolesOrPermissions: ["TeacherRole", "ClassTeacherRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
-            appPath: "#/current-events",
+            appPath: "#/events",
+            //appPath: "#/current-events", // TODO split event into current-events and tests
           },
           {
             key: "tests",
@@ -135,7 +141,8 @@ export const settings: Settings = {
             allowedRolesOrPermissions: ["TeacherRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
-            appPath: "#/tests",
+            appPath: "#/events",
+            //appPath: "#/tests", // TODO split event into current-events and tests
           },
           {
             key: "substitutionsAssign",
@@ -205,7 +212,7 @@ export const settings: Settings = {
               "SubstituteAdministratorRole",
             ],
             deniedInstanceIds: null,
-            appKey: "kursausschreibung",
+            appKey: "kursausschreibungIntern",
             appPath: "#/",
           },
           {
@@ -235,7 +242,7 @@ export const settings: Settings = {
             allowedRolesOrPermissions: ["StudentRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
-            appPath: "#/",
+            appPath: "#/my-grades",
           },
           {
             key: "schedule",
@@ -243,7 +250,7 @@ export const settings: Settings = {
             allowedRolesOrPermissions: ["StudentRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
-            appPath: "#/",
+            appPath: "#/schedule", // TODO not implemented yet
           },
         ],
       },
