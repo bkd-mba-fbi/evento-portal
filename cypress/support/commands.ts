@@ -41,12 +41,12 @@ import { storeToken } from "../../src/utils/storage";
 Cypress.Commands.add(
   "login",
   ({
-    lang = "de",
+    locale = "de-CH",
     roles = ["LessonTeacherRole", "TeacherRole"],
     permissions = [],
   } = {}) => {
     ["Tutoring", "Public", "NG"].forEach((scope) => {
-      const token = createToken(scope, { lang });
+      const token = createToken(scope, { locale });
       storeToken(scope, {
         accessToken: token,
         expiresAt: Math.floor(Date.now() / 1000) + 60 * 60,
@@ -73,7 +73,9 @@ Cypress.Commands.add(
  */
 function createToken(
   scope: string,
-  { lang = "de" }: Partial<{ lang: string; roles: ReadonlyArray<string> }> = {}
+  {
+    locale = "de-CH",
+  }: Partial<{ locale: string; roles: ReadonlyArray<string> }> = {}
 ) {
   const header = {
     typ: "JWT",
@@ -91,7 +93,7 @@ function createToken(
     consumer_id: "cypress",
     instance_id: "BsTest",
     username: "1234",
-    culture_info: `${lang}-CH`,
+    culture_info: locale,
     redirect_uri: "http://localhost:3000",
     id_mandant: "960",
     id_person: "1234",

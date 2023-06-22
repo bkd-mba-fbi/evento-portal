@@ -18,9 +18,9 @@ import {
   storeLoginState,
   storeToken,
 } from "./storage";
-import { getTokenPayload, isTokenExpired, isTokenHalfExpired } from "./token";
+import { getTokenPayload, isTokenExpired, isValidToken } from "./token";
 import { settings } from "../settings";
-import { portalState } from "../state/portal-state";
+import { LOCALE_QUERY_PARAM, portalState } from "../state/portal-state";
 
 /**
  * Returns a new OAuth client instance
@@ -43,7 +43,8 @@ export function createOAuthClient(): OAuth2Client {
  */
 export async function ensureAuthenticated(
   client: OAuth2Client,
-  scope: string
+  scope: string,
+  locale: string
 ): Promise<void> {
   const loginState = consumeLoginState();
   const loginResult = await getTokenAfterLogin(client, loginState);
@@ -51,13 +52,8 @@ export async function ensureAuthenticated(
     // Successfully logged in
     console.log("Successfully logged in");
     handleLoginResult(loginResult, loginState);
-  } else if (isTokenExpired(getRefreshToken())) {
-    // Not authenticated, redirect to login
-    console.log("Not authenticated, redirect to login");
-    await redirect(client, scope, loginUrl);
   } else {
-    console.log(`Activate token for scope "${scope}"`);
-    await activateTokenForScope(client, scope);
+    await activateTokenForScope(client, scope, locale);
   }
 }
 
@@ -77,48 +73,44 @@ export async function ensureAuthenticated(
  */
 export async function activateTokenForScope(
   client: OAuth2Client,
-  scope: string
+  scope: string,
+  locale: string
 ): Promise<void> {
+  console.log(`Activate token for scope "${scope}" and locale "${locale}"`);
+
   if (isTokenExpired(getRefreshToken())) {
-    // Refresh token expired, redirect to login
-    console.log("Refresh token expired, redirect to login");
-    return redirect(client, scope, loginUrl);
+    // Not authenticated or refresh token expired, redirect to login
+    console.log(
+      "Not authenticated or refresh token expired, redirect to login"
+    );
+    return redirect(client, scope, locale, loginUrl);
   }
 
   const currentAccessToken = getCurrentAccessToken();
   const cachedAccessToken = getAccessToken(scope);
 
-  const currentPayload = currentAccessToken
-    ? getTokenPayload(currentAccessToken)
-    : null;
-
-  if (currentPayload?.scope === scope) {
-    if (isTokenHalfExpired(currentPayload)) {
-      console.log(
-        `Current token for scope "${scope}" half expired, redirect for token refresh`
-      );
-      await redirect(client, scope, refreshUrl);
-    } else {
-      // Current token for requested scope already present
-      console.log(`Current token for scope "${scope}" already present`);
-    }
-  } else if (!cachedAccessToken || isTokenHalfExpired(cachedAccessToken)) {
-    // Token for requested scope has to be fetched or refreshed
+  if (isValidToken(currentAccessToken, scope, locale)) {
+    // Current token for scope/locale already set
     console.log(
-      `No Token for scope "${scope}" present or half expired, redirect for token refresh`
+      `Current token for scope "${scope}" and locale "${locale}" already set`
     );
-    await redirect(client, scope, refreshUrl);
-  } else {
-    // Token for requested scope present, set as current
-    console.log(`Token for requested scope "${scope}" present, set as current`);
+  } else if (isValidToken(cachedAccessToken, scope, locale)) {
+    // Token for scope/locale cached, set as current
+    console.log(
+      `Token for scope "${scope}" and locale "${locale}" cached, set as current`
+    );
     storeCurrentAccessToken(cachedAccessToken);
+  } else {
+    // No token for scope/locale present or half expired, redirect for
+    // token fetch/refresh
+    console.log(
+      `No token for scope "${scope}" and locale "${locale}" present or half expired, redirect for token fetch/refresh`
+    );
+    await redirect(client, scope, locale, refreshUrl);
   }
 }
 
-export async function logout(
-  client: OAuth2Client,
-  defaultScope: string
-): Promise<void> {
+export async function logout(client: OAuth2Client): Promise<void> {
   const instance = getInstance();
   if (!instance) throw new Error("No instance available");
 
@@ -138,8 +130,9 @@ export async function logout(
   } finally {
     resetAllTokens();
 
-    // Redirct to login
-    await redirect(client, defaultScope, loginUrl);
+    // Redirect to login with scope/locale of current token
+    const { scope, locale } = getTokenPayload(token);
+    await redirect(client, scope, locale, loginUrl);
   }
 }
 
@@ -153,6 +146,7 @@ function getAuthorizationEndpoint(): string {
 type RedirectUrlBuilder = (
   client: OAuth2Client,
   scope: string,
+  locale: string,
   redirectUri: string,
   codeVerifier: string
 ) => Promise<URL>;
@@ -160,19 +154,28 @@ type RedirectUrlBuilder = (
 async function redirect(
   client: OAuth2Client,
   scope: string,
+  locale: string,
   buildUrl: RedirectUrlBuilder
 ): Promise<void> {
   const codeVerifier = await generateCodeVerifier(); // Random PKCE code
-  const redirectUri = document.location.href; // URL to come back to after login
-  storeLoginState(codeVerifier, redirectUri);
+  const redirectUri = new URL(document.location.href); // URL to come back to after login
+  redirectUri.searchParams.set(LOCALE_QUERY_PARAM, locale); // Use the "new locale" (if the user switches language), not the current one
+  storeLoginState(codeVerifier, redirectUri.toString());
 
-  const url = await buildUrl(client, scope, redirectUri, codeVerifier);
+  const url = await buildUrl(
+    client,
+    scope,
+    locale,
+    redirectUri.toString(),
+    codeVerifier
+  );
   document.location.href = url.toString();
 }
 
 const loginUrl: RedirectUrlBuilder = async (
   client,
   scope,
+  locale,
   redirectUri,
   codeVerifier
 ) => {
@@ -183,7 +186,7 @@ const loginUrl: RedirectUrlBuilder = async (
   );
   url.searchParams.set("clientId", client.settings.clientId);
   url.searchParams.set("redirectUrl", redirectUri);
-  url.searchParams.set("culture_info", "de-CH"); // TODO
+  url.searchParams.set("culture_info", locale);
   url.searchParams.set("application_scope", scope);
   url.searchParams.set("response_type", "code");
   url.searchParams.set("code_challenge_method", codeChallengeMethod);
@@ -197,6 +200,7 @@ const loginUrl: RedirectUrlBuilder = async (
 const refreshUrl: RedirectUrlBuilder = async (
   client,
   scope,
+  locale,
   redirectUri,
   codeVerifier
 ) => {
@@ -212,7 +216,7 @@ const refreshUrl: RedirectUrlBuilder = async (
 
   // url.searchParams.set("clientId", client.settings.clientId);
   url.searchParams.set("redirectUrl", redirectUri);
-  url.searchParams.set("culture_info", "de-CH"); // TODO
+  url.searchParams.set("culture_info", locale);
   url.searchParams.set("application_scope", scope);
   url.searchParams.set("refresh_token", refreshToken ?? "");
   url.searchParams.set("response_type", "code");

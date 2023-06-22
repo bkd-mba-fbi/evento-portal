@@ -101,12 +101,18 @@ export class Footer extends LitElement {
         <div class="copyright">${msg("© Bildungs- und Kulturdirektion")}</div>
         <div class="footer-nav">
           <a
-            href=${`https://www.bkd.be.ch/${portalState.locale}/tools/rechtliches.html`}
+            href=${`https://www.bkd.be.ch/${portalState.locale.slice(
+              0,
+              2
+            )}/tools/rechtliches.html`}
             target="_blank"
             >${msg("Rechtliche Hinweise")}</a
           >
           <a
-            href=${`https://www.bkd.be.ch/${portalState.locale}/tools/impressum.html`}
+            href=${`https://www.bkd.be.ch/${portalState.locale.slice(
+              0,
+              2
+            )}/tools/impressum.html`}
             target="_blank"
             >${msg("Impressum")}</a
           >

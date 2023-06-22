@@ -30,7 +30,7 @@ declare global {
        */
       login(
         options?: Partial<{
-          lang: string;
+          locale: string;
           roles: ReadonlyArray<string>;
           permissions: ReadonlyArray<string>;
         }>

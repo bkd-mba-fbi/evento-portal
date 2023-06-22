@@ -3,12 +3,12 @@
 [![Linting & Testing ✨](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml)
 [![Build & Deployment 🚀](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/build.yml/badge.svg)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/build.yml)
 
-The _Evento Portal_ is used to integrate various applications for school administration in a single portal with a common look and feel.
+The _Evento Portal_ is used to integrate various applications for school administration in a single web portal with a common look and feel.
 
 This project is realised with:
 
 - [Vite](https://vitejs.dev/)
-- [Lit](https://lit.dev/) and [lit-localize](https://lit.dev/docs/localization/overview/)
+- [Lit](https://lit.dev/) with [lit-localize](https://lit.dev/docs/localization/overview/) and [@lit-app/state](https://github.com/lit-apps/lit-app/tree/main/packages/state).
 - [Cypress](https://www.cypress.io/)
 
 Download the [latest build](https://bkd-mba-fbi.github.io/evento-portal/evento-portal.zip).
@@ -86,7 +86,7 @@ Update the french translation file by extracting the base language texts from th
 npm run locale:extract
 ```
 
-The generated translation file `xliff/fr.xlf` can then be edited manually with a text editor or more conveniently with a XLIFF-compatible editor like [Poedit](https://poedit.net/) (open source).
+The generated translation file `xliff/fr-CH.xlf` can then be edited manually with a text editor or more conveniently with a XLIFF-compatible editor like [Poedit](https://poedit.net/) (open source).
 
 When all texts are translated, generate the locale artifacts:
 

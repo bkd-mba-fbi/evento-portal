@@ -1,5 +1,7 @@
 import { State, property, query } from "@lit-app/state";
-import { getLocale, updateLocale } from "../utils/locale";
+import { msg } from "@lit/localize";
+
+import { getInitialLocale, getLocale, updateLocale } from "../utils/locale";
 import { cleanupQueryParams, updateQueryParam } from "../utils/routing";
 import {
   App,
@@ -12,7 +14,6 @@ import { getCurrentAccessToken, storeLocale } from "../utils/storage";
 import { getTokenPayload } from "../utils/token";
 import { fetchInstanceName, fetchUserAccessInfo } from "../utils/fetch";
 import { filterAllowed, getApp, getNavigationItem } from "../utils/navigation";
-import { msg } from "@lit/localize";
 
 export const LOCALE_QUERY_PARAM = "locale";
 export const NAV_ITEM_QUERY_PARAM = "module";
@@ -20,8 +21,7 @@ export const NAV_ITEM_QUERY_PARAM = "module";
 const QUERY_PARAMS = [LOCALE_QUERY_PARAM, NAV_ITEM_QUERY_PARAM];
 
 export class PortalState extends State {
-  @query({ parameter: LOCALE_QUERY_PARAM })
-  @property({ value: getLocale() })
+  @property({ value: getInitialLocale() })
   locale!: string;
 
   @property({ value: [] })
@@ -65,7 +65,7 @@ export class PortalState extends State {
 
   async init() {
     // Update initially
-    this.handleStateChange("locale", this.locale);
+    await this.handleStateChange("locale", this.locale);
 
     // Update on state change
     this.subscribe(this.handleStateChange.bind(this));
@@ -108,14 +108,20 @@ export class PortalState extends State {
     return this.subscribe((_, item) => callback(item), "navigationItem");
   }
 
-  subscribeScope(
-    callback: (scope: PortalState["app"]["scope"]) => void,
+  subscribeScopeAndLocale(
+    callback: (
+      scope: PortalState["app"]["scope"],
+      locale: PortalState["locale"]
+    ) => void,
     skipInitial = false
   ) {
     if (!skipInitial) {
-      callback(this.app.scope); // Initial value
+      callback(this.app.scope, this.locale); // Initial value
     }
-    return this.subscribe((_, app) => callback(app.scope), "app");
+    return this.subscribe(
+      () => callback(this.app.scope, this.locale),
+      ["app", "locale"]
+    );
   }
 
   /**
@@ -138,13 +144,15 @@ export class PortalState extends State {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private handleStateChange(key: string, value: any): void {
+  private async handleStateChange(key: string, value: any): Promise<void> {
     if (key === "locale") {
-      this.updateLocale(value);
-      this.loadInstanceName();
+      await this.updateLocale(value);
+      await this.loadInstanceName();
     }
 
     if (key === "locale" || key === "navigationItemKey") {
+      // Store locale in localeStorage and update it whenever
+      // navigation changes, since some legacy apps modify the value
       storeLocale(this.locale);
     }
 
@@ -159,8 +167,8 @@ export class PortalState extends State {
   }
 
   private async updateLocale(locale: PortalState["locale"]): Promise<void> {
-    await updateLocale(locale);
     updateQueryParam(LOCALE_QUERY_PARAM, locale);
+    await updateLocale(locale);
   }
 
   private updateNavigation(): void {

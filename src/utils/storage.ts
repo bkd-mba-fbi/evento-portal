@@ -61,10 +61,25 @@ export function getCurrentAccessToken(): string | null {
   return sessionStorage.getItem(CURRENT_ACCESS_TOKEN_KEY);
 }
 
+export function getLastAccessToken(): string | null {
+  return localStorage.getItem(CURRENT_ACCESS_TOKEN_KEY);
+}
+
 export function storeCurrentAccessToken(accessToken: string): void {
+  // The access token for the current app is stored in sessionStorage
   sessionStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, accessToken);
-  //old apps use localStorage
-  localStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, JSON.stringify(accessToken));
+
+  // Store access token in localStorage as well:
+  // - Although this causes problems when working with different apps
+  //   in multiple tabs, legacy apps rely on the token being present
+  //   in localStorage. Apps should _always_ read the token from
+  //   sessionStorage!
+  // - It also allows us to get the last used token with
+  //   `getLastAccessToken`, which is used to detect the user's
+  //   language. Once all legacy apps will be converted to
+  //   sessionStorage, we should use another key such as
+  //   'bkdLastAccessToken'
+  localStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, accessToken);
 }
 
 /**
@@ -93,4 +108,8 @@ export function storeLoginState(
   } else {
     sessionStorage.removeItem(REDIRECT_URI_KEY);
   }
+}
+
+export function getLoginStateRedirectUri(): string | null {
+  return sessionStorage.getItem(REDIRECT_URI_KEY);
 }

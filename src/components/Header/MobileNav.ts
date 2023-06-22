@@ -11,7 +11,7 @@ import { NavigationGroup, NavigationItem } from "../../settings";
 import arrowDownIcon from "../../assets/icons/arrow-down.svg?raw";
 import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
 import { portalState } from "../../state/portal-state.ts";
-import { getUrl } from "../../utils/routing.ts";
+import { buildUrl } from "../../utils/routing.ts";
 import {
   UserSettingsItem,
   userSettingsItems,
@@ -247,7 +247,7 @@ export class MobileNav extends LitElement {
         })}
       >
         <a
-          href=${getUrl(item)}
+          href=${buildUrl(item)}
           @click=${(e: MouseEvent) => this.handleNavItemClick(e, item)}
         >
           ${item.label}

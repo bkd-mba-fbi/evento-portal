@@ -94,7 +94,7 @@ export class LanguageSwitcher extends LitElement {
               @click=${(event: MouseEvent) =>
                 this.handleLocaleChange(event, locale)}
             >
-              ${locale}
+              ${locale.slice(0, 2)}
             </a>
           </li>`
       )}

@@ -1,5 +1,5 @@
 import { msg } from "@lit/localize";
-import { getUrl } from "./routing";
+import { buildUrl } from "./routing";
 
 export type UserSettingsItem = Readonly<{
   key: string;
@@ -16,18 +16,18 @@ export function userSettingsItems(
     {
       key: "myProfile",
       label: msg("Mein Profil"),
-      href: getUrl("myProfile"),
+      href: buildUrl("myProfile"),
     },
     {
       key: "mySettings",
       label: msg("Einstellungen"),
-      href: getUrl("mySettings"),
+      href: buildUrl("mySettings"),
     },
     {
       key: "videos",
       label: msg("Video-Tutorials"),
       href:
-        locale === "de"
+        locale === "de-CH"
           ? "https://www.youtube.com/playlist?list=PLLDtLiOuctbx-_EQWgWqTO1MRbX845OEf"
           : "https://www.youtube.com/playlist?list=PLLDtLiOuctbyEegnquAkaW4u8cm62lFAU",
       img: "/icons/external-link.svg",
