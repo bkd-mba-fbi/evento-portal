@@ -1,30 +1,31 @@
 import { css, html, LitElement } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { localized } from "@lit/localize";
 import { StateController, Unsubscribe } from "@lit-app/state";
+import { when } from "lit/directives/when.js";
 
 import {
   customProperties,
   registerLightDomStyles,
   theme,
-} from "../utils/theme.ts";
+} from "../utils/theme";
 import {
   activateTokenForScope,
   createOAuthClient,
   ensureAuthenticated,
   logout,
-} from "../utils/auth.ts";
-import { portalState } from "../state/portal-state.ts";
-import { getScopeFromUrl } from "../utils/routing.ts";
-import { when } from "lit/directives/when.js";
-import { getCurrentAccessToken } from "../utils/storage.ts";
-import { settings } from "../settings.ts";
+} from "../utils/auth";
+import { portalState } from "../state/portal-state";
+import { getScopeFromUrl } from "../utils/routing";
+import { getCurrentAccessToken } from "../utils/storage";
+import { settings } from "../settings";
+import { getInitialLocale } from "../utils/locale";
 
 const oAuthClient = createOAuthClient();
 
-(async function () {
+const authReady = (async function () {
   // Start Authorization Code Flow with PKCE
-  await ensureAuthenticated(oAuthClient, getScopeFromUrl());
+  await ensureAuthenticated(oAuthClient, getScopeFromUrl(), getInitialLocale());
   portalState.init();
 })();
 
@@ -40,6 +41,9 @@ registerLightDomStyles(
 @customElement("bkd-portal")
 @localized()
 export class Portal extends LitElement {
+  @state()
+  authReady = false;
+
   static styles = [
     theme,
     css`
@@ -63,6 +67,8 @@ export class Portal extends LitElement {
   constructor() {
     super();
 
+    authReady.then(() => (this.authReady = true));
+
     new StateController(this, portalState);
   }
 
@@ -70,8 +76,8 @@ export class Portal extends LitElement {
     super.connectedCallback();
 
     this.subscriptions.push(
-      portalState.subscribeScope(
-        (scope) => activateTokenForScope(oAuthClient, scope),
+      portalState.subscribeScopeAndLocale(
+        (scope, locale) => activateTokenForScope(oAuthClient, scope, locale),
         true
       )
     );
@@ -105,13 +111,13 @@ export class Portal extends LitElement {
   }
 
   private handleLogout() {
-    logout(oAuthClient, portalState.app.scope);
+    logout(oAuthClient);
   }
 
   render() {
     return html`
       ${when(
-        this.isAuthenticated(),
+        this.authReady && this.isAuthenticated(),
         () => html`
           <bkd-header @bkdlogout=${this.handleLogout.bind(this)}></bkd-header>
           <bkd-content></bkd-content>

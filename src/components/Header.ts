@@ -7,7 +7,7 @@ import { DropdownController } from "../controllers/dropdown";
 import { when } from "lit/directives/when.js";
 import { portalState } from "../state/portal-state";
 import { StateController } from "@lit-app/state";
-import { getUrl } from "../utils/routing";
+import { buildUrl } from "../utils/routing";
 import { NavigationItem } from "../settings";
 import { UserSettingsItem } from "../utils/user-settings";
 
@@ -177,7 +177,7 @@ export class Header extends LitElement {
           @bkdhamburgertoggle=${() => this.mobileNav.toggle()}
           @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
         ></bkd-service-nav>
-        <a class="logo" href=${getUrl("home")}
+        <a class="logo" href=${buildUrl("home")}
           ><img
             src="logo.svg"
             alt=${msg("Evento Startseite")}

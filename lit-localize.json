@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/lit/lit/main/packages/localize-tools/config.schema.json",
-  "sourceLocale": "de",
-  "targetLocales": ["fr"],
+  "sourceLocale": "de-CH",
+  "targetLocales": ["fr-CH"],
   "output": {
     "mode": "runtime",
     "outputDir": "./public/locales",
