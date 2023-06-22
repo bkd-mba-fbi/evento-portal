@@ -63,6 +63,8 @@ export function getCurrentAccessToken(): string | null {
 
 export function storeCurrentAccessToken(accessToken: string): void {
   sessionStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, accessToken);
+  //old apps use localStorage
+  localStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, JSON.stringify(accessToken));
 }
 
 /**
