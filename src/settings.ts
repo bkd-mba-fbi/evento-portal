@@ -91,7 +91,7 @@ export const settings: Settings = {
     allowedRolesOrPermissions: null,
     deniedInstanceIds: null,
     appKey: "schulverwaltung",
-    appPath: "#/portal-home",
+    appPath: "#/dashboard",
   },
   get navigationMyProfile() {
     return {

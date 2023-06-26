@@ -50,12 +50,12 @@ window.schulverwaltung.settings = {
   // Id of the confirmation state for absences that need to be checked
   checkableAbsenceStateId: 1080,
 
-    // In presences control, the presence data of the selected lesson is
+  // In presences control, the presence data of the selected lesson is
   // reloaded for the following interval, if there is no user activity
   // (such as clicks or keypresses). Refresh time is in seconds (15 *
   // 60 * 1000 ? refresh every 15 minutes of inactivity).
   lessonPresencesRefreshTime: 15 * 60 * 1000,
-  
+
   // In presence control, a hint is shown if the student has
   // unconfirmed absences (in any lesson). These unconfirmed absences
   // are refreshed each time the user changes the date and in fixed
@@ -74,10 +74,10 @@ window.schulverwaltung.settings = {
   // confirmation values to sign (used in my absences)
   studentConfirmationReportId: 290036,
 
-   // Id of the report used in evaluate absences
-   evaluateAbsencesReportId: 290048,
+  // Id of the report used in evaluate absences
+  evaluateAbsencesReportId: 290048,
 
-  // Id of the course used for the tests report
+  // Id of the report used for the course report
   testsByCourseReportId: 290044,
 
   // Id of the report used for the tests report for a single student
@@ -98,11 +98,11 @@ window.schulverwaltung.settings = {
     editAbsences: 'LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole',
     evaluateAbsences: 'LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole',
   },
- 
-   /**
+
+  /**
    * Notifications
    */
-  // Refresh time for notifications in sec.
+  // Refresh time for notifications
   notificationRefreshTime: 30,
 
   // Types of notifications and their language-specific texts
@@ -210,8 +210,8 @@ window.schulverwaltung.settings = {
     statusfilter:
     '14030;14025;14017;14020;10350;10335;10355;10315;10330;10325;10320;10340;10345;10230;10225;10240;10250;10260;10217;10235;10220;10226;10227;10250;10300;10305;10310;14040'
   },
- 
-   /**
+
+  /**
    * My absences
    */
   // Instance IDs of schools where students cannot report absences after lessons have started
