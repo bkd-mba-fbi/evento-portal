@@ -5,6 +5,7 @@ import { portalState } from "../state/portal-state";
 import { keyed } from "lit/directives/keyed.js";
 import { localized } from "@lit/localize";
 import { theme } from "../utils/theme";
+import { when } from "lit/directives/when.js";
 
 @customElement("bkd-content")
 @localized()
@@ -79,7 +80,10 @@ export class Content extends LitElement {
     // The keyed directive ensures that the entire iframe and any associated scripts are removed when the application changes.
     return html`
       <main>
-        <h1>${portalState.navigationItem.label}</h1>
+        ${when(
+          portalState.app.heading,
+          () => html`<h1>${portalState.navigationItem.label}</h1>`
+        )}
         ${keyed(
           portalState.app.root,
           html`<iframe
