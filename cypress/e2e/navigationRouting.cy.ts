@@ -52,7 +52,11 @@ describe("Navigation & Routing", () => {
         .should("not.have.class", "active");
 
       // Displays home content
-      cy.get("main").contains("h1", "Home");
+      cy.get("iframe").should(
+        "have.attr",
+        "src",
+        "apps/webapp-schulverwaltung/index.html#/dashboard"
+      );
     });
 
     it("selects menu entry from URL", () => {
@@ -99,7 +103,11 @@ describe("Navigation & Routing", () => {
         .should("not.have.class", "active");
 
       // Displays item's content
-      cy.get("main").contains("h1", "Präsenzkontrolle");
+      cy.get("iframe").should(
+        "have.attr",
+        "src",
+        "apps/webapp-schulverwaltung/index.html#/presence-control"
+      );
 
       // Does not redirect to home
       cy.window().should((window) => {
@@ -152,7 +160,11 @@ describe("Navigation & Routing", () => {
         .should("not.have.class", "active");
 
       // Displays home content
-      cy.get("main").contains("h1", "Home");
+      cy.get("iframe").should(
+        "have.attr",
+        "src",
+        "apps/webapp-schulverwaltung/index.html#/dashboard"
+      );
 
       // Does not redirect to home
       cy.window().should((window) => {
@@ -172,7 +184,11 @@ describe("Navigation & Routing", () => {
         .should("not.have.class", "active");
 
       // Displays home content
-      cy.get("main").contains("h1", "Home");
+      cy.get("iframe").should(
+        "have.attr",
+        "src",
+        "apps/webapp-schulverwaltung/index.html#/dashboard"
+      );
 
       // Updates URL to ?module=home
       cy.window().should((window) => {
@@ -218,7 +234,11 @@ describe("Navigation & Routing", () => {
       });
 
       // Displays home content
-      cy.get("main").contains("h1", "Präsenzkontrolle");
+      cy.get("iframe").should(
+        "have.attr",
+        "src",
+        "apps/webapp-schulverwaltung/index.html#/presence-control"
+      );
     });
   });
 
@@ -229,7 +249,11 @@ describe("Navigation & Routing", () => {
 
     it("selects menu item from URL and expands its group", () => {
       cy.visit("/index.html?module=presenceControl");
-      cy.get("main").contains("h1", "Präsenzkontrolle");
+      cy.get("iframe").should(
+        "have.attr",
+        "src",
+        "apps/webapp-schulverwaltung/index.html#/presence-control"
+      );
       cy.get("button[aria-label='Menü']").as("toggle").should("be.visible");
 
       // Open menu

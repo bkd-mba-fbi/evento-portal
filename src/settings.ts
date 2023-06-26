@@ -10,17 +10,51 @@ export type Settings = Readonly<{
   navigation: ReadonlyArray<NavigationGroup>;
 }>;
 
-export type App = Readonly<{ key: string; scope: string; root: string }>;
+export type App = Readonly<{
+  /**
+   * A unique key for the app
+   */
+  key: string;
+
+  /**
+   * The OAuth scope associated with the app
+   */
+  scope: string;
+
+  /**
+   * The root directory of the app, containing the index.html
+   */
+  root: string;
+
+  /**
+   * Whether a H1 heading should be rendered by the portal
+   */
+  heading: boolean;
+}>;
 
 export type Navigation = ReadonlyArray<NavigationGroup>;
 
 export type NavigationGroup = Readonly<{
+  /**
+   * A label used in navigation
+   */
   label: string;
+
+  /**
+   * All navigation items contained in this group
+   */
   items: ReadonlyArray<NavigationItem>;
 }>;
 
 export type NavigationItem = Readonly<{
+  /**
+   * A unique key for the item
+   */
   key: string;
+
+  /**
+   * A label used for navigation links and as heading
+   */
   label: string;
 
   /**
@@ -36,7 +70,14 @@ export type NavigationItem = Readonly<{
    */
   deniedInstanceIds: ReadonlyArray<string> | null;
 
+  /**
+   * The key of the associated app
+   */
   appKey: string;
+
+  /**
+   * The client side routing path to the app module of this item
+   */
   appPath: string;
 }>;
 
@@ -53,36 +94,43 @@ export const settings: Settings = {
       key: "schulverwaltung",
       scope: "Tutoring",
       root: "apps/webapp-schulverwaltung/index.html",
+      heading: false,
     },
     {
       key: "anmeldedetailsEinlesen",
       scope: "NG",
       root: "apps/EmberApps/AnmeldedetailsEinlesen/index.html",
+      heading: true,
     },
     {
       key: "schulleiterPersonen",
       scope: "NG",
       root: "apps/EmberApps/SchulleiterPersonen/index.html",
+      heading: true,
     },
     {
       key: "kursausschreibung",
       scope: "Public",
       root: "apps/Kursausschreibung/index.html",
+      heading: true,
     },
     {
       key: "kursausschreibungIntern",
       scope: "Public",
       root: "apps/Kursausschreibung/indexIntern.html",
+      heading: true,
     },
     {
       key: "stellvertretung",
       scope: "Tutoring",
       root: "apps/Stellvertretung/index.html",
+      heading: true,
     },
     {
       key: "reservation",
       scope: "NG",
       root: "apps/Raumreservation/index.html",
+      heading: true,
     },
   ],
   navigationHome: {
