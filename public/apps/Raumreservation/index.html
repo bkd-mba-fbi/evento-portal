@@ -41,9 +41,9 @@ window._RoomReservationConfig = {
             }
             else if (element.href.search('JSModules/CSS/main.css') > 0) {
                 element.remove();
-            }        
+            }
         }
-        
+
     });
 
     //Workaround evtl. gibt es eine bessere Lösung
@@ -52,12 +52,12 @@ window._RoomReservationConfig = {
         //add type button if not exists
         let bt = document.getElementsByTagName('button');
         for (let item of bt) {
-            
+
             var type = item.getAttribute('type');
             if(type !== 'Button') {
                 item.setAttribute('type','button');
-            } 
-        }  
+            }
+        }
     },500);
 </script>
-<script src="../../src/resize.ts" type="module"></script>
+<script src="../../scripts/iframe.js" type="module"></script>
