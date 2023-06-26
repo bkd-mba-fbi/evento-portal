@@ -19,13 +19,18 @@ export class Content extends LitElement {
       /* Large screen */
 
       :host {
-        --bkd-header-margin-horizontal: var(--bkd-margin-horizontal-large);
-        margin: 0 var(--bkd-header-margin-horizontal);
+        --bkd-content-margin-top: 3rem;
+        --bkd-content-margin-horizontal: var(--bkd-margin-horizontal-large);
+        padding: var(--bkd-content-margin-top)
+          var(--bkd-content-margin-horizontal) 0
+          var(--bkd-content-margin-horizontal);
       }
 
       h1 {
         font-size: 3.375rem;
         font-weight: 100;
+        line-height: 2.25rem;
+        margin: 0 0 calc(3.375rem / 2) 0;
       }
 
       iframe {
@@ -37,7 +42,8 @@ export class Content extends LitElement {
 
       @media screen and (max-width: 1200px) {
         :host {
-          --bkd-header-margin-horizontal: var(--bkd-margin-horizontal-medium);
+          --bkd-content-margin-top: 2rem;
+          --bkd-content-margin-horizontal: var(--bkd-margin-horizontal-medium);
         }
 
         h1 {
@@ -49,7 +55,8 @@ export class Content extends LitElement {
 
       @media screen and (max-width: 767px) {
         :host {
-          --bkd-header-margin-horizontal: var(--bkd-margin-horizontal-small);
+          --bkd-content-margin-top: 1rem;
+          --bkd-content-margin-horizontal: var(--bkd-margin-horizontal-small);
         }
       }
     `,
