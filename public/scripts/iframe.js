@@ -24,3 +24,11 @@ const resizeObserver = new ResizeObserver((entries) => {
 window.onload = () => {
   resizeObserver.observe(document.documentElement);
 };
+
+///// HTML lang attribute updating /////
+
+const url = new URL(parent.window.location.href);
+const locale = url.searchParams.get("locale");
+if (typeof locale === "string") {
+  document.documentElement.lang = locale;
+}
