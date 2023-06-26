@@ -24,6 +24,17 @@ Download the [latest build](https://bkd-mba-fbi.github.io/evento-portal/evento-p
 - **Modules** \
   The _apps_ may consist of multiple _modules_ like _presence control_ or _tests_ that are individually integrated in the _Evento Portal_'s navigation.
 
+## App Integration
+
+A static build of the _apps_ is committed to this repository in the `public/apps/` directory. The _Evento Portal_ loads the _apps_ in an `<iframe>` to ensure a separation of the runtime environment and a proper cleanup when switching _apps_. The `public/scripts/iframe.js` script has to be included in an _app_'s `index.html` to setup communication between portal & iframe.
+
+Furthemore an _app_ can rely on the following information that is provided by the _Evento Portal_:
+
+- **Access token**: Can be read from `sessionStorage.get("CLX.LoginToken")`. For backwards compatibility this value is also available from `localStorage.get("CLX.LoginToken")`, but _apps_ should always use the sessionStorage value to avoid troubles when multiple browser tabs are involved.
+- **User's locale**: Can be read from the document's `lang` attribute, from `localStorage.get("uiCulture")` or from the token's `culture_info` property.
+
+Note that _apps_ should only read, never update the provided values in session- or localStorage.
+
 ## Getting Started
 
 Install the dependencies:
@@ -70,9 +81,9 @@ For more information, see [Cypress](https://www.cypress.io/).
 
 Mobile breakpoints:
 
-- > 1920px content centered
-- < 1200px hamburger menu
-- < 767px mobile compact
+- bigger than 1920px: content centered
+- smaller than 1200px: hamburger menu
+- smaller than 767px: mobile compact
 
 ## I18n
 
