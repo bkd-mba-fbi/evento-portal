@@ -19,16 +19,25 @@ import {
   storeToken,
 } from "./storage";
 import { getTokenPayload, isTokenExpired, isValidToken } from "./token";
-import { settings } from "../settings";
 import { LOCALE_QUERY_PARAM, portalState } from "../state/portal-state";
+
+const envSettings = window.eventoPortal.settings;
+
+if (typeof envSettings?.oAuthServer !== "string") {
+  throw new Error("Invalid 'oAuthServer' setting");
+}
+
+if (typeof envSettings?.oAuthClientId !== "string") {
+  throw new Error("Invalid 'clientId' setting");
+}
 
 /**
  * Returns a new OAuth client instance
  */
 export function createOAuthClient(): OAuth2Client {
   return new OAuth2Client({
-    server: settings.oauth.server,
-    clientId: settings.oauth.clientId,
+    server: envSettings.oAuthServer,
+    clientId: envSettings.oAuthClientId,
     tokenEndpoint: "/OAuth/Authorization/Token",
     authorizationEndpoint: getAuthorizationEndpoint(),
     fetch: (...args) => fetch(...args), // Fix for https://github.com/badgateway/oauth2-client/issues/105

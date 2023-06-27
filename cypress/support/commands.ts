@@ -54,15 +54,29 @@ Cypress.Commands.add(
       });
     });
 
+    // Mock environment settings
+    cy.intercept(
+      "/settings.js",
+      `
+        window.eventoPortal = {
+          settings: {
+            apiServer: "https://eventotest.api/restApi",
+            oAuthServer: "https://eventotest.api",
+            oAuthClientId: "cypress",
+          },
+        };
+      `
+    );
+
     cy.intercept(
       "GET",
-      "https://eventoapp-test.erz.be.ch/restApi/UserSettings/?expand=AccessInfo",
+      "https://eventotest.api/restApi/UserSettings/?expand=AccessInfo",
       { AccessInfo: { Roles: roles, Permissions: permissions } }
     ).as("fetchAccessInfo");
 
     cy.intercept(
       "GET",
-      "https://eventoapp-test.erz.be.ch/restApi/Configurations/SchoolAppNavigation",
+      "https://eventotest.api/restApi/Configurations/SchoolAppNavigation",
       { instanceName: "Test" }
     );
   }
