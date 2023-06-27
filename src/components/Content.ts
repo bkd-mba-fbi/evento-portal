@@ -77,6 +77,7 @@ export class Content extends LitElement {
   };
 
   render() {
+    // The keyed directive ensures that the entire iframe and any associated scripts are removed when the application changes.
     return html`
       <main>
         <h1>${portalState.navigationItem.label}</h1>
