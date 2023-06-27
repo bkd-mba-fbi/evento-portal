@@ -43,6 +43,8 @@ Install the dependencies:
 npm install
 ```
 
+Copy `public/settings.example.js` to `public/settings.js` and adjust its contents.
+
 Start the development server:
 
 ```

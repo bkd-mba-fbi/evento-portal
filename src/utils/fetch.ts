@@ -1,5 +1,10 @@
-import { settings } from "../settings";
 import { getCurrentAccessToken } from "./storage";
+
+const envSettings = window.eventoPortal.settings;
+
+if (typeof envSettings?.apiServer !== "string") {
+  throw new Error("Invalid 'apiServer' setting");
+}
 
 export type UserAccessInfo = {
   roles: ReadonlyArray<string>;
@@ -7,7 +12,7 @@ export type UserAccessInfo = {
 };
 
 export async function fetchUserAccessInfo(): Promise<UserAccessInfo> {
-  const url = `${settings.api.server}/UserSettings/?expand=AccessInfo`;
+  const url = `${envSettings.apiServer}/UserSettings/?expand=AccessInfo`;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result = await fetchApi<any>(url);
 
@@ -18,7 +23,7 @@ export async function fetchUserAccessInfo(): Promise<UserAccessInfo> {
 }
 
 export async function fetchInstanceName(): Promise<string | null> {
-  const url = `${settings.api.server}/Configurations/SchoolAppNavigation`;
+  const url = `${envSettings.apiServer}/Configurations/SchoolAppNavigation`;
   const result = await fetchApi<{ instanceName: string }>(url);
 
   return result?.instanceName || null;

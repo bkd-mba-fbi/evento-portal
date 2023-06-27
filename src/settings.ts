@@ -1,8 +1,12 @@
 import { msg } from "@lit/localize";
 
+/**
+ * This file contains the static configuration that is part of the
+ * build. For environment specific settings, see
+ * `public/settings.example.js`.
+ */
+
 export type Settings = Readonly<{
-  api: Readonly<{ server: string }>;
-  oauth: Readonly<{ server: string; clientId: string }>;
   apps: ReadonlyArray<Readonly<App>>;
   navigationHome: NavigationItem;
   navigationMyProfile: NavigationItem;
@@ -82,13 +86,6 @@ export type NavigationItem = Readonly<{
 }>;
 
 export const settings: Settings = {
-  api: {
-    server: "https://eventoapp-test.erz.be.ch/restApi",
-  },
-  oauth: {
-    server: "https://eventoapp-test.erz.be.ch",
-    clientId: "dev3000",
-  },
   apps: [
     {
       key: "schulverwaltung",
