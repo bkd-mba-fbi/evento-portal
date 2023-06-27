@@ -5,7 +5,10 @@ const CODE_VERIFIER_KEY = "bkdCodeVerifier";
 const REDIRECT_URI_KEY = "bkdRedirectUrl";
 const ACCESS_TOKEN_KEY = "bkdAccessToken";
 const REFRESH_TOKEN_KEY = "bkdRefreshToken";
-const CURRENT_ACCESS_TOKEN_KEY = "CLX.LoginToken"; // The "apps" rely on this being present
+
+// The "apps" rely on this being present
+const CURRENT_ACCESS_TOKEN_KEY = "CLX.LoginToken";
+const LOCALE_KEY = "uiCulture";
 // TODO: is `CLX.TokenExpire` required too?
 
 ///// localStorage /////
@@ -48,6 +51,10 @@ export function resetAllTokens(): void {
   sessionStorage.removeItem(CURRENT_ACCESS_TOKEN_KEY);
 }
 
+export function storeLocale(locale: string) {
+  localStorage.setItem(LOCALE_KEY, locale);
+}
+
 ///// sessionStorage /////
 
 export function getCurrentAccessToken(): string | null {
@@ -56,6 +63,8 @@ export function getCurrentAccessToken(): string | null {
 
 export function storeCurrentAccessToken(accessToken: string): void {
   sessionStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, accessToken);
+  //old apps use localStorage
+  localStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, JSON.stringify(accessToken));
 }
 
 /**
