@@ -70,10 +70,9 @@ export class Content extends LitElement {
   }
 
   private handleResize = (event: MessageEvent) => {
-    const { height } = event.data;
-    if (this.iframe) {
-      this.iframe.height = height;
-    }
+    const { type, height } = event.data;
+    if (type !== "bkdResize") return;
+    this.iframe && (this.iframe.height = height);
   };
 
   render() {

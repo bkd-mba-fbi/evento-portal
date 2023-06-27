@@ -14,7 +14,10 @@ const resizeObserver = new ResizeObserver((entries) => {
     const height = entry.contentBoxSize
       ? entry.contentBoxSize[0].blockSize
       : entry.contentRect.height;
-    parent.window.postMessage({ height }, window.parent.origin); // TODO target
+    parent.window.postMessage(
+      { type: "bkdResize", height },
+      window.parent.origin
+    ); // TODO target
   }
 });
 
