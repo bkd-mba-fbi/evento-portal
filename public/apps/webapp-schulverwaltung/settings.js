@@ -12,7 +12,7 @@ window.schulverwaltung.settings = {
   // Path (without trailing slash, relative to the index.html) to the
   // JavaScript bundles and the assets directory containing image and
   // locale files
-  scriptsAndAssetsPath: '.',
+  scriptsAndAssetsPath: '/apps/webapp-schulverwaltung',
 
   // Maximum loaded entries per page, where pagination is in place
   paginationLimit: 200,
