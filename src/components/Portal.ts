@@ -16,7 +16,7 @@ import {
   logout,
 } from "../utils/auth";
 import { portalState } from "../state/portal-state";
-import { getScopeFromUrl } from "../utils/routing";
+import { getHash, getScopeFromUrl, updateHash } from "../utils/routing";
 import { getCurrentAccessToken } from "../utils/storage";
 import { settings } from "../settings";
 import { getInitialLocale } from "../utils/locale";
@@ -87,11 +87,23 @@ export class Portal extends LitElement {
     this.subscriptions.push(
       portalState.subscribeNavigationItem(this.updateTitle.bind(this))
     );
+
+    window.addEventListener("message", this.handleMessage);
+
+    // When visiting the portal anew with an app path in URL hash, set
+    // this as the initial app path
+    const url = new URL(location.href);
+    portalState.initialAppPath = url.hash;
+
+    // For subsequent hash changes, update the state
+    window.addEventListener("hashchange", this.handleHashChange);
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
     this.subscriptions.forEach((unsubscribe) => unsubscribe());
+    window.removeEventListener("message", this.handleMessage);
+    window.removeEventListener("hashchange", this.handleHashChange);
   }
 
   private isAuthenticated(): boolean {
@@ -108,6 +120,30 @@ export class Portal extends LitElement {
     document.title = hasItem
       ? [item?.label, instanceName].join(" ― ")
       : instanceName;
+  }
+
+  private handleMessage = ({ data }: MessageEvent) => {
+    switch (data.type) {
+      case "bkdAppPushState": {
+        const url = data.args[2];
+        updateHash(getHash(url), false);
+        break;
+      }
+      case "bkdAppReplaceState": {
+        const url = data.args[2];
+        updateHash(getHash(url), true);
+        break;
+      }
+    }
+  };
+
+  /**
+   * Update the iframe's appPath whenever the user changes the hash in
+   * the portal URL
+   */
+  private handleHashChange(event: HashChangeEvent): void {
+    const url = new URL(event.newURL);
+    portalState.appPath = url.hash;
   }
 
   private handleLogout() {

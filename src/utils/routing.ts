@@ -31,6 +31,10 @@ export function updateQueryParam(
   }
 }
 
+export function getHash(url: string): string {
+  return new URL(url.startsWith("#") ? `${location.host}${url}` : url).hash;
+}
+
 export function updateHash(hash: string, replace = false): void {
   const url = new URL(location.href);
   url.hash = hash;

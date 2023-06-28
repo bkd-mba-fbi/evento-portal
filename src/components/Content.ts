@@ -69,19 +69,28 @@ export class Content extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener("message", this.handleResize, true);
+    window.addEventListener("message", this.handleMessage);
   }
 
   disconnectedCallback() {
-    window.removeEventListener("message", this.handleResize, true);
+    window.removeEventListener("message", this.handleMessage);
     super.disconnectedCallback();
   }
 
-  private handleResize = (event: MessageEvent) => {
-    const { type, height } = event.data;
-    if (type !== "bkdResize") return;
-    this.iframe && (this.iframe.height = height);
+  private handleMessage = (event: MessageEvent) => {
+    switch (event.data.type) {
+      case "bkdAppResize": {
+        this.handleResize(event.data.height);
+        break;
+      }
+    }
   };
+
+  private handleResize(height: string): void {
+    if (this.iframe) {
+      this.iframe.height = height;
+    }
+  }
 
   render() {
     // The keyed directive ensures that the entire iframe and any associated scripts are removed when the application changes.
@@ -93,11 +102,13 @@ export class Content extends LitElement {
         )}
         ${keyed(
           portalState.app.root,
-          html`<iframe
-            id="app"
-            title=${portalState.app.key}
-            src=${portalState.app.root + portalState.navigationItem.appPath}
-          ></iframe>`
+          html`
+            <iframe
+              id="app"
+              title=${portalState.app.key}
+              src=${portalState.app.root + portalState.appPath}
+            ></iframe>
+          `
         )}
       </main>
     `;
