@@ -240,6 +240,38 @@ describe("Navigation & Routing", () => {
         "apps/webapp-schulverwaltung/index.html#/presence-control"
       );
     });
+
+    it("visits profile (a specific sub app path of an item)", () => {
+      cy.visit(
+        "index.html?locale=de-CH&module=presenceControl#/presence-control/student/5389/absences?returnparams=date%3D2023-07-03%26viewMode%3Dgrid%26lesson%3D291257"
+      );
+      cy.get("bkd-nav").as("desktopMenu").should("be.visible");
+
+      // Group active
+      cy.get("@desktopMenu")
+        .contains("a", "Unterricht")
+        .as("teachingGroup")
+        .should("have.class", "active");
+
+      // Displays sub path content
+      cy.get("iframe")
+        .should(
+          "have.attr",
+          "src",
+          "apps/webapp-schulverwaltung/index.html#/presence-control/student/5389/absences?returnparams=date%3D2023-07-03%26viewMode%3Dgrid%26lesson%3D291257"
+        )
+        .its("0.contentDocument.body")
+        .should("contain", "Profil wurde nicht gefunden");
+
+      // Updates URL to ?module=home
+      cy.window().should((window) => {
+        const url = new URL(window.location.href);
+        expect(url.searchParams.get("module")).to.eq("presenceControl");
+        expect(url.hash).to.eq(
+          "#/presence-control/student/5389/absences?returnparams=date%3D2023-07-03%26viewMode%3Dgrid%26lesson%3D291257"
+        );
+      });
+    });
   });
 
   describe("mobile", () => {

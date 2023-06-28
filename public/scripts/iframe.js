@@ -15,9 +15,9 @@ const resizeObserver = new ResizeObserver((entries) => {
       ? entry.contentBoxSize[0].blockSize
       : entry.contentRect.height;
     parent.window.postMessage(
-      { type: "bkdResize", height },
+      { type: "bkdAppResize", height },
       window.parent.origin
-    ); // TODO target
+    );
   }
 });
 
@@ -32,3 +32,23 @@ const locale = url.searchParams.get("locale");
 if (typeof locale === "string") {
   document.documentElement.lang = locale;
 }
+
+///// Notify portal on state (URL) changes /////
+
+const pushState = history.pushState;
+history.pushState = (...args) => {
+  pushState.call(history, ...args);
+  parent.window.postMessage(
+    { type: "bkdAppPushState", args },
+    parent.window.origin
+  );
+};
+
+const replaceState = history.replaceState;
+history.replaceState = (...args) => {
+  replaceState.call(history, ...args);
+  parent.window.postMessage(
+    { type: "bkdAppReplaceState", args },
+    parent.window.origin
+  );
+};

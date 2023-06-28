@@ -58,6 +58,11 @@ export class PortalState extends State {
   @property({ value: getApp(settings.navigationHome) })
   app!: App;
 
+  @property({ value: settings.navigationHome.appPath })
+  appPath!: string;
+
+  initialAppPath: string | null = null;
+
   private setInitialized: () => void = () => undefined;
   private initialized = new Promise(
     (resolve) => (this.setInitialized = () => resolve(null))
@@ -138,8 +143,7 @@ export class PortalState extends State {
       this.navigationItemKey =
         url.searchParams.get(NAV_ITEM_QUERY_PARAM) ??
         settings.navigationHome.key;
-
-      // TODO: apply app path as well (as `path` query param?)
+      this.appPath = url.hash;
     });
   }
 
@@ -190,6 +194,11 @@ export class PortalState extends State {
       const { item, group } = getNavigationItem(this.navigation, itemKey);
       this.navigationItem = item;
       this.navigationGroup = group;
+
+      // When present, consume the `initialAppPath`, otherwise use the
+      // item's appPath
+      this.appPath = this.initialAppPath || item.appPath;
+      this.initialAppPath = null;
 
       // For invalid item key's redirect to home
       if (item.key === settings.navigationHome.key && item.key !== itemKey) {
