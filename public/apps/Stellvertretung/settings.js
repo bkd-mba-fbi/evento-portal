@@ -7,7 +7,7 @@ window.stellvertretung.settings = {
    * General settings
    */
   // API base URL (without trailing slash)
-  apiUrl: 'https://eventoapp-test.erz.be.ch/restApi',
+  apiUrl: window.parent.eventoPortal.settings.apiServer,
   oAuthUrl: 'http://localhost/CLX.Evento',
   oAuthRedirectUrl: 'http://localhost:4200',
   clientId: 'CLX.Evento-Public',
