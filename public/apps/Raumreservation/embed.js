@@ -24,7 +24,30 @@
         "showRoomReservation": true,
         "showDeviceReservation": true,
         "useHashRouting": true,
-        "assetPath": baseURL + 'assets/'
+        "assetPath": baseURL + 'assets/',
+        "AllowFurtherEvents": true,
+        "RoomColumns": [
+          {
+            "Column": "Room",
+            "Size": 1
+          },
+          {
+            "Column": "RoomType",
+            "Size": 1
+          },
+          {
+            "Column": "Building",
+            "Size": 0
+          },
+          {
+            "Column": "Floor",
+            "Size": 0
+          },
+          {
+            "Column": "NumberPersons",
+            "Size": 0
+          }
+        ]
     };
 
     if (globalConfig.initialPath) {

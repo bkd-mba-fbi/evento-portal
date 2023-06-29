@@ -6,13 +6,14 @@
     if (!token.includes('"')){
         localStorage.setItem('CLX.LoginToken','"'+token+'"');
     }
+    localStorage.setItem('CLX.TokenExpire',Date.now()+1000);
 window._RoomReservationConfig = {
 "tokenType": "urn:ietf:params:oauth:token-type:jwt-bearer",
 "webBaseUrl": "",
 "apiUrl": window.parent.eventoPortal.settings.apiServer,
 "oauthUrl": "",
 "clientId": "",
-"instanceId": 0,
+"instanceId": null,
 "appScope": "NG",
 "useAutoLogin": false,
 "useLanguageDetection": true,
