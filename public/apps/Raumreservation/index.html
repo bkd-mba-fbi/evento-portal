@@ -25,7 +25,7 @@ window._RoomReservationConfig = {
 "qrCodeBaseUrl": "",
 "showRoomReservation": true,
 "showDeviceReservation": true,
-"language": document.documentElement.lang+'-CH',
+"language": localStorage.getItem('uiCulture'),
 "initialPath": location.href.search('ressourceidra=3') > 0 ? 'devices' : '',
 "ShowAvailableRoomsChecked": true,
 "DefaultTimePeriod": 45,
