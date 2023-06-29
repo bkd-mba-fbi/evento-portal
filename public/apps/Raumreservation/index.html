@@ -2,16 +2,20 @@
 </div>
 <script src="../../scripts/iframe.js" type="module"></script>
 <script>
+    var token = localStorage.getItem('CLX.LoginToken');
+    if (!token.includes('"')){
+        localStorage.setItem('CLX.LoginToken','"'+token+'"');
+    }
 window._RoomReservationConfig = {
 "tokenType": "urn:ietf:params:oauth:token-type:jwt-bearer",
 "webBaseUrl": "",
 "apiUrl": window.parent.eventoPortal.settings.apiServer,
-"oauthUrl": 'https://eventoapp-test.erz.be.ch/OAuth',
-"clientId": "Roomreservation",
+"oauthUrl": "",
+"clientId": "",
 "instanceId": 0,
 "appScope": "NG",
-"useAutoLogin": true,
-"useLanguageDetection": true,
+"useAutoLogin": false,
+"useLanguageDetection": false,
 "debug": false,
 "availableLanguages": [
 "de-CH",
@@ -21,7 +25,7 @@ window._RoomReservationConfig = {
 "qrCodeBaseUrl": "",
 "showRoomReservation": true,
 "showDeviceReservation": true,
-"language": "<%= Clx.Evento.Common.Language.LanguageUtils.CurrentCulture.Name %>",
+"language": "",
 "initialPath": location.href.search('ressourceidra=3') > 0 ? 'devices' : '',
 "ShowAvailableRoomsChecked": true,
 "DefaultTimePeriod": 45,
@@ -60,4 +64,5 @@ window._RoomReservationConfig = {
             }
         }
     },500);
+
 </script>
