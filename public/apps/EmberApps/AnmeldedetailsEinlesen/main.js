@@ -40,7 +40,6 @@
 
             // start application
             applicationHelpers.initializeApplication(function () {
-                framework.Helpers.loadCss('/CSS/Custom/anmeldedetails-einlesen.css');
                 var appName = 'ClxApp';
                 var application = ember.Application.create(app);
                 root[appName] = application;
