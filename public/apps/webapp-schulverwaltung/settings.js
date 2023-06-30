@@ -203,8 +203,8 @@ window.schulverwaltung.settings = {
     // Links to the external event detail and evaluation modules.
     // The application will add the event id (IDAnlass) and the preceding equal sign,
     // e.g. link-to-event-detail-module.aspx?IDAnlass=1234
-    eventdetail: '../cst_pages/cst_anlassdetailma.aspx?IDAnlass',
-    evaluation: '../cst_pages/brn_qualifikationdurchdozenten.aspx?IDAnlass',
+    eventdetail: '../EmberApps/Fotoliste/index.html?IDAnlass',
+    evaluation: '../Noteneingabe/index.html?IDAnlass',
 
     // Only events with a status id in the following list are fetched
     statusfilter:
