@@ -1,4 +1,5 @@
 import { OAuth2Token } from "@badgateway/oauth2-client";
+import { getTokenPayload } from "./token";
 
 const INSTANCE_KEY = "bkdInstance";
 const CODE_VERIFIER_KEY = "bkdCodeVerifier";
@@ -9,7 +10,7 @@ const REFRESH_TOKEN_KEY = "bkdRefreshToken";
 // The "apps" rely on this being present
 const CURRENT_ACCESS_TOKEN_KEY = "CLX.LoginToken";
 const LOCALE_KEY = "uiCulture";
-// TODO: is `CLX.TokenExpire` required too?
+const TOKEN_EXPIRE = "CLX.TokenExpire";
 
 ///// localStorage /////
 
@@ -80,6 +81,10 @@ export function storeCurrentAccessToken(accessToken: string): void {
   //   sessionStorage, we should use another key such as
   //   'bkdLastAccessToken'
   localStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, accessToken);
+  // App Raumresevation need TOKEN_EXPIRE in localStorage
+  let { expirationTime } = getTokenPayload(accessToken);
+  expirationTime = expirationTime * 1000;
+  localStorage.setItem(TOKEN_EXPIRE, expirationTime.toString());
 }
 
 /**
