@@ -3,7 +3,7 @@ define([
     'application',
     'api',
     'jquery', 
-    'App/services/cacheService',   
+    'App/Services/cacheService',
     'App/Components/studentPhotoComponent',
     'App/Templates/Components/photoListComponent'
 ], function (ember, app, api, $) {

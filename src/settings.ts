@@ -109,7 +109,7 @@ export const settings: Settings = {
     },
     {
       key: "fotoliste",
-      scope: "NG",
+      scope: "Tutoring",
       root: "apps/EmberApps/Fotoliste/index.html",
       heading: false,
     },

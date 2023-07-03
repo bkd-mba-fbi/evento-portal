@@ -1,7 +1,7 @@
 define([
     'ember',
     'application',
-    'App/services/cacheService',
+    'App/Services/cacheService',
     'App/Templates/photoDetail',
 ], function (ember, app) {
 
