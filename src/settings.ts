@@ -153,7 +153,7 @@ export const settings: Settings = {
     appPath: "#/dashboard",
   },
   navigationPhotoList: {
-    key: "fotoliste",
+    key: "photoList",
     label: msg("Fotoliste"),
     allowedRolesOrPermissions: null,
     deniedInstanceIds: null,
@@ -161,7 +161,7 @@ export const settings: Settings = {
     appPath: "#/",
   },
   navigationInputGrades: {
-    key: "noteneingabe",
+    key: "inputGrades",
     label: msg("Noteneingabe"),
     allowedRolesOrPermissions: null,
     deniedInstanceIds: null,
