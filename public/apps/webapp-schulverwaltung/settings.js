@@ -7,7 +7,13 @@ window.schulverwaltung.settings = {
    * General settings
    */
   // API base URL (without trailing slash)
-  apiUrl: window.parent.eventoPortal.settings.apiServer,
+  get apiUrl() {
+    // To access to portal's settings, we have to consider that this
+    // file is loaded from within the iframe and directly in the
+    // portal's index.html (for the angular-elements)
+    return (window.parent.eventoPortal || window.eventoPortal).settings
+      .apiServer;
+  },
 
   // Path (without trailing slash, relative to the index.html) to the
   // JavaScript bundles and the assets directory containing image and
