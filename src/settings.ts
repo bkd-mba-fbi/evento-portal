@@ -152,21 +152,25 @@ export const settings: Settings = {
     appKey: "schulverwaltung",
     appPath: "#/dashboard",
   },
-  navigationPhotoList: {
-    key: "photoList",
-    label: msg("Fotoliste"),
-    allowedRolesOrPermissions: null,
-    deniedInstanceIds: null,
-    appKey: "fotoliste",
-    appPath: "#/",
+  get navigationPhotoList() {
+    return {
+      key: "photoList",
+      label: msg("Fotoliste"),
+      allowedRolesOrPermissions: ["PersonRight"],
+      deniedInstanceIds: null,
+      appKey: "fotoliste",
+      appPath: "#/",
+    };
   },
-  navigationInputGrades: {
-    key: "inputGrades",
-    label: msg("Noteneingabe"),
-    allowedRolesOrPermissions: null,
-    deniedInstanceIds: null,
-    appKey: "noteneingabe",
-    appPath: "#/",
+  get navigationInputGrades() {
+    return {
+      key: "inputGrades",
+      label: msg("Noteneingabe"),
+      allowedRolesOrPermissions: null,
+      deniedInstanceIds: null,
+      appKey: "noteneingabe",
+      appPath: "#/",
+    };
   },
   get navigationMyProfile() {
     return {
