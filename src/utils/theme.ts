@@ -49,7 +49,7 @@ export const customProperties = css`
   --bkd-margin-horizontal-small: 20px;
 `;
 
-const fontFaces = css`
+export const fontFaces = css`
   /* See https://kantonbern.snowflake.ch/styleguides/1/Kanton-Bern/#Sm3 */
 
   /* Thin */

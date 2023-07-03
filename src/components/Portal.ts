@@ -6,6 +6,7 @@ import { when } from "lit/directives/when.js";
 
 import {
   customProperties,
+  fontFaces,
   registerLightDomStyles,
   theme,
 } from "../utils/theme";
@@ -32,6 +33,7 @@ const authReady = (async function () {
 // Make custom properties available globally in light DOM
 registerLightDomStyles(
   css`
+    ${fontFaces}
     :root {
       ${customProperties}
     }
