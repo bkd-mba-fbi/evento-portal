@@ -18,6 +18,10 @@ export function getNavigationItem(
       return { item: settings.navigationMyProfile, group: null };
     case settings.navigationMySettings.key:
       return { item: settings.navigationMySettings, group: null };
+    case settings.navigationPhotoList.key:
+      return { item: settings.navigationPhotoList, group: null };
+    case settings.navigationInputGrades.key:
+      return { item: settings.navigationInputGrades, group: null };
     default: {
       for (const group of navigation) {
         const item = group.items.find(({ key }) => key === itemKey);

@@ -11,6 +11,8 @@ export type Settings = Readonly<{
   navigationHome: NavigationItem;
   navigationMyProfile: NavigationItem;
   navigationMySettings: NavigationItem;
+  navigationPhotoList: NavigationItem;
+  navigationInputGrades: NavigationItem;
   navigation: ReadonlyArray<NavigationGroup>;
 }>;
 
@@ -106,6 +108,12 @@ export const settings: Settings = {
       heading: true,
     },
     {
+      key: "fotoliste",
+      scope: "Tutoring",
+      root: "apps/EmberApps/Fotoliste/index.html",
+      heading: false,
+    },
+    {
       key: "kursausschreibung",
       scope: "Public",
       root: "apps/Kursausschreibung/index.html",
@@ -129,6 +137,12 @@ export const settings: Settings = {
       root: "apps/Raumreservation/index.html",
       heading: true,
     },
+    {
+      key: "noteneingabe",
+      scope: "Public",
+      root: "apps/Noteneingabe/index.html",
+      heading: false,
+    },
   ],
   navigationHome: {
     key: "home",
@@ -137,6 +151,26 @@ export const settings: Settings = {
     deniedInstanceIds: null,
     appKey: "schulverwaltung",
     appPath: "#/dashboard",
+  },
+  get navigationPhotoList() {
+    return {
+      key: "photoList",
+      label: msg("Fotoliste"),
+      allowedRolesOrPermissions: ["PersonRight"],
+      deniedInstanceIds: null,
+      appKey: "fotoliste",
+      appPath: "#/",
+    };
+  },
+  get navigationInputGrades() {
+    return {
+      key: "inputGrades",
+      label: msg("Noteneingabe"),
+      allowedRolesOrPermissions: null,
+      deniedInstanceIds: null,
+      appKey: "noteneingabe",
+      appPath: "#/",
+    };
   },
   get navigationMyProfile() {
     return {
@@ -177,8 +211,7 @@ export const settings: Settings = {
             allowedRolesOrPermissions: ["TeacherRole", "ClassTeacherRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
-            appPath: "#/events",
-            //appPath: "#/current-events", // TODO split event into current-events and tests
+            appPath: "#/events/current",
           },
           {
             key: "tests",
@@ -187,7 +220,6 @@ export const settings: Settings = {
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
             appPath: "#/events",
-            //appPath: "#/tests", // TODO split event into current-events and tests
           },
           {
             key: "substitutionsAssign",
