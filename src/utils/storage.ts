@@ -53,22 +53,24 @@ export function resetAllTokens(): void {
 }
 
 export function storeLocale(locale: string) {
-  localStorage.setItem(LOCALE_KEY, locale);
+  localStorage.setItem(LOCALE_KEY, `"${locale}"`);
 }
 
 ///// sessionStorage /////
 
 export function getCurrentAccessToken(): string | null {
-  return sessionStorage.getItem(CURRENT_ACCESS_TOKEN_KEY);
+  const token = sessionStorage.getItem(CURRENT_ACCESS_TOKEN_KEY);
+  return token ? token.replace(/^\"+|\"+$/g, "") : null;
 }
 
 export function getLastAccessToken(): string | null {
-  return localStorage.getItem(CURRENT_ACCESS_TOKEN_KEY);
+  const token = localStorage.getItem(CURRENT_ACCESS_TOKEN_KEY);
+  return token ? token.replace(/^\"+|\"+$/g, "") : null;
 }
 
 export function storeCurrentAccessToken(accessToken: string): void {
   // The access token for the current app is stored in sessionStorage
-  sessionStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, accessToken);
+  sessionStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, `"${accessToken}"`);
 
   // Store access token in localStorage as well:
   // - Although this causes problems when working with different apps
@@ -80,7 +82,8 @@ export function storeCurrentAccessToken(accessToken: string): void {
   //   language. Once all legacy apps will be converted to
   //   sessionStorage, we should use another key such as
   //   'bkdLastAccessToken'
-  localStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, accessToken);
+  localStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, `"${accessToken}"`);
+
   // App Raumresevation need TOKEN_EXPIRE in localStorage
   let { expirationTime } = getTokenPayload(accessToken);
   expirationTime = expirationTime * 1000;
