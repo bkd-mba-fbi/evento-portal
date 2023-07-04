@@ -60,12 +60,12 @@ export function storeLocale(locale: string) {
 
 export function getCurrentAccessToken(): string | null {
   const token = sessionStorage.getItem(CURRENT_ACCESS_TOKEN_KEY);
-  return token ? token.replace(/^\"+|\"+$/g, "") : null;
+  return token ? token.replace(/^"+|"+$/g, "") : null;
 }
 
 export function getLastAccessToken(): string | null {
   const token = localStorage.getItem(CURRENT_ACCESS_TOKEN_KEY);
-  return token ? token.replace(/^\"+|\"+$/g, "") : null;
+  return token ? token.replace(/^"+|"+$/g, "") : null;
 }
 
 export function storeCurrentAccessToken(accessToken: string): void {
