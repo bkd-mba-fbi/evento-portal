@@ -1,10 +1,8 @@
-name: deploy test 🚀
+name: Deploy Test Env 🚀
 
 on:
   push:
     branches: [ test ]
-  #pull_request:
-    #branches: [ master ]
 
 jobs:
   build:
@@ -12,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [lts/gallium]
+        node-version: [18]
 
     steps:
     - uses: actions/checkout@v2
@@ -28,5 +26,5 @@ jobs:
         npm install
         npm run build:prod
         cp README.md dist && cp -r doc dist
-        sed -i "s/example/schoolWeb/" dist/settings.example.js > dist/settings.js
+        sed -i "s/example/schoolWeb/"
         sed -i "s/eventotest.api/eventoapp-test.erz.be.ch/" dist/settings.example.js > dist/settings.js
