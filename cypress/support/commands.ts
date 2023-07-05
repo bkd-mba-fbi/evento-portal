@@ -44,9 +44,10 @@ Cypress.Commands.add(
     locale = "de-CH",
     roles = ["LessonTeacherRole", "TeacherRole"],
     permissions = [],
+    additionalTokenPayload = {},
   } = {}) => {
     ["Tutoring", "Public", "NG"].forEach((scope) => {
-      const token = createToken(scope, { locale });
+      const token = createToken(scope, { locale, additionalTokenPayload });
       storeToken(scope, {
         accessToken: token,
         expiresAt: Math.floor(Date.now() / 1000) + 60 * 60,
@@ -79,6 +80,12 @@ Cypress.Commands.add(
       "https://eventotest.api/restApi/Configurations/SchoolAppNavigation",
       { instanceName: "Test" }
     );
+
+    cy.intercept(
+      "GET",
+      "https://eventotest.api/restApi/TeacherSubstitutions/current",
+      []
+    );
   }
 );
 
@@ -89,7 +96,12 @@ function createToken(
   scope: string,
   {
     locale = "de-CH",
-  }: Partial<{ locale: string; roles: ReadonlyArray<string> }> = {}
+    additionalTokenPayload = {},
+  }: Partial<{
+    locale: string;
+    roles: ReadonlyArray<string>;
+    additionalTokenPayload: Record<string, unknown>;
+  }> = {}
 ) {
   const header = {
     typ: "JWT",
@@ -114,6 +126,7 @@ function createToken(
     fullname: "Somebody",
     roles: [],
     token_id: "123456",
+    ...additionalTokenPayload,
   };
 
   return `${btoa(JSON.stringify(header))}.${btoa(

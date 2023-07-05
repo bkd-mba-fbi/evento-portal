@@ -53,9 +53,7 @@ export class ServiceNav extends LitElement {
 
   render() {
     return html`
-      <div
-        style="background: #000; border-radius: 50%; width: 32px; height: 32px;"
-      ></div>
+      <bkd-substitutions-toggle></bkd-substitutions-toggle>
       <erz-notifications></erz-notifications>
       <bkd-user-settings></bkd-user-settings>
       <bkd-language-switcher></bkd-language-switcher>
