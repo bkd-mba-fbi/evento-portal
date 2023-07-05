@@ -32,7 +32,7 @@ export function updateQueryParam(
 }
 
 export function getHash(url: string): string {
-  return new URL(url.startsWith("#") ? `${location.host}${url}` : url).hash;
+  return url.slice(Math.max(url.indexOf("#"), 0));
 }
 
 export function updateHash(hash: string, replace = false): void {
