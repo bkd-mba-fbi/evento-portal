@@ -143,7 +143,9 @@ export class PortalState extends State {
       this.navigationItemKey =
         url.searchParams.get(NAV_ITEM_QUERY_PARAM) ??
         settings.navigationHome.key;
-      this.appPath = url.hash;
+      if (url.hash && url.hash !== "#" && url.hash !== "#/") {
+        this.appPath = url.hash;
+      }
     });
   }
 
