@@ -13,24 +13,27 @@ jobs:
         node-version: [18]
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: npm
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
+          cache: "npm"
 
-    - name: Build 🏭
-      run: |
-        npm install
-        npm run build:prod
-        cp README.md dist && cp -r doc dist
-        sed -i "s/example/schoolWeb/"
-        sed -i "s/eventotest.api/eventoapp-test.erz.be.ch/" dist/settings.example.js > dist/settings.js
+      - name: Install dependencies 🔧
+        run: npm ci
+
+      - name: Build 🏭
+        run: |
+          npm run build
+          mv dist evento-portal
+          sed -i "s/example/schoolWeb/"
+          sed -i "s/eventotest.api/eventoapp-test.erz.be.ch/" dist/settings.example.js > dist/settings.js
     
-    - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-          folder: dist 
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: evento-portal 
           target-folder: test
