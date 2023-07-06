@@ -34,5 +34,5 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: evento-portal 
+          folder: dist
           target-folder: test
