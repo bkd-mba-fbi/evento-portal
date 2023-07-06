@@ -1,0 +1,39 @@
+name: Deploy Test Env 🚀
+
+on:
+  push:
+    branches: [ test ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18]
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
+          cache: "npm"
+
+      - name: Install dependencies 🔧
+        run: npm ci
+
+      - name: Build 🏭
+        run: |
+          npm run build
+          sed -i "s/example/schoolWeb/" dist/settings.example.js
+          sed -i "s/eventotest.api/eventoapp-test.erz.be.ch/" dist/settings.example.js
+          mv  dist/settings.example.js  dist/settings.js
+    
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          target-folder: test
