@@ -2,7 +2,7 @@ name: Deploy Test Env 🚀
 
 on:
   push:
-    branches: [ test, feature/TestDeployment ]
+    branches: [ test ]
 
 jobs:
   build:
