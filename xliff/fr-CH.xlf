@@ -125,6 +125,21 @@
   <source>Logout</source>
   <target state="translated">Logout</target>
 </trans-unit>
+<trans-unit id="s8bb0b618bf59b96e">
+  <source>Fotoliste</source>
+</trans-unit>
+<trans-unit id="s8e7e1013bc071156">
+  <source>Noteneingabe</source>
+</trans-unit>
+<trans-unit id="s885970c4ee8d21cc">
+  <source>Schliessen</source>
+</trans-unit>
+<trans-unit id="s676022c035fe65f5">
+  <source>Stellvertretung ausüben</source>
+</trans-unit>
+<trans-unit id="sde99b4c098556d69">
+  <source>Stellvertretung aufheben</source>
+</trans-unit>
 </body>
 </file>
 </xliff>

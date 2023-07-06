@@ -6,10 +6,10 @@ if (typeof envSettings?.apiServer !== "string") {
   throw new Error("Invalid 'apiServer' setting");
 }
 
-export type UserAccessInfo = {
+export type UserAccessInfo = Readonly<{
   roles: ReadonlyArray<string>;
   permissions: ReadonlyArray<string>;
-};
+}>;
 
 export async function fetchUserAccessInfo(): Promise<UserAccessInfo> {
   const url = `${envSettings.apiServer}/UserSettings/?expand=AccessInfo`;
@@ -27,6 +27,21 @@ export async function fetchInstanceName(): Promise<string | null> {
   const result = await fetchApi<{ instanceName: string }>(url);
 
   return result?.instanceName || null;
+}
+
+export type Substitution = Readonly<{
+  Id: number;
+  HolderId: number;
+  Holder: string;
+  SubstituteId: number;
+  Substitute: string;
+}>;
+
+export function fetchCurrentSubstitutions(): Promise<
+  ReadonlyArray<Substitution>
+> {
+  const url = `${envSettings.apiServer}/TeacherSubstitutions/current`;
+  return fetchApi<ReadonlyArray<Substitution>>(url);
 }
 
 async function fetchApi<T = unknown>(

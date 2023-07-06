@@ -61,9 +61,18 @@ export async function ensureAuthenticated(
     // Successfully logged in
     console.log("Successfully logged in");
     handleLoginResult(loginResult, loginState);
-  } else {
-    await activateTokenForScope(client, scope, locale);
+    return;
   }
+
+  const substitutionResult = getTokenAfterSubstitutionRedirect();
+  if (substitutionResult) {
+    // Started or stopped substitution
+    console.log("Successfully started or stopped substitution");
+    handleSubstitutionResult(substitutionResult);
+    return;
+  }
+
+  await activateTokenForScope(client, scope, locale);
 }
 
 /**
@@ -273,6 +282,45 @@ function handleLoginResult(
   if (loginState?.redirectUri) {
     portalState.navigate(new URL(loginState.redirectUri));
   }
+}
+
+/**
+ * When starting or stopping a substitution a redirect is made, which
+ * will return with a new token with the adjusted roles/permissions.
+ *
+ * Documentation:
+ * - Start: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-starten
+ * - Stop: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-beenden
+ */
+function getTokenAfterSubstitutionRedirect(): OAuth2Token | null {
+  const params = new URLSearchParams(document.location.search);
+  const accessToken = params.get("access_token");
+  const expiresIn = params.get("expires_in");
+  const refreshToken = params.get("refresh_token");
+
+  if (accessToken) {
+    return {
+      accessToken,
+      expiresAt: expiresIn ? Date.now() + parseInt(expiresIn, 10) * 1000 : null,
+      refreshToken: refreshToken || null,
+    };
+  }
+
+  return null;
+}
+
+function handleSubstitutionResult(token: OAuth2Token): void {
+  const { accessToken } = token;
+  const { scope } = getTokenPayload(accessToken);
+  storeToken(scope, token);
+  storeCurrentAccessToken(accessToken);
+
+  // Remove sensitive information from URL
+  const url = new URL(document.location.href);
+  url.searchParams.delete("access_token");
+  url.searchParams.delete("expires_in");
+  url.searchParams.delete("refresh_token");
+  history.replaceState({}, "", url);
 }
 
 /**

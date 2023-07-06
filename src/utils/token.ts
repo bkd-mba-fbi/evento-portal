@@ -4,6 +4,7 @@ export type TokenPayload = {
   locale: string;
   issueTime: number;
   expirationTime: number;
+  substitutionId?: number;
 };
 
 export type RawTokenPayload = {
@@ -16,6 +17,7 @@ export type RawTokenPayload = {
   // token_id: string
   nbf: number;
   exp: number;
+  substitution_id?: string;
 };
 
 export function getTokenPayload(token: string): TokenPayload {
@@ -25,6 +27,7 @@ export function getTokenPayload(token: string): TokenPayload {
     culture_info: locale,
     nbf: issueTime,
     exp: expirationTime,
+    substitution_id: substitutionId,
   } = parseTokenPayload(token);
   return {
     instanceId,
@@ -32,6 +35,7 @@ export function getTokenPayload(token: string): TokenPayload {
     locale,
     issueTime,
     expirationTime,
+    substitutionId: substitutionId ? parseInt(substitutionId, 10) : undefined,
   };
 }
 

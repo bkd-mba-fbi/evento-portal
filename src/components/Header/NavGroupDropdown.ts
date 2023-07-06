@@ -77,14 +77,14 @@ export class NavGroupDropdown extends LitElement {
         transition: all 150ms ease-in-out;
       }
 
-      a.active:after {
+      a.active::after {
         background-color: var(--bkd-brand-red);
       }
 
       a:hover::after,
       a:focus::after,
       a:active::after,
-      a.active:after {
+      a.active::after {
         transform: scaleX(1);
       }
     `,
