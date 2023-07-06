@@ -35,6 +35,7 @@ if (typeof locale === "string") {
 
 ///// Notify portal on state (URL) changes /////
 
+// Post pushState calls to parent window
 const pushState = history.pushState;
 history.pushState = (...args) => {
   pushState.call(history, ...args);
@@ -44,6 +45,7 @@ history.pushState = (...args) => {
   );
 };
 
+// Post replaceState calls to parent window
 const replaceState = history.replaceState;
 history.replaceState = (...args) => {
   replaceState.call(history, ...args);
@@ -52,3 +54,11 @@ history.replaceState = (...args) => {
     parent.window.origin
   );
 };
+
+// Post hashchange events to parent window
+window.addEventListener("hashchange", (event) => {
+  parent.window.postMessage(
+    { type: "bkdAppHashChange", url: event.newURL },
+    parent.window.origin
+  );
+});
