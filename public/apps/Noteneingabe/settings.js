@@ -1,7 +1,7 @@
 ﻿define(['constants'], function (constants) {
     return {
         gradingRedirectUrl: '../cst_pages/suchresultat.aspx?tabkey=webtab_meineanlaessedoz&withsearchparameter=true#/events',
-        applicationScope: 'Undefined',
+        applicationScope: 'Tutoring',
         querystringName: 'idanlass',
         // define reports to display here with context as property name. those reports will be used for list and dialog.
         // if you wish to define different reports for list or dialog, define a new property
