@@ -28,8 +28,7 @@ jobs:
       - name: Build 🏭
         run: |
           npm run build
-          mv dist evento-portal
-          sed -i "s/example/schoolWeb/"
+          sed -i "s/example/schoolWeb/" dist/settings.example.js
           sed -i "s/eventotest.api/eventoapp-test.erz.be.ch/" dist/settings.example.js > dist/settings.js
     
       - name: Deploy 🚀
