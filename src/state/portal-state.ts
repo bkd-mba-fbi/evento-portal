@@ -197,10 +197,24 @@ export class PortalState extends State {
       this.navigationItem = item;
       this.navigationGroup = group;
 
-      // When present, consume the `initialAppPath`, otherwise use the
-      // item's appPath
-      this.appPath = this.initialAppPath || item.appPath;
-      this.initialAppPath = null;
+      if (
+        this.initialAppPath &&
+        this.initialAppPath !== "#" &&
+        this.initialAppPath !== "#/"
+      ) {
+        // Consume `initialAppPath`
+        this.appPath = this.initialAppPath;
+
+        // Make sure we are still on on the same app path, if it has
+        // been changed from loading the dashboard
+        const url = new URL(document.location.href);
+        url.hash = this.appPath;
+        history.replaceState({}, "", url);
+      } else {
+        // Use item's app path
+        this.appPath = item.appPath;
+      }
+      this.initialAppPath = null; // Only relevant the first time
 
       // For invalid item key's redirect to home
       if (item.key === settings.navigationHome.key && item.key !== itemKey) {
