@@ -63,6 +63,7 @@ Cypress.Commands.add(
           settings: {
             apiServer: "https://eventotest.api/restApi",
             oAuthServer: "https://eventotest.api",
+            oAuthPrefix: "/OAuth",
             oAuthClientId: "cypress",
           },
         };

@@ -152,8 +152,9 @@ export class SubstitutionsToggle extends LitElement {
 
     // Redirect to backend to get a new access token with the substitution's roles/permissions.
     // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-starten
+    const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
     this.redirect(
-      `${window.eventoPortal.settings.oAuthServer}/OAuth/Authorization/Substitutions/${substitution.Id}/start`
+      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${substitution.Id}/start`
     );
   }
 
@@ -163,8 +164,9 @@ export class SubstitutionsToggle extends LitElement {
     // Redirect to backend to get access token with the user's
     // original roles/permissions, not the substitution's ones.
     // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-beenden
+    const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
     this.redirect(
-      `${window.eventoPortal.settings.oAuthServer}/OAuth/Authorization/Substitutions/${this.activeSubstitution.Id}/stop`
+      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${this.activeSubstitution.Id}/stop`
     );
   }
 

@@ -3,6 +3,7 @@ interface Window {
     settings: Readonly<{
       apiServer: Readonly<string>;
       oAuthServer: Readonly<string>;
+      oAuthPrefix: Readonly<string>;
       oAuthClientId: Readonly<string>;
     }>;
   }>;

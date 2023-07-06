@@ -13,9 +13,14 @@ window.eventoPortal = {
     apiServer: "https://eventotest.api/restApi",
 
     /**
-     * Base URL of the OAuth provider
+     * Base URL of the OAuth provider without any path part
      */
     oAuthServer: "https://eventotest.api",
+
+    /**
+     * Path prefix for OAuth endpoints
+     */
+    oAuthPrefix: "/OAuth",
 
     /**
      * The OAuth client ID
