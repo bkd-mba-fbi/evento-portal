@@ -27,6 +27,10 @@ if (typeof envSettings?.oAuthServer !== "string") {
   throw new Error("Invalid 'oAuthServer' setting");
 }
 
+if (typeof envSettings?.oAuthPrefix !== "string") {
+  throw new Error("Invalid 'oAuthPrefix' setting");
+}
+
 if (typeof envSettings?.oAuthClientId !== "string") {
   throw new Error("Invalid 'clientId' setting");
 }
@@ -38,7 +42,7 @@ export function createOAuthClient(): OAuth2Client {
   return new OAuth2Client({
     server: envSettings.oAuthServer,
     clientId: envSettings.oAuthClientId,
-    tokenEndpoint: "/OAuth/Authorization/Token",
+    tokenEndpoint: `${envSettings.oAuthPrefix}/Authorization/Token`,
     authorizationEndpoint: getAuthorizationEndpoint(),
     fetch: (...args) => fetch(...args), // Fix for https://github.com/badgateway/oauth2-client/issues/105
   });
@@ -137,9 +141,13 @@ export async function logout(client: OAuth2Client): Promise<void> {
 
   // Logout & reset tokens
   try {
-    await request(client, `/OAuth/Authorization/${instance}/Logout`, {
-      access_token: token,
-    });
+    await request(
+      client,
+      `${envSettings.oAuthPrefix}/Authorization/${instance}/Logout`,
+      {
+        access_token: token,
+      }
+    );
   } catch (e) {
     // Only catch if JSON syntax error (API responds with HTML)
     if (!(e instanceof SyntaxError)) {
@@ -157,8 +165,8 @@ export async function logout(client: OAuth2Client): Promise<void> {
 function getAuthorizationEndpoint(): string {
   const instance = getInstance();
   return instance
-    ? `/OAuth/Authorization/${instance}/Login`
-    : "/OAuth/Authorization/Login";
+    ? `${envSettings.oAuthPrefix}/Authorization/${instance}/Login`
+    : `${envSettings.oAuthPrefix}/Authorization/Login`;
 }
 
 type RedirectUrlBuilder = (
@@ -223,7 +231,7 @@ const refreshUrl: RedirectUrlBuilder = async (
   codeVerifier
 ) => {
   const url = new URL(
-    "/OAuth/Authorization/RefreshPublic",
+    `${envSettings.oAuthPrefix}/Authorization/RefreshPublic`,
     client.settings.server
   );
 
