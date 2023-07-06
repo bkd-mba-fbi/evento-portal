@@ -53,7 +53,7 @@ export function resetAllTokens(): void {
 }
 
 export function storeLocale(locale: string) {
-  localStorage.setItem(LOCALE_KEY, `"${locale}"`);
+  localStorage.setItem(LOCALE_KEY, locale);
 }
 
 ///// sessionStorage /////

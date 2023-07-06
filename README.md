@@ -24,19 +24,22 @@ Download the [latest build](https://bkd-mba-fbi.github.io/evento-portal/evento-p
 - **Modules** \
   The _apps_ may consist of multiple _modules_ like _presence control_ or _tests_ that are individually integrated in the _Evento Portal_'s navigation.
 
-## App Integration
+## App Integration/Evento Portal API
 
-A static build of the _apps_ is committed to this repository in the `public/apps/` directory. The _Evento Portal_ loads the _apps_ in an `<iframe>` to ensure a separation of the runtime environment and a proper cleanup when switching _apps_. The `public/scripts/iframe.js` script has to be included in an _app_'s `index.html` to setup communication between portal & iframe.
+A static build of the _apps_ is committed to this repository in the `public/apps/` directory. The _Evento Portal_ loads the _apps_ in an `<iframe>` to ensure a separation of the runtime environment, a proper cleanup when switching _apps_ and no memory leaks. The `public/scripts/iframe.js` script has to be included in an _app_'s `index.html` to setup communication between portal & iframe.
+
+_Apps_ can use client-side hash-routing, that means using the [hash part](https://developer.mozilla.org/en-US/docs/Web/API/URL/hash) of the URL to store application state. The _Evento Portal_ ensures, that the hash part is mapped from the `<iframe>`'s URL to the browser URL and vice versa.
 
 Furthemore an _app_ can rely on the following information that is provided by the _Evento Portal_:
 
-- **Access token**: Can be read from `sessionStorage.get("CLX.LoginToken")`. For backwards compatibility this value is also available from `localStorage.get("CLX.LoginToken")`, but _apps_ should always use the sessionStorage value to avoid troubles when multiple browser tabs are involved.
-- **Token expiration**: Can be read from `sessionStorage.get("CLX.TokenExpire")`.
-- **User's locale**: Can be read from the document's `lang` attribute, from `localStorage.get("uiCulture")` or from the token's `culture_info` property.
+| What                             | Where                                                                                                                                       | Note                                                                                                                                                             |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Access token                     | `sessionStorage.getItem("CLX.LoginToken")`                                                                                                  | Quoted string (`"ey..."`)                                                                                                                                        |
+| Access token (legacy)            | `localStorage.getItem("CLX.LoginToken")`                                                                                                    | Quoted string (`"ey..."`). Should not be used since there are issues if the user opens diffent _apps_ in various tabs. Read value from `sessionStorage` instead. |
+| Access token expiration (legacy) | `localStorage.getItem("CLX.TokenExpire")`                                                                                                   | Unix timestamp in milliseconds when access token expires as string.                                                                                              |
+| User's locale                    | • `localStorage.getItem("uiCulture")`<br>• Document's `lang` attribute (`<html lang="de-CH">`)<br>• `culture_info` property in access token | String of user's locale such as `de-CH` or `fr-CH`                                                                                                               |
 
-The _apps_ expect the values of `CLX.LoginToken` and `uiCulture` to be stored in quotation marks in the session- and localStorage.
-
-Note that _apps_ should only read, never update the provided values in session- or localStorage.
+Note: _Apps_ should only read, never update the provided values in session- or localStorage.
 
 ## Getting Started
 
