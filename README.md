@@ -31,7 +31,10 @@ A static build of the _apps_ is committed to this repository in the `public/apps
 Furthemore an _app_ can rely on the following information that is provided by the _Evento Portal_:
 
 - **Access token**: Can be read from `sessionStorage.get("CLX.LoginToken")`. For backwards compatibility this value is also available from `localStorage.get("CLX.LoginToken")`, but _apps_ should always use the sessionStorage value to avoid troubles when multiple browser tabs are involved.
+- **Token expiration**: Can be read from `sessionStorage.get("CLX.TokenExpire")`.
 - **User's locale**: Can be read from the document's `lang` attribute, from `localStorage.get("uiCulture")` or from the token's `culture_info` property.
+
+The _apps_ expect the values of `CLX.LoginToken` and `uiCulture` to be stored in quotation marks in the session- and localStorage.
 
 Note that _apps_ should only read, never update the provided values in session- or localStorage.
 

@@ -139,7 +139,7 @@ export const settings: Settings = {
     },
     {
       key: "noteneingabe",
-      scope: "Public",
+      scope: "Tutoring",
       root: "apps/Noteneingabe/index.html",
       heading: false,
     },
@@ -156,7 +156,7 @@ export const settings: Settings = {
     return {
       key: "photoList",
       label: msg("Fotoliste"),
-      allowedRolesOrPermissions: ["PersonRight"],
+      allowedRolesOrPermissions: ["TeacherRole"],
       deniedInstanceIds: null,
       appKey: "fotoliste",
       appPath: "#/",
@@ -166,7 +166,7 @@ export const settings: Settings = {
     return {
       key: "inputGrades",
       label: msg("Noteneingabe"),
-      allowedRolesOrPermissions: null,
+      allowedRolesOrPermissions: ["TeacherRole"],
       deniedInstanceIds: null,
       appKey: "noteneingabe",
       appPath: "#/",
