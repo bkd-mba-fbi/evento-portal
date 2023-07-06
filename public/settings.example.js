@@ -15,7 +15,7 @@ window.eventoPortal = {
     /**
      * Base URL of the OAuth provider
      */
-    oAuthServer: "https://eventotest.api/OAuth",
+    oAuthServer: "https://eventotest.api",
 
     /**
      * The OAuth client ID
