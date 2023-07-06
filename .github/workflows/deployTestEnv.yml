@@ -28,3 +28,9 @@ jobs:
         cp README.md dist && cp -r doc dist
         sed -i "s/example/schoolWeb/"
         sed -i "s/eventotest.api/eventoapp-test.erz.be.ch/" dist/settings.example.js > dist/settings.js
+    
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+          folder: dist 
+          target-folder: test
