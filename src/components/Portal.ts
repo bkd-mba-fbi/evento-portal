@@ -136,6 +136,11 @@ export class Portal extends LitElement {
         updateHash(getHash(url), true);
         break;
       }
+      case "bkdAppHashChange": {
+        const { url } = data;
+        updateHash(getHash(url));
+        break;
+      }
     }
   };
 

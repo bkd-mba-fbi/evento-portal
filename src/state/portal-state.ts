@@ -205,8 +205,8 @@ export class PortalState extends State {
         // Consume `initialAppPath`
         this.appPath = this.initialAppPath;
 
-        // Make sure we are still on on the same app path, if it has
-        // been changed from loading the dashboard
+        // Make sure we are still on the same app path, if it has been
+        // changed from loading the dashboard
         const url = new URL(document.location.href);
         url.hash = this.appPath;
         history.replaceState({}, "", url);
