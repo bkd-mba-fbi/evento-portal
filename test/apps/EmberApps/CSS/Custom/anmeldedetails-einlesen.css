@@ -1,0 +1,83 @@
+/* overwrite main.css so the height of the textarea isn't always 5rem */
+.readSubscriptionDetails textarea {
+    height: auto !important;
+    resize: vertical;
+}
+
+/* style the table */
+.readSubscriptionDetails td:empty::before {
+    content: '-';
+    display: block;
+    width: 100%;
+    text-align: center; 
+}
+
+.readSubscriptionDetails td, .readSubscriptionDetails th {
+    padding: 0.5rem !important;
+}
+
+.readSubscriptionDetails .input-colum {
+    font-variant-caps: all-petite-caps;
+}
+
+/* loadinganimation */
+.readSubscriptionDetails .loadingAnimation {
+    margin: auto;
+}
+
+/* center text */
+.readSubscriptionDetails .center-text {
+    text-align: center;
+}
+
+/* show the default cursor for disabled links */
+.readSubscriptionDetails a.disabled {
+    cursor: default;
+}
+
+/* errors */
+.readSubscriptionDetails .textarea--error {
+    outline-color: red;
+    border-color: red;
+}
+
+.readSubscriptionDetails .error {
+    color: red
+}
+
+/* vertically center the info icons */
+.readSubscriptionDetails .dialogIcon > svg {
+    vertical-align: middle;
+}
+
+/* for the list of the excelfields */
+.readSubscriptionDetails pre {
+    background-color: white;
+    margin: 0.8rem 0 0 0;
+    padding: 0.6rem;
+    border: 1px solid darkgray;
+}
+
+/* main.css styles buttons with the disabled attribute
+   but not elements with the disabled class */
+.readSubscriptionDetails button.disabled * {
+    stroke: #aaa !important;
+    fill: #aaa !important;
+    color: #aaa !important;
+}
+
+/* navigation styling */
+.readSubscriptionDetails .dialogBody a {
+    color: #666;
+    font-weight: 400;
+}
+
+
+.readSubscriptionDetails .dialogBody a.active {
+    font-weight: 600;
+}
+
+/* by default the loadingAnimation is too high */
+.readSubscriptionDetails .loadingAnimation {
+    min-height: auto; 
+}
