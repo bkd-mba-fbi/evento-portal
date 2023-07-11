@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * This script is executed within the apps' iframe and allows to setup
  * aspects that have to be controlled from within the iframe.
@@ -5,24 +7,102 @@
 
 ///// iframe resizing /////
 
-/*
- * Observes the size of the HTML element and triggers a message with the new height if the size changes.
- * Can be used to dynamically adjust the height of an iframe.
+/**
+ * An array to track the absolute positioned elements
+ *
+ * @type {Array<Node>}
+ */
+let positionedNodes = [];
+
+/**
+ * Observes the size of the HTML element and triggers a message with
+ * the new height if the size changes. The parent window will then
+ * dynamically adjust the height of the iframe.
  */
 const resizeObserver = new ResizeObserver((entries) => {
   for (const entry of entries) {
     const height = entry.contentBoxSize
       ? entry.contentBoxSize[0].blockSize
       : entry.contentRect.height;
-    parent.window.postMessage(
-      { type: "bkdAppResize", height },
-      window.parent.origin
-    );
+    postAppResize(height);
   }
 });
 
+/**
+ * Observes absolute positioned elements that are added/removed
+ * from/to the DOM and triggers a message with the new height. The
+ * parent window will then dynamically adjust the height of the
+ * iframe.
+ */
+const mutationObserver = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    mutation.addedNodes.forEach((node) => {
+      if (
+        node instanceof HTMLElement &&
+        (node.style?.position === "absolute" ||
+          node.style?.position === "fixed" ||
+          node.style?.position === "sticky")
+      ) {
+        positionedNodes.push(node);
+        postAppResize();
+      }
+    });
+
+    mutation.removedNodes.forEach((node) => {
+      const index = positionedNodes.findIndex((n) => n === node);
+      if (index >= 0) {
+        positionedNodes = positionedNodes.splice(index, 1);
+        postAppResize();
+      }
+    });
+  });
+});
+
+/**
+ * Notify the parent window that the iframe should be resized, either
+ * to the body height, or to the lowest bottom of any absolute
+ * positioned element.
+ *
+ * @param {number=} height
+ * @returns {void}
+ */
+function postAppResize(height) {
+  const viewportHeight =
+    height ?? document.documentElement.getBoundingClientRect().height;
+  const maxBottom = getMaxPositionedBottom();
+
+  parent.window.postMessage(
+    {
+      type: "bkdAppResize",
+      height: Math.max(maxBottom, viewportHeight),
+    },
+    window.parent.origin
+  );
+}
+
+/**
+ * @returns {number}
+ */
+function getMaxPositionedBottom() {
+  return positionedNodes.reduce((maxBottom, node) => {
+    const nodeBottom =
+      node instanceof HTMLElement
+        ? node.getBoundingClientRect().top + node.clientHeight
+        : 0;
+    return Math.max(maxBottom, nodeBottom);
+  }, 0);
+}
+
 window.onload = () => {
   resizeObserver.observe(document.documentElement);
+
+  const body = document.querySelector("body");
+  if (body) {
+    mutationObserver.observe(body, {
+      subtree: true,
+      childList: true,
+    });
+  }
 };
 
 ///// HTML lang attribute updating /////
