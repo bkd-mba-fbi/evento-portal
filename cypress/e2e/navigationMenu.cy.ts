@@ -153,11 +153,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", ["Kurse und Veranstaltungen"]);
 
-        expectGroupItems("Aus-/Weiterbildungen", [
-          "Absenzen",
-          "Noten",
-          "Stundenplan",
-        ]);
+        expectGroupItems("Aus-/Weiterbildungen", ["Absenzen", "Noten"]);
       });
     });
   });
