@@ -149,11 +149,9 @@ describe("Navigation Menu", () => {
       cy.get("bkd-mobile-nav").within((mobileMenu) => {
         cy.wrap(mobileMenu).should("be.visible");
 
-        expectGroups(["Angebote", "Aus-/Weiterbildungen"]);
+        expectGroups(["Aus-/Weiterbildungen", "Angebote"]);
 
-        expectGroupItems("Angebote", [
-          "Kurse und Veranstaltungen"
-        ]);
+        expectGroupItems("Angebote", ["Kurse und Veranstaltungen"]);
 
         expectGroupItems("Aus-/Weiterbildungen", [
           "Absenzen",
@@ -194,7 +192,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", [
           "Kurse und Veranstaltungen",
-          "Schulinterne Weiterbildung"
+          "Schulinterne Weiterbildung",
         ]);
       });
     });
@@ -225,7 +223,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", [
           "Kurse und Veranstaltungen",
-          "Schulinterne Weiterbildung"
+          "Schulinterne Weiterbildung",
         ]);
       });
     });
@@ -253,7 +251,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", [
           "Kurse und Veranstaltungen",
-          "Schulinterne Weiterbildung"
+          "Schulinterne Weiterbildung",
         ]);
       });
     });
@@ -276,7 +274,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", [
           "Kurse und Veranstaltungen",
-          "Schulinterne Weiterbildung"
+          "Schulinterne Weiterbildung",
         ]);
 
         expectGroupItems("Administration", [
@@ -301,9 +299,7 @@ describe("Navigation Menu", () => {
 
         expectGroups(["Angebote", "Administration"]);
 
-        expectGroupItems("Angebote", [
-          "Kurse und Veranstaltungen"
-        ]);
+        expectGroupItems("Angebote", ["Kurse und Veranstaltungen"]);
 
         expectGroupItems("Administration", [
           "Personen und Institutionen suchen",
@@ -331,9 +327,7 @@ describe("Navigation Menu", () => {
 
         expectGroups(["Angebote", "Administration"]);
 
-        expectGroupItems("Angebote", [
-          "Kurse und Veranstaltungen"
-        ]);
+        expectGroupItems("Angebote", ["Kurse und Veranstaltungen"]);
 
         expectGroupItems("Administration", ["Anmeldedetails einlesen"]);
       });
@@ -358,9 +352,7 @@ describe("Navigation Menu", () => {
 
         expectGroups(["Angebote", "Administration"]);
 
-        expectGroupItems("Angebote", [
-          "Kurse und Veranstaltungen"
-        ]);
+        expectGroupItems("Angebote", ["Kurse und Veranstaltungen"]);
 
         expectGroupItems("Administration", ["Anmeldedetails einlesen"]);
       });
