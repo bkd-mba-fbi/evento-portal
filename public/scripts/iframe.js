@@ -37,12 +37,7 @@ const resizeObserver = new ResizeObserver((entries) => {
 const mutationObserver = new MutationObserver((mutations) => {
   mutations.forEach((mutation) => {
     mutation.addedNodes.forEach((node) => {
-      if (
-        node instanceof HTMLElement &&
-        (node.style?.position === "absolute" ||
-          node.style?.position === "fixed" ||
-          node.style?.position === "sticky")
-      ) {
+      if (isAbsolutePositioned(node)) {
         positionedNodes.push(node);
         postAppResize();
       }
@@ -57,6 +52,26 @@ const mutationObserver = new MutationObserver((mutations) => {
     });
   });
 });
+
+/**
+ * @param {Node} node
+ * @returns {boolean}
+ */
+function isAbsolutePositioned(node) {
+  if (!(node instanceof HTMLElement)) return false;
+
+  // For some nodes we have to consider the computed style to get the
+  // correct position value, but to avoid any performance issues we
+  // only do this for the nodes where it is a problem.
+  const position =
+    node.nodeName === "NG-DROPDOWN-PANEL"
+      ? getComputedStyle(node).position
+      : node.style?.position;
+
+  return (
+    position === "absolute" || position === "fixed" || position === "sticky"
+  );
+}
 
 /**
  * Notify the parent window that the iframe should be resized, either
