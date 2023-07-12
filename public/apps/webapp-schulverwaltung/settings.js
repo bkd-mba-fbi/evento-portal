@@ -210,7 +210,7 @@ window.schulverwaltung.settings = {
     // The application will replace the placeholder ':id' with the
     // corresponding event id
     eventdetail: "/?module=photoList#/:id",
-    evaluation: "/?module=inputGrades#/:id",
+    evaluation: "/?module=inputGrades#/grading/:id",
 
     // Only events with a status id in the following list are fetched
     statusfilter:
