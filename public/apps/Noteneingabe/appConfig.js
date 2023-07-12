@@ -8,7 +8,7 @@
         // API base URL without trailing slash
         apiUrl: window.parent.eventoPortal.settings.apiServer,
         // base Url of the web application without trailing slash (also the redirect url for public clients)
-        webBaseUrl:  '../',
+        webBaseUrl:  '.',
         // url to a page that handles login without trailing slash. Provide a value here, if you are not using
         // CLX.Evento OAuth Server for Authentication, but a login form on your website
         loginUrl: '../Evt_Pages/Login.aspx',

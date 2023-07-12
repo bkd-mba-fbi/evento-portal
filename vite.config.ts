@@ -8,15 +8,20 @@ import { defineConfig } from "vite";
 const EventoEmberAppsCasePlugin = {
   name: "evento-ember-apps-case",
   configureServer(server) {
-    server.middlewares.use("/apps/EmberApps", (req, res, next) => {
-      req.url = req.url
-        .replace("components", "Components")
-        .replace("controllers", "Controllers")
-        .replace("templates", "Templates")
-        .replace("views", "Views")
-        .replace("//JSModules", "");
-      next();
-    });
+    server.middlewares
+      .use("/apps/EmberApps", (req, res, next) => {
+        req.url = req.url
+          .replace("components", "Components")
+          .replace("controllers", "Controllers")
+          .replace("templates", "Templates")
+          .replace("views", "Views")
+          .replace("//JSModules", "");
+        next();
+      })
+      .use("/apps/Noteneingabe", (req, res, next) => {
+        req.url = req.url.replace("components", "Components");
+        next();
+      });
   },
 };
 
