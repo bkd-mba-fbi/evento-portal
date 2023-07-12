@@ -71,10 +71,11 @@ function postAppResize(height) {
     height ?? document.documentElement.getBoundingClientRect().height;
   const maxBottom = getMaxPositionedBottom();
 
+  const tolerance = 5; // Add some tolerance to show complete content of iframe and prevent scrollbar
   parent.window.postMessage(
     {
       type: "bkdAppResize",
-      height: Math.max(maxBottom, viewportHeight),
+      height: Math.max(maxBottom, viewportHeight) + tolerance,
     },
     window.parent.origin
   );
