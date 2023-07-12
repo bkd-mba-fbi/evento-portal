@@ -51,7 +51,7 @@ const mutationObserver = new MutationObserver((mutations) => {
     mutation.removedNodes.forEach((node) => {
       const index = positionedNodes.findIndex((n) => n === node);
       if (index >= 0) {
-        positionedNodes = positionedNodes.splice(index, 1);
+        positionedNodes.splice(index, 1);
         postAppResize();
       }
     });
