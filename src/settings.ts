@@ -269,6 +269,35 @@ export const settings: Settings = {
         ],
       },
       {
+        label: msg("Aus-/Weiterbildungen"),
+        items: [
+          {
+            key: "myAbsences",
+            label: msg("Absenzen"),
+            allowedRolesOrPermissions: ["StudentRole"],
+            deniedInstanceIds: null,
+            appKey: "schulverwaltung",
+            appPath: "#/my-absences",
+          },
+          {
+            key: "myGrades",
+            label: msg("Noten"),
+            allowedRolesOrPermissions: ["StudentRole"],
+            deniedInstanceIds: null,
+            appKey: "schulverwaltung",
+            appPath: "#/my-grades",
+          },
+          {
+            key: "schedule",
+            label: msg("Stundenplan"),
+            allowedRolesOrPermissions: ["StudentRole"],
+            deniedInstanceIds: null,
+            appKey: "schulverwaltung",
+            appPath: "#/schedule", // TODO not implemented yet
+          },
+        ],
+      },
+      {
         label: msg("Angebote"),
         items: [
           {
@@ -299,35 +328,6 @@ export const settings: Settings = {
             deniedInstanceIds: null,
             appKey: "reservation",
             appPath: "#/",
-          },
-        ],
-      },
-      {
-        label: msg("Aus-/Weiterbildungen"),
-        items: [
-          {
-            key: "myAbsences",
-            label: msg("Absenzen"),
-            allowedRolesOrPermissions: ["StudentRole"],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/my-absences",
-          },
-          {
-            key: "myGrades",
-            label: msg("Noten"),
-            allowedRolesOrPermissions: ["StudentRole"],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/my-grades",
-          },
-          {
-            key: "schedule",
-            label: msg("Stundenplan"),
-            allowedRolesOrPermissions: ["StudentRole"],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/schedule", // TODO not implemented yet
           },
         ],
       },
