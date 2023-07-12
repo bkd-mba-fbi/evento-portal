@@ -218,6 +218,14 @@ window.schulverwaltung.settings = {
   },
 
   /**
+   * Dashboard
+   */
+  dashboard: {
+    substitutionsAdminLink: '/?module=substitutionsAdmin',
+  },
+
+
+  /**
    * My absences
    */
   // Instance IDs of schools where students cannot report absences after lessons have started

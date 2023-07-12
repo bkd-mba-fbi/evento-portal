@@ -287,14 +287,6 @@ export const settings: Settings = {
             appKey: "schulverwaltung",
             appPath: "#/my-grades",
           },
-          {
-            key: "schedule",
-            label: msg("Stundenplan"),
-            allowedRolesOrPermissions: ["StudentRole"],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/schedule", // TODO not implemented yet
-          },
         ],
       },
       {
