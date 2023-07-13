@@ -2,7 +2,7 @@ name: Deploy Test Env 🚀
 
 on:
   push:
-    branches: [test, main]
+    branches: [test, main, feature-Deploy-Test-Env-main]
 
 jobs:
   build:
@@ -31,6 +31,11 @@ jobs:
           sed -i "s/example/schoolWeb/" dist/settings.example.js
           sed -i "s/eventotest.api/eventoapp-test.erz.be.ch/" dist/settings.example.js
           mv  dist/settings.example.js  dist/settings.js
+          mv dist evento-portal
+          mkdir dist
+          mv evento-portal dist
+          cd dist && zip --recurse-paths evento-portal.zip *
+          sleep 20
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
