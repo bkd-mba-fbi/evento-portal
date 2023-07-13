@@ -37,12 +37,7 @@ const resizeObserver = new ResizeObserver((entries) => {
 const mutationObserver = new MutationObserver((mutations) => {
   mutations.forEach((mutation) => {
     mutation.addedNodes.forEach((node) => {
-      if (
-        node instanceof HTMLElement &&
-        (node.style?.position === "absolute" ||
-          node.style?.position === "fixed" ||
-          node.style?.position === "sticky")
-      ) {
+      if (isAbsolutePositioned(node)) {
         positionedNodes.push(node);
         postAppResize();
       }
@@ -51,12 +46,32 @@ const mutationObserver = new MutationObserver((mutations) => {
     mutation.removedNodes.forEach((node) => {
       const index = positionedNodes.findIndex((n) => n === node);
       if (index >= 0) {
-        positionedNodes = positionedNodes.splice(index, 1);
+        positionedNodes.splice(index, 1);
         postAppResize();
       }
     });
   });
 });
+
+/**
+ * @param {Node} node
+ * @returns {boolean}
+ */
+function isAbsolutePositioned(node) {
+  if (!(node instanceof HTMLElement)) return false;
+
+  // For some nodes we have to consider the computed style to get the
+  // correct position value, but to avoid any performance issues we
+  // only do this for the nodes where it is a problem.
+  const position =
+    node.nodeName === "NG-DROPDOWN-PANEL"
+      ? getComputedStyle(node).position
+      : node.style?.position;
+
+  return (
+    position === "absolute" || position === "fixed" || position === "sticky"
+  );
+}
 
 /**
  * Notify the parent window that the iframe should be resized, either
@@ -71,10 +86,11 @@ function postAppResize(height) {
     height ?? document.documentElement.getBoundingClientRect().height;
   const maxBottom = getMaxPositionedBottom();
 
+  const tolerance = 5; // Add some tolerance to show complete content of iframe and prevent scrollbar
   parent.window.postMessage(
     {
       type: "bkdAppResize",
-      height: Math.max(maxBottom, viewportHeight),
+      height: Math.max(maxBottom, viewportHeight) + tolerance,
     },
     window.parent.origin
   );
