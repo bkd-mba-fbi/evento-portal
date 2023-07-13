@@ -61,7 +61,7 @@ export class PortalState extends State {
   @property({ value: settings.navigationHome.appPath })
   appPath!: string;
 
-  initialAppPath: string | null = null;
+  actualAppPath: string | null = null;
 
   private setInitialized: () => void = () => undefined;
   private initialized = new Promise(
@@ -198,12 +198,12 @@ export class PortalState extends State {
       this.navigationGroup = group;
 
       if (
-        this.initialAppPath &&
-        this.initialAppPath !== "#" &&
-        this.initialAppPath !== "#/"
+        this.actualAppPath &&
+        this.actualAppPath !== "#" &&
+        this.actualAppPath !== "#/"
       ) {
-        // Consume `initialAppPath`
-        this.appPath = this.initialAppPath;
+        // Consume `actualAppPath`
+        this.appPath = this.actualAppPath;
 
         // Make sure we are still on the same app path, if it has been
         // changed from loading the dashboard
@@ -214,7 +214,7 @@ export class PortalState extends State {
         // Use item's app path
         this.appPath = item.appPath;
       }
-      this.initialAppPath = null; // Only relevant the first time
+      this.actualAppPath = null; // Only relevant the first time
 
       // For invalid item key's redirect to home
       if (item.key === settings.navigationHome.key && item.key !== itemKey) {
