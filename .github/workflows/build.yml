@@ -2,7 +2,7 @@ name: Build & Deployment 🚀
 
 on:
   push:
-    branches: [main, feature-Deploy-Test-Env-main]
+    branches: [main]
 
 jobs:
   build:
