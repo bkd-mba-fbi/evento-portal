@@ -21,6 +21,7 @@ import { getHash, getScopeFromUrl, updateHash } from "../utils/routing";
 import { getCurrentAccessToken } from "../utils/storage";
 import { settings } from "../settings";
 import { getInitialLocale } from "../utils/locale";
+import { getNavigationItemKey } from "../utils/navigation.ts";
 
 const oAuthClient = createOAuthClient();
 
@@ -95,7 +96,7 @@ export class Portal extends LitElement {
     // When visiting the portal anew with an app path in URL hash, set
     // this as the initial app path
     const url = new URL(location.href);
-    portalState.initialAppPath = url.hash;
+    portalState.actualAppPath = url.hash;
 
     // For subsequent hash changes, update the state
     window.addEventListener("hashchange", this.handleHashChange);
@@ -128,7 +129,13 @@ export class Portal extends LitElement {
     switch (data.type) {
       case "bkdAppPushState": {
         const url = data.args[2];
-        updateHash(getHash(url), false);
+        const hash = getHash(url);
+        updateHash(hash, false);
+        const itemKey = getNavigationItemKey(portalState.navigation, hash);
+        if (itemKey && itemKey !== portalState.navigationItemKey) {
+          portalState.actualAppPath = hash;
+          portalState.navigationItemKey = itemKey;
+        }
         break;
       }
       case "bkdAppReplaceState": {

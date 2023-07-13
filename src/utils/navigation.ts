@@ -6,6 +6,14 @@ import {
   settings,
 } from "../settings";
 
+const ungroupedNavigationItems = [
+  settings.navigationHome,
+  settings.navigationMyProfile,
+  settings.navigationMySettings,
+  settings.navigationPhotoList,
+  settings.navigationInputGrades,
+];
+
 /**
  * Returns navigation item (and its group) with given item key.
  */
@@ -13,25 +21,34 @@ export function getNavigationItem(
   navigation: Navigation,
   itemKey: string
 ): { item: NavigationItem; group: NavigationGroup | null } {
-  switch (itemKey) {
-    case settings.navigationMyProfile.key:
-      return { item: settings.navigationMyProfile, group: null };
-    case settings.navigationMySettings.key:
-      return { item: settings.navigationMySettings, group: null };
-    case settings.navigationPhotoList.key:
-      return { item: settings.navigationPhotoList, group: null };
-    case settings.navigationInputGrades.key:
-      return { item: settings.navigationInputGrades, group: null };
-    default: {
-      for (const group of navigation) {
-        const item = group.items.find(({ key }) => key === itemKey);
-        if (item) {
-          return { item, group };
-        }
-      }
-      return { item: settings.navigationHome, group: null };
-    }
+  let item = ungroupedNavigationItems.find(({ key }) => key === itemKey);
+  if (item) return { item, group: null };
+
+  for (const group of navigation) {
+    item = group.items.find(({ key }) => key === itemKey);
+    if (item) return { item, group };
   }
+
+  return { item: settings.navigationHome, group: null };
+}
+
+export function getNavigationItemKey(
+  navigation: Navigation,
+  appPath: string
+): string | null {
+  let key = ungroupedNavigationItems.find(
+    (item) => item.appPath !== "#/" && appPath.startsWith(item.appPath)
+  )?.key;
+  if (key) return key;
+
+  for (const group of navigation) {
+    key = group.items.find(
+      (item) => item.appPath !== "#/" && appPath.startsWith(item.appPath)
+    )?.key;
+    if (key) return key;
+  }
+
+  return null;
 }
 
 export function getApp(item: NavigationItem): App {
