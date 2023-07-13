@@ -31,6 +31,7 @@ jobs:
           sed -i "s/example/schoolWeb/" dist/settings.example.js
           sed -i "s/eventotest.api/eventoapp-test.erz.be.ch/" dist/settings.example.js
           mv  dist/settings.example.js  dist/settings.js
+          sleep 60
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
