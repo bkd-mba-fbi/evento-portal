@@ -2,7 +2,7 @@ name: Deploy Test Env 🚀
 
 on:
   push:
-    branches: [ test ]
+    branches: [test, main]
 
 jobs:
   build:
@@ -31,7 +31,7 @@ jobs:
           sed -i "s/example/schoolWeb/" dist/settings.example.js
           sed -i "s/eventotest.api/eventoapp-test.erz.be.ch/" dist/settings.example.js
           mv  dist/settings.example.js  dist/settings.js
-    
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
