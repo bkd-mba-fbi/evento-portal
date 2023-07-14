@@ -26,6 +26,9 @@
             //console.log(ember.$.extend(de_CH, custom_de_CH));
 
             // patch api.js
+            api.ember.getCourses = function (idEvent) {
+                return api.getEmber('Courses/'+ idEvent);
+            };
             api.ember.LegalRepresentativesByStudent = function (studentId) {
                 return api.getEmber('Students/'+ studentId + '/LegalRepresentatives');
             };
@@ -51,7 +54,6 @@
 
             // start application
             applicationHelpers.initializeApplication(function () {
-                framework.Helpers.loadCss('/CSS/Custom/fotoliste.css');
                 var appName = 'ClxApp';
                 var application = ember.Application.create(app);
                 root[appName] = application;

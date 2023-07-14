@@ -54,7 +54,7 @@ define([
 
             var getReports = api.ember.GetReports(idEvent);
             var getExcel = api.ember.GetExcel(idEvent);
-            var getEventPromise = api.ember.getEvent(idEvent);
+            var getEventPromise = api.ember.getCourses(idEvent);
             var getSubscriptionByEventPromise = api.ember.getSubscriptionByEvent(idEvent);
 
             ember.RSVP.Promise.all([getReports,getExcel]).then(function (responses) {
@@ -83,7 +83,7 @@ define([
             });
 
             ember.RSVP.Promise.all([getSubscriptionByEventPromise,getEventPromise]).then(function (responses) {
-                var subscriptionByEvent = responses[0];
+                var subscriptionByEvent = responses[0];                
 
                 if(responses[1].EventTypeId !== 1) {
                     subscriptionByEvent = subscriptionByEvent.filter(ok => ok.IsOkay === true);
@@ -99,9 +99,9 @@ define([
                 
                 event.setProperties({
                     idEvent: subscriptionByEvent[0].EventId,
-                    designation: subscriptionByEvent[0].EventDesignation + ' (' + responses[1].Number +')',
-                    leadership: responses[1].Leadership,
-                    dateString: responses[1].DateString
+                    designation: responses[1].Designation,
+                    //leadership: responses[1].Leadership,
+                    //dateString: responses[1].DateString
                 });
 
                 //console.log(event);
