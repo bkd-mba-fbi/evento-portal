@@ -10,7 +10,7 @@
     </div>
     {{else}}
     <div class="photolist__details__container">
-        <h2>{{model.student.title}}</h2>
+        <h3>{{model.student.title}}</h3>
         <table class="photolist__details__table">
             {{#each model.student.data as |property|}}
             <tr>
@@ -21,7 +21,7 @@
     </div>
     {{#if model.hasRepresentative}}
     <div class="photolist__details__container">
-        <h2>{{model.parents.title}}</h2>
+        <h3>{{model.parents.title}}</h3>
         <table class="photolist__details__table">
             {{#each model.parents.data as |property|}}
             <tr>
@@ -33,7 +33,7 @@
     {{/if}}
     {{#if model.hasApprenticeship}}
     <div class="photolist__details__container">
-        <h2>{{model.employer.title}}</h2>
+        <h3>{{model.employer.title}}</h3>
         <table class="photolist__details__table">
             {{#each model.employer.data as |property|}}
             <tr>
@@ -45,7 +45,7 @@
     {{/if}}
     {{#if model.hasSubscriptionDetails}}
     <div>
-        <h2>{{model.details.title}}</h2>
+        <h3>{{model.details.title}}</h3>
         <table class="photolist__subscriptionDeatils__table">
             <tbody>
                 {{#each model.details.data as |property|}}
