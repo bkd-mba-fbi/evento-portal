@@ -40,9 +40,6 @@ window._RoomReservationConfig = {
             if (element.href.search('bootstrap-clx.min.css') > 0) {
                 element.href = element.href.replace('bootstrap-clx.min.css','fbi.css');
             }
-            else if (element.href.search('JSModules/CSS/main.css') > 0) {
-                element.remove();
-            }
         }
 
     });
@@ -62,3 +59,5 @@ window._RoomReservationConfig = {
     },500);
 
 </script>
+<link rel="stylesheet" href="../../styles/raumreservation-override.css" />
+
