@@ -90,7 +90,7 @@ function postAppResize(height) {
   parent.window.postMessage(
     {
       type: "bkdAppResize",
-      height: Math.max(maxBottom, viewportHeight) + tolerance,
+      height: Math.max(maxBottom + tolerance, viewportHeight),
     },
     window.parent.origin
   );
