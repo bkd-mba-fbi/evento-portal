@@ -21,7 +21,7 @@ import { getHash, getScopeFromUrl, updateHash } from "../utils/routing";
 import { getCurrentAccessToken } from "../utils/storage";
 import { settings } from "../settings";
 import { getInitialLocale } from "../utils/locale";
-import { getNavigationItemKey } from "../utils/navigation.ts";
+import { getNavigationItemByAppPath } from "../utils/navigation.ts";
 
 const oAuthClient = createOAuthClient();
 
@@ -129,13 +129,7 @@ export class Portal extends LitElement {
     switch (data.type) {
       case "bkdAppPushState": {
         const url = data.args[2];
-        const hash = getHash(url);
-        updateHash(hash, false);
-        const itemKey = getNavigationItemKey(portalState.navigation, hash);
-        if (itemKey && itemKey !== portalState.navigationItemKey) {
-          portalState.actualAppPath = hash;
-          portalState.navigationItemKey = itemKey;
-        }
+        this.updateUrlAndNavigationState(url, false);
         break;
       }
       case "bkdAppReplaceState": {
@@ -150,6 +144,27 @@ export class Portal extends LitElement {
       }
     }
   };
+
+  /**
+   * When navigating between modules of the same app, be sure to update the
+   * portal URL and navigation state
+   */
+  private updateUrlAndNavigationState(url: string, replaceHash: boolean) {
+    const hash = getHash(url);
+    updateHash(hash, replaceHash);
+
+    const navigationItem = getNavigationItemByAppPath(
+      portalState.navigation,
+      hash
+    );
+    if (
+      navigationItem?.item?.key &&
+      navigationItem.item.key !== portalState.navigationItemKey
+    ) {
+      portalState.actualAppPath = hash;
+      portalState.navigationItemKey = navigationItem.item.key;
+    }
+  }
 
   /**
    * Update the iframe's appPath whenever the user changes the hash in

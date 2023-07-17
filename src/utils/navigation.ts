@@ -21,31 +21,38 @@ export function getNavigationItem(
   navigation: Navigation,
   itemKey: string
 ): { item: NavigationItem; group: NavigationGroup | null } {
-  let item = ungroupedNavigationItems.find(({ key }) => key === itemKey);
+  const navigationItem = findNavigationItem(
+    navigation,
+    ({ key }) => key === itemKey
+  );
+  return navigationItem
+    ? navigationItem
+    : { item: settings.navigationHome, group: null };
+}
+
+/**
+ * Returns navigation item (and its group) with given app path.
+ */
+export function getNavigationItemByAppPath(
+  navigation: Navigation,
+  appPath: string
+): { item: NavigationItem | null; group: NavigationGroup | null } | null {
+  return findNavigationItem(
+    navigation,
+    (item) => item.appPath !== "#/" && appPath.startsWith(item.appPath)
+  );
+}
+
+function findNavigationItem(
+  navigation: Navigation,
+  callback: (item: NavigationItem) => boolean
+): { item: NavigationItem; group: NavigationGroup | null } | null {
+  let item = ungroupedNavigationItems.find((item) => callback(item));
   if (item) return { item, group: null };
 
   for (const group of navigation) {
-    item = group.items.find(({ key }) => key === itemKey);
+    item = group.items.find((item) => callback(item));
     if (item) return { item, group };
-  }
-
-  return { item: settings.navigationHome, group: null };
-}
-
-export function getNavigationItemKey(
-  navigation: Navigation,
-  appPath: string
-): string | null {
-  let key = ungroupedNavigationItems.find(
-    (item) => item.appPath !== "#/" && appPath.startsWith(item.appPath)
-  )?.key;
-  if (key) return key;
-
-  for (const group of navigation) {
-    key = group.items.find(
-      (item) => item.appPath !== "#/" && appPath.startsWith(item.appPath)
-    )?.key;
-    if (key) return key;
   }
 
   return null;
