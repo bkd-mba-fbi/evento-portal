@@ -116,11 +116,20 @@ export class SubstitutionsToggle extends LitElement {
   }
 
   private async fetch(): Promise<void> {
-    this.availableSubstitutions = await fetchCurrentSubstitutions();
+    const currentSubstitutions = await fetchCurrentSubstitutions();
+    this.availableSubstitutions = currentSubstitutions.filter((substitution) =>
+      this.isNotInFuture(substitution)
+    );
 
     const activeId = this.getActiveSubstitutionId();
     this.activeSubstitution =
       this.availableSubstitutions.find((s) => s.Id === activeId) ?? null;
+  }
+
+  private isNotInFuture(substitution: Substitution): boolean {
+    return (
+      !!substitution.DateFrom && new Date(substitution.DateFrom) <= new Date()
+    );
   }
 
   private getActiveSubstitutionId(): number | null {
