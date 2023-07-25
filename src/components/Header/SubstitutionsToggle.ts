@@ -117,9 +117,9 @@ export class SubstitutionsToggle extends LitElement {
 
   private async fetch(): Promise<void> {
     const currentSubstitutions = await fetchCurrentSubstitutions();
-    this.availableSubstitutions = currentSubstitutions.filter((substitution) =>
-      this.isNotInFuture(substitution)
-    );
+    this.availableSubstitutions = currentSubstitutions
+      .filter((substitution) => this.isNotInFuture(substitution))
+      .sort((a, b) => a.Holder.localeCompare(b.Holder));
 
     const activeId = this.getActiveSubstitutionId();
     this.activeSubstitution =
