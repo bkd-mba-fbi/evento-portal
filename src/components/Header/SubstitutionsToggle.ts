@@ -14,6 +14,7 @@ import substitutionIcon from "../../assets/icons/substitution.svg?raw";
 import caretIcon from "../../assets/icons/caret.svg?raw";
 import closeSmallIcon from "../../assets/icons/close-small.svg?raw";
 import { submit } from "../../utils/submit";
+import { buildUrl } from "../../utils/routing.ts";
 
 @customElement("bkd-substitutions-toggle")
 @localized()
@@ -182,7 +183,7 @@ export class SubstitutionsToggle extends LitElement {
   private redirect(url: string): void {
     submit("POST", url, {
       access_token: getCurrentAccessToken() ?? "",
-      redirect_uri: location.href,
+      redirect_uri: buildUrl("home"),
     });
   }
 
