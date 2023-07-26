@@ -96,6 +96,7 @@ export class Header extends LitElement {
         .logo-caption {
           margin-top: 12px;
           font-size: 0.75rem;
+          font-weight: 400;
           line-height: 0.75rem;
           max-width: 13.125rem;
         }
