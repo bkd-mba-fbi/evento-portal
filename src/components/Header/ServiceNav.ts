@@ -1,6 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { localized } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
 import { theme } from "../../utils/theme";
 
 @customElement("bkd-service-nav")
@@ -15,10 +15,13 @@ export class ServiceNav extends LitElement {
       /* Large screen */
 
       :host {
+        margin-left: 1rem;
+      }
+
+      nav {
         display: flex;
         align-items: center;
         gap: 2.5rem;
-        margin-left: 1rem;
       }
 
       bkd-hamburger {
@@ -53,14 +56,16 @@ export class ServiceNav extends LitElement {
 
   render() {
     return html`
-      <bkd-substitutions-toggle></bkd-substitutions-toggle>
-      <erz-notifications></erz-notifications>
-      <bkd-user-settings></bkd-user-settings>
-      <bkd-language-switcher></bkd-language-switcher>
-      <bkd-hamburger
-        id="mobile-nav-toggle"
-        .open=${this.mobileNavOpen}
-      ></bkd-hamburger>
+      <nav aria-label=${msg("Servicenavigation")}>
+        <bkd-substitutions-toggle></bkd-substitutions-toggle>
+        <erz-notifications></erz-notifications>
+        <bkd-user-settings></bkd-user-settings>
+        <bkd-language-switcher></bkd-language-switcher>
+        <bkd-hamburger
+          id="mobile-nav-toggle"
+          .open=${this.mobileNavOpen}
+        ></bkd-hamburger>
+      </nav>
     `;
   }
 }
