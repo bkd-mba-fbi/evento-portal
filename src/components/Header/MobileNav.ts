@@ -32,15 +32,14 @@ export class MobileNav extends LitElement {
         padding: 1.25rem;
         left: 0;
         top: calc(100% + 1px); /* Place right below header */
-        max-height: calc(100vh - 100% - 1px);
-
+        height: calc(100vh - 100% - 1px);
         background-color: var(--bkd-func-bg-white);
-        box-shadow: 0 2px 6px -1px var(--bkd-mobile-nav-shadow);
       }
 
       nav {
+        height: 100%;
         display: flex;
-        gap: 5rem;
+        justify-content: space-between;
         flex-direction: column;
       }
 
