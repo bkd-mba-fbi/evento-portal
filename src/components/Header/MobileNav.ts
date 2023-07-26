@@ -232,7 +232,7 @@ export class MobileNav extends LitElement {
           @click=${(e: MouseEvent) => this.handleGroupClick(e, group)}
         >
           <label> ${group.label} </label>
-          ${unsafeHTML(open ? arrowUpIcon : arrowDownIcon)}
+          ${unsafeHTML(open ? arrowDownIcon : arrowUpIcon)}
         </button>
         <ul class="items">
           ${map(group.items, this.renderNavItem.bind(this))}
