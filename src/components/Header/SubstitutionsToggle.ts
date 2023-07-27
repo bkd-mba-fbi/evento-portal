@@ -14,6 +14,7 @@ import substitutionIcon from "../../assets/icons/substitution.svg?raw";
 import caretIcon from "../../assets/icons/caret.svg?raw";
 import closeSmallIcon from "../../assets/icons/close-small.svg?raw";
 import { submit } from "../../utils/submit";
+import { buildUrl } from "../../utils/routing.ts";
 
 @customElement("bkd-substitutions-toggle")
 @localized()
@@ -116,11 +117,20 @@ export class SubstitutionsToggle extends LitElement {
   }
 
   private async fetch(): Promise<void> {
-    this.availableSubstitutions = await fetchCurrentSubstitutions();
+    const currentSubstitutions = await fetchCurrentSubstitutions();
+    this.availableSubstitutions = currentSubstitutions
+      .filter((substitution) => this.isNotInFuture(substitution))
+      .sort((a, b) => a.Holder.localeCompare(b.Holder));
 
     const activeId = this.getActiveSubstitutionId();
     this.activeSubstitution =
       this.availableSubstitutions.find((s) => s.Id === activeId) ?? null;
+  }
+
+  private isNotInFuture(substitution: Substitution): boolean {
+    return (
+      !!substitution.DateFrom && new Date(substitution.DateFrom) <= new Date()
+    );
   }
 
   private getActiveSubstitutionId(): number | null {
@@ -173,7 +183,7 @@ export class SubstitutionsToggle extends LitElement {
   private redirect(url: string): void {
     submit("POST", url, {
       access_token: getCurrentAccessToken() ?? "",
-      redirect_uri: location.href,
+      redirect_uri: buildUrl("home"),
     });
   }
 

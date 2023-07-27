@@ -51,7 +51,8 @@ describe("Navigation Menu", () => {
                 "Präsenzkontrolle",
                 "Aktuelle Fächer",
                 "Tests und Bewertung",
-                "Stellvertretung",
+                "Stellvertretung erfassen",
+                "Stellvertretung ausüben",
               ]);
             });
 
@@ -177,7 +178,8 @@ describe("Navigation Menu", () => {
           "Präsenzkontrolle",
           "Aktuelle Fächer",
           "Tests und Bewertung",
-          "Stellvertretung",
+          "Stellvertretung erfassen",
+          "Stellvertretung ausüben",
         ]);
 
         expectGroupItems("Absenzen", [
