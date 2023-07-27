@@ -1,6 +1,6 @@
 import { css, html, LitElement, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { localized } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
 import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
@@ -32,12 +32,15 @@ export class MobileNav extends LitElement {
         padding: 1.25rem;
         left: 0;
         top: calc(100% + 1px); /* Place right below header */
-        max-height: calc(100vh - 100% - 1px);
-        display: flex;
-        gap: 5rem;
-        flex-direction: column;
+        height: calc(100vh - 100% - 1px);
         background-color: var(--bkd-func-bg-white);
-        box-shadow: 0 2px 6px -1px var(--bkd-mobile-nav-shadow);
+      }
+
+      nav {
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
       }
 
       a {
@@ -228,7 +231,7 @@ export class MobileNav extends LitElement {
           @click=${(e: MouseEvent) => this.handleGroupClick(e, group)}
         >
           <label> ${group.label} </label>
-          ${unsafeHTML(open ? arrowUpIcon : arrowDownIcon)}
+          ${unsafeHTML(open ? arrowDownIcon : arrowUpIcon)}
         </button>
         <ul class="items">
           ${map(group.items, this.renderNavItem.bind(this))}
@@ -273,18 +276,20 @@ export class MobileNav extends LitElement {
 
   render() {
     return html`
-      <ul class="nav">
-        ${map(portalState.navigation, this.renderGroup.bind(this))}
-      </ul>
-      <div class="service-nav">
-        <ul>
-          ${map(
-            userSettingsItems(portalState.locale),
-            this.renderSettingsItem.bind(this)
-          )}
+      <nav aria-label=${msg("Mobile Navigation")}>
+        <ul class="nav">
+          ${map(portalState.navigation, this.renderGroup.bind(this))}
         </ul>
-        <bkd-language-switcher></bkd-language-switcher>
-      </div>
+        <div class="service-nav">
+          <ul>
+            ${map(
+              userSettingsItems(portalState.locale),
+              this.renderSettingsItem.bind(this)
+            )}
+          </ul>
+          <bkd-language-switcher></bkd-language-switcher>
+        </div>
+      </nav>
     `;
   }
 }
