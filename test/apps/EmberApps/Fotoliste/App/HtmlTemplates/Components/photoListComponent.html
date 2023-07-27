@@ -1,0 +1,95 @@
+{{#if event.isLoading}}
+<div class="d-flex justify-content-center pt-4">
+    <div class="spinner-border" style="width:3rem; height: 3rem;" role="status">
+        <span class="sr-only"></span>
+    </div>
+</div>
+{{else}}
+<h1 class="photolist__header photolist__top">{{event.designation}}</h1>
+<div class="photolist__header">{{event.leadership}}</div>
+<div class="photolist__header">{{event.dateString}}</div>
+
+<div class="photolist-email-document">
+    <div class="photolist-emailTo document">
+        <table>
+            <tr>
+                <td class="iconwidth">
+                    <span class="material-icons-outlined">email</span>
+                </td>
+                <td>
+                    <a href="{{event.emailsToStudents}}">{{translate 'emailsToStudents'}}</a>  <br>      
+                </td>
+            </tr>
+            <!--
+            <tr>
+                <td></td>
+                <td>
+                    <a href="" {{action "representativeMailTo"}}>representativeMailTo</a> 
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <a href="" {{action "jobTrainerMailTo"}}>jobTrainerMailTo</a> 
+                </td>
+            </tr>-->
+               
+        </table>
+    </div>
+    {{#if event.noReports}}
+    {{else}}
+    <div class="photolist-documents document">
+        <table>
+            {{#each event.reports as |reports index|}}
+            <tr>
+                <td class="iconwidth">
+                    <span class="material-icons-outlined">
+                        picture_as_pdf
+                        </span>
+                </td>
+                <td>   
+                    <a href="{{reports.HRef}}" target="_blank"> {{reports.Title}}</a> <br>
+                </td>
+            </tr>
+            <!--
+            <tr>
+                <td></td>
+                <td>   
+                    <a href="{{reports.HRef}}" target="_blank"> {{reports.Title}}</a> <br>
+                </td>
+            </tr> 
+            -->
+            {{/each}}
+
+        </table> 
+    </div>
+    {{/if}}
+    {{#if event.excel}}
+    <div id="ExcelDownload" class="photolist-documents document">
+    <table>
+        {{#each event.excel as |excel index|}}
+            <tr>
+                <td class="iconwidth">
+                    <span class="material-icons-outlined">
+                        file_download
+                        </span>
+                </td>
+                <td id="jsExcelDownload">  
+                    <a href="{{excel.HRef}}"> {{excel.Title}}</a>
+                </td>
+            </tr>
+            {{/each}}
+        </table> 
+    </div>
+    {{/if}}
+</div>
+<div class="photolist__container">
+    {{yield}}
+    {{#each event.students as |student index|}}
+    {{#link-to "photoDetail" student.idPerson class=(concat "photolist__student" " " (if (endOfLine index columnCount) "end-of-line"))}}
+        {{student-photo student=student}}
+        <span class="photolist__student__label" title={{student.fullname}}>{{student.fullname}}</span>
+    {{/link-to}}
+    {{/each}}
+</div>
+{{/if}}
