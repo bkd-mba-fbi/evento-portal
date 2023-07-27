@@ -33,6 +33,7 @@ export type Substitution = Readonly<{
   Id: number;
   HolderId: number;
   Holder: string;
+  DateFrom: string;
   SubstituteId: number;
   Substitute: string;
 }>;
