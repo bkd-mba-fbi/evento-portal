@@ -70,10 +70,6 @@
   <source>Noten</source>
   <target state="translated">Notes</target>
 </trans-unit>
-<trans-unit id="s364e8548a3193773">
-  <source>Stundenplan</source>
-  <target state="translated">Horaire</target>
-</trans-unit>
 <trans-unit id="saac6cc64d5c17b4f">
   <source>Administration</source>
   <target state="translated">Administration</target>
@@ -139,6 +135,15 @@
 </trans-unit>
 <trans-unit id="sde99b4c098556d69">
   <source>Stellvertretung aufheben</source>
+</trans-unit>
+<trans-unit id="s918230658d993873">
+  <source>Mobile Navigation</source>
+</trans-unit>
+<trans-unit id="sbd4575edfbf5c84f">
+  <source>Hauptnavigation</source>
+</trans-unit>
+<trans-unit id="sd10fcf5b06af72f6">
+  <source>Servicenavigation</source>
 </trans-unit>
 </body>
 </file>

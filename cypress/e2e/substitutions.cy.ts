@@ -8,6 +8,7 @@ describe("Substitutions", () => {
           Id: 1,
           Holder: "Paul McCartney",
           HolderId: 10,
+          DateFrom: "2022-05-22T00:00:00",
           Substitution: "Billy Preston",
           SubstitutionId: 20,
         },
@@ -15,6 +16,7 @@ describe("Substitutions", () => {
           Id: 2,
           Holder: "John Lennon",
           HolderId: 11,
+          DateFrom: "2022-05-29T00:00:00",
           Substitution: "Billy Preston",
           SubstitutionId: 20,
         },
@@ -22,6 +24,7 @@ describe("Substitutions", () => {
           Id: 3,
           Holder: "George Harrison",
           HolderId: 12,
+          DateFrom: "2022-06-04T00:00:00",
           Substitution: "Billy Preston",
           SubstitutionId: 20,
         },
@@ -29,12 +32,23 @@ describe("Substitutions", () => {
           Id: 4,
           Holder: "Ringo Starr",
           HolderId: 13,
+          DateFrom: "2022-07-24T00:00:00", // Start date today
+          Substitution: "Billy Preston",
+          SubstitutionId: 20,
+        },
+        {
+          Id: 5,
+          Holder: "Pete Best",
+          HolderId: 14,
+          DateFrom: "2022-08-24T00:00:00", // Start date in the future
           Substitution: "Billy Preston",
           SubstitutionId: 20,
         },
       ]
     );
   }
+
+  const now = new Date(2022, 6, 24);
 
   beforeEach(() => {
     cy.intercept(
@@ -56,6 +70,8 @@ describe("Substitutions", () => {
         })
         .as("stopRequest")
     );
+
+    cy.clock(now);
   });
 
   describe("desktop", () => {
@@ -84,6 +100,7 @@ describe("Substitutions", () => {
           cy.contains("a", "John Lennon").should("be.visible");
           cy.contains("a", "George Harrison").should("be.visible");
           cy.contains("a", "Ringo Starr").should("be.visible");
+          cy.contains("a", "Pete Best").should("not.exist");
 
           cy.get(".dropdown-menu-header").should("not.be.visible");
           cy.contains("button", "Stellvertretung aufheben").should("not.exist");
@@ -148,6 +165,7 @@ describe("Substitutions", () => {
           cy.contains("a", "John Lennon").should("be.visible");
           cy.contains("a", "George Harrison").should("be.visible");
           cy.contains("a", "Ringo Starr").should("be.visible");
+          cy.contains("a", "Pete Best").should("not.exist");
 
           cy.get(".dropdown-menu-header").should("be.visible");
           cy.contains("button", "Stellvertretung aufheben").should("not.exist");

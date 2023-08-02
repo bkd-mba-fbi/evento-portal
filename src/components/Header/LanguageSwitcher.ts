@@ -14,10 +14,6 @@ export class LanguageSwitcher extends LitElement {
   static styles = [
     theme,
     css`
-      :host {
-        font-size: 0.875rem;
-      }
-
       ul {
         display: flex;
         align-items: baseline;
@@ -39,6 +35,8 @@ export class LanguageSwitcher extends LitElement {
 
       a {
         display: block;
+        font-size: 0.875rem;
+        font-weight: 400;
         letter-spacing: 0.025rem;
         text-decoration: none;
         text-transform: uppercase;

@@ -1,6 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
-import { localized } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
 import { map } from "lit/directives/map.js";
 import { StateController } from "@lit-app/state";
 
@@ -16,7 +16,7 @@ export class Nav extends LitElement {
     css`
       /* Large screen */
 
-      :host {
+      nav {
         display: flex;
         justify-content: end;
         gap: 4.375rem;
@@ -25,7 +25,7 @@ export class Nav extends LitElement {
       /* Medium screen */
 
       @media screen and (max-width: 1500px) {
-        :host {
+        nav {
           gap: 3rem;
         }
       }
@@ -47,12 +47,14 @@ export class Nav extends LitElement {
   }
 
   render() {
-    return map(portalState.navigation, (group) =>
-      this.renderGroupToggle(
-        group,
-        group.label === portalState.navigationGroup?.label
-      )
-    );
+    return html`<nav aria-label=${msg("Hauptnavigation")}>
+      ${map(portalState.navigation, (group) =>
+        this.renderGroupToggle(
+          group,
+          group.label === portalState.navigationGroup?.label
+        )
+      )}
+    </nav>`;
   }
 }
 
