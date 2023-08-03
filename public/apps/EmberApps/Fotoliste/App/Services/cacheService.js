@@ -4,8 +4,9 @@ define([
     'api',
     'globalize',
     'translate',
-    'App/helpers'
-], function (ember, app, api, globalize, translate, helpers) {
+    'App/helpers',
+    'appConfig'
+], function (ember, app, api, globalize, translate, helpers, appConfig) {
 
     //console.log(helpers);
     // returns first non empty argument
@@ -62,7 +63,7 @@ define([
                 var noReports = false;
                 if (reports !== null){
                     reports.forEach(function(element) {
-                        element.HRef = element.HRef.replace('/CrystalReports/'+element.Id,'/Files/CrystalReports/Anlass/'+element.Id) + '?ids='+ idEvent + '&token=' + api.getLoginToken();
+                        element.HRef = appConfig.apiUrl + element.HRef.replace('restApi/CrystalReports/'+element.Id,'/Files/CrystalReports/Anlass/'+element.Id) + '?ids='+ idEvent + '&token=' + api.getLoginToken();
                      }); 
                 } else {
                     noReports = true;
@@ -70,7 +71,7 @@ define([
 
                 var excel = responses[1];
                 if(excel !== null) {
-                    excel[0].HRef = '/restApi/Files/ExcelReports/Anlass/'+excel[0].Id + '?ids='+ idEvent + '&token=' + api.getLoginToken(); 
+                    excel[0].HRef = appConfig.apiUrl + '/Files/ExcelReports/Anlass/'+excel[0].Id + '?ids='+ idEvent + '&token=' + api.getLoginToken(); 
                 } else {
                     excel = false;
                 }
