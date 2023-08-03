@@ -42,26 +42,16 @@ html {
   color: inherit;
 }
 
-body {
-  margin: revert;
-}
-
-#CLX_Root .photolist__header {
-  padding-left: 1.5rem;
-}
-
 #CLX_Root .photolist__container {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
   position: relative;
-  margin: 0 0.5rem 0 0.5rem;
   border-top: 1px solid #e9ecef;
 }
 
 
 #CLX_Root .photolist-email-document {
-  margin: 1.1rem 1.5rem 0 1.5rem;
   display: block;
 }
 
@@ -112,7 +102,7 @@ body {
   width: 12rem;
   height: 19rem;
   float: left;
-  margin: 1rem 1rem 0.5rem 1rem;
+  margin: 1rem 2rem 0.5rem 0rem;
   cursor: pointer;
   order: 1;
 }
@@ -162,7 +152,7 @@ body {
 
 #CLX_Root .photolist__details {
   width: 100%;
-  margin: 1rem 1.5rem 0 1rem;
+  margin: 1rem 1.5rem 0 0rem;
   order: 2;
   display: block;
   padding: 2.5rem;
