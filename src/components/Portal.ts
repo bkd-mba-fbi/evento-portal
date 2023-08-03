@@ -163,6 +163,8 @@ export class Portal extends LitElement {
     ) {
       portalState.actualAppPath = hash;
       portalState.navigationItemKey = navigationItem.item.key;
+    } else {
+      portalState.appPath = hash;
     }
   }
 
