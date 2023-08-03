@@ -245,7 +245,7 @@ export class SubstitutionsDropdown extends LitElement {
           this.activeSubstitution,
           () => html`<li class="dropdown-menu-stop">
             <button @click=${this.handleStopClick.bind(this)}>
-              ${msg("Stellvertretung aufheben")}
+              ${msg("Stellvertretung beenden")}
             </button>
           </li>`
         )}

@@ -103,7 +103,7 @@ describe("Substitutions", () => {
           cy.contains("a", "Pete Best").should("not.exist");
 
           cy.get(".dropdown-menu-header").should("not.be.visible");
-          cy.contains("button", "Stellvertretung aufheben").should("not.exist");
+          cy.contains("button", "Stellvertretung beenden").should("not.exist");
         });
 
         cy.get("@startRequest").should("not.have.been.called");
@@ -168,7 +168,7 @@ describe("Substitutions", () => {
           cy.contains("a", "Pete Best").should("not.exist");
 
           cy.get(".dropdown-menu-header").should("be.visible");
-          cy.contains("button", "Stellvertretung aufheben").should("not.exist");
+          cy.contains("button", "Stellvertretung beenden").should("not.exist");
         });
 
         cy.get("@startRequest").should("not.have.been.called");
@@ -211,7 +211,7 @@ describe("Substitutions", () => {
           cy.get(".dropdown-menu-header").should("be.visible");
 
           cy.get("@stopRequest").should("not.have.been.called");
-          cy.contains("button", "Stellvertretung aufheben")
+          cy.contains("button", "Stellvertretung beenden")
             .should("be.visible")
             .click();
           cy.get("@stopRequest").should("have.been.called");
