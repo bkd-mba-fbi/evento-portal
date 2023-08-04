@@ -4,8 +4,9 @@ define([
     'api',
     'globalize',
     'translate',
-    'App/helpers'
-], function (ember, app, api, globalize, translate, helpers) {
+    'App/helpers',
+    'appConfig'
+], function (ember, app, api, globalize, translate, helpers, appConfig) {
 
     //console.log(helpers);
     // returns first non empty argument
@@ -54,7 +55,7 @@ define([
 
             var getReports = api.ember.GetReports(idEvent);
             var getExcel = api.ember.GetExcel(idEvent);
-            var getEventPromise = api.ember.getEvent(idEvent);
+            var getEventPromise = api.ember.getCourses(idEvent);
             var getSubscriptionByEventPromise = api.ember.getSubscriptionByEvent(idEvent);
 
             ember.RSVP.Promise.all([getReports,getExcel]).then(function (responses) {
@@ -62,7 +63,7 @@ define([
                 var noReports = false;
                 if (reports !== null){
                     reports.forEach(function(element) {
-                        element.HRef = element.HRef.replace('/CrystalReports/'+element.Id,'/Files/CrystalReports/Anlass/'+element.Id) + '?ids='+ idEvent + '&token=' + api.getLoginToken();
+                        element.HRef = appConfig.apiUrl + element.HRef.replace('restApi/CrystalReports/'+element.Id,'/Files/CrystalReports/Anlass/'+element.Id) + '?ids='+ idEvent + '&token=' + api.getLoginToken();
                      }); 
                 } else {
                     noReports = true;
@@ -70,7 +71,7 @@ define([
 
                 var excel = responses[1];
                 if(excel !== null) {
-                    excel[0].HRef = '/restApi/Files/ExcelReports/Anlass/'+excel[0].Id + '?ids='+ idEvent + '&token=' + api.getLoginToken(); 
+                    excel[0].HRef = appConfig.apiUrl + '/Files/ExcelReports/Anlass/'+excel[0].Id + '?ids='+ idEvent + '&token=' + api.getLoginToken(); 
                 } else {
                     excel = false;
                 }
@@ -83,7 +84,7 @@ define([
             });
 
             ember.RSVP.Promise.all([getSubscriptionByEventPromise,getEventPromise]).then(function (responses) {
-                var subscriptionByEvent = responses[0];
+                var subscriptionByEvent = responses[0];                
 
                 if(responses[1].EventTypeId !== 1) {
                     subscriptionByEvent = subscriptionByEvent.filter(ok => ok.IsOkay === true);
@@ -99,9 +100,9 @@ define([
                 
                 event.setProperties({
                     idEvent: subscriptionByEvent[0].EventId,
-                    designation: subscriptionByEvent[0].EventDesignation + ' (' + responses[1].Number +')',
-                    leadership: responses[1].Leadership,
-                    dateString: responses[1].DateString
+                    designation: responses[1].Designation,
+                    //leadership: responses[1].Leadership,
+                    //dateString: responses[1].DateString
                 });
 
                 //console.log(event);

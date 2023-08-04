@@ -4,23 +4,13 @@
     <title>Noteneingabe</title>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-   <!-- <script language="javascript" type="text/javascript" src="jquery.js"></script>-->
     <link rel="stylesheet" type="text/css" href="CSS/main.min.css" />
     <link rel="stylesheet" type="text/css" href="CSS/responsive.min.css" />
+    <link rel="stylesheet"  type="text/css" href="/apps/webapp-schulverwaltung/styles.css">
+    <link rel="stylesheet" href="../../styles/noteneingabe-override.css" />
 </head>
 <body>
-    <header>
-        <div>
-            <h1 id="page_title"></h1> 
-        </div>
-        <div class="user_info">
-            <div id="CLX_LoginInfo"></div>
-            <div id="CLX_LanguageInfo"></div>
-        </div>
-    </header>
     <div class="pageWrapper">
-        <!-- <nav></nav> -->
         <section class="content">
             <div class="displayWrapper">
                 <div id="CLX_Root"></div>
@@ -29,5 +19,8 @@
     </div>
     <script src="../../scripts/iframe.js" type="module"></script>
     <script data-main="main.js" src="Lib/require.js"></script>
+    <script src="../MasterExcel/jquery.min.js"></script>
+    <script src="../../scripts/noteneingabe.js"></script>
+    
 </body>
 </html>

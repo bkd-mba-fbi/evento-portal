@@ -1,3 +1,5 @@
+
+
 :root {
     --bkd-brand-white: rgba(255, 255, 255, 0.42);
     --bkd-brand-red: rgba(234, 22, 31, 1);
@@ -32,73 +34,64 @@
     --bkd-margin-horizontal-large: 40px;
     --bkd-margin-horizontal-medium: 30px;
     --bkd-margin-horizontal-small: 20px;
-}
-
-html {
-    font-size: inherit;
-    background: inherit;
-    font-weight: inherit;
-    line-height: inherit;
-    color: inherit;
-}
-
-.uk-scope .uk-card-default {
-    background-color: transparent;
-    box-shadow: 0 0px 0px;
-}
-
-.uk-scope,
-.uk-label,
-.uk-breadcrumb>*>*,
-.uk-navbar-nav>li>a,
-.uk-button,
-.uk-form-label {
-    font-size: inherit !important;
-    font-style: inherit !important;
-    font-family: inherit !important;
-}
-
-.uk-navbar-container {
-    background-color: inherit !important;
-}
-
-.uk-scope .uk-navbar-nav > li.uk-active > a {
-    border-bottom-color: var(--bkd-language-switcher-active-border);
-}
-
-.uk-scope a {
-    font-weight: normal;
-}
-
-.uk-scope .uk-button-primary,
-.uk-scope .uk-button-primary:hover {
-    background: var(--bkd-func-fg-grey);
-}
-
-.uk-scope .uk-link, .uk-scope a {
-    color: var(--bkd-func-fg-grey);
-}
-
-.uk-subnav-pill > .uk-active > a {
-    background-color: var(--bkd-func-fg-grey);
-    color: #fff;
-}
-
-.centerHorizontalTop20Percent {
-    top: 20%;
-    left: 50%;
-    position: sticky;
+  }
+  
+  html, body, input, textarea, select, a, button, .sectionTitle {
+    font-size: initial;
+    line-height: initial;
+    color: initial;
   }
 
-/*
-.uk-navbar-nav > .uk-active > a {
-    background: #d5d5d5;
-    border-radius: 0.1rem;
+  pre {
+    font-family: var(--bs-body-font-family);
+    font-size: var(--bs-body-font-size);
+    font-weight: var(--bs-body-font-weight);
+    line-height: var(--bs-body-line-height);
+    color: var(--bs-body-color);
+  }
 
+
+.btn-primary {
+    background-color: var(--bs-btn-bg)  !important;
+    border-color: var(--bs-btn-border-color) !important;
+    color: var(--bs-btn-color) !important;
 }
 
-
-.uk-navbar-nav > li > a {
-    height: 4.5rem !important;
+  #CLX_Root, #CLX_Root > .ember-view {
+  height: unset !important;
 }
-*/
+
+.dialogFooter {
+    background-color: transparent;
+    padding: 0;
+}
+
+.dialogDraggable{
+    top: 5px;
+    height: 99%;
+    border: #c8c8c8 solid 1px;
+}
+
+.dialogTab {
+    font-size: initial;
+}
+
+.tabBar, .groupRow, .dialogLabel, .parentNode {
+    background-color: var(--bkd-brand-dark-sand);
+    background-image: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+.dialogLabel, .headerLabel {
+    font-weight: normal;
+}
+.dialogHeader, .modalOverlay {
+    background-color: transparent;
+}
+
+a.active .dialogTab {
+    color: #fff;
+    font-weight: bold;
+    background-color: var(--bkd-brand-red);
+    background-image: none;
+}
