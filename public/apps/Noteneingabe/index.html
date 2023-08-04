@@ -4,7 +4,6 @@
     <title>Noteneingabe</title>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-   <!-- <script language="javascript" type="text/javascript" src="jquery.js"></script>-->
     <link rel="stylesheet" type="text/css" href="CSS/main.min.css" />
     <link rel="stylesheet" type="text/css" href="CSS/responsive.min.css" />
     <link rel="stylesheet"  type="text/css" href="/apps/webapp-schulverwaltung/styles.css">
@@ -12,7 +11,6 @@
 </head>
 <body>
     <div class="pageWrapper">
-        <!-- <nav></nav> -->
         <section class="content">
             <div class="displayWrapper">
                 <div id="CLX_Root"></div>
@@ -22,166 +20,7 @@
     <script src="../../scripts/iframe.js" type="module"></script>
     <script data-main="main.js" src="Lib/require.js"></script>
     <script src="../MasterExcel/jquery.min.js"></script>
+    <script src="../../scripts/noteneingabe.js"></script>
     
-
-
-        <!-- EVT CR-11450: X.js einbinden -->
-        <style type="text/css">
-            #overlay-toggle-embedded {
-                float: right;
-                margin-right: 0;
-            }
-            
-            #overlay-toggle-embedded-test>a {
-                display: inline-block;
-            }
-            
-            .excelDropdown {
-                position: relative;
-                display: inline-block;
-            }
-            
-            .excelDropdown-content {
-                display: none;
-                position: absolute;
-                right: 0;
-                min-width: 120px;
-                box-shadow: none;
-                padding: 10px 10px;
-                color: var(--bs-btn-color);
-                border: 1px solid #ced4da;
-                border-radius: 0.375rem;
-                top: 34px;
-                text-align: left;
-            }
-            
-            .excelDropdown:hover .excelDropdown-content,
-            .excelDropdown:focus .excelDropdown-content {
-                display: grid;
-            }
-        </style>
-        <script type="text/javascript">        
-            (function() {
-                window.X_IS_EMBEDDED = true;
-
-                // Das Script erst laden, wenn das JSModul bereit ist
-                var interval_id = setInterval(function() {
-                    // testen ob die Toolbar geladen wurde
-                    if ($('#CLX_Root .dialog .grading').length === 1) {
-                        clearInterval(interval_id);
-                        $.getScript("../MasterExcel/X.js");
-                    }
-                }, 100);
-
-                // Funktion um Buttons einzufügen
-                var insertButtons = function() {
-                    // Buttons nicht einfügen, wenn die grading Route nicht aktiv ist
-                    if (location.hash.substring(0, 10) !== '#/grading/') {
-                        return;
-                    }
-
-                    // die Buttons nur einfügen, wenn sie nicht bereits da sind
-                    if ($('#overlay-toggle-embedded').length === 1) {
-                        return;
-                    }
-
-                    // true wenn auch Absenzen eingegeben werden können
-                    var appendExcelBt = $("td.gradeInput ~ td input[type=text]", $("div.page")).length >= 2 ||  $("td.gradeInput ~ td input[type=number]", $("div.page")).length >= 2;
-
-                    var buttons_html = '\
-<div id="overlay-toggle-embedded" class="btn btn-outline-primary ms-2 dropdown-toggle excelDropdown">\
-    <span>' + X.strings[X.lang].views[2].start_dropdown + ' </span>\
-    <div class="excelDropdown-content">\
-	<a class="textButton" style="color:var(--bs-primary)" onclick="top.X.showOverlay(2);"> ' + X.strings[X.lang].views[2].start_button + ' </a>' + (appendExcelBt ? '\
-	<a class="textButton" style="color:var(--bs-primary)" onclick="top.X.showOverlay(3);"> ' + X.strings[X.lang].views[3].start_button + ' </a>' : '') + '\
-</div> </div>';
-
-                    if(document.getElementsByClassName('gradeInput').length > 0) {
-                        var buttons = $(buttons_html);
-                        $('#CLX_Root .dialog .grading').append(buttons); 
-                    }
-                    
-                }
-
-                window.X_EMBEDDED_CALLBACK = function() {
-                    insertButtons();
-                    console.log('Buttons')
-                    // Die Buttons einfügen, wenn die Route verändert wird
-                    $(window).bind('hashchange', insertButtons);
-                };
-            })();
-
-
-            
-        setInterval(function(){
-            if (!document.getElementById('overlay-toggle-embedded')){
-                $.getScript("../MasterExcel/X.js");
-            }
-        },5000)
-        </script>
-        <!-- ENDE EVT CR-11450 -->
-
-        <script>
-        var triangleExpanded = null;
-        document.addEventListener('DOMNodeInserted', function(event) {
-            
-            if (event.target.data !== undefined) {
-                if(event.target.data.search('Formativ') > -1) {
-                    var target = event.target;
-                    var parent = target.parentElement;
-                    for (var i = 0; i < 4; i++) {
-                        var parent = parent.parentElement;
-                    }
-
-                    triangleExpanded = parent.children[0];
-
-                }
-            }
-           
-            
-        }); 
-
-        setInterval(function(){
-            if(triangleExpanded !== null && triangleExpanded.children[0].className.search('triangleExpanded') === -1 ) {
-                triangleExpanded.click();
-                triangleExpanded = null;
-
-            }
-
-
-        }  ,2500)
-        
- 
-        /**
-            Workaround: Zurück Button auf der hash grading ausblenden, weil er nicht mehr history.back() bach sonder auf das Standalone module zeigt.
-        */
-        function displayNoneBackButton() {
-            var backbutton = document.querySelector('.dialogFooter > div:nth-of-type(2)')
-            if(location.href.indexOf('#/grading/') > 0 && backbutton != null){
-                backbutton.style.display = 'none';
-                stop();
-            }
-        }
-        function stop(){
-            clearInterval('workaroundBackButton');
-        }
-
-        function intervalBackButton(){
-            const workaroundBackButton = setInterval(function(){
-                                displayNoneBackButton();
-                            },100);
-        }
-        onhashchange = (event) => {
-            intervalBackButton();
-        };
-        
-        onload = (event) => {
-            intervalBackButton();
-        };
- 
-        
-        </script>
-
-
 </body>
 </html>
