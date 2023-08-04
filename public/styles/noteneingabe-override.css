@@ -73,6 +73,7 @@ pre {
 
 .dialogTitle {
   font-size: var(--bkd-font-size-base) !important;
+  color: var(--bkd-brand-black) !important;
 }
 
 .bodyContainer a,
@@ -104,10 +105,6 @@ pre {
 .dialogFooter {
   background-color: transparent;
   padding: 0;
-}
-
-.modalOverlay {
-  background-color: transparent;
 }
 
 #CLX_Root .option-button,
@@ -165,10 +162,6 @@ button.active path[fill="#666"],
 button.active rect[fill="#666"],
 button.active circle[fill="#666"] {
   fill: var(--bkd-brand-red);
-}
-
-.dialogDraggable {
-  border: solid 1px #c8c8c8;
 }
 
 #overlay-toggle-embedded {
