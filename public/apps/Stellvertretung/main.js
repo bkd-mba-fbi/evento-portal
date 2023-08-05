@@ -841,6 +841,7 @@ const Settings = io_ts__WEBPACK_IMPORTED_MODULE_0__.type({
     apiUrl: io_ts__WEBPACK_IMPORTED_MODULE_0__.string,
     oAuthUrl: io_ts__WEBPACK_IMPORTED_MODULE_0__.string,
     oAuthRedirectUrl: io_ts__WEBPACK_IMPORTED_MODULE_0__.union([io_ts__WEBPACK_IMPORTED_MODULE_0__.string, io_ts__WEBPACK_IMPORTED_MODULE_0__.undefined]),
+    webModuleRedirectUrlAdHoc: io_ts__WEBPACK_IMPORTED_MODULE_0__.union([io_ts__WEBPACK_IMPORTED_MODULE_0__.string, io_ts__WEBPACK_IMPORTED_MODULE_0__.undefined]),
     clientId: io_ts__WEBPACK_IMPORTED_MODULE_0__.union([io_ts__WEBPACK_IMPORTED_MODULE_0__.string, io_ts__WEBPACK_IMPORTED_MODULE_0__.undefined]),
     instanceId: io_ts__WEBPACK_IMPORTED_MODULE_0__.string,
     appScope: io_ts__WEBPACK_IMPORTED_MODULE_0__.string,
@@ -2219,10 +2220,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "TeacherSubstitutionService": () => (/* binding */ TeacherSubstitutionService)
 /* harmony export */ });
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rxjs */ 2378);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs */ 2378);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs/operators */ 9095);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! rxjs/operators */ 9361);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! rxjs/operators */ 4514);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rxjs/operators */ 6942);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs/operators */ 9128);
 /* harmony import */ var _utils_decode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/decode */ 8108);
 /* harmony import */ var _rest_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./rest.service */ 2671);
 /* harmony import */ var _typeahead_rest_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./typeahead-rest.service */ 109);
@@ -2230,10 +2233,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _models_teacher_substitution_model__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../models/teacher-substitution.model */ 6263);
 /* harmony import */ var _models_teacher_resource_model__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../models/teacher-resource.model */ 4743);
 /* harmony import */ var _utils_date__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/date */ 6316);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/core */ 3184);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/core */ 3184);
 /* harmony import */ var _loading_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./loading-service */ 2024);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/router */ 2816);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/common/http */ 8784);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/router */ 2816);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/common/http */ 8784);
 /* harmony import */ var _auth_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./auth.service */ 629);
 
 
@@ -2302,16 +2305,23 @@ class TeacherSubstitutionService extends _rest_service__WEBPACK_IMPORTED_MODULE_
         };
         return this.http.put(`${this.baseUrl}/new`, body).pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_10__.mapTo)(undefined), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.share)());
     }
+    createAdHoc(holderId) {
+        console.log("createAdHoc" + holderId);
+        let body = {
+            'HolderId': holderId
+        };
+        return this.http.put(`${this.baseUrl}/NewAdHoc`, body, { responseType: "json" }).pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.map)((v, i) => v.SubstitutionId), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.shareReplay)());
+    }
     delete(substitutionId) {
         let body = {
             'SubsititutionIds': substitutionId ? [substitutionId] : null
         };
         return this.http.put(`${this.baseUrl}/revoke`, body).pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_10__.mapTo)(undefined), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.share)());
     }
-    start(substitutionId) {
+    start(substitutionId, webModuleRedirectUri = null) {
         var _a;
         let oAuthUrl = this.settings.oAuthUrl;
-        let webmoduleRedirectUrl = window.location.pathname + window.location.hash;
+        let webmoduleRedirectUrl = webModuleRedirectUri !== null && webModuleRedirectUri !== void 0 ? webModuleRedirectUri : (window.location.pathname + window.location.hash);
         let body = {
             'access_token': (_a = this.authService.accessToken) !== null && _a !== void 0 ? _a : "",
         };
@@ -2323,7 +2333,10 @@ class TeacherSubstitutionService extends _rest_service__WEBPACK_IMPORTED_MODULE_
         });
         let url = `${oAuthUrl}/Authorization/Substitutions/${substitutionId}/start?${params.toString()}`;
         this.postFormData(url, body);
-        return new rxjs__WEBPACK_IMPORTED_MODULE_12__.Observable();
+        return new rxjs__WEBPACK_IMPORTED_MODULE_14__.Observable();
+    }
+    startAdHoc(substitutionId, redirect_uri = null) {
+        return this.start(substitutionId, this.settings.webModuleRedirectUrlAdHoc);
     }
     stop(substitutionId) {
         var _a;
@@ -2341,7 +2354,7 @@ class TeacherSubstitutionService extends _rest_service__WEBPACK_IMPORTED_MODULE_
         });
         let url = `${oAuthUrl}/Authorization/Substitutions/${substitutionId}/stop?${params.toString()}`;
         this.postFormData(url, body);
-        return new rxjs__WEBPACK_IMPORTED_MODULE_12__.Observable();
+        return new rxjs__WEBPACK_IMPORTED_MODULE_14__.Observable();
     }
     postFormData(url, data) {
         let formElement = document.createElement('form');
@@ -2360,8 +2373,8 @@ class TeacherSubstitutionService extends _rest_service__WEBPACK_IMPORTED_MODULE_
         formElement.submit();
     }
 }
-TeacherSubstitutionService.ɵfac = function TeacherSubstitutionService_Factory(t) { return new (t || TeacherSubstitutionService)(_angular_core__WEBPACK_IMPORTED_MODULE_13__["ɵɵinject"](_loading_service__WEBPACK_IMPORTED_MODULE_7__.LoadingService), _angular_core__WEBPACK_IMPORTED_MODULE_13__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_14__.ActivatedRoute), _angular_core__WEBPACK_IMPORTED_MODULE_13__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_15__.HttpClient), _angular_core__WEBPACK_IMPORTED_MODULE_13__["ɵɵinject"](_settings__WEBPACK_IMPORTED_MODULE_3__.SETTINGS), _angular_core__WEBPACK_IMPORTED_MODULE_13__["ɵɵinject"](_auth_service__WEBPACK_IMPORTED_MODULE_8__.AuthService)); };
-TeacherSubstitutionService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_13__["ɵɵdefineInjectable"]({ token: TeacherSubstitutionService, factory: TeacherSubstitutionService.ɵfac, providedIn: 'root' });
+TeacherSubstitutionService.ɵfac = function TeacherSubstitutionService_Factory(t) { return new (t || TeacherSubstitutionService)(_angular_core__WEBPACK_IMPORTED_MODULE_15__["ɵɵinject"](_loading_service__WEBPACK_IMPORTED_MODULE_7__.LoadingService), _angular_core__WEBPACK_IMPORTED_MODULE_15__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_16__.ActivatedRoute), _angular_core__WEBPACK_IMPORTED_MODULE_15__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_17__.HttpClient), _angular_core__WEBPACK_IMPORTED_MODULE_15__["ɵɵinject"](_settings__WEBPACK_IMPORTED_MODULE_3__.SETTINGS), _angular_core__WEBPACK_IMPORTED_MODULE_15__["ɵɵinject"](_auth_service__WEBPACK_IMPORTED_MODULE_8__.AuthService)); };
+TeacherSubstitutionService.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_15__["ɵɵdefineInjectable"]({ token: TeacherSubstitutionService, factory: TeacherSubstitutionService.ɵfac, providedIn: 'root' });
 
 
 /***/ }),

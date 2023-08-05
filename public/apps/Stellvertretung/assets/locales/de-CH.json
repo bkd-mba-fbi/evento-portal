@@ -65,6 +65,14 @@
     "save-success-message": "Die Stellvertretung wurde gespeichert."
   },
 
+  "substitution-create-ad-hoc": {
+    "title": "Sofort-Stellvertretung ausüben",
+    "field-holder-label": "Für Lehrperson",
+    "field-holder-placeholder": "Name suchen...",
+    "cancel-button-label": "Abbrechen",
+    "save-button-label": "Ausüben"
+  },
+
   "page-substitution-list": {
     "title-message": "Von Ihnen erfasste Stellvertretung: Die Person ist berechtigt, in der definierten Zeitspanne Ihre Funktion zu übernehmen.",
     "empty-message": "Erfassen Sie eine Stellvertretung mit Klick auf +."
@@ -80,6 +88,7 @@
   "substitution-list-admin": {
     "count-label": "Anzahl aktive und zukünftige Stellvertretungen: ",
     "search-placeholder": "Name suchen...",
+    "create-ad-hoc-button-label": "Sofort-Stellvertretung",
 
     "column-title-substitute": "Stellvertretung",
     "column-title-holder": "Für Lehrperson",
