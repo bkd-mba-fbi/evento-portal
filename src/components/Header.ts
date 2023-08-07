@@ -8,7 +8,7 @@ import { when } from "lit/directives/when.js";
 import { portalState } from "../state/portal-state";
 import { StateController } from "@lit-app/state";
 import { buildUrl } from "../utils/routing";
-import { NavigationItem } from "../settings";
+import { NavigationItem, settings } from "../settings";
 import { UserSettingsItem } from "../utils/user-settings";
 
 @customElement("bkd-header")
@@ -134,7 +134,8 @@ export class Header extends LitElement {
 
   private handleLogoClick(event: MouseEvent) {
     event.preventDefault();
-    portalState.navigationItemKey = "home";
+    portalState.navigationItemKey = settings.navigationHome.key;
+    portalState.appPath = settings.navigationHome.appPath;
   }
 
   private handleNavItemClick(
