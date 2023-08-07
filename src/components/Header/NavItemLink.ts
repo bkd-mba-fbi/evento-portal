@@ -14,7 +14,6 @@ export class NavItemLink extends LitElement {
 
   private handleClick(event: MouseEvent): void {
     event.preventDefault();
-    console.log("clicked", this.item);
   }
 
   render() {
