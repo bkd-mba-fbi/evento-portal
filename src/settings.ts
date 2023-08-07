@@ -277,7 +277,7 @@ export const settings: Settings = {
         ],
       },
       {
-        label: msg("Aus-/Weiterbildungen"),
+        label: msg("Aus-/Weiterbildung"),
         items: [
           {
             key: "myAbsences",
@@ -345,7 +345,7 @@ export const settings: Settings = {
           },
           {
             key: "personSearch",
-            label: "Personen und Institutionen suchen",
+            label: msg("Personen und Institutionen suchen"),
             allowedRolesOrPermissions: ["PersonRight"],
             deniedInstanceIds: null,
             appKey: "schulleiterPersonen",

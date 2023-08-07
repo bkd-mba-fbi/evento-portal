@@ -38,7 +38,7 @@ describe("Locale", () => {
       cy.resizeToDesktop();
       cy.visit("/index.html?locale=fr-CH");
       cy.contains("Enseignement");
-      cy.contains("Direction de l’instruction publique et de la culture");
+      cy.contains("Direction de l'instruction publique et de la culture");
 
       cy.get("bkd-language-switcher").within(() => {
         cy.contains("a", "de").should("not.have.class", "active");

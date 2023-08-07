@@ -150,11 +150,11 @@ describe("Navigation Menu", () => {
       cy.get("bkd-mobile-nav").within((mobileMenu) => {
         cy.wrap(mobileMenu).should("be.visible");
 
-        expectGroups(["Aus-/Weiterbildungen", "Angebote"]);
+        expectGroups(["Aus-/Weiterbildung", "Angebote"]);
 
         expectGroupItems("Angebote", ["Kurse und Veranstaltungen"]);
 
-        expectGroupItems("Aus-/Weiterbildungen", ["Absenzen", "Noten"]);
+        expectGroupItems("Aus-/Weiterbildung", ["Absenzen", "Noten"]);
       });
     });
   });
