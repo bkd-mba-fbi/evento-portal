@@ -210,17 +210,13 @@ export class PortalState extends State {
       ) {
         // Consume `actualAppPath`
         this.appPath = this.actualAppPath;
-
-        // Make sure we are still on the same app path, if it has been
-        // changed from loading the dashboard
-        const url = new URL(document.location.href);
-        url.hash = this.appPath;
-        history.replaceState({}, "", url);
       } else {
         // Use item's app path
         this.appPath = item.appPath;
       }
+
       this.actualAppPath = null; // Only relevant the first time
+      this.updateHashFromAppPath();
 
       // For invalid item key's redirect to home
       if (item.key === settings.navigationHome.key && item.key !== itemKey) {
@@ -229,6 +225,12 @@ export class PortalState extends State {
     }
 
     updateQueryParam(NAV_ITEM_QUERY_PARAM, this.navigationItemKey);
+  }
+
+  private updateHashFromAppPath() {
+    const url = new URL(document.location.href);
+    url.hash = this.appPath;
+    history.replaceState({}, "", url);
   }
 
   private updateApp(item: PortalState["navigationItem"]): void {
