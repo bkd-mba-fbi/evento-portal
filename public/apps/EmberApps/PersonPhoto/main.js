@@ -109,10 +109,10 @@
           streaming = true;
 
           
-          var frameBorder = width-(height/4*3)/2
+          //var frameBorder = width-(height/4*3)/2
           //console.log(frameBorder);
-          document.getElementsByClassName('frame-left')[0].style.borderLeftWidth = frameBorder;
-          document.getElementsByClassName('frame-right')[0].style.borderLeftWidth = frameBorder;
+          //document.getElementsByClassName('frame-left')[0].style.borderLeftWidth = frameBorder;
+          //document.getElementsByClassName('frame-right')[0].style.borderLeftWidth = frameBorder;
         }
       },
       false
