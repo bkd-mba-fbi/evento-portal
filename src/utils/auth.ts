@@ -328,7 +328,12 @@ function handleSubstitutionResult(token: OAuth2Token): void {
   url.searchParams.delete("access_token");
   url.searchParams.delete("expires_in");
   url.searchParams.delete("refresh_token");
-  history.replaceState({}, "", url);
+  if (window.parent === window) {
+    history.replaceState({}, "", url);
+  } else {
+    // only do this inside iframe, prevents loading the entire portal app inside the iframe
+    window.parent.location.assign(url);
+  }
 }
 
 /**
