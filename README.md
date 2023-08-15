@@ -1,6 +1,6 @@
 # Evento Portal
 
-[![Linting & Testing ✨](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml)
+[![Linting & Testing ✨](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml)
 [![Build & Deployment 🚀](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/build.yml/badge.svg)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/build.yml)
 
 The _Evento Portal_ is used to integrate various applications for school administration in a single web portal with a common look and feel.
