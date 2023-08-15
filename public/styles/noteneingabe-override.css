@@ -67,7 +67,7 @@ pre {
 }
 
 .dialogTitleInfo {
-  font-size: 3.375rem;
+  font-size: calc(1.4625rem + 2.55vw);
   font-weight: 100;
 }
 
