@@ -111,7 +111,6 @@ svg:not(:root) {
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 30px;
     bottom: -12px;
 }
 
