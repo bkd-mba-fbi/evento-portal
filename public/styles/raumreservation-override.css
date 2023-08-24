@@ -134,6 +134,10 @@ button.navbar-toggler {
   display: initial;
 }
 
+.modal-open {
+  min-height: 740px;
+}
+
 .accordion {
   padding-bottom: 50px;
 }
