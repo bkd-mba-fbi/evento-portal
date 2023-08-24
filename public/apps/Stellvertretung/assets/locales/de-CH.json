@@ -2,13 +2,13 @@
   "navigation": {
     "title": "Stellvertretung",
     "item-execute": "Stellvertretung ausüben",
-    "item-assign": "Stellvertretung vergeben",
+    "item-assign": "Stellvertretung administrieren",
     "item-admin": "Administration",
     "user.signed-in-as": "Angemeldet als",
     "user.substituted-by": "Stellvertretung durch",
-    "user.stop-button-label": "Stellvertretung Abgeben",
+    "user.stop-button-label": "Stellvertretung beenden",
     "user.logout-button-label": "Logout",
-    "user.login-button-label": "Login"
+    "user.login-button-label": "Anmelden"
   },
 
   "substitutions.title": "Meine Stellvertretungen",
@@ -36,8 +36,8 @@
     "save-button-label": "Speichern",
 
     "confirm-delete-message": "Wollen Sie diese Stellvertretung löschen?",
-    "confirm-delete-cancel-button-label": "Nein",
-    "confirm-delete-confirm-button-label": "Ja",
+    "confirm-delete-cancel-button-label": "Abbrechen",
+    "confirm-delete-confirm-button-label": "Löschen",
 
     "save-success-message": "Die Stellvertretung wurde gespeichert.",
     "delete-success-message": "Die Stellvertretung wurde gelöscht."
