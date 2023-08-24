@@ -10,7 +10,7 @@ window.stellvertretung.settings = {
   apiUrl: window.parent.eventoPortal.settings.apiServer,
   oAuthUrl: window.parent.eventoPortal.settings.oAuthServer + window.parent.eventoPortal.settings.oAuthPrefix,
   oAuthRedirectUrl: window.parent.location.href,
-  webModuleRedirectUrlAdHoc: window.parent.location.href,
+  webModuleRedirectUrlAdHoc: '/apps/stellvertretung/#/substitutions/execute',
   clientId: window.parent.eventoPortal.settings.oAuthClientId,
   appScope: 'Tutoring',
   instanceId: '111',
