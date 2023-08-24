@@ -1,4 +1,121 @@
 {
+  "navigation": {
+    "title": "Remplacement",
+    "item-execute": "Effecteur un remplacement",
+    "item-assign": "Saisir un remplacement",
+    "item-admin": "Administration",
+    "user.signed-in-as": "Connecté-e comme",
+    "user.substituted-by": "Remplacement par",
+    "user.stop-button-label": "Terminer le remplacement",
+    "user.logout-button-label": "Se déconnecter",
+    "user.login-button-label": "Se connecter"
+  },
+
+  "substitutions.title": "Mes remplacements",
+  "substitutions/current.title": "Effectuer un remplacement",
+
+  "substitution-model": {
+    "Holder": "Pour l'enseignant-e-",
+    "Substitute": "Remplacement",
+    "DateFrom": "Date du",
+    "DateTo": "Date au",
+    "Remarks": "Commentaire"
+  },
+
+    "substitution-edit": {
+    "title-holder-prefix": "pour",
+
+    "field-date-from-label": "Date du",
+    "field-date-from-placeholder": "Sélectionner la date...",
+    "field-date-to-label": "Date au",
+    "field-date-to-placeholder": "Sélectionner la date...",
+    "field-remarks-label": "Commentaire",
+    "field-remarks-placeholder": "Commentaire...",
+
+    "cancel-button-label": "Annuler",
+    "save-button-label": "Valider",
+
+    "confirm-delete-message": "Voulez-vous supprimer ce remplacement ?",
+    "confirm-delete-cancel-button-label": "Annuler",
+    "confirm-delete-confirm-button-label": "Supprimer",
+
+    "save-success-message": "Le remplacement a été enregistré.",
+    "delete-success-message": "Le remplacement a été supprimé."
+  },
+ 
+  "substitution-create": {
+    "field-holder-label": "Pour l'enseignant-e",
+    "field-holder-placeholder": "Rechercher un nom...",
+    "field-substitute-label": "Nom",
+    "field-substitute-placeholder": "Rechercher un nom...",
+    "field-date-from-label": "Date du",
+    "field-date-from-placeholder": "Sélectionner la date...",
+    "field-date-to-label": "Date au",
+    "field-date-to-placeholder": "Sélectionner la date...",
+    "field-remarks-label": "Commentaire",
+    "field-remarks-placeholder": "Commentaire...",
+    
+    "cancel-button-label": "Annuler",
+    "save-button-label": "Valider",
+
+    "confirm-delete-message": "Voulez-vous supprimer ce remplacement ?",
+    "confirm-delete-cancel-button-label": "Annuler",
+    "confirm-delete-confirm-button-label": "Supprimer",
+
+    "save-success-message": "Le remplacement a été enregistré."
+  },
+
+  "substitution-create-ad-hoc": {
+    "title": "Effectuer un remplacement immédiat",
+    "field-holder-label": "Pour l'enseignant-e",
+    "field-holder-placeholder": "Rechercher un nom...",
+    "cancel-button-label": "Annuler",
+    "save-button-label": "Effectuer"
+  },
+
+  "page-substitution-list": {
+    "title-message": "Remplacement saisi : la personne est autorisée à assumer votre fonction pendant la période définie.",
+    "empty-message": "Aucun remplacement disponible"
+  },
+
+  "substitution-list": {
+    "column-title-substitute": "Remplacement",
+    "column-title-date-range": "Période",
+    "column-title-remarks": "Commentaire",
+    "column-title-holder": "Pour l'enseigannt-e"
+  },
+
+  "substitution-list-admin": {
+    "count-label": "Nombre de remplacement actifs et futurs : ",
+    "search-placeholder": "Rechecher un nom...",
+  	"create-ad-hoc-button-label": "Remplacement immédiat",
+
+    "column-title-substitute": "Remplacement",
+    "column-title-holder": "Pour l'enseignant-e",
+    "column-title-date-range": "Période",
+    "column-title-remarks": "Commentaire",
+
+    "substitution-holder-prefix": "pour "
+  },
+
+  "execute-substitution-list": {
+    "substitution-inactive-title-message": "Vous n'effectuez actuellement pas de remplacament.",
+    "substitution-active-title-message": "Vous effectuez actuellement un remplacament.",
+
+    "substitution-holder-prefix": "pour ",
+
+    "column-title-holder": "Pour l'enseignant-e",
+    "column-title-date-range": "Période",
+    "column-title-remarks": "Commentaire",
+
+    "start-button-label": "Effectuer",
+    "stop-button-label": "Terminer",
+
+    "active-label": "Actif",
+
+    "empty-list-message": "Pas d'enseignant-e disponible"
+  },
+
   "global": {
     "app-errors": {
       "exception-title": "Erreur",
@@ -29,11 +146,6 @@
   "unauthenticated": {
     "message": "Vous n'avez pas les droits d'accès de l'enseignant-e."
   }, 
-  "my-notifications": {
-    "title": "Notifications",
-    "deleteAll": "Tout effacer",
-    "none": "Aucune notification"
-  },
   "shared": {
     "date-select": {
       "default-placeholder": "Sélectionner la date..."
@@ -44,26 +156,6 @@
       "yesterday": "Hier",
       "ago": "il y a {{count}} jours",
       "in": "dans {{count}} jours"
-    },
-    "lesson-presences-update": {
-      "error": "Une erreur s'est produite lors de l'enregistrement des modifications."
-    },
-    "profile": {
-      "student-address": "Adresse",
-      "correspondence-address": "Adresse de correspondance",
-      "billing-address": "Adresse de facturation",
-      "legal-representation": "Représentants légaux",
-      "apprenticeship-company": "Entreprise formatrice",
-      "apprenticeship-period": "Durée de l'apprentissage",
-      "job-trainer": "Formateur/trice",
-      "checkable-absences": "Absences annoncées",
-      "open-absences": "Absences en suspens",
-      "excused-absences": "Absences excusées",
-      "unexcused-absences": "Absences non excusées",
-      "incidents": "Incidents",
-      "half-days": "Demi-journées libres",
-      "no-profile": "Le profil n'a pas été trouvé.",
-      "no-absences": "Aucune donnée disponible"
     },
     "select": {
       "empty-option": "Sélectionner..."
