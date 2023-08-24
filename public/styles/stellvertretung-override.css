@@ -89,3 +89,17 @@ a:hover {
   border-color: #000 !important;
   color: #000 !important;
 }
+
+@media screen and (max-width: 700px) {
+  .row-bottom-divider > .pb-2 {
+    display: contents !important;
+  }
+
+  .row-bottom-divider > .pb-2 > * {
+    margin: 0 10px 12px 0 !important;
+  }
+
+  .row-bottom-divider {
+    margin: auto !important;
+  }
+}
