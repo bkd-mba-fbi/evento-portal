@@ -165,8 +165,10 @@ button.active circle[fill="#666"] {
 }
 
 #overlay-toggle-embedded {
-  float: right;
-  margin-right: 0;
+  top: 0px;
+  position: absolute;
+  right: 1rem;
+  font-weight: 400;
 }
 
 #overlay-toggle-embedded-test > a {
@@ -174,7 +176,6 @@ button.active circle[fill="#666"] {
 }
 
 .excelDropdown {
-  position: relative;
   display: inline-block;
 }
 
