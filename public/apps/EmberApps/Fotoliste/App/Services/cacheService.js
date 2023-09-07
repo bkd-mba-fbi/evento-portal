@@ -71,7 +71,9 @@ define([
 
                 var excel = responses[1];
                 if(excel !== null) {
-                    excel[0].HRef = appConfig.apiUrl + '/Files/ExcelReports/Anlass/'+excel[0].Id + '?ids='+ idEvent + '&token=' + api.getLoginToken(); 
+                    excel.forEach(function(element) {
+                        element.HRef = appConfig.apiUrl + '/Files/ExcelReports/Anlass/'+element.Id + '?ids='+ idEvent + '&token=' + api.getLoginToken(); 
+                    }); 
                 } else {
                     excel = false;
                 }
