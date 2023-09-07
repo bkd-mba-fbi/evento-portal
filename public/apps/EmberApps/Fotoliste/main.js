@@ -49,7 +49,7 @@
             };
             ///ExcelReports/AvailableReports/{BezugsobjektTyp}?ids={BerichtsdefinitionIDs}&keys={ObjektIDs}
             api.ember.GetExcel = function(eventId) {
-                return api.getEmber('ExcelReports/AvailableReports/Anlass?ids=240001,250004&keys='+eventId);
+                return api.getEmber('ExcelReports/AvailableReports/Anlass?ids=240001,250004,290040&keys='+eventId);
             };
 
             // start application
