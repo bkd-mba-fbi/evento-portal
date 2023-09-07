@@ -2,7 +2,7 @@ name: Deploy Test Env 🚀
 
 on:
   push:
-    branches: [test, main]
+    branches: [main]
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
         run: |
           npm run build
           sed -i "s/example/schoolWeb/" dist/settings.example.js
-          sed -i "s/eventotest.api/eventoapp-test.erz.be.ch/" dist/settings.example.js
+          sed -i "s/eventotest.api/eventoapp-test.apps.be.ch/" dist/settings.example.js
           mv  dist/settings.example.js  dist/settings.js
           sleep 60
 
