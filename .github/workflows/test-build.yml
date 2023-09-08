@@ -52,7 +52,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ env.IMAGE_NAME }}
+            ${{ REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=test-ci
             type=semver,pattern={{version}},value=v1.0.0
