@@ -219,7 +219,7 @@ var X = {
         $(pageEl).append('\
 <style type="text/css">\
 	' + (isModernUI ? 'div.page { position: relative; }' : '') + ' \
-	#tsv-overlay { position: fixed; top: 0px;' + (!isModernUI ? 'left: 0px;' : 'max-width: 100%;') + 'width: 100%; height: 100%; display: none; } \
+	#tsv-overlay { position: fixed; top: 0px;' + (!isModernUI ? 'left: 0px;' : 'max-width: 100%;') + 'width: 100%; height: 85%; display: none; } \
 	#tsv-overlay-inner { height: 90%; background: white; padding: 5% 5% 20px; } \
 	#tsv-overlay-inner-2 { height: 70%; } \
 	/* Bugfix: Google Chrome ändert nur bei display:block Textfeldern mit CSS die Höhe */ \
@@ -293,7 +293,7 @@ var X = {
             $("#tsv-data + div > :first-child").attr("onClick", 'X.acceptOverlay(' + aView + ', ' + index + ');').html(X.strings[X.lang].views[aView].accept_button);
         }
 
-        $("#tsv-overlay").show(1000, function() {
+        $("#tsv-overlay").show(500, function() {
             $("textarea", this).focus();
             $("textarea", this).select();
         }).find("textarea").val(lines);
@@ -305,7 +305,7 @@ var X = {
      * @param aTest  muss der Index des gewählten Tests sein (für aView == 4)
      */
     acceptOverlay: function(aView, aTest) {
-        var lines = $("#tsv-overlay").hide(1000).find("textarea").val().split("\n");
+        var lines = $("#tsv-overlay").hide(500).find("textarea").val().split("\n");
         var errorColors = {
             "not-found": "#ff6",
             "grade-not-found": "#ff6",
@@ -584,7 +584,7 @@ var X = {
      * bricht die Excel-Eingabe ab
      */
     cancelOverlay: function() {
-        $("#tsv-overlay").hide(1000);
+        $("#tsv-overlay").hide(500);
     },
 
     /**
