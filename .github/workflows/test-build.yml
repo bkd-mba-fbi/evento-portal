@@ -1,4 +1,4 @@
-name: Build & Deployment Docker🚀
+name: Build & Push Docker Image 🚀
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies 🔧
         run: npm ci
 
-      - name: Build 🏭
+      - name: Build application 🏭
         run: |
           npm run build
           mv dist evento-portal
@@ -47,25 +47,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker meta
+      - name: Determine environment and version tags based on Git & Docker registry
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: |
-            ghcr.io/${{ env.IMAGE_NAME }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=test-ci
+            type=ref,event=branch
             type=semver,pattern={{version}},value=v1.0.0
 
-      - name: Build and push
+      - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags:
-            ${{ steps.meta.outputs.tags }}
-
-            #      - name: Deploy 🚀
-            #        uses: JamesIves/github-pages-deploy-action@v4
-            #        with:
-            #          folder: dist
+          tags: ${{ steps.meta.outputs.tags }}
