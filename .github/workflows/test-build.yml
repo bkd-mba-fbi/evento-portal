@@ -9,8 +9,35 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  prerequisites:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.extract-version.outputs.version }}
+      branch: ${{ steps.extract-branch.branch}}
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Get version tag of HEAD if any
+        id: extract-version
+        run: |
+          git fetch --prune --tags
+          echo "version=`git tag -l --points-at=HEAD | grep '^v' | cat`" >> $GITHUB_OUTPUT
+
+      - name: Extract branch name
+        id: extract-branch
+        shell: bash
+        run: |
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
+  # If the current commit has no version tag, an image needs to be
+  # built, tagged and pushed to the registry
   build-and-push-image:
     runs-on: ubuntu-latest
+    needs: prerequisites
+    if: needs.prerequisites.outputs.version == ''
 
     strategy:
       matrix:
@@ -70,3 +97,15 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+
+  # If the current commit has a version tag, the existing image should
+  # be reused by retagging and pushing it
+  retag-and-push-image:
+    runs-on: ubuntu-latest
+    needs: prerequisites
+    if: needs.prerequisites.outputs.version != ''
+
+    steps:
+      - name: Retag existing image & push
+        # Environment tag name: ${{ needs.prerequisites.outputs.branch }}
+        run: echo "TODO"
