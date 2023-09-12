@@ -1,0 +1,165 @@
+:root {
+  --bkd-brand-white: rgba(255, 255, 255, 0.42);
+  --bkd-brand-red: rgba(234, 22, 31, 1);
+  --bkd-brand-black: rgba(0, 0, 0, 1);
+  --bkd-brand-light-sand: rgba(252, 248, 243, 1);
+  --bkd-brand-sand: rgba(250, 241, 227, 1);
+  --bkd-brand-dark-sand: rgba(247, 233, 210, 1);
+  --bkd-brand-sand-hover: rgba(242, 224, 195, 1);
+  --bkd-brand-cappuchino: rgba(235, 211, 174, 1);
+  --bkd-func-fg-black: rgba(0, 0, 0, 1);
+  --bkd-func-fg-grey: rgba(112, 112, 112, 1);
+  --bkd-func-fg-light-grey: rgba(112, 112, 112, 0.68);
+  --bkd-func-fg-white: rgba(255, 255, 255, 1);
+  --bkd-func-bg-anthrazit-hover: rgba(64, 64, 64, 1);
+  --bkd-func-bg-anthrazit: rgba(78, 78, 78, 0.95);
+  --bkd-func-bg-dark-grey: rgba(112, 112, 112, 1);
+  --bkd-func-bg-line-grey: rgba(112, 112, 112, 0.5);
+  --bkd-func-bg-grey: rgba(222, 222, 222, 1);
+  --bkd-func-bg-light-grey: rgba(242, 242, 242, 1);
+  --bkd-func-bg-very-light-grey: rgba(248, 248, 248, 1);
+  --bkd-func-bg-white: rgba(255, 255, 255, 1);
+  --bkd-func-bg-red: rgba(208, 16, 24, 1);
+  --bkd-func-bg-green: rgba(61, 134, 8, 1);
+  --bkd-language-switcher-active-border: rgba(234, 22, 31, 0.77);
+  --bkd-footer-border: rgba(238, 238, 238, 1);
+  --bkd-mobile-nav-shadow: rgba(0, 0, 0, 0.16);
+  --bkd-z-index-dropdown: 1;
+  --bkd-font-family: "Roboto", sans-serif;
+  --bkd-font-size-base: 16px;
+  --bkd-font-weight-base: 300;
+  --bkd-line-height-base: 1.625;
+  --bkd-margin-horizontal-large: 40px;
+  --bkd-margin-horizontal-medium: 30px;
+  --bkd-margin-horizontal-small: 20px;
+}
+
+html,
+body,
+input,
+textarea,
+select,
+a,
+button,
+.sectionTitle {
+  font-size: initial;
+  line-height: initial;
+  color: initial;
+}
+
+pre {
+  font-family: var(--bs-body-font-family);
+  font-size: var(--bs-body-font-size);
+  font-weight: var(--bs-body-font-weight);
+  line-height: var(--bs-body-line-height);
+  color: var(--bs-body-color);
+}
+
+.btn-primary {
+  background-color: var(--bs-btn-bg) !important;
+  border-color: var(--bs-btn-border-color) !important;
+  color: var(--bs-btn-color) !important;
+}
+
+#CLX_Root,
+#CLX_Root > .ember-view {
+  height: unset !important;
+}
+
+.dialogTitleInfo {
+  font-size: calc(1.4625rem + 2.55vw);
+  font-weight: 100;
+}
+
+.dialogTitle {
+  font-size: var(--bkd-font-size-base) !important;
+  color: var(--bkd-brand-black) !important;
+}
+
+.bodyContainer a,
+.dialogBody a,
+.dialogFooter .buttonDiv .textButton {
+  color: initial;
+}
+.textButton:hover div,
+.textButton:hover h3,
+.textButton:hover span {
+  color: var(--bkd-brand-red);
+}
+
+#CLX_Root table th {
+  font-weight: 400;
+}
+
+.dialogHeader {
+  background-color: transparent;
+  border-bottom: none;
+  padding: 0.8rem 0 0 0.8rem;
+  min-height: initial;
+}
+
+.dialogBody {
+  padding: 0;
+}
+
+.dialogFooter {
+  background-color: transparent;
+  padding: 0;
+}
+
+#CLX_Root .option-button,
+.btn-clearGrades,
+.btn-applyGrade {
+  background-color: white;
+  border: #000 solid 1px !important;
+  border: 1 !important;
+  color: #000;
+  padding: 0.375rem 0.75rem !important;
+  height: 35px !important;
+  cursor: pointer;
+  border-radius: 0.375rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#CLX_Root .option-button.active {
+  background: var(--bkd-func-fg-grey) !important;
+  color: #fff;
+}
+
+.btn-clearGrades,
+.btn-applyGrade,
+.option-button {
+  border-radius: 2.5rem !important;
+}
+
+.settings-overlay.gradesActionPrompt .dialogDraggable {
+  top: 5% !important;
+}
+
+.combobox {
+  height: unset;
+}
+#CLX_Root button svg,
+#CLX_Root .inputButton {
+  height: 16px !important;
+  width: 1.5rem !important;
+}
+
+button:hover path[stroke="#666"],
+button:hover rect[stroke="#666"],
+button:hover circle[stroke="#666"],
+button.active path[stroke="#666"],
+button.active rect[stroke="#666"],
+button.active circle[stroke="#666"] {
+  stroke: var(--bkd-brand-red);
+}
+
+button:hover path[fill="#666"],
+button:hover rect[fill="#666"],
+button:hover circle[fill="#666"],
+button.active path[fill="#666"],
+button.active rect[fill="#666"],
+button.active circle[fill="#666"] {
+  fill: var(--bkd-brand-red);
+}

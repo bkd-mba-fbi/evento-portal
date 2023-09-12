@@ -1,0 +1,255 @@
+:root {
+  --bkd-brand-white: rgba(255, 255, 255, 0.42);
+  --bkd-brand-red: rgba(234, 22, 31, 1);
+  --bkd-brand-black: rgba(0, 0, 0, 1);
+  --bkd-brand-light-sand: rgba(252, 248, 243, 1);
+  --bkd-brand-sand: rgba(250, 241, 227, 1);
+  --bkd-brand-dark-sand: rgba(247, 233, 210, 1);
+  --bkd-brand-sand-hover: rgba(242, 224, 195, 1);
+  --bkd-brand-cappuchino: rgba(235, 211, 174, 1);
+  --bkd-func-fg-black: rgba(0, 0, 0, 1);
+  --bkd-func-fg-grey: rgba(112, 112, 112, 1);
+  --bkd-func-fg-light-grey: rgba(112, 112, 112, 0.68);
+  --bkd-func-fg-white: rgba(255, 255, 255, 1);
+  --bkd-func-bg-anthrazit-hover: rgba(64, 64, 64, 1);
+  --bkd-func-bg-anthrazit: rgba(78, 78, 78, 0.95);
+  --bkd-func-bg-dark-grey: rgba(112, 112, 112, 1);
+  --bkd-func-bg-line-grey: rgba(112, 112, 112, 0.5);
+  --bkd-func-bg-grey: rgba(222, 222, 222, 1);
+  --bkd-func-bg-light-grey: rgba(242, 242, 242, 1);
+  --bkd-func-bg-very-light-grey: rgba(248, 248, 248, 1);
+  --bkd-func-bg-white: rgba(255, 255, 255, 1);
+  --bkd-func-bg-red: rgba(208, 16, 24, 1);
+  --bkd-func-bg-green: rgba(61, 134, 8, 1);
+  --bkd-language-switcher-active-border: rgba(234, 22, 31, 0.77);
+  --bkd-footer-border: rgba(238, 238, 238, 1);
+  --bkd-mobile-nav-shadow: rgba(0, 0, 0, 0.16);
+  --bkd-z-index-dropdown: 1;
+  --bkd-font-family: "Roboto", sans-serif;
+  --bkd-font-size-base: 16px;
+  --bkd-font-weight-base: 300;
+  --bkd-line-height-base: 1.625;
+  --bkd-margin-horizontal-large: 40px;
+  --bkd-margin-horizontal-medium: 30px;
+  --bkd-margin-horizontal-small: 20px;
+}
+
+html {
+  font-size: inherit;
+  background: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+#CLX_Root .photolist__container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  position: relative;
+  border-top: 1px solid #e9ecef;
+}
+
+
+#CLX_Root .photolist-email-document {
+  display: block;
+}
+
+#CLX_Root .photolist-emailTo,
+#CLX_Root .photolist-documents {
+  margin-right: 1.5rem;
+}
+
+#CLX_Root .excelDownload .form-button {
+  white-space: normal;
+  height: auto;
+}
+
+#CLX_Root .photolist__subscriptionDeatils__table td {
+  padding: 1rem 0.5rem 1rem 0.5rem;
+  border-bottom: 1px solid #ccced0;
+}
+#CLX_Root .photolist__subscriptionDeatils__table  {
+  border-top: 1px solid #ccced0;
+}
+
+#CLX_Root  .photolist-label {
+  font-weight: lighter;
+}
+
+#CLX_Root table td {
+  padding: 0;
+}
+
+#CLX_Root .iconwidth {
+  width: 3rem;
+}
+
+#CLX_Root .document {
+  padding-bottom: 1rem;
+  float: left;
+  min-width: 25rem;
+}
+
+
+#CLX_Root svg {
+  width: auto;
+  height: auto;
+}
+
+#CLX_Root .photolist__student {
+  display: block;
+  width: 12rem;
+  height: 19rem;
+  float: left;
+  margin: 1rem 2rem 0.5rem 0rem;
+  cursor: pointer;
+  order: 1;
+}
+
+/* pointer
+ * the active class is set by the link-to helper 
+ */
+#CLX_Root .photolist__student.active::before {
+  content: ' ';
+  position: absolute;
+  width: 0;
+  height: 0;
+  margin-top: 16.6rem;
+  margin-left: 4rem;
+  border: 2rem solid transparent;
+  border-bottom-color: var(--bkd-brand-dark-sand);
+}
+
+/* items after the end-of-line of the active element */
+#CLX_Root .photolist__student.active ~ .photolist__student.end-of-line ~ .photolist__student,
+#CLX_Root .photolist__student.active.end-of-line ~ .photolist__student {
+  order: 3; /* order is higher than the one of .photolist__details; this is used to position .photolist__details */
+}
+
+#CLX_Root .photolist__student__photo {
+  width: 12rem;
+  height: 16rem;
+  border: 1px solid rgba(51,51,61,.25);
+}
+
+#CLX_Root .photolist__student__photo:hover{
+  opacity: 0.5;
+}
+
+#CLX_Root .photolist__student__label {
+  display: inline-block;
+  margin-top: 0.2rem;
+  max-width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+#CLX_Root .photolist__placeholder {
+  float: left;
+  width: 100%;
+}
+
+#CLX_Root .photolist__details {
+  width: 100%;
+  margin: 1rem 1.5rem 0 0rem;
+  order: 2;
+  display: block;
+  padding: 2.5rem;
+  background-color: var(--bkd-brand-dark-sand);
+  /*
+  e5e7e778
+  -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.29);
+  -moz-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.29);
+  box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.29);
+  */
+}
+
+#CLX_Root .photolist__details__close {
+  float: right;
+
+  /* the close button should not take space away from
+   * the table. Some browsers will ignore the transform
+   * instruction.
+   */
+  width: 0px;
+  transform: translateX(-1.15rem);
+}
+
+/* style the close svg graphic */
+#CLX_Root .photolist__details__close *{
+  stroke: var(--bkd-brand-black);
+  fill: transparent;
+  height: 2rem;
+  width: 2rem;
+}
+
+#CLX_Root .photolist__details__container {
+  display: inline-block;
+  margin: 1rem 1rem 0 0;
+  max-width: 25rem;
+  vertical-align: top;
+}
+
+#CLX_Root .photolist__details__container h2 {
+  margin: 0;
+  font-weight: bold;
+  padding: 0 0 1rem;
+  font-style: normal;
+  font-size: 1.8rem;
+}
+
+#CLX_Root .photolist__details__table td {
+  white-space: pre;
+  padding: 0;
+  width: 20rem;
+}
+
+#CLX_Root .href-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 25rem;
+  display: inline-block;
+}
+
+
+#CLX_Root .photolist__details__table a:hover {
+  text-decoration: underline;
+}
+
+#CLX_Root .photolist__details__table td, .photolist__details__table a {
+  vertical-align: top;
+}
+
+#CLX_Root .photolist__details--loading {
+  height: 20rem;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+}
+
+#CLX_Root .jsExcelDownload{
+  background: transparent;
+  border: none;
+  color: #005189;
+  padding: 0;
+  white-space: normal;
+}
+
+@media only screen and (max-device-width: 1355px), only screen and (max-width: 1355px) { 
+  #CLX_Root .photolist-email-document {
+    display: block;
+  }
+}
+
+@media only screen and (max-device-width: 499px), only screen and (max-width: 499px) { 
+  #CLX_Root .photolist__details__container {
+    max-width: 20rem;
+  }
+  #CLX_Root .photolist__details {
+    padding: 1rem 2rem 1rem 1rem;
+  }
+  
+}
+
