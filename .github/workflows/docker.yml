@@ -1,8 +1,14 @@
 name: Build & Push Docker Image 🚀
 
+# Workflow that builds and pushes a Docker image for the release
+# branches. The image will be tagged with an automatically incremented
+# version (e.g. `1.3.0`) and the name of the release branch (`test` or
+# `production`). The Git commit will be tagged with the version as
+# well (e.g. `v1.3.0`). For more details, see README.md.
+
 on:
   push:
-    branches: [test-ci]
+    branches: [test-ci, production-ci]
 
 env:
   REGISTRY: ghcr.io
@@ -14,7 +20,7 @@ jobs:
 
     outputs:
       version: ${{ steps.extract-version.outputs.version }}
-      branch: ${{ steps.extract-branch.branch}}
+      branch: ${{ steps.extract-branch.outputs.branch }}
 
     steps:
       - name: Checkout 🛎️
@@ -24,7 +30,7 @@ jobs:
         id: extract-version
         run: |
           git fetch --prune --tags
-          echo "version=`git tag -l --points-at=HEAD | grep '^v' | cat`" >> $GITHUB_OUTPUT
+          echo "version=`git tag -l --points-at=HEAD | sed -En 's/^v(.*)/\1/p'`" >> $GITHUB_OUTPUT
 
       - name: Extract branch name
         id: extract-branch
@@ -67,7 +73,8 @@ jobs:
           mkdir dist
           mv evento-portal dist
 
-      - name: Bump version and push tag
+      - name: Bump Git version tag and push it
+        id: tag
         uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -89,7 +96,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=branch
-            type=semver,pattern={{version}}
+            type=semver,pattern={{version}},value=${{steps.tag.outputs.new_tag}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
@@ -106,6 +113,18 @@ jobs:
     if: needs.prerequisites.outputs.version != ''
 
     steps:
+      - name: Login to Docker registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Retag existing image & push
-        # Environment tag name: ${{ needs.prerequisites.outputs.branch }}
-        run: echo "TODO"
+        env:
+          VERSION_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.prerequisites.outputs.version }}
+          BRANCH_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.prerequisites.outputs.branch }}
+        run: |
+          docker pull $VERSION_IMAGE
+          docker tag $VERSION_IMAGE $BRANCH_IMAGE
+          docker push $BRANCH_IMAGE
