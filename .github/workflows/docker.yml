@@ -103,8 +103,8 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
-            type=semver,pattern={{version}},value=${{steps.tag.outputs.new_tag}}
+            type=raw,value=${{ needs.prerequisites.outputs.branch }}
+            type=semver,pattern={{version}},value=${{ steps.tag.outputs.new_tag }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
