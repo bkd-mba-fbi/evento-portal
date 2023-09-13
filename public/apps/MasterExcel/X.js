@@ -34,7 +34,9 @@ var X = {
     // Text von start_button wurde angepasst für EVT CR-11450
     strings: {
         de: {
-            views: [{
+            views: [null, // view 2 und 3 verwenden die Zeichenketten von view 0 und 1
+                    null,
+                 {
                 start_dropdown: "Excel-Eingabe",
                 start_button: "für Noten",
                 accept_button: "Noten übernehmen",
@@ -49,7 +51,8 @@ var X = {
                     "# die Zeugnisnoten, dazwischen liegende Spalten werden ignoriert",
                     ""
                 ]
-            }, {
+            }, 
+            {
                 start_dropdown: "Excel-Eingabe",
                 start_button: "für Absenzen",
                 accept_button: "Absenzen übernehmen",
@@ -64,8 +67,7 @@ var X = {
                     ""
                 ]
             },
-            null, // view 2 und 3 verwenden die Zeichenketten von view 0 und 1
-            null, {
+            {
                 start_dropdown: "Excel-Eingabe",
                 start_button: "für Noten",
                 accept_button: "Daten übernehmen",
@@ -92,7 +94,10 @@ var X = {
             }
         },
         fr: {
-            views: [{
+            views: [
+            null, // view 2 und 3 verwenden die Zeichenketten von view 0 und 1
+            null,
+            {
                 start_dropdown: "Saisie Excel",
                 start_button: "pour les notes",
                 accept_button: "Valider les notes",
@@ -122,8 +127,7 @@ var X = {
                     ""
                 ]
             },
-            null, // view 2 und 3 verwenden die Zeichenketten von view 0 und 1
-            null, {
+             {
                 start_dropdown: "Saisie Excel",
                 start_button: "pour les notes",
                 accept_button: "Valider les données",
@@ -191,7 +195,7 @@ var X = {
         X._loaded = true;
 
         var showPanel = !X.embedded;
-        X.onFrameLoad(showPanel);
+
     },
 
     /**
@@ -204,27 +208,19 @@ var X = {
 
     /**
      * füge zusätzliche Eingabehilfen ein, sofern es solcher bedarf
-     * @param aShowPanel  gibt an, ob das Excel-Importfeld unbedingt angezeigt werden soll
-     *                    oder nur, wenn das Evento-Formular noch keine Daten enthält
+     * @param view  welche funktion soll geladen werden
      */
-    onFrameLoad: function(aShowPanel) {
+    onFrameLoad: function(view) {
         
         X.lang = X.language();
-        
-        X.strings[X.lang].views[2] = X.strings[X.lang].views[0];
-        X.strings[X.lang].views[3] = X.strings[X.lang].views[1];
-
-        var view = X.viewType();
-        var strings = X.strings[X.lang].views[view];
-
         // füge den Knopf und das Textfeld (inkl. Styling) hinzu
         var isModernUI = view == 2 || view == 4;
-        var pageEl = isModernUI ? $("div.page") : document.body;
+        var pageEl = $("body");
         $(pageEl).append('\
 <style type="text/css">\
 	' + (isModernUI ? 'div.page { position: relative; }' : '') + ' \
-	#tsv-overlay { position: fixed; top: 0px;' + (!isModernUI ? 'left: 0px;' : 'max-width: 100%;') + 'width: 100%; height: 100%; display: none; } \
-	#tsv-overlay-inner { height: 100%; background: white; padding: 5% 5% 20px; margin-left: 327px; } \
+	#tsv-overlay { position: fixed; top: 0px;' + (!isModernUI ? 'left: 0px;' : 'max-width: 100%;') + 'width: 100%; height: 85%; display: none; } \
+	#tsv-overlay-inner { height: 90%; background: white; padding: 5% 5% 20px; } \
 	#tsv-overlay-inner-2 { height: 70%; } \
 	/* Bugfix: Google Chrome ändert nur bei display:block Textfeldern mit CSS die Höhe */ \
 	#tsv-data { width: 100%; height: 80%; margin-bottom: 1em; display: block; } \
@@ -235,8 +231,8 @@ var X = {
 	<!-- Bugfix: MSIE7 kann im Standard Mode die Höhe von Textfeldern nicht mit CSS ändern -->\
 	<textarea id="tsv-data" rows="20"></textarea>\
 	\
-	<div style="float: left;"><input type="button" class="btn btn-primary" value=" ' + strings.accept_button + ' " onclick="top.X.acceptOverlay(' + view + ');"> <input type="button" class="btn btn-secondary" value=" ' + strings.cancel_button + ' " onclick="top.X.cancelOverlay();"></div>\
-	<div style="float: right;">' + strings.feedback_to.replace("%s", '<a href="mailto:simon.buenzli@zeniko.ch?subject=Evento:%20Excel-Eingabe%20Feedback">Simon B&uuml;nzli</a>') + '</div>\
+	<div style="float: left;"><input type="button" class="btn btn-primary" value=" ' + X.strings[X.lang].views[view].accept_button + ' " onclick="X.acceptOverlay(' + view + ');"> <input type="button" class="btn btn-outline-secondary" value=" ' + X.strings[X.lang].views[view].cancel_button + ' " onclick="X.cancelOverlay();"></div>\
+	<div style="float: right;">' + X.strings[X.lang].views[view].feedback_to.replace("%s", '<a href="mailto:simon.buenzli@zeniko.ch?subject=Evento:%20Excel-Eingabe%20Feedback">Simon B&uuml;nzli</a>') + '</div>\
 </div></div></div>\
 		');
 
@@ -249,10 +245,7 @@ var X = {
                     view = 3;
                 }
             }
-            // für JSModul werden Links anstelle von Buttons verwendet
-            $("#tsv-overlay input[type=button]", pageEl).replaceWith(function() {
-                return '<a class="linkButton" onclick="' + this.getAttribute("onclick") + '" style="float: left; margin-right: 0.5em;"> ' + this.value + ' </a>';
-            });
+           
         }
 
         if (view == 4) {
@@ -261,16 +254,6 @@ var X = {
             // X.showOverlay(4, "Name") lädt die Eingabemaske
         }
 
-        // lade das Excel-Importfeld automatisch, wenn noch keine Daten eingetragen sind
-        var autoLoadOverlay = !X.embedded && (aShowPanel || $.grep(X.collectNames(view, true), function(aLine) {
-            // enthält die Zeile bereits Daten (eine Note oder Absenzen)?
-            return /\t/.test(aLine);
-        }).length == 0);
-        if (autoLoadOverlay) {
-            X.showOverlay(view);
-        }
-
-        X.embeddedCallback();
     },
 
     /**
@@ -279,6 +262,7 @@ var X = {
      * @param aTest  muss der Name (oder Index) des gewüschten Tests sein (für aView == 4)
      */
     showOverlay: function(aView, aTest) {
+        this.onFrameLoad(aView)
         var lines = [];
         var index = -1;
         if (aView == 4 && aTest) {
@@ -291,7 +275,6 @@ var X = {
                 // ungültiger Wert für aTest
                 return;
             }
-
             var kursname = tests[index];
             lines = X.strings[X.lang].views[aView].default_lines.join("\n").replace("%s", kursname) +
                 "\n" + X.collectNames(aView, index).join("\n") + "\n";
@@ -307,10 +290,10 @@ var X = {
         }
 
         if (aView >= 2) {
-            $("#tsv-data + div > :first-child").attr("onClick", 'top.X.acceptOverlay(' + aView + ', ' + index + ');').html(X.strings[X.lang].views[aView].accept_button);
+            $("#tsv-data + div > :first-child").attr("onClick", 'X.acceptOverlay(' + aView + ', ' + index + ');').html(X.strings[X.lang].views[aView].accept_button);
         }
 
-        $("#tsv-overlay").show(1000, function() {
+        $("#tsv-overlay").show(500, function() {
             $("textarea", this).focus();
             $("textarea", this).select();
         }).find("textarea").val(lines);
@@ -322,7 +305,7 @@ var X = {
      * @param aTest  muss der Index des gewählten Tests sein (für aView == 4)
      */
     acceptOverlay: function(aView, aTest) {
-        var lines = $("#tsv-overlay").hide(1000).find("textarea").val().split("\n");
+        var lines = $("#tsv-overlay").hide(500).find("textarea").val().split("\n");
         var errorColors = {
             "not-found": "#ff6",
             "grade-not-found": "#ff6",
@@ -601,7 +584,7 @@ var X = {
      * bricht die Excel-Eingabe ab
      */
     cancelOverlay: function() {
-        $("#tsv-overlay").hide(1000);
+        $("#tsv-overlay").hide(500);
     },
 
     /**
