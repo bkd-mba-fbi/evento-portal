@@ -8,5 +8,6 @@ window.personPhoto.locale = {
       fotoAufnehmen: {de: "Foto aufnehmen", fr: "Prendre une photo" } ,
       abbrechen: {de: "Abbrechen", fr: "Annuler" } ,
       uebernehmen: {de: "Übernehmen", fr: "Valider" } ,
+      errorZusatzInfoRecht: {de: "Ihnen fehlt das Recht Zusatzinformation. Bitte melden Sie sich bitte bei Ihrem Evento Superuser/in.", fr: "Vous n'avez pas le droit d'ajouter des informations. Veuillez vous adresser à votre superutilisateur Evento." } ,
 
 };

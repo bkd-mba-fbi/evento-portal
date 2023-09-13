@@ -292,14 +292,17 @@ function startPerson(idperson,token){
       var urlPut = window.personPhoto.settings.apiUrl.split('/');
       urlPut = urlPut[0] + '//' + urlPut[2];
       var arraybuffer = base64ToArrayBuffer(fileUrl.substring(fileUrl.indexOf('base64,')+7,fileUrl.length));
-       await fetch(urlPut+location, {
+      var putResponse = await fetch(urlPut+location, {
         method: 'PUT', // *GET, POST, PUT, DELETE, etc.
         headers: {
           'CLX-Authorization': 'token_type=urn:ietf:params:oauth:token-type:jwt-bearer, access_token='+token
-  
         },
         body: arraybuffer // body data type must match "Content-Type" header
       });
+
+      if(putResponse.status >= 400){
+        window.alert(getString('errorZusatzInfoRecht'));
+      }
 
     } else {
       window.alert(response.json())
