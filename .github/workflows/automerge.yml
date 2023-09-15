@@ -28,5 +28,3 @@ jobs:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           MERGE_LABELS: "automerge, deployment"
           MERGE_METHOD: "rebase"
-          MERGE_READY_STATE: "clean"
-          UPDATE_METHOD: "rebase"
