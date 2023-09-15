@@ -141,5 +141,5 @@ jobs:
           BRANCH_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.prerequisites.outputs.branch }}
         run: |
           docker pull $VERSION_IMAGE
-          docker tag $VERSION_IMAGE ${{ github.head_ref }}  #$BRANCH_IMAGE
+          docker tag $VERSION_IMAGE ${{ github.ref }}  #$BRANCH_IMAGE
           docker push $BRANCH_IMAGE
