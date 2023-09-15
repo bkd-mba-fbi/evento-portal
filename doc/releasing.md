@@ -29,3 +29,7 @@ Production:
 - To release & deploy to the _production_ environment running at Bedag, BKD merges the `test` branch into the `production` branch. The workflow [docker.yml](../.github/workflows/docker.yml) can usually reuse the Docker image already built for this commit and will tag it with the `production` tag. In a Gitops manner, the Bedag cluster will then deploy the `production` Image to the _production_ environment.
 
 - Hotfixes can either be made on the `production` branch (using a hotfix branch if appropriate), then cherry-picked back into the `main` branch. Or they can be made in the `main` branch, then cherry-picked into the `test`/`production` branch.
+
+## Release Instructions
+
+TODO
