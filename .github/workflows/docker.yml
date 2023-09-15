@@ -22,13 +22,6 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  debug:
-    runs-on: ubuntu-latest
-
-    steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🎉 event info ${{ github.event.pull_request }}"
-
   prerequisites:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
