@@ -110,7 +110,7 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=${{ needs.prerequisites.outputs.branch }}
+            type=raw,value=test-ci  #${{ needs.prerequisites.outputs.branch }}
             type=semver,pattern={{version}},value=${{ steps.tag.outputs.new_tag }}
 
       - name: Build and push Docker image
@@ -141,5 +141,5 @@ jobs:
           BRANCH_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.prerequisites.outputs.branch }}
         run: |
           docker pull $VERSION_IMAGE
-          docker tag $VERSION_IMAGE ${{ github.ref }}  #$BRANCH_IMAGE
+          docker tag $VERSION_IMAGE production-ci  #$BRANCH_IMAGE
           docker push $BRANCH_IMAGE
