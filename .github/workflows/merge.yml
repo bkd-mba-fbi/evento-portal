@@ -31,6 +31,6 @@ jobs:
         run: |
           git fetch
           git checkout ${{ inputs.targetBranch }}
-          git merge --ff-only ${{ inputs.sourceBranch }}
+          git merge --ff-only origin/${{ inputs.sourceBranch }}
           git log -n 1 --tags
           git push
