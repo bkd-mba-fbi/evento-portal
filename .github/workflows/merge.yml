@@ -1,0 +1,36 @@
+name: Merge Branched with ff-only
+
+on:
+  workflow_dispatch:
+    inputs:
+      sourceBranch:
+        description: ""
+        required: true
+        default: "main-ci"
+        type: choice
+        options:
+          - main-ci
+          - test-ci
+      targetBranch:
+        description: ""
+        required: true
+        default: "main-ci"
+        type: choice
+        options:
+          - test-ci
+          - production-ci
+
+jobs:
+  merge-branches-with-ff-only:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: merge branches
+        run: |
+          git checkout ${{ inputs.sourceBranch }}
+          git merge --ff-only ${{ inputs.targetBranch }}
+          git checkout ${{ inputs.targetBranch }}
+          git log -n 1 --tags
+          git push
