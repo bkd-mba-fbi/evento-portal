@@ -29,6 +29,7 @@ jobs:
 
       - name: merge branches
         run: |
+          git fetch
           git checkout ${{ inputs.sourceBranch }}
           git merge --ff-only ${{ inputs.targetBranch }}
           git checkout ${{ inputs.targetBranch }}
