@@ -1,0 +1,22 @@
+name: 'Merge Fast Forward'
+description: 'Merge two branches with --ff-only'
+inputs:
+  base-ref:
+    description: 'base branch for merging'
+    required: true
+  target-ref:
+    description: 'target branch for merging'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - run: git fetch
+      shell: bash
+    - run: git checkout ${{ inputs.target-ref }}
+      shell: bash
+    - run: git merge --ff-only origin/${{ inputs.base-ref }}
+      shell: bash
+    - run: git log -n 1 --tags
+      shell: bash
+    - run: git push
+      shell: bash

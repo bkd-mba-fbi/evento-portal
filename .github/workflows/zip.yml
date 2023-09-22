@@ -1,4 +1,4 @@
-name: Build & Deployment 🚀
+name: Build & Deploy ZIP 📦
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies 🔧
         run: npm ci
 
-      - name: Build 🏭
+      - name: Build and create ZIP 🏭
         run: |
           npm run build
           mv dist evento-portal
