@@ -1,34 +1,43 @@
-name: Build & Push Docker Image 🚀
-
-# Workflow that builds and pushes a Docker image for the release
-# branches. The image will be tagged with an automatically incremented
-# version (e.g. `1.3.0`) and the name of the release branch (`test` or
-# `production`). The Git commit will be tagged with the version as
-# well (e.g. `v1.3.0`). For more details, see README.md.
+name: Container Build and Push 🐳 ⏏️
 
 on:
-  # This workflow should only run on the release branches, when a PR
-  # has been merged (each job must include the
-  # `github.event.pull_request.merged == true` condition)
-  pull_request:
-    branches:
-      - test-ci
-      - production-ci
-    types:
-      - closed
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  prerequisites:
+  merge-branches-with-no-ff:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: merge into test
+        if: github.ref_name == 'test'
+        uses: ./.github/workflows/actions/merge-ff-only
+        with:
+          target-ref: 'test'
+          base-ref: 'main'
+
+      - name: merge into production
+        if: github.ref_name == 'production'
+        uses: ./.github/workflows/actions/merge-ff-only
+        with:
+          target-ref: 'production'
+          base-ref: 'test'
+
+  container-prerequisites:
+    runs-on: ubuntu-latest
+    needs: merge-branches-with-no-ff
 
     outputs:
       version: ${{ steps.extract-version.outputs.version }}
-      branch: ${{ steps.extract-branch.outputs.branch }}
 
     steps:
       - name: Checkout 🛎️
@@ -40,26 +49,18 @@ jobs:
           git fetch --prune --tags
           echo "version=`git tag -l --points-at=HEAD | sed -En 's/^v(.*)/\1/p'`" >> $GITHUB_OUTPUT
 
-      - name: Extract branch name
-        id: extract-branch
-        shell: bash
-        run: |
-          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-
   # If the current commit has no version tag, an image needs to be
   # built, tagged and pushed to the registry
-  build-and-push-image:
+  # If the build runs on test but test has already been built 
+  # with the latest tag, nothing happens
+  container-build-and-push-image:
     runs-on: ubuntu-latest
-    needs: prerequisites
-    if: github.event.pull_request.merged == true && needs.prerequisites.outputs.version == ''
+    needs: container-prerequisites
+    if: needs.container-prerequisites.outputs.version == ''
 
     strategy:
       matrix:
         node-version: [18]
-
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout 🛎️
@@ -103,7 +104,7 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=${{ needs.prerequisites.outputs.branch }}
+            type=raw,value=${{ github.ref_name }}
             type=semver,pattern={{version}},value=${{ steps.tag.outputs.new_tag }}
 
       - name: Build and push Docker image
@@ -115,10 +116,10 @@ jobs:
 
   # If the current commit has a version tag, the existing image should
   # be reused by retagging and pushing it
-  retag-and-push-image:
+  container-retag-and-push-image:
     runs-on: ubuntu-latest
-    needs: prerequisites
-    if: github.event.pull_request.merged == true && needs.prerequisites.outputs.version != ''
+    needs: container-prerequisites
+    if: needs.container-prerequisites.outputs.version != ''
 
     steps:
       - name: Login to Docker registry
@@ -130,9 +131,9 @@ jobs:
 
       - name: Retag existing image & push
         env:
-          VERSION_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.prerequisites.outputs.version }}
-          BRANCH_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.prerequisites.outputs.branch }}
+          VERSION_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.container-prerequisites.outputs.version }}
+          BRANCH_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
         run: |
-          docker pull $VERSION_IMAGE
-          docker tag $VERSION_IMAGE $BRANCH_IMAGE
-          docker push $BRANCH_IMAGE
+          docker pull ${{ env.VERSION_IMAGE }}
+          docker tag ${{ env.VERSION_IMAGE }} ${{ env.BRANCH_IMAGE }}
+          docker push ${{ env.BRANCH_IMAGE }}
