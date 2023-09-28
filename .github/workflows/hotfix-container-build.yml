@@ -14,7 +14,6 @@ env:
 jobs:
   container-prerequisites:
     runs-on: ubuntu-latest
-    needs: merge-branches-with-no-ff
 
     outputs:
       version: ${{ steps.extract-version.outputs.version }}
