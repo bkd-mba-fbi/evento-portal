@@ -1,4 +1,4 @@
-name: Container Build and Push 🔥🚒
+name: HotFix Build and Push 🔥🚒
 
 on:
   workflow_dispatch:
