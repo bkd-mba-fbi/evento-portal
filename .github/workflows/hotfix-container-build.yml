@@ -1,0 +1,95 @@
+name: HotFix Build and Push 🔥🚒
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  container-prerequisites:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.extract-version.outputs.version }}
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Get version tag of HEAD if any
+        id: extract-version
+        run: |
+          git fetch --prune --tags
+          echo "version=`git tag -l --points-at=HEAD | sed -En 's/^v(.*)/\1/p'`" >> $GITHUB_OUTPUT
+
+  # If the current commit has no version tag, an image needs to be
+  # built, tagged and pushed to the registry
+  # If the build runs on test but test has already been built 
+  # with the latest tag, nothing happens
+  container-build-and-push-image:
+    runs-on: ubuntu-latest
+    needs: container-prerequisites
+    if: needs.container-prerequisites.outputs.version == ''
+
+    strategy:
+      matrix:
+        node-version: [18]
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
+          cache: "npm"
+
+      - name: Install dependencies 🔧
+        run: npm ci
+
+      - name: Build application 🏭
+        run: |
+          npm run build
+          mv dist evento-portal
+          mkdir dist
+          mv evento-portal dist
+
+      - name: Bump Git version tag and push it
+        id: tag
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INITIAL_VERSION: 1.0.0
+          WITH_V: true
+          DEFAULT_BUMP: patch
+
+      - name: Login to Docker registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine environment and version tags based on Git & Docker registry
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ github.ref_name }}
+            type=semver,pattern={{version}},value=${{ steps.tag.outputs.new_tag }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
