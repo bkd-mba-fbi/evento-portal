@@ -38,16 +38,19 @@ Hotfix:
 This chapter desciprtes how you can deploy newq releases with github actions. The first step is always the same:
 
 1. In the top bar of the Github project select the tab `Actions`
+
 ![Release Workflow](assets/images/release_step_1.png)
 
 ### Standard Release Cycle (test/production)
 
-2. On the left list select the Workflow `Container Build and Push 🐳 ⏏️`
+2. On the left list select the Workflow `Container Build and Push 🐳 ⏏️ `
+
 ![Release Workflow](assets/images/release_step_2.png)
 
 3. Click on the `Run workflow` button, a tooltip will open. It containt a dropdown button, from which you can choose a branch.
 
 4. Always choose the branch you want to deploy a new version from. If you want to merge `main` into `test` and release a new test iamge, choose `test`. If you want to deploy production, choose `production`
+ 
 ![Release Workflow](assets/images/release_step_3_4.png)
 
 ### Hotfix Release Cycle
@@ -63,4 +66,5 @@ This chapter desciprtes how you can deploy newq releases with github actions. Th
 ![Release Workflow](assets/images/hotfix_step_3_4.png)
 
 5. In the end the package repository should look similar to that:
+
 ![Hotfix Releases](assets/images/hotfix.png)
