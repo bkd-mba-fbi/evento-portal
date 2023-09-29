@@ -35,7 +35,7 @@ Hotfix:
 
 ## Release Instructions
 
-This chapter desciprtes how you can deploy newq releases with github actions. The first step is always the same:
+This chapter desciprtes how you can deploy new releases with github actions. The first step is always the same:
 
 1. In the top bar of the Github project select the tab `Actions`
 
@@ -47,9 +47,9 @@ This chapter desciprtes how you can deploy newq releases with github actions. Th
 
 ![Release Workflow](assets/images/release_step_2.png)
 
-3. Click on the `Run workflow` button, a tooltip will open. It containt a dropdown button, from which you can choose a branch.
+3. Click on the `Run workflow` button, a tooltip will open. It contains a dropdown button, from which you can choose a branch.
 
-4. Always choose the branch you want to deploy a new version from. If you want to merge `main` into `test` and release a new test iamge, choose `test`. If you want to deploy production, choose `production`
+4. Always choose the branch you want to deploy a new version from. If you want to merge `main` into `test` and release a new test image, choose `test`. If you want to deploy production, choose `production`
  
 ![Release Workflow](assets/images/release_step_3_4.png)
 
@@ -61,7 +61,7 @@ This chapter desciprtes how you can deploy newq releases with github actions. Th
 
 3. Click on the `Run workflow` button, a tooltip will open. It containt a dropdown button, from which you can choose a branch.
 
-4. Always choose the branch you want to deploy a new version from. Choose the hotfix branch you jusr created from `production`
+4. Always choose the branch you want to deploy a new version from. Choose the hotfix branch you just created from `production`
 
 ![Release Workflow](assets/images/hotfix_step_3_4.png)
 
