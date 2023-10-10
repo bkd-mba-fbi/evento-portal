@@ -84,7 +84,7 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=${{ github.ref_name }}
+            type=raw,value=hotfix
             type=semver,pattern={{version}},value=${{ steps.tag.outputs.new_tag }}
 
       - name: Build and push Docker image
