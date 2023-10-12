@@ -42,7 +42,7 @@
 }
 
 @media only screen and (max-width: 700px)  {
-    #overlay-toggle-embedded-test {
+    #overlay-toggle-embedded-test, #overlay-toggle-embedded {
         display: none;
     }
 }
