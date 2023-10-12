@@ -55,7 +55,7 @@ define([
 
             var getReports = api.ember.GetReports(idEvent);
             var getExcel = api.ember.GetExcel(idEvent);
-            var getEventPromise = api.ember.getCourses(idEvent);
+            var getEventPromise =  api.ember.getEvent(idEvent)
             var getSubscriptionByEventPromise = api.ember.getSubscriptionByEvent(idEvent);
 
             ember.RSVP.Promise.all([getReports,getExcel]).then(function (responses) {
@@ -99,12 +99,12 @@ define([
                         isLoading: false
                     });
                 }
-                
+                var designation = responses[1].Designation.split('-').length >= 5 ? responses[1].Designation.split('-')[2] + '-' + responses[1].Designation.split('-')[3] : responses[1].Designation;
                 event.setProperties({
                     idEvent: subscriptionByEvent[0].EventId,
-                    designation: responses[1].Designation,
+                    designation: designation,
                     //leadership: responses[1].Leadership,
-                    //dateString: responses[1].DateString
+                    dateString: responses[1].DateString
                 });
 
                 //console.log(event);
@@ -118,7 +118,7 @@ define([
                 var getStudentPromise = api.ember.getPerson('?filter.Id='+filterPersons +'&sort=Lastname.asc&sort=Firstname.asc');
                
                 ember.RSVP.Promise.all([getStudentPromise]).then(function (response) {
-                    studentResponse = response[0];
+                    var studentResponse = response[0];
 
                     //console.log(response);
                     //Create fullname property with LastName and FirstName. Also create the Email to Students string

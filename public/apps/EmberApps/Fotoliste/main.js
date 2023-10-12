@@ -27,7 +27,7 @@
 
             // patch api.js
             api.ember.getCourses = function (idEvent) {
-                return api.getEmber('Courses/'+ idEvent);
+                return api.getEmber('Courses/'+ idEvent+'?fields=Id,Designation');
             };
             api.ember.LegalRepresentativesByStudent = function (studentId) {
                 return api.getEmber('Students/'+ studentId + '/LegalRepresentatives');

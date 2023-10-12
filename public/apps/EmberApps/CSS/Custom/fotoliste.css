@@ -50,6 +50,9 @@ html {
   border-top: 1px solid #e9ecef;
 }
 
+#CLX_Root h1 {
+  margin: 0;
+}
 
 #CLX_Root .photolist-email-document {
   display: block;
@@ -99,8 +102,8 @@ html {
 
 #CLX_Root .photolist__student {
   display: block;
-  width: 12rem;
-  height: 19rem;
+  width: 130px;
+  height: 215px;
   float: left;
   margin: 1rem 2rem 0.5rem 0rem;
   cursor: pointer;
@@ -115,8 +118,8 @@ html {
   position: absolute;
   width: 0;
   height: 0;
-  margin-top: 16.6rem;
-  margin-left: 4rem;
+  margin-top: 185px;
+  margin-left: 33px;
   border: 2rem solid transparent;
   border-bottom-color: var(--bkd-brand-dark-sand);
 }
@@ -128,8 +131,8 @@ html {
 }
 
 #CLX_Root .photolist__student__photo {
-  width: 12rem;
-  height: 16rem;
+  width: 130px;
+  height: 180px;
   border: 1px solid rgba(51,51,61,.25);
 }
 
