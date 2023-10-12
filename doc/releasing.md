@@ -6,12 +6,12 @@
 
 Here is an overview of the operation environments the _Evento Portal_ will be deployed to and their corresponding Git branches:
 
-| Environment | Platform           | Git Branch   | Purpose                                                  |
-| ----------- | ------------------ | ------------ | -------------------------------------------------------- |
-| Development | Netlify            | `main`       | Review latest changes during development                 |
-| Test        | Bedag (Kubernetes) | `test`       | Test on close to production environment before releasing |
-| Production  | Bedag (Kubernetes) | `production` | "Live" version used by the users                         |
-| Hotfix      | Bedag (Kubernetes) | `hotfix-*`   | Deploying hotfixes to production                         |
+| Environment | Platform                                                                                                                                                    | Git Branch   | Purpose                                                  | Url                          |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | -------------------------------------------------------- | ---------------------------- |
+| Development | [![Netlify Status](https://api.netlify.com/api/v1/badges/fccfe392-ffb5-4e40-b95a-5d319e431559/deploy-status)](https://app.netlify.com/sites/evtapp/deploys) | `main`       | Review latest changes during development                 | https://evtapp.netlify.app/  |
+| Test        | Bedag (Kubernetes)                                                                                                                                          | `test`       | Test on close to production environment before releasing | https://evt-test.apps.be.ch/ |
+| Production  | Bedag (Kubernetes)                                                                                                                                          | `production` | "Live" version used by the users                         | https://evt.apps.be.ch/      |
+| Hotfix      | Bedag (Kubernetes)                                                                                                                                          | `hotfix-*`   | Deploying hotfixes to production                         |                              |
 
 ## Branching & Releasing Concept
 
