@@ -1,0 +1,35 @@
+{{#if studentData.isLoading}}
+<div class="photolist__details--loading">{{translate "loading"}}</div>
+{{else}}
+<div class="photolist__details__close">{{icon "close"}}</div>
+<div class="photolist__details__container">
+    <h3>{{studentData.student.title}}</h3>
+    <table class="photolist__details__table">
+        {{#each studentData.student.data as |property|}}
+        <tr>
+            <td>{{#if property.href}}<a href="{{property.href}}:{{property.value}}">{{property.value}}</a>{{else}}{{property.value}}{{/if}}</td>
+        </tr>
+        {{/each}}
+    </table>
+</div>
+<div class="photolist__details__container">
+    <h3>{{studentData.parents.title}}</h3>
+    <table class="photolist__details__table">
+        {{#each studentData.parents.data as |property|}}
+        <tr>
+            <td>{{#if property.href}}<a href="{{property.href}}:{{property.value}}">{{property.value}}</a>{{else}}{{property.value}}{{/if}}</td>
+        </tr>
+        {{/each}}
+    </table>
+</div>
+<div class="photolist__details__container">
+    <h3>{{studentData.employer.title}}</h3>
+    <table class="photolist__details__table">
+        {{#each studentData.employer.data as |property|}}
+        <tr>
+            <td>{{#if property.href}}<a href="{{property.href}}:{{property.value}}">{{property.value}}</a>{{else}}{{property.value}}{{/if}}</td>
+        </tr>
+        {{/each}}
+    </table>
+</div>
+{{/if}}
