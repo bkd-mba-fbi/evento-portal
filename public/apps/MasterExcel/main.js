@@ -39,16 +39,16 @@ function insertButtonsGrading() {
       '\
 <div id="overlay-toggle-embedded" class="btn-clearGrades ms-2 dropdown-toggle excelDropdown">\
 <span>' +
-      X.strings[X.lang].views[2].start_dropdown +
+      X.strings[X.language()].views[2].start_dropdown +
       ' </span>\
 <div class="excelDropdown-content">\
 <a class="textButton" onclick="X.showOverlay(2);"> ' +
-      X.strings[X.lang].views[2].start_button +
+      X.strings[X.language()].views[2].start_button +
       " </a>" +
       (appendExcelBt.length > 0
         ? '\
 <a class="textButton" onclick="X.showOverlay(3);"> ' +
-          X.strings[X.lang].views[3].start_button +
+          X.strings[X.language()].views[3].start_button +
           " </a>"
         : "") +
       "\
@@ -89,7 +89,7 @@ function insertButtonsTest() {
   });              
   
   var buttons_html = '<button id="overlay-toggle-embedded-test" type="button" class="btn btn-outline-primary ms-2 dropdown-toggle excelDropdown">\
-      <span>' + X.strings[X.lang].views[2].start_dropdown + ' </span>\
+      <span>' + X.strings[X.language()].views[2].start_dropdown + ' </span>\
       <div class="excelDropdown-content">'
       +dropdownItems+
   '</div> </button>';
