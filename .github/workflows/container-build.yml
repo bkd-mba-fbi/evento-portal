@@ -137,4 +137,4 @@ jobs:
         run: |
           docker pull ${{ env.VERSION_IMAGE }}
           docker tag ${{ env.VERSION_IMAGE }} ${{ env.BRANCH_VERSION_IMAGE }}
-          docker push ${{ env.BRANCH_IMAGE }}
+          docker push ${{ env.BRANCH_VERSION_IMAGE }}
