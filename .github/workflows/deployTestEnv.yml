@@ -1,9 +1,11 @@
-name: Deploy Test Env 🚀
+name: Deploy MAIN to Netlify 🚀
 
 on:
   push:
-    branches: [main]
-
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
 jobs:
   build:
     runs-on: ubuntu-latest
