@@ -159,9 +159,12 @@ describe("Navigation Menu", () => {
     });
   });
 
-  describe("with 'TeacherRole' role", () => {
+  describe("with 'TeacherRole' and 'LessonTeacherRole' role", () => {
     beforeEach(() => {
-      cy.login({ roles: ["TeacherRole"], permissions: [] });
+      cy.login({
+        roles: ["TeacherRole", "LessonTeacherRole"],
+        permissions: [],
+      });
       cy.resizeToMobile();
       cy.visit("/index.html");
     });

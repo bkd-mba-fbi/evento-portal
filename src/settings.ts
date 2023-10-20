@@ -202,6 +202,7 @@ export const settings: Settings = {
             label: msg("Präsenzkontrolle"),
             allowedRolesOrPermissions: [
               "TeacherRole",
+              "LessonTeacherRole",
               "AbsenceAdministratorRole",
             ],
             deniedInstanceIds: null,
@@ -213,6 +214,7 @@ export const settings: Settings = {
             label: msg("Aktuelle Fächer"),
             allowedRolesOrPermissions: [
               "TeacherRole",
+              "LessonTeacherRole",
               "ClassTeacherRole",
               "AbsenceAdministratorRole",
             ],
@@ -225,6 +227,7 @@ export const settings: Settings = {
             label: msg("Tests und Bewertung"),
             allowedRolesOrPermissions: [
               "TeacherRole",
+              "LessonTeacherRole",
               "AbsenceAdministratorRole",
             ],
             deniedInstanceIds: null,
@@ -234,7 +237,7 @@ export const settings: Settings = {
           {
             key: "substitutionsAssign",
             label: msg("Stellvertretung erfassen"),
-            allowedRolesOrPermissions: ["TeacherRole"],
+            allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
             deniedInstanceIds: null,
             appKey: "stellvertretung",
             appPath: "#/substitutions/assign",
@@ -242,7 +245,7 @@ export const settings: Settings = {
           {
             key: "substitutionsExecute",
             label: msg("Stellvertretung ausüben"),
-            allowedRolesOrPermissions: ["TeacherRole"],
+            allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
             deniedInstanceIds: null,
             appKey: "stellvertretung",
             appPath: "#/substitutions/execute",
@@ -257,6 +260,7 @@ export const settings: Settings = {
             label: msg("Offene Absenzen entschuldigen"),
             allowedRolesOrPermissions: [
               "TeacherRole",
+              "LessonTeacherRole",
               "ClassTeacherRole",
               "AbsenceAdministratorRole",
             ],
@@ -269,6 +273,7 @@ export const settings: Settings = {
             label: msg("Absenzen bearbeiten"),
             allowedRolesOrPermissions: [
               "TeacherRole",
+              "LessonTeacherRole",
               "ClassTeacherRole",
               "AbsenceAdministratorRole",
             ],
@@ -281,6 +286,7 @@ export const settings: Settings = {
             label: msg("Absenzen auswerten"),
             allowedRolesOrPermissions: [
               "TeacherRole",
+              "LessonTeacherRole",
               "ClassTeacherRole",
               "AbsenceAdministratorRole",
             ],
@@ -327,6 +333,7 @@ export const settings: Settings = {
             label: msg("Schulinterne Weiterbildung"),
             allowedRolesOrPermissions: [
               "TeacherRole",
+              "LessonTeacherRole",
               "ClassTeacherRole",
               "AbsenceAdministratorRole",
               "SubstituteAdministratorRole",
