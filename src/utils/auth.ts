@@ -57,7 +57,7 @@ export function createOAuthClient(): OAuth2Client {
 export async function ensureAuthenticated(
   client: OAuth2Client,
   scope: string,
-  locale: string
+  locale: string,
 ): Promise<void> {
   const loginState = consumeLoginState();
   const loginResult = await getTokenAfterLogin(client, loginState);
@@ -96,14 +96,14 @@ export async function ensureAuthenticated(
 export async function activateTokenForScope(
   client: OAuth2Client,
   scope: string,
-  locale: string
+  locale: string,
 ): Promise<void> {
   console.log(`Activate token for scope "${scope}" and locale "${locale}"`);
 
   if (isTokenExpired(getRefreshToken())) {
     // Not authenticated or refresh token expired, redirect to login
     console.log(
-      "Not authenticated or refresh token expired, redirect to login"
+      "Not authenticated or refresh token expired, redirect to login",
     );
     return redirect(client, scope, locale, loginUrl);
   }
@@ -114,19 +114,19 @@ export async function activateTokenForScope(
   if (isValidToken(currentAccessToken, scope, locale)) {
     // Current token for scope/locale already set
     console.log(
-      `Current token for scope "${scope}" and locale "${locale}" already set`
+      `Current token for scope "${scope}" and locale "${locale}" already set`,
     );
   } else if (isValidToken(cachedAccessToken, scope, locale)) {
     // Token for scope/locale cached, set as current
     console.log(
-      `Token for scope "${scope}" and locale "${locale}" cached, set as current`
+      `Token for scope "${scope}" and locale "${locale}" cached, set as current`,
     );
     storeCurrentAccessToken(cachedAccessToken);
   } else {
     // No token for scope/locale present or half expired, redirect for
     // token fetch/refresh
     console.log(
-      `No token for scope "${scope}" and locale "${locale}" present or half expired, redirect for token fetch/refresh`
+      `No token for scope "${scope}" and locale "${locale}" present or half expired, redirect for token fetch/refresh`,
     );
     await redirect(client, scope, locale, refreshUrl);
   }
@@ -146,7 +146,7 @@ export async function logout(client: OAuth2Client): Promise<void> {
       `${envSettings.oAuthPrefix}/Authorization/${instance}/Logout`,
       {
         access_token: token,
-      }
+      },
     );
   } catch (e) {
     // Only catch if JSON syntax error (API responds with HTML)
@@ -174,14 +174,14 @@ type RedirectUrlBuilder = (
   scope: string,
   locale: string,
   redirectUri: string,
-  codeVerifier: string
+  codeVerifier: string,
 ) => Promise<URL>;
 
 async function redirect(
   client: OAuth2Client,
   scope: string,
   locale: string,
-  buildUrl: RedirectUrlBuilder
+  buildUrl: RedirectUrlBuilder,
 ): Promise<void> {
   const codeVerifier = await generateCodeVerifier(); // Random PKCE code
   const redirectUri = new URL(document.location.href); // URL to come back to after login
@@ -193,7 +193,7 @@ async function redirect(
     scope,
     locale,
     redirectUri.toString(),
-    codeVerifier
+    codeVerifier,
   );
   document.location.href = url.toString();
 }
@@ -203,13 +203,12 @@ const loginUrl: RedirectUrlBuilder = async (
   scope,
   locale,
   redirectUri,
-  codeVerifier
+  codeVerifier,
 ) => {
   const url = new URL(await client.getEndpoint("authorizationEndpoint"));
 
-  const [codeChallengeMethod, codeChallenge] = await getCodeChallenge(
-    codeVerifier
-  );
+  const [codeChallengeMethod, codeChallenge] =
+    await getCodeChallenge(codeVerifier);
   url.searchParams.set("clientId", client.settings.clientId);
   url.searchParams.set("redirectUrl", redirectUri);
   url.searchParams.set("culture_info", locale);
@@ -228,16 +227,15 @@ const refreshUrl: RedirectUrlBuilder = async (
   scope,
   locale,
   redirectUri,
-  codeVerifier
+  codeVerifier,
 ) => {
   const url = new URL(
     `${envSettings.oAuthPrefix}/Authorization/RefreshPublic`,
-    client.settings.server
+    client.settings.server,
   );
 
-  const [codeChallengeMethod, codeChallenge] = await getCodeChallenge(
-    codeVerifier
-  );
+  const [codeChallengeMethod, codeChallenge] =
+    await getCodeChallenge(codeVerifier);
   const refreshToken = getRefreshToken();
 
   // url.searchParams.set("clientId", client.settings.clientId);
@@ -257,7 +255,7 @@ async function getTokenAfterLogin(
   loginState: {
     codeVerifier: string;
     redirectUri?: string;
-  } | null
+  } | null,
 ): Promise<OAuth2Token | null> {
   const code = new URLSearchParams(document.location.search).get("code");
   if (code && loginState?.redirectUri) {
@@ -266,7 +264,7 @@ async function getTokenAfterLogin(
       {
         redirectUri: loginState.redirectUri,
         codeVerifier: loginState.codeVerifier,
-      }
+      },
     );
   }
   return null;
@@ -277,7 +275,7 @@ function handleLoginResult(
   loginState: {
     codeVerifier: string;
     redirectUri?: string;
-  } | null
+  } | null,
 ): void {
   const { accessToken } = token;
   const { scope, instanceId } = getTokenPayload(accessToken);
@@ -343,7 +341,7 @@ function handleSubstitutionResult(token: OAuth2Token): void {
 async function request<T = unknown>(
   client: OAuth2Client,
   endpointPath: string,
-  body?: Record<string, string>
+  body?: Record<string, string>,
 ): Promise<T> {
   const uri = new URL(endpointPath, client.settings.server).toString();
   const headers: Record<string, string> = {

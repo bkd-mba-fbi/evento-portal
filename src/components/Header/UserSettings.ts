@@ -91,7 +91,7 @@ export class UserSettings extends LitElement {
         null,
       queryFocused: () =>
         (this.shadowRoot?.activeElement ?? null) as HTMLElement | null,
-    }
+    },
   );
 
   constructor() {
@@ -109,8 +109,8 @@ export class UserSettings extends LitElement {
           detail: { item, event },
           composed: true,
           bubbles: true,
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -145,7 +145,7 @@ export class UserSettings extends LitElement {
       <ul id="settings-menu" role="menu" ?hidden=${!this.dropdown.open}>
         ${map(
           userSettingsItems(portalState.locale),
-          this.renderSettingsItem.bind(this)
+          this.renderSettingsItem.bind(this),
         )}
       </ul>
     `;

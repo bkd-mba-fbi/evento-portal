@@ -98,7 +98,7 @@ export class Content extends LitElement {
       <main>
         ${when(
           portalState.app.heading,
-          () => html`<h1>${portalState.navigationItem.label}</h1>`
+          () => html`<h1>${portalState.navigationItem.label}</h1>`,
         )}
         ${keyed(
           portalState.app.root,
@@ -108,7 +108,7 @@ export class Content extends LitElement {
               title=${portalState.app.key}
               src=${portalState.app.root + portalState.appPath}
             ></iframe>
-          `
+          `,
         )}
       </main>
     `;

@@ -19,11 +19,11 @@ const ungroupedNavigationItems = [
  */
 export function getNavigationItem(
   navigation: Navigation,
-  itemKey: string
+  itemKey: string,
 ): { item: NavigationItem; group: NavigationGroup | null } {
   const navigationItem = findNavigationItem(
     navigation,
-    ({ key }) => key === itemKey
+    ({ key }) => key === itemKey,
   );
   return navigationItem
     ? navigationItem
@@ -35,17 +35,17 @@ export function getNavigationItem(
  */
 export function getNavigationItemByAppPath(
   navigation: Navigation,
-  appPath: string
+  appPath: string,
 ): { item: NavigationItem | null; group: NavigationGroup | null } | null {
   return findNavigationItem(
     navigation,
-    (item) => item.appPath !== "#/" && appPath.startsWith(item.appPath)
+    (item) => item.appPath !== "#/" && appPath.startsWith(item.appPath),
   );
 }
 
 function findNavigationItem(
   navigation: Navigation,
-  callback: (item: NavigationItem) => boolean
+  callback: (item: NavigationItem) => boolean,
 ): { item: NavigationItem; group: NavigationGroup | null } | null {
   let item = ungroupedNavigationItems.find((item) => callback(item));
   if (item) return { item, group: null };
@@ -77,13 +77,13 @@ export function getScope(navigation: Navigation, itemKey: string): string {
 export function filterAllowed(
   navigation: Navigation,
   instanceId: string,
-  rolesOrPermissions: ReadonlyArray<string>
+  rolesOrPermissions: ReadonlyArray<string>,
 ): Navigation {
   return navigation.reduce<Navigation>((acc, group) => {
     const items = group.items.filter(
       (item) =>
         allowedInstance(item, instanceId) &&
-        allowedRoleOrPermission(item, rolesOrPermissions)
+        allowedRoleOrPermission(item, rolesOrPermissions),
     );
     return items.length > 0 ? [...acc, { ...group, items }] : acc;
   }, []);
@@ -98,7 +98,7 @@ function allowedInstance(item: NavigationItem, instanceId: string): boolean {
 
 function allowedRoleOrPermission(
   item: NavigationItem,
-  rolesOrPermissions: ReadonlyArray<string>
+  rolesOrPermissions: ReadonlyArray<string>,
 ): boolean {
   return (
     item.allowedRolesOrPermissions === null ||

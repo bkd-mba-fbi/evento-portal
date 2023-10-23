@@ -103,7 +103,7 @@ export class Footer extends LitElement {
           <a
             href=${`https://www.bkd.be.ch/${portalState.locale.slice(
               0,
-              2
+              2,
             )}/tools/rechtliches.html`}
             target="_blank"
             >${msg("Rechtliche Hinweise")}</a
@@ -111,7 +111,7 @@ export class Footer extends LitElement {
           <a
             href=${`https://www.bkd.be.ch/${portalState.locale.slice(
               0,
-              2
+              2,
             )}/tools/impressum.html`}
             target="_blank"
             >${msg("Impressum")}</a

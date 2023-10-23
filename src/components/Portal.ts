@@ -38,7 +38,7 @@ registerLightDomStyles(
     :root {
       ${customProperties}
     }
-  `.toString()
+  `.toString(),
 );
 
 @customElement("bkd-portal")
@@ -81,14 +81,14 @@ export class Portal extends LitElement {
     this.subscriptions.push(
       portalState.subscribeScopeAndLocale(
         (scope, locale) => activateTokenForScope(oAuthClient, scope, locale),
-        true
-      )
+        true,
+      ),
     );
     this.subscriptions.push(
-      portalState.subscribeInstanceName(this.updateTitle.bind(this))
+      portalState.subscribeInstanceName(this.updateTitle.bind(this)),
     );
     this.subscriptions.push(
-      portalState.subscribeNavigationItem(this.updateTitle.bind(this))
+      portalState.subscribeNavigationItem(this.updateTitle.bind(this)),
     );
 
     window.addEventListener("message", this.handleMessage);
@@ -155,7 +155,7 @@ export class Portal extends LitElement {
 
     const navigationItem = getNavigationItemByAppPath(
       portalState.navigation,
-      hash
+      hash,
     );
     if (
       navigationItem?.item?.key &&
@@ -189,7 +189,7 @@ export class Portal extends LitElement {
           <bkd-header @bkdlogout=${this.handleLogout.bind(this)}></bkd-header>
           <bkd-content></bkd-content>
           <bkd-footer></bkd-footer>
-        `
+        `,
       )}
     `;
   }

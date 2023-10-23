@@ -102,12 +102,12 @@ export class SubstitutionsToggle extends LitElement {
     {
       queryItems: () =>
         this.dropdownElement?.shadowRoot?.querySelectorAll<HTMLElement>(
-          "a[role='menuitem']"
+          "a[role='menuitem']",
         ) ?? null,
       queryFocused: () =>
         (this.dropdownElement?.shadowRoot?.activeElement ??
           null) as HTMLElement | null,
-    }
+    },
   );
 
   connectedCallback(): void {
@@ -164,7 +164,7 @@ export class SubstitutionsToggle extends LitElement {
     // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-starten
     const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
     this.redirect(
-      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${substitution.Id}/start`
+      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${substitution.Id}/start`,
     );
   }
 
@@ -176,7 +176,7 @@ export class SubstitutionsToggle extends LitElement {
     // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-beenden
     const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
     this.redirect(
-      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${this.activeSubstitution.Id}/stop`
+      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${this.activeSubstitution.Id}/stop`,
     );
   }
 
@@ -188,7 +188,7 @@ export class SubstitutionsToggle extends LitElement {
   }
 
   private handleSubstitutionStart(
-    event: CustomEvent<{ substitution: Substitution }>
+    event: CustomEvent<{ substitution: Substitution }>,
   ): void {
     this.dropdown.close();
     this.startSubstitution(event.detail.substitution);

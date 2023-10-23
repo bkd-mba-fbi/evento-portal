@@ -92,7 +92,7 @@ function postAppResize(height) {
       type: "bkdAppResize",
       height: Math.max(maxBottom + tolerance, viewportHeight),
     },
-    window.parent.origin
+    window.parent.origin,
   );
 }
 
@@ -137,7 +137,7 @@ history.pushState = (...args) => {
   pushState.call(history, ...args);
   parent.window.postMessage(
     { type: "bkdAppPushState", args },
-    parent.window.origin
+    parent.window.origin,
   );
 };
 
@@ -147,7 +147,7 @@ history.replaceState = (...args) => {
   replaceState.call(history, ...args);
   parent.window.postMessage(
     { type: "bkdAppReplaceState", args },
-    parent.window.origin
+    parent.window.origin,
   );
 };
 
@@ -155,6 +155,6 @@ history.replaceState = (...args) => {
 window.addEventListener("hashchange", (event) => {
   parent.window.postMessage(
     { type: "bkdAppHashChange", url: event.newURL },
-    parent.window.origin
+    parent.window.origin,
   );
 });
