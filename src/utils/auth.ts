@@ -43,7 +43,9 @@ export function createOAuthClient(): OAuth2Client {
     server: envSettings.oAuthServer,
     clientId: envSettings.oAuthClientId,
     tokenEndpoint: `${envSettings.oAuthPrefix}/Authorization/Token`,
-    authorizationEndpoint: getAuthorizationEndpoint(),
+    get authorizationEndpoint() {
+      return getAuthorizationEndpoint();
+    },
     fetch: (...args) => fetch(...args), // Fix for https://github.com/badgateway/oauth2-client/issues/105
   });
 }
