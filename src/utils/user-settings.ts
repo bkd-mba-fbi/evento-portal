@@ -10,7 +10,7 @@ export type UserSettingsItem = Readonly<{
 }>;
 
 export function userSettingsItems(
-  locale: string
+  locale: string,
 ): ReadonlyArray<UserSettingsItem> {
   return [
     {

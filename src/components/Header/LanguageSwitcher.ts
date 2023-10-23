@@ -94,7 +94,7 @@ export class LanguageSwitcher extends LitElement {
             >
               ${locale.slice(0, 2)}
             </a>
-          </li>`
+          </li>`,
       )}
     </ul>`;
   }

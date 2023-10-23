@@ -102,7 +102,7 @@ export class NavGroupDropdown extends LitElement {
         detail: { item },
         composed: true,
         bubbles: true,
-      })
+      }),
     );
   }
 

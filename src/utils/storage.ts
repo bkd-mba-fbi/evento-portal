@@ -108,7 +108,7 @@ export function consumeLoginState(): {
 
 export function storeLoginState(
   codeVerifier: string,
-  redirectUri?: string
+  redirectUri?: string,
 ): void {
   sessionStorage.setItem(CODE_VERIFIER_KEY, codeVerifier);
   if (redirectUri) {

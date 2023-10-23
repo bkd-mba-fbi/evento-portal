@@ -65,7 +65,7 @@ export class PortalState extends State {
 
   private setInitialized: () => void = () => undefined;
   private initialized = new Promise(
-    (resolve) => (this.setInitialized = () => resolve(null))
+    (resolve) => (this.setInitialized = () => resolve(null)),
   );
 
   async init() {
@@ -86,28 +86,28 @@ export class PortalState extends State {
   }
 
   subscribeInstanceName(
-    callback: (instanceName: PortalState["instanceName"]) => void
+    callback: (instanceName: PortalState["instanceName"]) => void,
   ) {
     // It makes no sense to call with initial value since it is
     // fetched asynchronously
     return this.subscribe(
       (_, instanceName) => callback(instanceName),
-      "instanceName"
+      "instanceName",
     );
   }
 
   subscribeNavigationItemKey(
-    callback: (itemKey: PortalState["navigationItemKey"]) => void
+    callback: (itemKey: PortalState["navigationItemKey"]) => void,
   ) {
     callback(this.navigationItemKey); // Initial value
     return this.subscribe(
       (_, itemKey) => callback(itemKey),
-      "navigationItemKey"
+      "navigationItemKey",
     );
   }
 
   subscribeNavigationItem(
-    callback: (item: PortalState["navigationItem"]) => void
+    callback: (item: PortalState["navigationItem"]) => void,
   ) {
     callback(this.navigationItem); // Initial value
     return this.subscribe((_, item) => callback(item), "navigationItem");
@@ -116,16 +116,16 @@ export class PortalState extends State {
   subscribeScopeAndLocale(
     callback: (
       scope: PortalState["app"]["scope"],
-      locale: PortalState["locale"]
+      locale: PortalState["locale"],
     ) => void,
-    skipInitial = false
+    skipInitial = false,
   ) {
     if (!skipInitial) {
       callback(this.app.scope, this.locale); // Initial value
     }
     return this.subscribe(
       () => callback(this.app.scope, this.locale),
-      ["app", "locale"]
+      ["app", "locale"],
     );
   }
 
@@ -190,12 +190,12 @@ export class PortalState extends State {
     this.navigation = filterAllowed(
       settings.navigation,
       instanceId,
-      this.rolesAndPermissions
+      this.rolesAndPermissions,
     );
   }
 
   private updateNavigationItemAndGroup(
-    itemKey: PortalState["navigationItemKey"]
+    itemKey: PortalState["navigationItemKey"],
   ): void {
     if (this.navigation.length > 0) {
       const { item, group } = getNavigationItem(this.navigation, itemKey);

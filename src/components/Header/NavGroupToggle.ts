@@ -62,12 +62,12 @@ export class NavGroupToggle extends LitElement {
     {
       queryItems: () =>
         this.dropdownElement?.shadowRoot?.querySelectorAll<HTMLElement>(
-          "a[role='menuitem']"
+          "a[role='menuitem']",
         ) ?? null,
       queryFocused: () =>
         (this.dropdownElement?.shadowRoot?.activeElement ??
           null) as HTMLElement | null,
-    }
+    },
   );
 
   private toggle(event: Event) {

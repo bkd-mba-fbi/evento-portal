@@ -51,8 +51,8 @@ export class Nav extends LitElement {
       ${map(portalState.navigation, (group) =>
         this.renderGroupToggle(
           group,
-          group.label === portalState.navigationGroup?.label
-        )
+          group.label === portalState.navigationGroup?.label,
+        ),
       )}
     </nav>`;
   }

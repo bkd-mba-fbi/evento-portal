@@ -20,7 +20,7 @@ export function cleanupQueryParams(paramsToKeep: ReadonlyArray<string>): void {
 export function updateQueryParam(
   key: string,
   value: string,
-  replace = false
+  replace = false,
 ): void {
   const url = new URL(location.href);
   url.searchParams.set(key, value);

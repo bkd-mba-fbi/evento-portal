@@ -34,7 +34,7 @@ declare global {
           roles: ReadonlyArray<string>;
           permissions: ReadonlyArray<string>;
           additionalTokenPayload: Record<string, unknown>;
-        }>
+        }>,
       ): Chainable<void>;
 
       /**

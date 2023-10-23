@@ -67,27 +67,27 @@ Cypress.Commands.add(
             oAuthClientId: "cypress",
           },
         };
-      `
+      `,
     );
 
     cy.intercept(
       "GET",
       "https://eventotest.api/restApi/UserSettings/?expand=AccessInfo",
-      { AccessInfo: { Roles: roles, Permissions: permissions } }
+      { AccessInfo: { Roles: roles, Permissions: permissions } },
     ).as("fetchAccessInfo");
 
     cy.intercept(
       "GET",
       "https://eventotest.api/restApi/Configurations/SchoolAppNavigation",
-      { instanceName: "Test" }
+      { instanceName: "Test" },
     );
 
     cy.intercept(
       "GET",
       "https://eventotest.api/restApi/TeacherSubstitutions/current",
-      []
+      [],
     );
-  }
+  },
 );
 
 /**
@@ -102,7 +102,7 @@ function createToken(
     locale: string;
     roles: ReadonlyArray<string>;
     additionalTokenPayload: Record<string, unknown>;
-  }> = {}
+  }> = {},
 ) {
   const header = {
     typ: "JWT",
@@ -131,7 +131,7 @@ function createToken(
   };
 
   return `${btoa(JSON.stringify(header))}.${btoa(
-    JSON.stringify(body)
+    JSON.stringify(body),
   )}.signature`;
 }
 
@@ -164,5 +164,5 @@ Cypress.Commands.add(
           expect(value).to.be.oneOf(["false", "", undefined]);
         }
         return subject;
-      })
+      }),
 );

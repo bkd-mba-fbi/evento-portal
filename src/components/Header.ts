@@ -129,7 +129,7 @@ export class Header extends LitElement {
   private mobileNav = new DropdownController(
     this,
     "mobile-nav-toggle",
-    "mobile-nav-menu"
+    "mobile-nav-menu",
   );
 
   private handleLogoClick(event: MouseEvent) {
@@ -139,7 +139,7 @@ export class Header extends LitElement {
   }
 
   private handleNavItemClick(
-    event: CustomEvent<{ item: NavigationItem }>
+    event: CustomEvent<{ item: NavigationItem }>,
   ): void {
     const { item } = event.detail;
 
@@ -151,7 +151,7 @@ export class Header extends LitElement {
   }
 
   private handleSettingsItemClick(
-    event: CustomEvent<{ item: UserSettingsItem; event: Event }>
+    event: CustomEvent<{ item: UserSettingsItem; event: Event }>,
   ): void {
     const { item, event: sourceEvent } = event.detail;
 
@@ -159,7 +159,7 @@ export class Header extends LitElement {
       sourceEvent.preventDefault();
       if (item.key === "logout") {
         this.dispatchEvent(
-          new CustomEvent<void>("bkdlogout", { composed: true, bubbles: true })
+          new CustomEvent<void>("bkdlogout", { composed: true, bubbles: true }),
         );
       } else {
         // Internal navigation
@@ -196,7 +196,7 @@ export class Header extends LitElement {
               id="mobile-nav-menu"
               @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
               @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
-            ></bkd-mobile-nav>`
+            ></bkd-mobile-nav>`,
         )}
       </header>
     `;

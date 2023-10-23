@@ -178,13 +178,13 @@ export class SubstitutionsDropdown extends LitElement {
 
   get displayedSubstitutions(): ReadonlyArray<Substitution> {
     return this.availableSubstitutions.filter(
-      (s) => !this.activeSubstitution || s.Id === this.activeSubstitution.Id
+      (s) => !this.activeSubstitution || s.Id === this.activeSubstitution.Id,
     );
   }
 
   private handleSubstitutionClick(
     event: MouseEvent,
-    substitution: Substitution
+    substitution: Substitution,
   ) {
     event.preventDefault();
     this.dispatchEvent(
@@ -192,7 +192,7 @@ export class SubstitutionsDropdown extends LitElement {
         detail: { substitution },
         composed: true,
         bubbles: true,
-      })
+      }),
     );
   }
 
@@ -201,7 +201,7 @@ export class SubstitutionsDropdown extends LitElement {
       new CustomEvent<void>("bkdsubstitutionstop", {
         composed: true,
         bubbles: true,
-      })
+      }),
     );
   }
 
@@ -243,11 +243,12 @@ export class SubstitutionsDropdown extends LitElement {
         ${map(this.displayedSubstitutions, this.renderSubstitution.bind(this))}
         ${when(
           this.activeSubstitution,
-          () => html`<li class="dropdown-menu-stop">
-            <button @click=${this.handleStopClick.bind(this)}>
-              ${msg("Stellvertretung beenden")}
-            </button>
-          </li>`
+          () =>
+            html`<li class="dropdown-menu-stop">
+              <button @click=${this.handleStopClick.bind(this)}>
+                ${msg("Stellvertretung beenden")}
+              </button>
+            </li>`,
         )}
       </ul>
     `;

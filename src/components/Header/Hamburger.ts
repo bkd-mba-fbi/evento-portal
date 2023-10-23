@@ -30,7 +30,7 @@ export class Hamburger extends LitElement {
       new CustomEvent("bkdhamburgertoggle", {
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 

@@ -196,13 +196,13 @@ export class MobileNav extends LitElement {
         detail: { item },
         composed: true,
         bubbles: true,
-      })
+      }),
     );
   }
 
   private handleSettingsItemClick(
     event: MouseEvent,
-    item: UserSettingsItem
+    item: UserSettingsItem,
   ): void {
     this.dispatchEvent(
       new CustomEvent<{ item: UserSettingsItem; event: Event }>(
@@ -211,8 +211,8 @@ export class MobileNav extends LitElement {
           detail: { item, event },
           composed: true,
           bubbles: true,
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -284,7 +284,7 @@ export class MobileNav extends LitElement {
           <ul>
             ${map(
               userSettingsItems(portalState.locale),
-              this.renderSettingsItem.bind(this)
+              this.renderSettingsItem.bind(this),
             )}
           </ul>
           <bkd-language-switcher></bkd-language-switcher>
