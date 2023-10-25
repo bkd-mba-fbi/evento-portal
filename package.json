@@ -2,6 +2,14 @@
   "name": "evento-portal",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://github.com/bkd-mba-fbi/evento-portal/blob/main/README.md",
+  "bugs": {
+    "url": "https://github.com/bkd-mba-fbi/evento-portal/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https@github.com:bkd-mba-fbi/evento-portal.git"
+  },
   "type": "module",
   "scripts": {
     "start": "npm run dev",
