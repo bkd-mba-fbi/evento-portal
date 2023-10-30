@@ -201,21 +201,14 @@ window.schulverwaltung.settings = {
    */
   eventlist: {
     // Links to the external event detail and evaluation modules.
-    // The application will replace the placeholder ':id' with the
-    // corresponding event id
-    eventdetail: 'link-to-event-detail-module/:id',
-    evaluation: 'link-to-evaluation-module/:id',
+    // The application will add the event id (IDAnlass) and the preceding equal sign,
+    // e.g. link-to-event-detail-module.aspx?IDAnlass=1234
+    eventdetail: 'link-to-event-detail-module.aspx?IDAnlass',
+    evaluation: 'link-to-evaluation-module.aspx?IDAnlass',
 
     // Only events with a status id in the following list are fetched
     statusfilter:
       '14030;14025;14017;14020;10350;10335;10355;10315;10330;10325;10320;10340;10345;10230;10225;10240;10250;10260;10217;10235;10220;10226;10227;10250;10300;10305;10310',
-  },
-
-  /**
-   * Dashboard
-   */
-  dashboard: {
-    substitutionsAdminLink: 'link-to-substitutions-admin-module',
   },
 
   /**

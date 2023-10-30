@@ -1,7 +1,8 @@
 # webapp-schulverwaltung
 
-[![lint test ✨](https://github.com/bkd-mba-fbi/webapp-schulverwaltung/actions/workflows/lintAndTest.yml/badge.svg?branch=master)](https://github.com/bkd-mba-fbi/webapp-schulverwaltung/actions/workflows/lintAndTest.yml)
+[![lint test ✨](https://github.com/bkd-mba-fbi/webapp-schulverwaltung/actions/workflows/lintAndTest.yml/badge.svg?branch=main)](https://github.com/bkd-mba-fbi/webapp-schulverwaltung/actions/workflows/lintAndTest.yml)
 [![build 🏭 deploy 🚀](https://github.com/bkd-mba-fbi/webapp-schulverwaltung/actions/workflows/buildDeploy.yml/badge.svg)](https://github.com/bkd-mba-fbi/webapp-schulverwaltung/actions/workflows/buildDeploy.yml)
+[![SBOM](https://github.com/bkd-mba-fbi/webapp-schulverwaltung/actions/workflows/bom.yml/badge.svg?branch=main)](https://github.com/bkd-mba-fbi/webapp-schulverwaltung/actions/workflows/bom.yml)
 
 JavaScript web module to implement processes for school administration using the SLH.Evento backend (REST API).
 
@@ -19,6 +20,7 @@ paste the import of the `settings.js` and the CSS files from
 <head>
   <script src="settings.js"></script>
   <link rel="stylesheet" href="styles.xyz.css"></head>
+  <link rel="stylesheet" href="styles-notifications.xyz.css"></head>
 </head>
 ```
 
@@ -37,6 +39,8 @@ tags from `index.html`'s `<body>`:
 
 To configure the app, you have to rename the file
 `settings.example.js` to `settings.js` and adjust its contents.
+
+To configure the position of the notification bell and popup, you may want to edit `styles-notifications.scss`.
 
 ### Authorization
 
