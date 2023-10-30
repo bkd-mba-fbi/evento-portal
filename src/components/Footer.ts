@@ -76,7 +76,7 @@ export class Footer extends LitElement {
 
         footer {
           flex-direction: column-reverse;
-          gap: 2.25rem;
+          gap: 1.25rem;
         }
       }
 
