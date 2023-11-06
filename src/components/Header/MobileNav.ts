@@ -1,17 +1,16 @@
-import { css, html, LitElement, nothing } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { localized, msg } from "@lit/localize";
-import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
+import { map } from "lit/directives/map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
-
-import { theme } from "../../utils/theme";
-import { NavigationGroup, NavigationItem } from "../../settings";
 import arrowDownIcon from "../../assets/icons/arrow-down.svg?raw";
 import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
+import { NavigationGroup, NavigationItem } from "../../settings";
 import { portalState } from "../../state/portal-state.ts";
 import { buildUrl } from "../../utils/routing.ts";
+import { theme } from "../../utils/theme";
 import {
   UserSettingsItem,
   userSettingsItems,

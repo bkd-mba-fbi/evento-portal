@@ -1,12 +1,11 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
-import { localized } from "@lit/localize";
 import { classMap } from "lit/directives/class-map.js";
+import { localized } from "@lit/localize";
 import { StateController } from "@lit-app/state";
-
-import { theme } from "../../utils/theme";
 import { allLocales } from "../../locales";
 import { portalState } from "../../state/portal-state";
+import { theme } from "../../utils/theme";
 
 @customElement("bkd-language-switcher")
 @localized()

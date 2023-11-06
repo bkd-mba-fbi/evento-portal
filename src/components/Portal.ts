@@ -1,27 +1,26 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { when } from "lit/directives/when.js";
 import { localized } from "@lit/localize";
 import { StateController, Unsubscribe } from "@lit-app/state";
-import { when } from "lit/directives/when.js";
-
-import {
-  customProperties,
-  fontFaces,
-  registerLightDomStyles,
-  theme,
-} from "../utils/theme";
+import { settings } from "../settings";
+import { portalState } from "../state/portal-state";
 import {
   activateTokenForScope,
   createOAuthClient,
   ensureAuthenticated,
   logout,
 } from "../utils/auth";
-import { portalState } from "../state/portal-state";
+import { getInitialLocale } from "../utils/locale";
+import { getNavigationItemByAppPath } from "../utils/navigation";
 import { getHash, getScopeFromUrl, updateHash } from "../utils/routing";
 import { getCurrentAccessToken } from "../utils/storage";
-import { settings } from "../settings";
-import { getInitialLocale } from "../utils/locale";
-import { getNavigationItemByAppPath } from "../utils/navigation.ts";
+import {
+  customProperties,
+  fontFaces,
+  registerLightDomStyles,
+  theme,
+} from "../utils/theme";
 import { tokenMatchesScope } from "../utils/token.ts";
 
 const oAuthClient = createOAuthClient();

@@ -1,14 +1,13 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
-import { localized, msg } from "@lit/localize";
-
-import { theme } from "../utils/theme";
-import { DropdownController } from "../controllers/dropdown";
 import { when } from "lit/directives/when.js";
-import { portalState } from "../state/portal-state";
+import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
-import { buildUrl } from "../utils/routing";
+import { DropdownController } from "../controllers/dropdown";
 import { NavigationItem, settings } from "../settings";
+import { portalState } from "../state/portal-state";
+import { buildUrl } from "../utils/routing";
+import { theme } from "../utils/theme";
 import { UserSettingsItem } from "../utils/user-settings";
 
 @customElement("bkd-header")

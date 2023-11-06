@@ -1,4 +1,4 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { theme } from "../../utils/theme";

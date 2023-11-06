@@ -1,12 +1,12 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
+import { keyed } from "lit/directives/keyed.js";
+import { when } from "lit/directives/when.js";
+import { localized } from "@lit/localize";
 import { StateController } from "@lit-app/state";
 import { portalState } from "../state/portal-state";
-import { keyed } from "lit/directives/keyed.js";
-import { localized } from "@lit/localize";
-import { theme } from "../utils/theme";
-import { when } from "lit/directives/when.js";
 import { getCurrentAccessToken } from "../utils/storage";
+import { theme } from "../utils/theme";
 import { tokenMatchesScope } from "../utils/token";
 
 @customElement("bkd-content")
