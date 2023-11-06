@@ -6,6 +6,8 @@ import { keyed } from "lit/directives/keyed.js";
 import { localized } from "@lit/localize";
 import { theme } from "../utils/theme";
 import { when } from "lit/directives/when.js";
+import { getCurrentAccessToken } from "../utils/storage";
+import { tokenMatchesScope } from "../utils/token";
 
 @customElement("bkd-content")
 @localized()
@@ -93,7 +95,15 @@ export class Content extends LitElement {
   }
 
   render() {
-    // The keyed directive ensures that the entire iframe and any associated scripts are removed when the application changes.
+    if (!tokenMatchesScope(getCurrentAccessToken(), portalState.app.scope)) {
+      // Token scope does not match current app, wait for correct
+      // token to be activated in <Portal> component to avoid requests
+      // resulting in 403 due to unsufficient rights.
+      return html`<main></main>`;
+    }
+
+    // The keyed directive ensures that the entire iframe and any
+    // associated scripts are removed when the application changes.
     return html`
       <main>
         ${when(
