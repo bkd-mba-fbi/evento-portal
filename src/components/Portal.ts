@@ -22,6 +22,7 @@ import { getCurrentAccessToken } from "../utils/storage";
 import { settings } from "../settings";
 import { getInitialLocale } from "../utils/locale";
 import { getNavigationItemByAppPath } from "../utils/navigation.ts";
+import { tokenMatchesScope } from "../utils/token.ts";
 
 const oAuthClient = createOAuthClient();
 
@@ -77,6 +78,23 @@ export class Portal extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+
+    portalState.initialized.then(() => {
+      // When all roles/permissions have been loaded and the current
+      // app does not match the scope of the current token, activate a
+      // token for the app's scope. This can be the case when
+      // previously authenticated as another user and the current user
+      // has no access to the navigation item from the redirect URL,
+      // hence is redirected to home (see
+      // https://github.com/bkd-mba-fbi/evento-portal/issues/106).
+      if (!tokenMatchesScope(getCurrentAccessToken(), portalState.app.scope)) {
+        activateTokenForScope(
+          oAuthClient,
+          portalState.app.scope,
+          portalState.locale,
+        );
+      }
+    });
 
     this.subscriptions.push(
       portalState.subscribeScopeAndLocale(

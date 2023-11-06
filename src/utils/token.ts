@@ -84,6 +84,17 @@ export function isTokenHalfExpired(
   return expirationTime <= now + validFor / 2;
 }
 
+/**
+ * Returns whether the given token matches the given scope.
+ */
+export function tokenMatchesScope(
+  token: string | null,
+  scope: string,
+): boolean {
+  const tokenScope = token && getTokenPayload(token).scope;
+  return tokenScope === scope;
+}
+
 function parseTokenPayload(token: string): RawTokenPayload {
   const base64Url = token.split(".")[1];
   const base64 = base64Url.replace("-", "+").replace("_", "/");

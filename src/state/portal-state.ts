@@ -64,7 +64,7 @@ export class PortalState extends State {
   actualAppPath: string | null = null;
 
   private setInitialized: () => void = () => undefined;
-  private initialized = new Promise(
+  initialized = new Promise(
     (resolve) => (this.setInitialized = () => resolve(null)),
   );
 
