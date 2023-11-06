@@ -1,8 +1,5 @@
-import { State, property, query } from "@lit-app/state";
 import { msg } from "@lit/localize";
-
-import { getInitialLocale, getLocale, updateLocale } from "../utils/locale";
-import { cleanupQueryParams, updateQueryParam } from "../utils/routing";
+import { State, property, query } from "@lit-app/state";
 import {
   App,
   Navigation,
@@ -10,10 +7,12 @@ import {
   NavigationItem,
   settings,
 } from "../settings";
+import { fetchInstanceName, fetchUserAccessInfo } from "../utils/fetch";
+import { getInitialLocale, getLocale, updateLocale } from "../utils/locale";
+import { filterAllowed, getApp, getNavigationItem } from "../utils/navigation";
+import { cleanupQueryParams, updateQueryParam } from "../utils/routing";
 import { getCurrentAccessToken, storeLocale } from "../utils/storage";
 import { getTokenPayload } from "../utils/token";
-import { fetchInstanceName, fetchUserAccessInfo } from "../utils/fetch";
-import { filterAllowed, getApp, getNavigationItem } from "../utils/navigation";
 
 export const LOCALE_QUERY_PARAM = "locale";
 export const NAV_ITEM_QUERY_PARAM = "module";
