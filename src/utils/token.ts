@@ -85,6 +85,15 @@ export function isTokenHalfExpired(
 }
 
 /**
+ * Returns the time (in milliseconds) the token will expire from now (0
+ * if already expired).
+ */
+export function getTokenExpireIn(token: string): number {
+  const { expirationTime } = getTokenPayload(token);
+  return Math.max(expirationTime * 1000 - Date.now(), 0);
+}
+
+/**
  * Returns whether the given token matches the given scope.
  */
 export function tokenMatchesScope(
