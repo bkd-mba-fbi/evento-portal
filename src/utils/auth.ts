@@ -20,6 +20,12 @@ import {
   storeToken,
 } from "./storage";
 import { getTokenPayload, isTokenExpired, isValidToken } from "./token";
+import {
+  clearTokenRenewalTimers,
+  renewAccessTokenOnExpiration,
+  renewRefreshTokenOnExpiration,
+  renewTokenOnExpiration,
+} from "./token-renewal";
 
 const envSettings = window.eventoPortal.settings;
 
@@ -66,7 +72,7 @@ export async function ensureAuthenticated(
   if (loginResult) {
     // Successfully logged in
     console.log("Successfully logged in");
-    handleLoginResult(loginResult, loginState);
+    handleLoginResult(client, loginResult, loginState);
     return;
   }
 
@@ -74,7 +80,7 @@ export async function ensureAuthenticated(
   if (substitutionResult) {
     // Started or stopped substitution
     console.log("Successfully started or stopped substitution");
-    handleSubstitutionResult(substitutionResult);
+    handleSubstitutionResult(client, substitutionResult);
     return;
   }
 
@@ -102,12 +108,15 @@ export async function activateTokenForScope(
 ): Promise<void> {
   console.log(`Activate token for scope "${scope}" and locale "${locale}"`);
 
-  if (isTokenExpired(getRefreshToken())) {
+  const refreshToken = getRefreshToken();
+  if (!refreshToken || isTokenExpired(refreshToken)) {
     // Not authenticated or refresh token expired, redirect to login
     console.log(
       "Not authenticated or refresh token expired, redirect to login",
     );
     return redirect(client, scope, locale, loginUrl);
+  } else {
+    renewRefreshTokenOnExpiration(client, refreshToken);
   }
 
   const currentAccessToken = getCurrentAccessToken();
@@ -118,12 +127,14 @@ export async function activateTokenForScope(
     console.log(
       `Current token for scope "${scope}" and locale "${locale}" already set`,
     );
+    renewAccessTokenOnExpiration(client, currentAccessToken);
   } else if (isValidToken(cachedAccessToken, scope, locale)) {
     // Token for scope/locale cached, set as current
     console.log(
       `Token for scope "${scope}" and locale "${locale}" cached, set as current`,
     );
     storeCurrentAccessToken(cachedAccessToken);
+    renewAccessTokenOnExpiration(client, cachedAccessToken);
   } else {
     // No token for scope/locale present or half expired, redirect for
     // token fetch/refresh
@@ -157,6 +168,7 @@ export async function logout(client: OAuth2Client): Promise<void> {
     }
   } finally {
     resetAllTokens();
+    clearTokenRenewalTimers();
 
     // Redirect to login with scope/locale of current token
     const { scope, locale } = getTokenPayload(token);
@@ -179,7 +191,7 @@ type RedirectUrlBuilder = (
   codeVerifier: string,
 ) => Promise<URL>;
 
-async function redirect(
+export async function redirect(
   client: OAuth2Client,
   scope: string,
   locale: string,
@@ -200,7 +212,7 @@ async function redirect(
   document.location.href = url.toString();
 }
 
-const loginUrl: RedirectUrlBuilder = async (
+export const loginUrl: RedirectUrlBuilder = async (
   client,
   scope,
   locale,
@@ -224,7 +236,7 @@ const loginUrl: RedirectUrlBuilder = async (
   return url;
 };
 
-const refreshUrl: RedirectUrlBuilder = async (
+export const refreshUrl: RedirectUrlBuilder = async (
   client,
   scope,
   locale,
@@ -273,6 +285,7 @@ async function getTokenAfterLogin(
 }
 
 function handleLoginResult(
+  client: OAuth2Client,
   token: OAuth2Token,
   loginState: {
     codeVerifier: string;
@@ -283,6 +296,7 @@ function handleLoginResult(
   const { scope, instanceId } = getTokenPayload(accessToken);
   storeToken(scope, token);
   storeCurrentAccessToken(accessToken);
+  renewTokenOnExpiration(client, token);
 
   // Remember the chosen instance for later logins
   storeInstance(instanceId);
@@ -317,11 +331,15 @@ function getTokenAfterSubstitutionRedirect(): OAuth2Token | null {
   return null;
 }
 
-function handleSubstitutionResult(token: OAuth2Token): void {
+function handleSubstitutionResult(
+  client: OAuth2Client,
+  token: OAuth2Token,
+): void {
   const { accessToken } = token;
   const { scope } = getTokenPayload(accessToken);
   storeToken(scope, token);
   storeCurrentAccessToken(accessToken);
+  renewTokenOnExpiration(client, token);
 
   // Remove sensitive information from URL
   const url = new URL(document.location.href);
