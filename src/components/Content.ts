@@ -2,7 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
 import { keyed } from "lit/directives/keyed.js";
 import { when } from "lit/directives/when.js";
-import { localized } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
 import { portalState } from "../state/portal-state";
 import { tokenState } from "../state/token-state";
@@ -94,6 +94,14 @@ export class Content extends LitElement {
   }
 
   render() {
+    if (!navigator.onLine) {
+      // Show message when offline
+      return html`<main>
+        <h1>${msg("Offline")}</h1>
+        <p>${msg("Keine Verbindung vorhanden.")}</p>
+      </main>`;
+    }
+
     if (tokenState.scope !== portalState.app.scope) {
       // Token scope does not match current app, wait for correct
       // token to be activated in <Portal> component to avoid requests
@@ -115,7 +123,7 @@ export class Content extends LitElement {
             <iframe
               id="app"
               title=${portalState.app.key}
-              src=${portalState.app.root + portalState.appPath}
+              src=${`/${portalState.app.root}${portalState.appPath}`}
             ></iframe>
           `,
         )}

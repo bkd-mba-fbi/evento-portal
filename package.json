@@ -17,6 +17,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "preview:ssl": "echo \"Don't forget to set oAuthClientId: 'browserstack' in public/settings.js\nThe app will be running on https://bs-local.com:3000\" && (cd dist && HOST=bs-local.com PORT=3000 npx https-localhost)",
     "prepare": "husky install",
     "analyze": "npx vite-bundle-visualizer",
     "lint:eslint": "eslint src/**/*.ts",
@@ -50,7 +51,8 @@
     "lint-staged": "^15.0.2",
     "prettier": "3.0.3",
     "typescript": "^5.2.2",
-    "vite": "^4.5.0"
+    "vite": "^4.5.0",
+    "vite-plugin-pwa": "^0.16.7"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
