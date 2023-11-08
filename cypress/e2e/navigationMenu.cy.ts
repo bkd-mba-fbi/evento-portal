@@ -246,16 +246,9 @@ describe("Navigation Menu", () => {
       cy.get("bkd-mobile-nav").within((mobileMenu) => {
         cy.wrap(mobileMenu).should("be.visible");
 
-        expectGroups(["Unterricht", "Absenzen", "Angebote"]);
-
-        expectGroupItems("Unterricht", [
-          "Präsenzkontrolle",
-          "Aktuelle Fächer",
-          "Tests und Bewertung",
-        ]);
+        expectGroups(["Absenzen", "Angebote"]);
 
         expectGroupItems("Absenzen", [
-          "Offene Absenzen entschuldigen",
           "Absenzen bearbeiten",
           "Absenzen auswerten",
         ]);
