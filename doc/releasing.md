@@ -11,7 +11,7 @@ Here is an overview of the operation environments the _Evento Portal_ will be de
 | Development | [![Netlify Status](https://api.netlify.com/api/v1/badges/fccfe392-ffb5-4e40-b95a-5d319e431559/deploy-status)](https://app.netlify.com/sites/evtapp/deploys) | `main`       | Review latest changes during development                 | https://evtapp.netlify.app/  |
 | Test        | Bedag (Kubernetes)                                                                                                                                          | `test`       | Test on close to production environment before releasing | https://evt-test.apps.be.ch/ |
 | Production  | Bedag (Kubernetes)                                                                                                                                          | `production` | "Live" version used by the users                         | https://evt.apps.be.ch/      |
-| Hotfix      | Bedag (Kubernetes)                                                                                                                                          | `hotfix-*`   | Deploying hotfixes to production                         |                              |
+| Hotfix      | Bedag (Kubernetes)                                                                                                                                          | `hotfix-*`   | Deploying hotfixes to test and production           |                         |                              |
 
 ## Branching & Releasing Concept
 
