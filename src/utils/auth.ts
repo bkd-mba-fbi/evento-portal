@@ -7,26 +7,17 @@ import {
 import { generateQueryString } from "@badgateway/oauth2-client/dist/client";
 import { getCodeChallenge } from "@badgateway/oauth2-client/dist/client/authorization-code";
 import { LOCALE_QUERY_PARAM, portalState } from "../state/portal-state";
+import { tokenState } from "../state/token-state";
 import { log } from "./logging";
 import {
   consumeLoginState,
   getAccessToken,
-  getCurrentAccessToken,
   getInstance,
-  getRefreshToken,
-  resetAllTokens,
-  storeCurrentAccessToken,
   storeInstance,
   storeLoginState,
-  storeToken,
 } from "./storage";
-import { getTokenPayload, isTokenExpired, isValidToken } from "./token";
-import {
-  clearTokenRenewalTimers,
-  renewAccessTokenOnExpiration,
-  renewRefreshTokenOnExpiration,
-  renewTokenOnExpiration,
-} from "./token-renewal";
+import { isValidToken } from "./token";
+import { clearTokenRenewalTimers } from "./token-renewal";
 
 const envSettings = window.eventoPortal.settings;
 
@@ -73,7 +64,7 @@ export async function ensureAuthenticated(
   if (loginResult) {
     // Successfully logged in
     log("Successfully logged in");
-    handleLoginResult(client, loginResult, loginState);
+    handleLoginResult(loginResult, loginState);
     return;
   }
 
@@ -81,7 +72,7 @@ export async function ensureAuthenticated(
   if (substitutionResult) {
     // Started or stopped substitution
     log("Successfully started or stopped substitution");
-    handleSubstitutionResult(client, substitutionResult);
+    handleSubstitutionResult(substitutionResult);
     return;
   }
 
@@ -109,16 +100,13 @@ export async function activateTokenForScope(
 ): Promise<void> {
   log(`Activate token for scope "${scope}" and locale "${locale}"`);
 
-  const refreshToken = getRefreshToken();
-  if (!refreshToken || isTokenExpired(refreshToken)) {
+  if (tokenState.isRefreshTokenExpired()) {
     // Not authenticated or refresh token expired, redirect to login
     log("Not authenticated or refresh token expired, redirect to login");
     return redirect(client, scope, locale, loginUrl);
-  } else {
-    renewRefreshTokenOnExpiration(client, refreshToken);
   }
 
-  const currentAccessToken = getCurrentAccessToken();
+  const currentAccessToken = tokenState.accessToken;
   const cachedAccessToken = getAccessToken(scope);
 
   if (isValidToken(currentAccessToken, scope, locale)) {
@@ -126,14 +114,12 @@ export async function activateTokenForScope(
     log(
       `Current token for scope "${scope}" and locale "${locale}" already set`,
     );
-    renewAccessTokenOnExpiration(client, currentAccessToken);
   } else if (isValidToken(cachedAccessToken, scope, locale)) {
     // Token for scope/locale cached, set as current
     log(
       `Token for scope "${scope}" and locale "${locale}" cached, set as current`,
     );
-    storeCurrentAccessToken(cachedAccessToken);
-    renewAccessTokenOnExpiration(client, cachedAccessToken);
+    tokenState.accessToken = cachedAccessToken;
   } else {
     // No token for scope/locale present or half expired, redirect for
     // token fetch/refresh
@@ -148,8 +134,8 @@ export async function logout(client: OAuth2Client): Promise<void> {
   const instance = getInstance();
   if (!instance) throw new Error("No instance available");
 
-  const token = getCurrentAccessToken();
-  if (!token) return;
+  const { accessToken, scope, locale } = tokenState;
+  if (!accessToken || !scope || !locale) return;
 
   // Logout & reset tokens
   try {
@@ -157,7 +143,7 @@ export async function logout(client: OAuth2Client): Promise<void> {
       client,
       `${envSettings.oAuthPrefix}/Authorization/${instance}/Logout`,
       {
-        access_token: token,
+        access_token: accessToken,
       },
     );
   } catch (e) {
@@ -166,11 +152,10 @@ export async function logout(client: OAuth2Client): Promise<void> {
       throw e;
     }
   } finally {
-    resetAllTokens();
+    tokenState.resetAllTokens();
     clearTokenRenewalTimers();
 
     // Redirect to login with scope/locale of current token
-    const { scope, locale } = getTokenPayload(token);
     await redirect(client, scope, locale, loginUrl);
   }
 }
@@ -249,13 +234,12 @@ export const refreshUrl: RedirectUrlBuilder = async (
 
   const [codeChallengeMethod, codeChallenge] =
     await getCodeChallenge(codeVerifier);
-  const refreshToken = getRefreshToken();
 
   // url.searchParams.set("clientId", client.settings.clientId);
   url.searchParams.set("redirectUrl", redirectUri);
   url.searchParams.set("culture_info", locale);
   url.searchParams.set("application_scope", scope);
-  url.searchParams.set("refresh_token", refreshToken ?? "");
+  url.searchParams.set("refresh_token", tokenState.refreshToken ?? "");
   url.searchParams.set("response_type", "code");
   url.searchParams.set("code_challenge_method", codeChallengeMethod);
   url.searchParams.set("code_challenge", codeChallenge);
@@ -284,21 +268,21 @@ async function getTokenAfterLogin(
 }
 
 function handleLoginResult(
-  client: OAuth2Client,
-  token: OAuth2Token,
+  { refreshToken, accessToken }: OAuth2Token,
   loginState: {
     codeVerifier: string;
     redirectUri?: string;
   } | null,
 ): void {
-  const { accessToken } = token;
-  const { scope, instanceId } = getTokenPayload(accessToken);
-  storeToken(scope, token);
-  storeCurrentAccessToken(accessToken);
-  renewTokenOnExpiration(client, token);
+  tokenState.refreshToken = refreshToken;
+  tokenState.accessToken = accessToken;
 
   // Remember the chosen instance for later logins
-  storeInstance(instanceId);
+  const instanceId = tokenState.accessTokenPayload?.instanceId;
+  if (instanceId) {
+    // TODO: move to TokenState as well?
+    storeInstance(instanceId);
+  }
 
   if (loginState?.redirectUri) {
     portalState.navigate(new URL(loginState.redirectUri));
@@ -330,15 +314,10 @@ function getTokenAfterSubstitutionRedirect(): OAuth2Token | null {
   return null;
 }
 
-function handleSubstitutionResult(
-  client: OAuth2Client,
-  token: OAuth2Token,
-): void {
-  const { accessToken } = token;
-  const { scope } = getTokenPayload(accessToken);
-  storeToken(scope, token);
-  storeCurrentAccessToken(accessToken);
-  renewTokenOnExpiration(client, token);
+function handleSubstitutionResult(token: OAuth2Token): void {
+  const { refreshToken, accessToken } = token;
+  tokenState.refreshToken = refreshToken;
+  tokenState.accessToken = accessToken;
 
   // Remove sensitive information from URL
   const url = new URL(document.location.href);

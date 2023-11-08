@@ -5,9 +5,8 @@ import { when } from "lit/directives/when.js";
 import { localized } from "@lit/localize";
 import { StateController } from "@lit-app/state";
 import { portalState } from "../state/portal-state";
-import { getCurrentAccessToken } from "../utils/storage";
+import { tokenState } from "../state/token-state";
 import { theme } from "../utils/theme";
-import { tokenMatchesScope } from "../utils/token";
 
 @customElement("bkd-content")
 @localized()
@@ -95,7 +94,7 @@ export class Content extends LitElement {
   }
 
   render() {
-    if (!tokenMatchesScope(getCurrentAccessToken(), portalState.app.scope)) {
+    if (tokenState.scope !== portalState.app.scope) {
       // Token scope does not match current app, wait for correct
       // token to be activated in <Portal> component to avoid requests
       // resulting in 403 due to unsufficient rights.

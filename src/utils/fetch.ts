@@ -1,4 +1,4 @@
-import { getCurrentAccessToken } from "./storage";
+import { tokenState } from "../state/token-state";
 
 const envSettings = window.eventoPortal.settings;
 
@@ -49,13 +49,13 @@ async function fetchApi<T = unknown>(
   url: string | URL,
   { method = "GET" } = {},
 ): Promise<T> {
-  const token = getCurrentAccessToken();
-  if (!token) {
+  const { accessToken } = tokenState;
+  if (!accessToken) {
     throw new Error("No token available");
   }
 
   const headers = new Headers({
-    "CLX-Authorization": `token_type=urn:ietf:params:oauth:token-type:jwt-bearer, access_token=${token}`,
+    "CLX-Authorization": `token_type=urn:ietf:params:oauth:token-type:jwt-bearer, access_token=${accessToken}`,
     "Content-Type": "application/json",
   });
 
