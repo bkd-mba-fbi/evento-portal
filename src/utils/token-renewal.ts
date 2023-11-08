@@ -1,5 +1,6 @@
 import { OAuth2Client, OAuth2Token } from "@badgateway/oauth2-client";
 import { loginUrl, redirect, refreshUrl } from "./auth";
+import { log, logLazy } from "./logging";
 import { getCurrentAccessToken } from "./storage";
 import { getTokenExpireIn, getTokenPayload } from "./token";
 
@@ -40,7 +41,7 @@ export function renewRefreshTokenOnExpiration(
       return;
     }
 
-    console.log(`Refresh token expired, redirect to login`);
+    log(`Refresh token expired, redirect to login`);
     const { scope, locale } = getTokenPayload(accessToken);
     redirect(client, scope, locale, loginUrl);
   });
@@ -52,7 +53,7 @@ export function renewAccessTokenOnExpiration(
 ): void {
   const { scope, locale } = getTokenPayload(accessToken);
   onExpiration(TokenType.Access, accessToken, () => {
-    console.log(
+    log(
       `Access token for scope "${scope}" and locale "${locale}" expired, redirect for token fetch/refresh`,
     );
     redirect(client, scope, locale, refreshUrl);
@@ -80,4 +81,13 @@ function onExpiration(
     clearTimeout(expirationTimers[type]);
   }
   expirationTimers[type] = setTimeout(callback, getTokenExpireIn(token));
+
+  logLazy(() => {
+    const { expirationTime } = getTokenPayload(token);
+    const expirationDate = new Date();
+    expirationDate.setTime(expirationTime * 1000);
+    return `Scheduled ${type} token expiration timeout in ${Math.floor(
+      getTokenExpireIn(token) / 1000 / 60,
+    )} minutes (at ${expirationDate})`;
+  });
 }
