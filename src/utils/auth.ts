@@ -7,6 +7,7 @@ import {
 import { generateQueryString } from "@badgateway/oauth2-client/dist/client";
 import { getCodeChallenge } from "@badgateway/oauth2-client/dist/client/authorization-code";
 import { LOCALE_QUERY_PARAM, portalState } from "../state/portal-state";
+import { log } from "./logging";
 import {
   consumeLoginState,
   getAccessToken,
@@ -71,7 +72,7 @@ export async function ensureAuthenticated(
   const loginResult = await getTokenAfterLogin(client, loginState);
   if (loginResult) {
     // Successfully logged in
-    console.log("Successfully logged in");
+    log("Successfully logged in");
     handleLoginResult(client, loginResult, loginState);
     return;
   }
@@ -79,7 +80,7 @@ export async function ensureAuthenticated(
   const substitutionResult = getTokenAfterSubstitutionRedirect();
   if (substitutionResult) {
     // Started or stopped substitution
-    console.log("Successfully started or stopped substitution");
+    log("Successfully started or stopped substitution");
     handleSubstitutionResult(client, substitutionResult);
     return;
   }
@@ -106,14 +107,12 @@ export async function activateTokenForScope(
   scope: string,
   locale: string,
 ): Promise<void> {
-  console.log(`Activate token for scope "${scope}" and locale "${locale}"`);
+  log(`Activate token for scope "${scope}" and locale "${locale}"`);
 
   const refreshToken = getRefreshToken();
   if (!refreshToken || isTokenExpired(refreshToken)) {
     // Not authenticated or refresh token expired, redirect to login
-    console.log(
-      "Not authenticated or refresh token expired, redirect to login",
-    );
+    log("Not authenticated or refresh token expired, redirect to login");
     return redirect(client, scope, locale, loginUrl);
   } else {
     renewRefreshTokenOnExpiration(client, refreshToken);
@@ -124,13 +123,13 @@ export async function activateTokenForScope(
 
   if (isValidToken(currentAccessToken, scope, locale)) {
     // Current token for scope/locale already set
-    console.log(
+    log(
       `Current token for scope "${scope}" and locale "${locale}" already set`,
     );
     renewAccessTokenOnExpiration(client, currentAccessToken);
   } else if (isValidToken(cachedAccessToken, scope, locale)) {
     // Token for scope/locale cached, set as current
-    console.log(
+    log(
       `Token for scope "${scope}" and locale "${locale}" cached, set as current`,
     );
     storeCurrentAccessToken(cachedAccessToken);
@@ -138,7 +137,7 @@ export async function activateTokenForScope(
   } else {
     // No token for scope/locale present or half expired, redirect for
     // token fetch/refresh
-    console.log(
+    log(
       `No token for scope "${scope}" and locale "${locale}" present or half expired, redirect for token fetch/refresh`,
     );
     await redirect(client, scope, locale, refreshUrl);
