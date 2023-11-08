@@ -158,6 +158,14 @@
   <source>Stellvertretung beenden</source>
   <target state="translated">Terminer le remplacement</target>
 </trans-unit>
+<trans-unit id="scde3342a428aaee8">
+  <source>Offline</source>
+  <target state="translated">Hors ligne</target>
+</trans-unit>
+<trans-unit id="sd79be54b222abcae">
+  <source>Keine Verbindung vorhanden.</source>
+  <target state="translated">Aucune connexion disponible.</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

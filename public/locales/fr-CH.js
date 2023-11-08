@@ -40,8 +40,10 @@ export const templates = {
   sc42d48a091dc3230: `Page d'accueil Evento`,
   sc874744fb4632e62: `Mentions légales`,
   sccb8c6ab6c0cf3e6: `Terminer le remplacement`,
+  scde3342a428aaee8: `Hors ligne`,
   scfa1631260cdd84a: `Tests et évalution`,
   sd10fcf5b06af72f6: `Navigation service`,
   sd11a46c2e7022f58: `Impressum`,
+  sd79be54b222abcae: `Aucune connexion disponible.`,
   sec148f76974d9b06: `Saisir des détails d'inscription`,
 };

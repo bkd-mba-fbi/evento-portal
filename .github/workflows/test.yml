@@ -2,6 +2,9 @@ name: Lint & Test ✨
 
 on: [push, pull_request]
 
+env:
+  DISABLE_SERVICE_WORKER: "true"
+
 jobs:
   test:
     runs-on: ubuntu-latest

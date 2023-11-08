@@ -55,7 +55,7 @@ describe("Navigation & Routing", () => {
       cy.get("iframe").should(
         "have.attr",
         "src",
-        "apps/webapp-schulverwaltung/index.html#/dashboard",
+        "/apps/webapp-schulverwaltung/index.html#/dashboard",
       );
     });
 
@@ -106,7 +106,7 @@ describe("Navigation & Routing", () => {
       cy.get("iframe").should(
         "have.attr",
         "src",
-        "apps/webapp-schulverwaltung/index.html#/presence-control",
+        "/apps/webapp-schulverwaltung/index.html#/presence-control",
       );
 
       // Does not redirect to home
@@ -163,7 +163,7 @@ describe("Navigation & Routing", () => {
       cy.get("iframe").should(
         "have.attr",
         "src",
-        "apps/webapp-schulverwaltung/index.html#/dashboard",
+        "/apps/webapp-schulverwaltung/index.html#/dashboard",
       );
 
       // Does not redirect to home
@@ -187,7 +187,7 @@ describe("Navigation & Routing", () => {
       cy.get("iframe").should(
         "have.attr",
         "src",
-        "apps/webapp-schulverwaltung/index.html#/dashboard",
+        "/apps/webapp-schulverwaltung/index.html#/dashboard",
       );
 
       // Updates URL to ?module=home
@@ -237,7 +237,7 @@ describe("Navigation & Routing", () => {
       cy.get("iframe").should(
         "have.attr",
         "src",
-        "apps/webapp-schulverwaltung/index.html#/presence-control",
+        "/apps/webapp-schulverwaltung/index.html#/presence-control",
       );
     });
 
@@ -258,7 +258,7 @@ describe("Navigation & Routing", () => {
         .should(
           "have.attr",
           "src",
-          "apps/webapp-schulverwaltung/index.html#/presence-control/student/5389/absences?returnparams=date%3D2023-07-03%26viewMode%3Dgrid%26lesson%3D291257",
+          "/apps/webapp-schulverwaltung/index.html#/presence-control/student/5389/absences?returnparams=date%3D2023-07-03%26viewMode%3Dgrid%26lesson%3D291257",
         )
         .its("0.contentDocument.body")
         .should("contain", "Profil wurde nicht gefunden");
@@ -284,7 +284,7 @@ describe("Navigation & Routing", () => {
       cy.get("iframe").should(
         "have.attr",
         "src",
-        "apps/webapp-schulverwaltung/index.html#/presence-control",
+        "/apps/webapp-schulverwaltung/index.html#/presence-control",
       );
       cy.get("button[aria-label='Menü']").as("toggle").should("be.visible");
 
