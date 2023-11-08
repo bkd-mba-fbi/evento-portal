@@ -1,10 +1,9 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
-
-import { theme } from "../utils/theme";
 import { portalState } from "../state/portal-state";
+import { theme } from "../utils/theme";
 
 @customElement("bkd-footer")
 @localized()
@@ -76,7 +75,7 @@ export class Footer extends LitElement {
 
         footer {
           flex-direction: column-reverse;
-          gap: 2.25rem;
+          gap: 1.25rem;
         }
       }
 

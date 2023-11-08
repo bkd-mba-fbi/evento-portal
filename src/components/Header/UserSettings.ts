@@ -1,12 +1,11 @@
-import { css, html, LitElement, nothing } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement } from "lit/decorators.js";
+import { map } from "lit/directives/map.js";
 import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
-import { map } from "lit/directives/map.js";
-
-import { theme } from "../../utils/theme";
 import { DropdownController } from "../../controllers/dropdown";
 import { portalState } from "../../state/portal-state";
+import { theme } from "../../utils/theme";
 import { UserSettingsItem, userSettingsItems } from "../../utils/user-settings";
 
 @customElement("bkd-user-settings")

@@ -1,12 +1,11 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
+import { map } from "lit/directives/map.js";
 import { when } from "lit/directives/when.js";
 import { localized, msg } from "@lit/localize";
-
-import { theme } from "../../utils/theme";
 import { Substitution } from "../../utils/fetch";
+import { theme } from "../../utils/theme";
 
 @customElement("bkd-substitutions-dropdown")
 @localized()

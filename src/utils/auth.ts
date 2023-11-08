@@ -4,8 +4,9 @@ import {
   OAuth2Token,
   generateCodeVerifier,
 } from "@badgateway/oauth2-client";
-import { getCodeChallenge } from "@badgateway/oauth2-client/dist/client/authorization-code";
 import { generateQueryString } from "@badgateway/oauth2-client/dist/client";
+import { getCodeChallenge } from "@badgateway/oauth2-client/dist/client/authorization-code";
+import { LOCALE_QUERY_PARAM, portalState } from "../state/portal-state";
 import {
   consumeLoginState,
   getAccessToken,
@@ -19,7 +20,6 @@ import {
   storeToken,
 } from "./storage";
 import { getTokenPayload, isTokenExpired, isValidToken } from "./token";
-import { LOCALE_QUERY_PARAM, portalState } from "../state/portal-state";
 
 const envSettings = window.eventoPortal.settings;
 

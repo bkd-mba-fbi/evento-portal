@@ -1,11 +1,10 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { localized } from "@lit/localize";
 import { classMap } from "lit/directives/class-map.js";
-
-import { theme } from "../../utils/theme";
-import { NavigationGroup } from "../../settings";
+import { localized } from "@lit/localize";
 import { DropdownController } from "../../controllers/dropdown";
+import { NavigationGroup } from "../../settings";
+import { theme } from "../../utils/theme";
 import { NavGroupDropdown } from "./NavGroupDropdown";
 
 @customElement("bkd-nav-group-toggle")
