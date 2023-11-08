@@ -7,12 +7,11 @@ import caretIcon from "../../assets/icons/caret.svg?raw";
 import closeSmallIcon from "../../assets/icons/close-small.svg?raw";
 import substitutionIcon from "../../assets/icons/substitution.svg?raw";
 import { DropdownController } from "../../controllers/dropdown";
+import { tokenState } from "../../state/token-state.ts";
 import { Substitution, fetchCurrentSubstitutions } from "../../utils/fetch";
 import { buildUrl } from "../../utils/routing.ts";
-import { getCurrentAccessToken } from "../../utils/storage";
 import { submit } from "../../utils/submit";
 import { theme } from "../../utils/theme";
-import { getTokenPayload } from "../../utils/token";
 import { SubstitutionsDropdown } from "./SubstitutionsDropdown";
 
 @customElement("bkd-substitutions-toggle")
@@ -133,11 +132,7 @@ export class SubstitutionsToggle extends LitElement {
   }
 
   private getActiveSubstitutionId(): number | null {
-    const token = getCurrentAccessToken();
-    if (!token) return null;
-
-    const { substitutionId } = getTokenPayload(token);
-    return substitutionId ?? null;
+    return tokenState.accessTokenPayload?.substitutionId ?? null;
   }
 
   private toggle(event: Event) {
@@ -181,7 +176,7 @@ export class SubstitutionsToggle extends LitElement {
 
   private redirect(url: string): void {
     submit("POST", url, {
-      access_token: getCurrentAccessToken() ?? "",
+      access_token: tokenState.accessToken ?? "",
       redirect_uri: buildUrl("home"),
     });
   }

@@ -5,6 +5,7 @@ import { localized } from "@lit/localize";
 import { StateController, Unsubscribe } from "@lit-app/state";
 import { settings } from "../settings";
 import { portalState } from "../state/portal-state";
+import { tokenState } from "../state/token-state.ts";
 import {
   activateTokenForScope,
   createOAuthClient,
@@ -14,16 +15,16 @@ import {
 import { getInitialLocale } from "../utils/locale";
 import { getNavigationItemByAppPath } from "../utils/navigation";
 import { getHash, getScopeFromUrl, updateHash } from "../utils/routing";
-import { getCurrentAccessToken } from "../utils/storage";
 import {
   customProperties,
   fontFaces,
   registerLightDomStyles,
   theme,
 } from "../utils/theme";
-import { tokenMatchesScope } from "../utils/token.ts";
+import { initializeTokenRenewal } from "../utils/token-renewal.ts";
 
 const oAuthClient = createOAuthClient();
+initializeTokenRenewal(oAuthClient);
 
 const authReady = (async function () {
   // Start Authorization Code Flow with PKCE
@@ -86,7 +87,7 @@ export class Portal extends LitElement {
       // has no access to the navigation item from the redirect URL,
       // hence is redirected to home (see
       // https://github.com/bkd-mba-fbi/evento-portal/issues/106).
-      if (!tokenMatchesScope(getCurrentAccessToken(), portalState.app.scope)) {
+      if (tokenState.scope !== portalState.app.scope) {
         activateTokenForScope(
           oAuthClient,
           portalState.app.scope,
@@ -124,11 +125,6 @@ export class Portal extends LitElement {
     this.subscriptions.forEach((unsubscribe) => unsubscribe());
     window.removeEventListener("message", this.handleMessage);
     window.removeEventListener("hashchange", this.handleHashChange);
-  }
-
-  private isAuthenticated(): boolean {
-    const token = getCurrentAccessToken();
-    return Boolean(token);
   }
 
   /**
@@ -201,7 +197,7 @@ export class Portal extends LitElement {
   render() {
     return html`
       ${when(
-        this.authReady && this.isAuthenticated(),
+        this.authReady && tokenState.authenticated,
         () => html`
           <bkd-header @bkdlogout=${this.handleLogout.bind(this)}></bkd-header>
           <bkd-content></bkd-content>
