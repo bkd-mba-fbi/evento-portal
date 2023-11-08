@@ -156,10 +156,7 @@ export class SubstitutionsToggle extends LitElement {
 
     // Redirect to backend to get a new access token with the substitution's roles/permissions.
     // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-starten
-    const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
-    this.redirect(
-      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${substitution.Id}/start`,
-    );
+    this.redirect(substitution, "start");
   }
 
   private stopSubstitution(): void {
@@ -168,13 +165,12 @@ export class SubstitutionsToggle extends LitElement {
     // Redirect to backend to get access token with the user's
     // original roles/permissions, not the substitution's ones.
     // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-beenden
-    const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
-    this.redirect(
-      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${this.activeSubstitution.Id}/stop`,
-    );
+    this.redirect(this.activeSubstitution, "stop");
   }
 
-  private redirect(url: string): void {
+  private redirect(substitution: Substitution, action: "start" | "stop"): void {
+    const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
+    const url = `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${substitution.Id}/${action}`;
     submit("POST", url, {
       access_token: tokenState.accessToken ?? "",
       redirect_uri: buildUrl("home"),

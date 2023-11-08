@@ -9,6 +9,7 @@ type RawTokenPayload = {
   nbf: number;
   exp: number;
   substitution_id?: string;
+  holder_roles?: string;
 };
 
 export type TokenPayload = {
@@ -18,6 +19,7 @@ export type TokenPayload = {
   issueTime: number;
   expirationTime: number;
   substitutionId?: number;
+  substitutionRoles?: ReadonlyArray<string>;
 };
 
 export function getTokenPayload(token: string): TokenPayload {
@@ -28,6 +30,7 @@ export function getTokenPayload(token: string): TokenPayload {
     nbf: issueTime,
     exp: expirationTime,
     substitution_id: substitutionId,
+    holder_roles: holderRoles,
   } = parseTokenPayload(token);
   return {
     instanceId,
@@ -36,6 +39,7 @@ export function getTokenPayload(token: string): TokenPayload {
     issueTime,
     expirationTime,
     substitutionId: substitutionId ? parseInt(substitutionId, 10) : undefined,
+    substitutionRoles: holderRoles ? holderRoles.split(";") : undefined,
   };
 }
 
