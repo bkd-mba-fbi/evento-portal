@@ -1,13 +1,4 @@
-export type TokenPayload = {
-  instanceId: string;
-  scope: string;
-  locale: string;
-  issueTime: number;
-  expirationTime: number;
-  substitutionId?: number;
-};
-
-export type RawTokenPayload = {
+type RawTokenPayload = {
   instance_id: string;
   scope: string;
   culture_info: string;
@@ -18,6 +9,15 @@ export type RawTokenPayload = {
   nbf: number;
   exp: number;
   substitution_id?: string;
+};
+
+export type TokenPayload = {
+  instanceId: string;
+  scope: string;
+  locale: string;
+  issueTime: number;
+  expirationTime: number;
+  substitutionId?: number;
 };
 
 export function getTokenPayload(token: string): TokenPayload {

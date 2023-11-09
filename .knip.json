@@ -1,0 +1,9 @@
+{
+  "project": ["src/**/*.{ts,js}"],
+  "ignore": ["public/*"],
+  "ignoreBinaries": ["knip", "vite-bundle-visualizer"],
+  "rules": {
+    "exports": "warn",
+    "types": "warn"
+  }
+}
