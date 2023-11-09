@@ -19,7 +19,7 @@ export const NAV_ITEM_QUERY_PARAM = "module";
 
 const QUERY_PARAMS = [LOCALE_QUERY_PARAM, NAV_ITEM_QUERY_PARAM];
 
-export class PortalState extends State {
+class PortalState extends State {
   @property({ value: getInitialLocale() })
   locale!: string;
 

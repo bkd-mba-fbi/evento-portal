@@ -29,7 +29,15 @@ export function initializeTokenRenewal(client: OAuth2Client): void {
   );
 }
 
-export function renewRefreshTokenOnExpiration(
+export function clearTokenRenewalTimers(): void {
+  Object.values(TokenType).forEach((type) => {
+    if (expirationTimers[type]) {
+      clearTimeout(expirationTimers[type]);
+    }
+  });
+}
+
+function renewRefreshTokenOnExpiration(
   client: OAuth2Client,
   refreshToken: TokenPayload | null,
 ): void {
@@ -46,7 +54,7 @@ export function renewRefreshTokenOnExpiration(
   });
 }
 
-export function renewAccessTokenOnExpiration(
+function renewAccessTokenOnExpiration(
   client: OAuth2Client,
   accessToken: TokenPayload | null,
 ): void {
@@ -58,14 +66,6 @@ export function renewAccessTokenOnExpiration(
       `Access token for scope "${scope}" and locale "${locale}" expired, redirect for token fetch/refresh`,
     );
     redirect(client, scope, locale, refreshUrl);
-  });
-}
-
-export function clearTokenRenewalTimers(): void {
-  Object.values(TokenType).forEach((type) => {
-    if (expirationTimers[type]) {
-      clearTimeout(expirationTimers[type]);
-    }
   });
 }
 
