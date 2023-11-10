@@ -12,7 +12,6 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
-
 // Import commands.js using ES2015 syntax:
 import "./commands";
 
@@ -34,7 +33,7 @@ declare global {
           roles: ReadonlyArray<string>;
           permissions: ReadonlyArray<string>;
           additionalTokenPayload: Record<string, unknown>;
-        }>
+        }>,
       ): Chainable<void>;
 
       /**

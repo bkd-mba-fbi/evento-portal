@@ -1,13 +1,13 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { localized } from "@lit/localize";
-import { theme } from "../../utils/theme";
-import { NavigationGroup, NavigationItem } from "../../settings";
-import { map } from "lit/directives/map.js";
-import { portalState } from "../../state/portal-state";
-import { StateController } from "@lit-app/state";
 import { classMap } from "lit/directives/class-map.js";
+import { map } from "lit/directives/map.js";
+import { localized } from "@lit/localize";
+import { StateController } from "@lit-app/state";
+import { NavigationGroup, NavigationItem } from "../../settings";
+import { portalState } from "../../state/portal-state";
 import { buildUrl } from "../../utils/routing";
+import { theme } from "../../utils/theme";
 
 @customElement("bkd-nav-group-dropdown")
 @localized()
@@ -102,7 +102,7 @@ export class NavGroupDropdown extends LitElement {
         detail: { item },
         composed: true,
         bubbles: true,
-      })
+      }),
     );
   }
 

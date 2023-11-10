@@ -1,11 +1,13 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
+import { keyed } from "lit/directives/keyed.js";
+import { when } from "lit/directives/when.js";
+import { localized } from "@lit/localize";
 import { StateController } from "@lit-app/state";
 import { portalState } from "../state/portal-state";
-import { keyed } from "lit/directives/keyed.js";
-import { localized } from "@lit/localize";
+import { getCurrentAccessToken } from "../utils/storage";
 import { theme } from "../utils/theme";
-import { when } from "lit/directives/when.js";
+import { tokenMatchesScope } from "../utils/token";
 
 @customElement("bkd-content")
 @localized()
@@ -93,12 +95,20 @@ export class Content extends LitElement {
   }
 
   render() {
-    // The keyed directive ensures that the entire iframe and any associated scripts are removed when the application changes.
+    if (!tokenMatchesScope(getCurrentAccessToken(), portalState.app.scope)) {
+      // Token scope does not match current app, wait for correct
+      // token to be activated in <Portal> component to avoid requests
+      // resulting in 403 due to unsufficient rights.
+      return html`<main></main>`;
+    }
+
+    // The keyed directive ensures that the entire iframe and any
+    // associated scripts are removed when the application changes.
     return html`
       <main>
         ${when(
           portalState.app.heading,
-          () => html`<h1>${portalState.navigationItem.label}</h1>`
+          () => html`<h1>${portalState.navigationItem.label}</h1>`,
         )}
         ${keyed(
           portalState.app.root,
@@ -108,7 +118,7 @@ export class Content extends LitElement {
               title=${portalState.app.key}
               src=${portalState.app.root + portalState.appPath}
             ></iframe>
-          `
+          `,
         )}
       </main>
     `;

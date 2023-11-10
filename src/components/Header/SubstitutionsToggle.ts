@@ -1,20 +1,19 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { localized, msg } from "@lit/localize";
-
-import { theme } from "../../utils/theme";
-import { DropdownController } from "../../controllers/dropdown";
-import { SubstitutionsDropdown } from "./SubstitutionsDropdown";
-import { fetchCurrentSubstitutions, Substitution } from "../../utils/fetch";
-import { getCurrentAccessToken } from "../../utils/storage";
-import { getTokenPayload } from "../../utils/token";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import substitutionIcon from "../../assets/icons/substitution.svg?raw";
+import { localized, msg } from "@lit/localize";
 import caretIcon from "../../assets/icons/caret.svg?raw";
 import closeSmallIcon from "../../assets/icons/close-small.svg?raw";
-import { submit } from "../../utils/submit";
+import substitutionIcon from "../../assets/icons/substitution.svg?raw";
+import { DropdownController } from "../../controllers/dropdown";
+import { Substitution, fetchCurrentSubstitutions } from "../../utils/fetch";
 import { buildUrl } from "../../utils/routing.ts";
+import { getCurrentAccessToken } from "../../utils/storage";
+import { submit } from "../../utils/submit";
+import { theme } from "../../utils/theme";
+import { getTokenPayload } from "../../utils/token";
+import { SubstitutionsDropdown } from "./SubstitutionsDropdown";
 
 @customElement("bkd-substitutions-toggle")
 @localized()
@@ -102,12 +101,12 @@ export class SubstitutionsToggle extends LitElement {
     {
       queryItems: () =>
         this.dropdownElement?.shadowRoot?.querySelectorAll<HTMLElement>(
-          "a[role='menuitem']"
+          "a[role='menuitem']",
         ) ?? null,
       queryFocused: () =>
         (this.dropdownElement?.shadowRoot?.activeElement ??
           null) as HTMLElement | null,
-    }
+    },
   );
 
   connectedCallback(): void {
@@ -164,7 +163,7 @@ export class SubstitutionsToggle extends LitElement {
     // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-starten
     const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
     this.redirect(
-      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${substitution.Id}/start`
+      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${substitution.Id}/start`,
     );
   }
 
@@ -176,7 +175,7 @@ export class SubstitutionsToggle extends LitElement {
     // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-beenden
     const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
     this.redirect(
-      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${this.activeSubstitution.Id}/stop`
+      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${this.activeSubstitution.Id}/stop`,
     );
   }
 
@@ -188,7 +187,7 @@ export class SubstitutionsToggle extends LitElement {
   }
 
   private handleSubstitutionStart(
-    event: CustomEvent<{ substitution: Substitution }>
+    event: CustomEvent<{ substitution: Substitution }>,
   ): void {
     this.dropdown.close();
     this.startSubstitution(event.detail.substitution);

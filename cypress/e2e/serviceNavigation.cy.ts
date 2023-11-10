@@ -41,13 +41,13 @@ describe("Service Navigation", () => {
         .find("a")
         .should((links) =>
           expect(
-            links.toArray().map((link) => link.textContent?.trim())
+            links.toArray().map((link) => link.textContent?.trim()),
           ).to.deep.eq([
             "Mein Profil",
             "Einstellungen",
             "Video-Tutorials",
             "Logout",
-          ])
+          ]),
         );
     });
 
@@ -118,8 +118,8 @@ describe("Service Navigation", () => {
         .find("a")
         .should((links) =>
           expect(
-            links.toArray().map((link) => link.textContent.trim())
-          ).to.deep.eq(["de", "fr"])
+            links.toArray().map((link) => link.textContent.trim()),
+          ).to.deep.eq(["de", "fr"]),
         );
     });
   });
@@ -147,7 +147,7 @@ describe("Service Navigation", () => {
         .find("a")
         .should((links) =>
           expect(
-            links.toArray().map((link) => link.textContent?.trim())
+            links.toArray().map((link) => link.textContent?.trim()),
           ).to.deep.eq([
             "Mein Profil",
             "Einstellungen",
@@ -155,7 +155,7 @@ describe("Service Navigation", () => {
             "Logout",
             "de",
             "fr",
-          ])
+          ]),
         );
     });
   });

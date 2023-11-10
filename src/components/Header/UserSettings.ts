@@ -1,12 +1,11 @@
-import { css, html, LitElement, nothing } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement } from "lit/decorators.js";
+import { map } from "lit/directives/map.js";
 import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
-import { map } from "lit/directives/map.js";
-
-import { theme } from "../../utils/theme";
 import { DropdownController } from "../../controllers/dropdown";
 import { portalState } from "../../state/portal-state";
+import { theme } from "../../utils/theme";
 import { UserSettingsItem, userSettingsItems } from "../../utils/user-settings";
 
 @customElement("bkd-user-settings")
@@ -91,7 +90,7 @@ export class UserSettings extends LitElement {
         null,
       queryFocused: () =>
         (this.shadowRoot?.activeElement ?? null) as HTMLElement | null,
-    }
+    },
   );
 
   constructor() {
@@ -109,8 +108,8 @@ export class UserSettings extends LitElement {
           detail: { item, event },
           composed: true,
           bubbles: true,
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -145,7 +144,7 @@ export class UserSettings extends LitElement {
       <ul id="settings-menu" role="menu" ?hidden=${!this.dropdown.open}>
         ${map(
           userSettingsItems(portalState.locale),
-          this.renderSettingsItem.bind(this)
+          this.renderSettingsItem.bind(this),
         )}
       </ul>
     `;

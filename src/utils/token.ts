@@ -47,7 +47,7 @@ export function getTokenPayload(token: string): TokenPayload {
 export function isValidToken(
   token: string | null,
   scope: string,
-  locale: string
+  locale: string,
 ): token is string {
   if (!token) return false;
 
@@ -70,7 +70,7 @@ export function isTokenExpired(token: string | null): boolean {
 export function isTokenHalfExpired(token: string | null): boolean;
 export function isTokenHalfExpired(payload: TokenPayload | null): boolean;
 export function isTokenHalfExpired(
-  tokenOrPayload: string | TokenPayload | null
+  tokenOrPayload: string | TokenPayload | null,
 ): boolean {
   if (!tokenOrPayload) return true;
 
@@ -84,6 +84,17 @@ export function isTokenHalfExpired(
   return expirationTime <= now + validFor / 2;
 }
 
+/**
+ * Returns whether the given token matches the given scope.
+ */
+export function tokenMatchesScope(
+  token: string | null,
+  scope: string,
+): boolean {
+  const tokenScope = token && getTokenPayload(token).scope;
+  return tokenScope === scope;
+}
+
 function parseTokenPayload(token: string): RawTokenPayload {
   const base64Url = token.split(".")[1];
   const base64 = base64Url.replace("-", "+").replace("_", "/");
@@ -94,7 +105,7 @@ function parseTokenPayload(token: string): RawTokenPayload {
       .map(function (c) {
         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
       })
-      .join("")
+      .join(""),
   );
 
   return JSON.parse(jsonPayload);

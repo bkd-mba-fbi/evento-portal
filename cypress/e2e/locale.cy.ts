@@ -9,7 +9,7 @@ describe("Locale", () => {
         locale: "de-CH",
         roles: ["LessonTeacherRole", "TeacherRole"],
         permissions: [],
-      })
+      }),
     );
 
     it("uses de-CH", () => {
@@ -31,7 +31,7 @@ describe("Locale", () => {
         locale: "fr-CH",
         roles: ["LessonTeacherRole", "TeacherRole"],
         permissions: [],
-      })
+      }),
     );
 
     it("uses fr-CH", () => {

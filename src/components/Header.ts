@@ -1,14 +1,13 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
-import { localized, msg } from "@lit/localize";
-
-import { theme } from "../utils/theme";
-import { DropdownController } from "../controllers/dropdown";
 import { when } from "lit/directives/when.js";
-import { portalState } from "../state/portal-state";
+import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
-import { buildUrl } from "../utils/routing";
+import { DropdownController } from "../controllers/dropdown";
 import { NavigationItem, settings } from "../settings";
+import { portalState } from "../state/portal-state";
+import { buildUrl } from "../utils/routing";
+import { theme } from "../utils/theme";
 import { UserSettingsItem } from "../utils/user-settings";
 
 @customElement("bkd-header")
@@ -129,7 +128,7 @@ export class Header extends LitElement {
   private mobileNav = new DropdownController(
     this,
     "mobile-nav-toggle",
-    "mobile-nav-menu"
+    "mobile-nav-menu",
   );
 
   private handleLogoClick(event: MouseEvent) {
@@ -139,7 +138,7 @@ export class Header extends LitElement {
   }
 
   private handleNavItemClick(
-    event: CustomEvent<{ item: NavigationItem }>
+    event: CustomEvent<{ item: NavigationItem }>,
   ): void {
     const { item } = event.detail;
 
@@ -151,7 +150,7 @@ export class Header extends LitElement {
   }
 
   private handleSettingsItemClick(
-    event: CustomEvent<{ item: UserSettingsItem; event: Event }>
+    event: CustomEvent<{ item: UserSettingsItem; event: Event }>,
   ): void {
     const { item, event: sourceEvent } = event.detail;
 
@@ -159,7 +158,7 @@ export class Header extends LitElement {
       sourceEvent.preventDefault();
       if (item.key === "logout") {
         this.dispatchEvent(
-          new CustomEvent<void>("bkdlogout", { composed: true, bubbles: true })
+          new CustomEvent<void>("bkdlogout", { composed: true, bubbles: true }),
         );
       } else {
         // Internal navigation
@@ -196,7 +195,7 @@ export class Header extends LitElement {
               id="mobile-nav-menu"
               @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
               @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
-            ></bkd-mobile-nav>`
+            ></bkd-mobile-nav>`,
         )}
       </header>
     `;

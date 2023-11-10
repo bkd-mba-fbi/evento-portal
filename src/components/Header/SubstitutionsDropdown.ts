@@ -1,12 +1,11 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
+import { map } from "lit/directives/map.js";
 import { when } from "lit/directives/when.js";
 import { localized, msg } from "@lit/localize";
-
-import { theme } from "../../utils/theme";
 import { Substitution } from "../../utils/fetch";
+import { theme } from "../../utils/theme";
 
 @customElement("bkd-substitutions-dropdown")
 @localized()
@@ -178,13 +177,13 @@ export class SubstitutionsDropdown extends LitElement {
 
   get displayedSubstitutions(): ReadonlyArray<Substitution> {
     return this.availableSubstitutions.filter(
-      (s) => !this.activeSubstitution || s.Id === this.activeSubstitution.Id
+      (s) => !this.activeSubstitution || s.Id === this.activeSubstitution.Id,
     );
   }
 
   private handleSubstitutionClick(
     event: MouseEvent,
-    substitution: Substitution
+    substitution: Substitution,
   ) {
     event.preventDefault();
     this.dispatchEvent(
@@ -192,7 +191,7 @@ export class SubstitutionsDropdown extends LitElement {
         detail: { substitution },
         composed: true,
         bubbles: true,
-      })
+      }),
     );
   }
 
@@ -201,7 +200,7 @@ export class SubstitutionsDropdown extends LitElement {
       new CustomEvent<void>("bkdsubstitutionstop", {
         composed: true,
         bubbles: true,
-      })
+      }),
     );
   }
 
@@ -243,11 +242,12 @@ export class SubstitutionsDropdown extends LitElement {
         ${map(this.displayedSubstitutions, this.renderSubstitution.bind(this))}
         ${when(
           this.activeSubstitution,
-          () => html`<li class="dropdown-menu-stop">
-            <button @click=${this.handleStopClick.bind(this)}>
-              ${msg("Stellvertretung beenden")}
-            </button>
-          </li>`
+          () =>
+            html`<li class="dropdown-menu-stop">
+              <button @click=${this.handleStopClick.bind(this)}>
+                ${msg("Stellvertretung beenden")}
+              </button>
+            </li>`,
         )}
       </ul>
     `;

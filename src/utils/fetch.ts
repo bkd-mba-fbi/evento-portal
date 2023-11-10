@@ -47,7 +47,7 @@ export function fetchCurrentSubstitutions(): Promise<
 
 async function fetchApi<T = unknown>(
   url: string | URL,
-  { method = "GET" } = {}
+  { method = "GET" } = {},
 ): Promise<T> {
   const token = getCurrentAccessToken();
   if (!token) {

@@ -1,8 +1,8 @@
 import { configureLocalization } from "@lit/localize";
-import { sourceLocale, targetLocales, allLocales } from "../locales";
+import { allLocales, sourceLocale, targetLocales } from "../locales";
 import { LOCALE_QUERY_PARAM } from "../state/portal-state";
-import { getTokenPayload } from "./token";
 import { getLastAccessToken, getLoginStateRedirectUri } from "./storage";
+import { getTokenPayload } from "./token";
 
 const { getLocale, setLocale } = configureLocalization({
   sourceLocale,

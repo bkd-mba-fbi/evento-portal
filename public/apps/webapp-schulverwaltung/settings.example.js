@@ -7,12 +7,12 @@ window.schulverwaltung.settings = {
    * General settings
    */
   // API base URL (without trailing slash)
-  apiUrl: 'https://eventotest.api',
+  apiUrl: "https://eventotest.api",
 
   // Path (without trailing slash, relative to the index.html) to the
   // JavaScript bundles and the assets directory containing image and
   // locale files
-  scriptsAndAssetsPath: '.',
+  scriptsAndAssetsPath: ".",
 
   // Maximum loaded entries per page, where pagination is in place
   paginationLimit: 200,
@@ -67,22 +67,35 @@ window.schulverwaltung.settings = {
   /**
    * Reports
    */
-  // Id of the report that contains a user's master data (used in my profile)
-  personMasterDataReportId: 290026,
+  // Report "Stammblatt" with user's master data (used in my profile)
+  personMasterDataReports: [{ type: "crystal", id: 290026 }],
 
-  // Id of the report that contains the open absences with
-  // confirmation values to sign (used in my absences)
-  studentConfirmationReportId: 290036,
+  // Report "Entschuldigungsformular" with open absences sign (used in
+  // my absences by students)
+  studentConfirmationReports: [{ type: "crystal", id: 290036 }],
 
-  // Id of the report used in evaluate absences
-  evaluateAbsencesReportId: 290048,
+  // Report "Auswertung der Absenzen" (used in evaluate absences by
+  // teachers)
+  evaluateAbsencesReports: [
+    { type: "crystal", id: 290048 },
+    { type: "excel", id: 290033 },
+  ],
 
-  // Id of the report used for the course report
-  testsByCourseReportId: 290044,
+  // Report "Auswertung der Absenzen" (used in my absences by
+  // students)
+  myAbsencesReports: [{ type: "crystal", id: 290048 }],
 
-  // Id of the report used for the tests report for a single student
-  testsBySubscriptionReportIdStudent: 290043,
-  testsBySubscriptionReportIdTeacher: 290042,
+  // Report "Tests" with grades of a course (used in events/tests by
+  // teachers)
+  testsByCourseReports: [{ type: "crystal", id: 290044 }],
+
+  // Report including grades of multiple courses for a single student
+  // (used in events/tests by students)
+  testsBySubscriptionStudentReports: [{ type: "crystal", id: 290043 }],
+
+  // Report including grades of multiple courses for a single student
+  // (used in events/tests by teachers)
+  testsBySubscriptionTeacherReports: [{ type: "crystal", id: 290042 }],
 
   /**
    * Groups
@@ -92,11 +105,11 @@ window.schulverwaltung.settings = {
 
   // X-Role-Restriction custom HTTP header values by module
   headerRoleRestriction: {
-    myAbsences: 'StudentRole',
-    presenceControl: 'LessonTeacherRole;TeacherRole;ClassTeacherRole',
-    openAbsences: 'LessonTeacherRole;ClassTeacherRole',
+    myAbsences: "StudentRole",
+    presenceControl: "LessonTeacherRole;TeacherRole;ClassTeacherRole",
+    openAbsences: "LessonTeacherRole;ClassTeacherRole",
     editAbsences:
-      'LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole',
+      "LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole",
   },
 
   /**
@@ -110,88 +123,88 @@ window.schulverwaltung.settings = {
   notificationTypes: {
     BM2Student: {
       de: {
-        label: 'Präsenz im BM-Unterricht',
+        label: "Präsenz im BM-Unterricht",
         description:
-          'Sie haben eine Präsenz von <= 85% in einem Fach erreicht.',
+          "Sie haben eine Präsenz von <= 85% in einem Fach erreicht.",
       },
       fr: {
-        label: 'Présence dans les cours de BM',
+        label: "Présence dans les cours de BM",
         description:
-          'Vous avez atteint un taux de présence <= 85% dans une matière.',
+          "Vous avez atteint un taux de présence <= 85% dans une matière.",
       },
     },
     gradePublish: {
       de: {
-        label: 'Note publiziert',
-        description: 'Eine Note aus einem Test wurde publiziert.',
+        label: "Note publiziert",
+        description: "Eine Note aus einem Test wurde publiziert.",
       },
       fr: {
-        label: 'Note publiée',
+        label: "Note publiée",
         description: "Une note obtenue lors d'un test a été publiée.",
       },
     },
     absenceMessage: {
       de: {
-        label: 'Absenzenmeldung',
+        label: "Absenzenmeldung",
         description:
-          'Fachlehrpersonen: Abwesenheit von Lernenden\nKlassenlehrperson: Antrag freier Halbtag',
+          "Fachlehrpersonen: Abwesenheit von Lernenden\nKlassenlehrperson: Antrag freier Halbtag",
       },
       fr: {
-        label: 'Déclaration des absences',
+        label: "Déclaration des absences",
         description:
           "Fachlehrpersonen: Absence d'apprenants\nEnseignant de classe : demande de demi-journée libre",
       },
     },
     absenceMessageTeacher: {
       de: {
-        label: 'Absenz erfasst (Lehrperson)',
+        label: "Absenz erfasst (Lehrperson)",
         description:
-          'Klassenlehrperson: Jemand anderes als die Lernenden erfasst einen Absenz ohne Grund.',
+          "Klassenlehrperson: Jemand anderes als die Lernenden erfasst einen Absenz ohne Grund.",
       },
       fr: {
-        label: 'Absence saisie (enseignant)',
+        label: "Absence saisie (enseignant)",
         description:
           "Enseignant(e) de classe : quelqu'un d'autre que les apprenants saisit un motif d'absence.",
       },
     },
     teacherSubstitutions: {
       de: {
-        label: 'Stellvertretung',
+        label: "Stellvertretung",
         description:
-          'Lehrperson: Sie wurden als Stellvertretung für eine andere Lehrperson erfasst.',
+          "Lehrperson: Sie wurden als Stellvertretung für eine andere Lehrperson erfasst.",
       },
       fr: {
-        label: 'Suppléance',
+        label: "Suppléance",
         description:
           "Enseignant(e) : vous avez été saisi(e) en tant que remplaçant(e) d'un autre enseignant.",
       },
     },
     BM2Teacher: {
       de: {
-        label: 'Präsenz im BM-Unterricht',
+        label: "Präsenz im BM-Unterricht",
         description:
-          'Ein/e Lernende/r hat eine Präsenz von <= 85% in einem Fach erreicht.',
+          "Ein/e Lernende/r hat eine Präsenz von <= 85% in einem Fach erreicht.",
       },
       fr: {
-        label: 'Présence dans les cours de BM',
+        label: "Présence dans les cours de BM",
         description:
-          'Un(e) apprenti(e) a atteint un taux de présence <= 85% dans une matière.',
+          "Un(e) apprenti(e) a atteint un taux de présence <= 85% dans une matière.",
       },
     },
   },
 
   notificationTypesAssignments: [
     {
-      roles: ['StudentRole'],
-      types: ['BM2Student', 'gradePublish'],
+      roles: ["StudentRole"],
+      types: ["BM2Student", "gradePublish"],
     },
     {
-      roles: ['LessonTeacherRole', 'ClassTeacherRole', 'TeacherRole'],
+      roles: ["LessonTeacherRole", "ClassTeacherRole", "TeacherRole"],
       types: [
-        'BM2Teacher',
-        'absenceMessage',
-        'absenceMessageTeacher',
-        'teacherSubstitutions',
+        "BM2Teacher",
+        "absenceMessage",
+        "absenceMessageTeacher",
+        "teacherSubstitutions",
       ],
     },
   ],
@@ -203,19 +216,19 @@ window.schulverwaltung.settings = {
     // Links to the external event detail and evaluation modules.
     // The application will replace the placeholder ':id' with the
     // corresponding event id
-    eventdetail: 'link-to-event-detail-module/:id',
-    evaluation: 'link-to-evaluation-module/:id',
+    eventdetail: "link-to-event-detail-module/:id",
+    evaluation: "link-to-evaluation-module/:id",
 
     // Only events with a status id in the following list are fetched
     statusfilter:
-      '14030;14025;14017;14020;10350;10335;10355;10315;10330;10325;10320;10340;10345;10230;10225;10240;10250;10260;10217;10235;10220;10226;10227;10250;10300;10305;10310',
+      "14030;14025;14017;14020;10350;10335;10355;10315;10330;10325;10320;10340;10345;10230;10225;10240;10250;10260;10217;10235;10220;10226;10227;10250;10300;10305;10310",
   },
 
   /**
    * Dashboard
    */
   dashboard: {
-    substitutionsAdminLink: 'link-to-substitutions-admin-module',
+    substitutionsAdminLink: "link-to-substitutions-admin-module",
   },
 
   /**

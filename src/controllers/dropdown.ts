@@ -28,7 +28,7 @@ export class DropdownController implements ReactiveController {
        * Returns the currently focused item
        */
       queryFocused: () => HTMLElement | null;
-    }
+    },
   ) {
     this.host.addController(this);
   }
@@ -60,7 +60,7 @@ export class DropdownController implements ReactiveController {
     document.addEventListener("keydown", this.handleKeydown, true);
     document.addEventListener(
       "bkddropdowntoggleclose",
-      this.handleCloseOthers as EventListener
+      this.handleCloseOthers as EventListener,
     );
   }
 
@@ -69,7 +69,7 @@ export class DropdownController implements ReactiveController {
     document.removeEventListener("keydown", this.handleKeydown, true);
     document.removeEventListener(
       "bkddropdowntoggleclose",
-      this.handleCloseOthers as EventListener
+      this.handleCloseOthers as EventListener,
     );
   }
 
@@ -119,7 +119,7 @@ export class DropdownController implements ReactiveController {
   }
 
   private handleCloseOthers = (
-    event: CustomEvent<{ source: DropdownController }>
+    event: CustomEvent<{ source: DropdownController }>,
   ) => {
     const { source } = event.detail;
     if (source !== this) {
@@ -131,8 +131,8 @@ export class DropdownController implements ReactiveController {
     document.dispatchEvent(
       new CustomEvent<{ source: DropdownController }>(
         "bkddropdowntoggleclose",
-        { detail: { source: this } }
-      )
+        { detail: { source: this } },
+      ),
     );
   }
 

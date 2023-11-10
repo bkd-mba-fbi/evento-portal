@@ -37,7 +37,7 @@ window.addEventListener(
   (event) => {
     goToTestEvents();
   },
-  false
+  false,
 );
 
 window.addEventListener("load", (event) => {

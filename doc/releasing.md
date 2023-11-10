@@ -11,7 +11,7 @@ Here is an overview of the operation environments the _Evento Portal_ will be de
 | Development | [![Netlify Status](https://api.netlify.com/api/v1/badges/fccfe392-ffb5-4e40-b95a-5d319e431559/deploy-status)](https://app.netlify.com/sites/evtapp/deploys) | `main`       | Review latest changes during development                 | https://evtapp.netlify.app/  |
 | Test        | Bedag (Kubernetes)                                                                                                                                          | `test`       | Test on close to production environment before releasing | https://evt-test.apps.be.ch/ |
 | Production  | Bedag (Kubernetes)                                                                                                                                          | `production` | "Live" version used by the users                         | https://evt.apps.be.ch/      |
-| Hotfix      | Bedag (Kubernetes)                                                                                                                                          | `hotfix-*`   | Deploying hotfixes to production                         |                              |
+| Hotfix      | Bedag (Kubernetes)                                                                                                                                          | `hotfix-*`   | Deploying hotfixes to test and production           |                         |                              |
 
 ## Branching & Releasing Concept
 
@@ -50,12 +50,12 @@ This chapter desciprtes how you can deploy new releases with github actions. The
 3. Click on the `Run workflow` button, a tooltip will open. It contains a dropdown button, from which you can choose a branch.
 
 4. Always choose the branch you want to deploy a new version from. If you want to merge `main` into `test` and release a new test image, choose `test`. If you want to deploy production, choose `production`
- 
+
 ![Release Workflow](assets/images/release_step_3_4.png)
 
 ### Hotfix Release Cycle
 
-2. On the left list select the Workflow `HotFix Build and Push 🔥🚒` 
+2. On the left list select the Workflow `HotFix Build and Push 🔥🚒`
 
 ![Release Workflow](assets/images/hotfix_step_2.png)
 
