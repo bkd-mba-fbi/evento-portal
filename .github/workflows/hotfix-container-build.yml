@@ -85,8 +85,8 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=hotfix
-            type=raw,value=v${{ steps.tag.outputs.new_tag }}-test
-            type=raw,value=v${{ steps.tag.outputs.new_tag }}-production
+            type=raw,value=${{ steps.tag.outputs.new_tag }}-test
+            type=raw,value=${{ steps.tag.outputs.new_tag }}-production
             type=semver,pattern={{version}},value=${{ steps.tag.outputs.new_tag }}
 
       - name: Build and push Docker image
