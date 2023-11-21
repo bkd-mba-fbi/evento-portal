@@ -219,11 +219,11 @@ var X = {
         $(pageEl).append('\
 <style type="text/css">\
 	' + (isModernUI ? 'div.page { position: relative; }' : '') + ' \
-	#tsv-overlay { position: fixed; top: 0px;' + (!isModernUI ? 'left: 0px;' : 'max-width: 100%;') + 'width: 100%; height: 85%; display: none; } \
-	#tsv-overlay-inner { height: 90%; background: white; padding: 5% 5% 20px; } \
-	#tsv-overlay-inner-2 { height: 70%; } \
+	#tsv-overlay {background: white; position: fixed; top: 0px;' + (!isModernUI ? 'left: 0px;' : 'max-width: 100%;') + 'width: 100%; height: 100%; display: none; } \
+	#tsv-overlay-inner { height: 90%; padding: 5% 5%; } \
+	#tsv-overlay-inner-2 { height: 100%; } \
 	/* Bugfix: Google Chrome ändert nur bei display:block Textfeldern mit CSS die Höhe */ \
-	#tsv-data { width: 100%; height: 80%; margin-bottom: 1em; display: block; } \
+	#tsv-data { width: 100%; height: 100%; margin-bottom: 1em; display: block; } \
 	/* Bugfix: MSIE kennt "position: fixed" nicht */ \
 	#tsv-overlay { _position: absolute; } \
 </style>\
