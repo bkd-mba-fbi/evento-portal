@@ -27,7 +27,8 @@
     "locale:extract": "lit-localize extract",
     "locale:build": "lit-localize build",
     "format": "prettier --write --ignore-unknown \"./**/*.*\"",
-    "format:upgrade": "npm install --save-exact prettier@latest && npm run format"
+    "format:upgrade": "npm install --save-exact prettier@latest && npm run format",
+    "unused": "npx knip"
   },
   "dependencies": {
     "@badgateway/oauth2-client": "^2.2.4",

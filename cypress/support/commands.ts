@@ -1,4 +1,4 @@
-import { storeToken } from "../../src/utils/storage";
+import { storeAccessToken, storeRefreshToken } from "../../src/utils/storage";
 
 /// <reference types="cypress" />
 // ***********************************************
@@ -48,11 +48,8 @@ Cypress.Commands.add(
   } = {}) => {
     ["Tutoring", "Public", "NG"].forEach((scope) => {
       const token = createToken(scope, { locale, additionalTokenPayload });
-      storeToken(scope, {
-        accessToken: token,
-        expiresAt: Math.floor(Date.now() / 1000) + 60 * 60,
-        refreshToken: token,
-      });
+      storeRefreshToken(token);
+      storeAccessToken(scope, token);
     });
 
     // Mock environment settings

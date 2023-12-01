@@ -11,15 +11,15 @@ import { fetchInstanceName, fetchUserAccessInfo } from "../utils/fetch";
 import { getInitialLocale, getLocale, updateLocale } from "../utils/locale";
 import { filterAllowed, getApp, getNavigationItem } from "../utils/navigation";
 import { cleanupQueryParams, updateQueryParam } from "../utils/routing";
-import { getCurrentAccessToken, storeLocale } from "../utils/storage";
-import { getTokenPayload } from "../utils/token";
+import { storeLocale } from "../utils/storage";
+import { tokenState } from "./token-state";
 
 export const LOCALE_QUERY_PARAM = "locale";
 export const NAV_ITEM_QUERY_PARAM = "module";
 
 const QUERY_PARAMS = [LOCALE_QUERY_PARAM, NAV_ITEM_QUERY_PARAM];
 
-export class PortalState extends State {
+class PortalState extends State {
   @property({ value: getInitialLocale() })
   locale!: string;
 
@@ -182,10 +182,9 @@ export class PortalState extends State {
   }
 
   private updateNavigation(): void {
-    const token = getCurrentAccessToken();
-    if (!token) return;
+    const { instanceId } = tokenState;
+    if (!instanceId) return;
 
-    const { instanceId } = getTokenPayload(token);
     this.navigation = filterAllowed(
       settings.navigation,
       instanceId,
@@ -237,16 +236,14 @@ export class PortalState extends State {
   }
 
   private async loadRolesAndPermissions(): Promise<void> {
-    const token = getCurrentAccessToken();
-    if (!token) return;
+    if (!tokenState.authenticated) return;
 
     const { roles, permissions } = await fetchUserAccessInfo();
     this.rolesAndPermissions = [...roles, ...permissions];
   }
 
   private async loadInstanceName(): Promise<void> {
-    const token = getCurrentAccessToken();
-    if (!token) return;
+    if (!tokenState.authenticated) return;
 
     const instanceName = await fetchInstanceName();
     this.instanceName = [msg("Evento"), instanceName]
