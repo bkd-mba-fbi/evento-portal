@@ -74,6 +74,9 @@ class PortalState extends State {
     // Update on state change
     this.subscribe(this.handleStateChange.bind(this));
 
+    // Update navigation on (substitution) token change
+    tokenState.onAccessTokenUpdate(() => this.updateNavigation());
+
     await this.loadRolesAndPermissions();
 
     this.setInitialized();
@@ -188,7 +191,12 @@ class PortalState extends State {
     this.navigation = filterAllowed(
       settings.navigation,
       instanceId,
-      this.rolesAndPermissions,
+
+      // When a substitution is active, use the roles of the substituted user
+      // from the token, otherwise use the user's actual roles and
+      // permissions from the user settings/info request
+      tokenState.accessTokenPayload?.substitutionRoles ||
+        this.rolesAndPermissions,
     );
   }
 
