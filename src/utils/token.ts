@@ -22,15 +22,6 @@ export type TokenPayload = {
   substitutionRoles?: ReadonlyArray<string>;
 };
 
-export type TokenPayload = {
-  instanceId: string;
-  scope: string;
-  locale: string;
-  issueTime: number;
-  expirationTime: number;
-  substitutionId?: number;
-};
-
 export function getTokenPayload(token: string): TokenPayload {
   const {
     instance_id: instanceId,
