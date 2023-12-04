@@ -30,7 +30,7 @@ jobs:
 
   # If the current commit has no version tag, an image needs to be
   # built, tagged and pushed to the registry
-  # If the build runs on test but test has already been built 
+  # If the build runs on test but test has already been built
   # with the latest tag, nothing happens
   container-build-and-push-image:
     runs-on: ubuntu-latest
@@ -85,6 +85,8 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=hotfix
+            type=raw,value=${{ steps.tag.outputs.new_tag }}-test
+            type=raw,value=${{ steps.tag.outputs.new_tag }}-production
             type=semver,pattern={{version}},value=${{ steps.tag.outputs.new_tag }}
 
       - name: Build and push Docker image
