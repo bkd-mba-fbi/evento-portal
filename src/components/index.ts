@@ -12,5 +12,6 @@ export * from "./Header/ServiceNav";
 export * from "./Header/SubstitutionsDropdown";
 export * from "./Header/SubstitutionsToggle";
 export * from "./Header/NotificationsToggle";
+export * from "./Header/NotificationsDropdown";
 export * from "./Header/UserSettings";
 export * from "./Portal";
