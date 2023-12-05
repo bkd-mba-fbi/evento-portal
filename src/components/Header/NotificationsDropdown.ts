@@ -48,6 +48,11 @@ export class NotificationsDropdown extends LitElement {
         background-color: var(--bkd-func-bg-anthrazit-hover);
       }
 
+      button:disabled {
+        cursor: default;
+        background-color: var(--bkd-func-bg-grey);
+      }
+
       .content {
         padding: 1rem;
       }
@@ -73,7 +78,13 @@ export class NotificationsDropdown extends LitElement {
     return html`<div id="notifications-menu">
       <div class="header">
         <span>${msg("Benachrichtigungen")}</span>
-        <button type="button">${msg("Alle löschen")}</button>
+        <button
+          type="button"
+          disabled="disabled"
+          @click="${() => console.log("delete")}"
+        >
+          ${msg("Alle löschen")}
+        </button>
       </div>
       <div class="content">${msg("Keine Benachrichtigungen")}</div>
     </div>`;
