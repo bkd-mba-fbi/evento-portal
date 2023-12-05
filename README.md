@@ -18,6 +18,7 @@ Download the [latest build](https://bkd-mba-fbi.github.io/evento-portal/evento-p
 ## Contents
 
 - [Setup & Development](./doc/development.md)
+- [Browser Support](./doc/browser-support.md)
 - [Architecture](./doc/architecture.md)
 - [Authentication via OAuth 2.0](./doc/auth.md)
 - [Branching, Releasing & Deployment](./doc/releasing.md)

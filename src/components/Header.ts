@@ -173,11 +173,15 @@ export class Header extends LitElement {
   render() {
     return html`
       <header>
-        <bkd-service-nav
-          .mobileNavOpen=${this.mobileNav.open}
-          @bkdhamburgertoggle=${() => this.mobileNav.toggle()}
-          @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
-        ></bkd-service-nav>
+        ${when(
+          navigator.onLine, // Hide service nav when offline
+          () =>
+            html`<bkd-service-nav
+              .mobileNavOpen=${this.mobileNav.open}
+              @bkdhamburgertoggle=${() => this.mobileNav.toggle()}
+              @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
+            ></bkd-service-nav> `,
+        )}
         <a class="logo" href=${buildUrl("home")}
           ><img
             src="logo.svg"
@@ -185,9 +189,13 @@ export class Header extends LitElement {
             @click=${this.handleLogoClick.bind(this)}
         /></a>
         <div class="logo-caption">${portalState.instanceName}</div>
-        <bkd-nav
-          @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
-        ></bkd-nav>
+        ${when(
+          navigator.onLine, // Hide nav when offline
+          () =>
+            html` <bkd-nav
+              @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
+            ></bkd-nav>`,
+        )}
         ${when(
           this.mobileNav.open,
           () =>
