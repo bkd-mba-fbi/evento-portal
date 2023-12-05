@@ -158,10 +158,20 @@
   <source>Stellvertretung beenden</source>
   <target state="translated">Terminer le remplacement</target>
 </trans-unit>
+<trans-unit id="scff9b2b73fc9a17f">
+  <source>Benachrichtigungen</source>
+  <target state="translated">Notifications</target>
 <trans-unit id="scde3342a428aaee8">
   <source>Offline</source>
   <target state="translated">Hors ligne</target>
 </trans-unit>
+<trans-unit id="sda82f4406693e77c">
+  <source>Alle löschen</source>
+  <target state="translated">Tout effacer</target>
+</trans-unit>
+<trans-unit id="sb993cc3240e32971">
+  <source>Keine Benachrichtigungen</source>
+  <target state="translated">Aucune notification</target>
 <trans-unit id="sd79be54b222abcae">
   <source>Keine Verbindung vorhanden.</source>
   <target state="translated">Aucune connexion disponible.</target>

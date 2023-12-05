@@ -75,7 +75,7 @@ export class NotificationsDropdown extends LitElement {
         <span>${msg("Benachrichtigungen")}</span>
         <button type="button">${msg("Alle löschen")}</button>
       </div>
-      <div class="content">${"Keine Benachrichtigungen"}</div>
+      <div class="content">${msg("Keine Benachrichtigungen")}</div>
     </div>`;
   }
 }
