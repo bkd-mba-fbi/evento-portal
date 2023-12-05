@@ -21,6 +21,22 @@ export class NotificationsToggle extends LitElement {
         border: none;
         background: transparent;
         padding: 0;
+        display: flex;
+      }
+
+      .circle {
+        color: var(--bkd-func-bg-white);
+        background-color: var(--bkd-brand-red);
+        box-shadow: 0 0 0 2px var(--bkd-func-bg-white);
+        border-radius: 50%;
+        font-weight: 700;
+        font-size: small;
+        line-height: 1.5;
+        text-align: center;
+        width: 20px;
+        height: 20px;
+        margin-left: -10px;
+        margin-top: 2px;
       }
     `,
   ];
@@ -39,6 +55,7 @@ export class NotificationsToggle extends LitElement {
         @click="${() => this.dropdown.toggle()}"
       >
         ${unsafeHTML(bellIcon)}
+        <span class="circle" hidden="hidden">3</span>
       </button>
       <bkd-notifications-dropdown
         .open=${this.dropdown.open}
