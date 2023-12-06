@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import { NotificationData } from "../../utils/fetch.ts";
 import { theme } from "../../utils/theme.ts";
@@ -60,8 +61,19 @@ export class NotificationsDropdown extends LitElement {
         background-color: var(--bkd-func-bg-grey);
       }
 
-      .content {
+      .notification {
+        display: flex;
+        justify-content: space-between;
         padding: 1rem;
+        border-bottom: 1px solid var(--bkd-func-bg-grey);
+
+        .subject {
+          padding-right: 1rem;
+        }
+
+        .body {
+          text-align: right;
+        }
       }
 
       /* For medium & small screens */
@@ -76,6 +88,13 @@ export class NotificationsDropdown extends LitElement {
     `,
   ];
 
+  private renderNotificationData(data: NotificationData) {
+    return html`<div class="notification">
+      <div class="subject">${unsafeHTML(data.subject)}</div>
+      <div class="body">${unsafeHTML(data.body)}</div>
+    </div>`;
+  }
+
   render() {
     if (!this.open) return;
 
@@ -84,13 +103,19 @@ export class NotificationsDropdown extends LitElement {
         <span>${msg("Benachrichtigungen")}</span>
         <button
           type="button"
-          disabled="disabled"
+          ?disabled=${this.notificationData.length === 0}
           @click="${() => console.log("delete")}"
         >
           ${msg("Alle löschen")}
         </button>
       </div>
-      <div class="content">${msg("Keine Benachrichtigungen")}</div>
+      <div class="content">
+        ${this.notificationData.length === 0
+          ? msg("Keine Benachrichtigungen")
+          : this.notificationData.map((data: NotificationData) =>
+              this.renderNotificationData(data),
+            )}
+      </div>
     </div>`;
   }
 }
