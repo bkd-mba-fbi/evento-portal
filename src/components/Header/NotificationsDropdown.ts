@@ -1,11 +1,18 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
+import { NotificationData } from "../../utils/fetch.ts";
 import { theme } from "../../utils/theme.ts";
 
 @customElement("bkd-notifications-dropdown")
 @localized()
 export class NotificationsDropdown extends LitElement {
+  @property()
+  open = false;
+
+  @property()
+  notificationData: ReadonlyArray<NotificationData> = [];
+
   static styles = [
     theme,
     css`
@@ -68,9 +75,6 @@ export class NotificationsDropdown extends LitElement {
       }
     `,
   ];
-
-  @property()
-  open = false;
 
   render() {
     if (!this.open) return;

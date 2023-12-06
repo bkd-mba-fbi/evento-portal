@@ -74,7 +74,9 @@ export class NotificationsToggle extends LitElement {
       </button>
       <bkd-notifications-dropdown
         .open=${this.dropdown.open}
-      ></bkd-notifications-dropdown>`;
+        .notificationData=${this.notificationData}
+      >
+      </bkd-notifications-dropdown>`;
   }
 }
 
