@@ -46,6 +46,29 @@ export function fetchCurrentSubstitutions(): Promise<
   return fetchApi<ReadonlyArray<Substitution>>(url);
 }
 
+const NOTIFICATION_DATA_KEY = "notificationData";
+type UserSetting = Readonly<{
+  Key: string;
+  Value: string;
+}>;
+export type NotificationData = Readonly<{
+  id: number;
+  subject: string;
+  body: string;
+}>;
+export async function fetchNotificationData(): Promise<
+  ReadonlyArray<NotificationData>
+> {
+  const url = `${envSettings.apiServer}/UserSettings/Cst`;
+  const { Settings } = await fetchApi<{
+    Settings: ReadonlyArray<UserSetting>;
+  }>(url);
+  const notificationData = Settings.find(
+    (setting) => setting.Key === NOTIFICATION_DATA_KEY,
+  )?.Value;
+  return notificationData ? JSON.parse(notificationData) : [];
+}
+
 async function fetchApi<T = unknown>(
   url: string | URL,
   { method = "GET" } = {},
