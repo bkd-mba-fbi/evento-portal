@@ -1,14 +1,18 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import bellIcon from "../../assets/icons/bell.svg?raw";
 import { DropdownController } from "../../controllers/dropdown.ts";
+import { NotificationData, fetchNotificationData } from "../../utils/fetch.ts";
 import { theme } from "../../utils/theme.ts";
 
 @customElement("bkd-notifications-toggle")
 @localized()
 export class NotificationsToggle extends LitElement {
+  @state()
+  notificationData: ReadonlyArray<NotificationData> = [];
+
   static styles = [
     theme,
     css`
@@ -41,11 +45,20 @@ export class NotificationsToggle extends LitElement {
     `,
   ];
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.fetch();
+  }
+
   private dropdown = new DropdownController(
     this,
     "notifications-toggle",
     "notifications-menu",
   );
+
+  private async fetch(): Promise<void> {
+    this.notificationData = await fetchNotificationData();
+  }
 
   render() {
     return html` <button
@@ -55,7 +68,9 @@ export class NotificationsToggle extends LitElement {
         @click="${() => this.dropdown.toggle()}"
       >
         ${unsafeHTML(bellIcon)}
-        <span class="circle" hidden="hidden">3</span>
+        <span class="circle" ?hidden=${this.notificationData.length === 0}>
+          ${this.notificationData.length}
+        </span>
       </button>
       <bkd-notifications-dropdown
         .open=${this.dropdown.open}
