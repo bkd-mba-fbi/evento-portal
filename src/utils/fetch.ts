@@ -1,6 +1,7 @@
+import { getEnvSettings } from "../env-settings";
 import { tokenState } from "../state/token-state";
 
-const envSettings = window.eventoPortal.settings;
+const envSettings = getEnvSettings();
 
 if (typeof envSettings?.apiServer !== "string") {
   throw new Error("Invalid 'apiServer' setting");

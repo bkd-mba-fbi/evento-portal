@@ -7,6 +7,7 @@ import caretIcon from "../../assets/icons/caret.svg?raw";
 import closeSmallIcon from "../../assets/icons/close-small.svg?raw";
 import substitutionIcon from "../../assets/icons/substitution.svg?raw";
 import { DropdownController } from "../../controllers/dropdown";
+import { getEnvSettings } from "../../env-settings.ts";
 import { tokenState } from "../../state/token-state.ts";
 import { Substitution, fetchCurrentSubstitutions } from "../../utils/fetch";
 import { buildUrl } from "../../utils/routing.ts";
@@ -169,7 +170,7 @@ export class SubstitutionsToggle extends LitElement {
   }
 
   private redirect(substitution: Substitution, action: "start" | "stop"): void {
-    const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
+    const { oAuthServer, oAuthPrefix } = getEnvSettings();
     const url = `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${substitution.Id}/${action}`;
     submit("POST", url, {
       access_token: tokenState.accessToken ?? "",

@@ -2,7 +2,7 @@ import { msg } from "@lit/localize";
 
 /**
  * This file contains the static configuration that is part of the
- * build. For environment specific settings, see
+ * build. For environment specific settings, see `env-settings.ts` and
  * `public/settings.example.js`.
  */
 

@@ -17,8 +17,9 @@ const commonPlugins = [
       // by the service worker
       navigateFallbackDenylist: [/^\/apps/],
 
-      // Define files to be pre-cached (all except the files in apps dir)
-      globIgnores: ["apps/**/*"],
+      // Define files to be pre-cached (all except the settings files
+      // & the apps dir)
+      globIgnores: ["apps/**/*", "settings*.js"],
       globPatterns: ["**/*{js,css,html,ico,png,svg,woff}"],
     },
     manifest: {
