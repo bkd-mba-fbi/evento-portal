@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import { NotificationData } from "../../utils/fetch.ts";
+import { sanitize } from "../../utils/sanitize.ts";
 import { theme } from "../../utils/theme.ts";
 
 @customElement("bkd-notifications-dropdown")
@@ -89,9 +90,12 @@ export class NotificationsDropdown extends LitElement {
   ];
 
   private renderNotificationData(data: NotificationData) {
+    const sanitizedSubject = sanitize(data.subject);
+    const sanitizedBody = sanitize(data.body);
+
     return html`<div class="notification">
-      <div class="subject">${unsafeHTML(data.subject)}</div>
-      <div class="body">${unsafeHTML(data.body)}</div>
+      <div class="subject">${unsafeHTML(sanitizedSubject)}</div>
+      <div class="body">${unsafeHTML(sanitizedBody)}</div>
     </div>`;
   }
 
