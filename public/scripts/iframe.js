@@ -116,9 +116,10 @@ window.addEventListener("load", () => {
   // element is smaller. As a workaround we observe the child in the
   // kursausschreibung app. See also
   // https://github.com/bkd-mba-fbi/evento-portal/issues/117
-  const mainElement = document.getElementById("kursausschreibung-root")
-    ? document.querySelector("body > div")
-    : document.documentElement;
+  const mainElement =
+    (document.getElementById("kursausschreibung-root") &&
+      document.querySelector("body > div")) ||
+    document.documentElement;
   resizeObserver.observe(mainElement);
 
   const body = document.querySelector("body");
@@ -167,3 +168,172 @@ window.addEventListener("hashchange", (event) => {
     parent.window.origin,
   );
 });
+
+///// Scrolling /////
+
+// Since the iframe is always resized to contain the full height of
+// its contents (with the observers above), it never has
+// scrollbars. So if the app wants to scroll vertically or read the
+// vertical scroll position, we have to do this in the Evento Portal
+// window, while also considering the iframe's top-offset within the
+// portal. Therefore we monkey-patch the scroll-relevant browser APIs
+// to make the app's scroll logic work.
+
+/**
+ * @type {any}
+ */
+const iFrameScrollTo = window.scrollTo;
+
+/**
+ * Monkey-patch `window.scrollTo` & `window.scroll` to scroll Evento
+ * Portal window instead.
+ *
+ * @param {...*} args
+ * @returns {void}
+ */
+function patchedScrollTo(...args) {
+  if (args.length === 2) {
+    const [x, y] = args;
+
+    // Scroll portal vertically
+    window.parent.scrollTo(0, y + getPortalOffset());
+
+    // Scroll iframe horizontally
+    iFrameScrollTo.call(window, x, 0);
+  } else if (args[0]) {
+    const { top, left, behavior } = args[0];
+    if (top != null) {
+      // Scroll portal vertically
+      window.parent.scrollTo({
+        top: top + getPortalOffset(),
+        behavior,
+      });
+    }
+    if (left != null) {
+      // Scroll iframe horizontally
+      iFrameScrollTo.call(window, { left, behavior });
+    }
+  }
+}
+window.scrollTo = patchedScrollTo;
+window.scroll = patchedScrollTo;
+
+/**
+ * @type {any}
+ */
+const iFrameScrollBy = window.scrollBy;
+
+/**
+ * Monkey-patch `window.scrollBy` to scroll Evento Portal window
+ * instead.
+ *
+ * @param {...*} args
+ * @returns {void}
+ */
+function patchedScrollBy(...args) {
+  if (args.length === 2) {
+    const [x, y] = args;
+
+    // Scroll portal vertically
+    window.parent.scrollBy(0, y);
+
+    // Scroll iframe horizontally
+    iFrameScrollBy.call(window, x, 0);
+  } else if (args[0]) {
+    const { top, left, behavior } = args[0];
+    if (top != null) {
+      // Scroll portal vertically
+      window.parent.scrollBy({ top, behavior });
+    }
+    if (left != null) {
+      // Scroll iframe horizontally
+      iFrameScrollBy.call(window, { left, behavior });
+    }
+  }
+}
+window.scrollBy = patchedScrollBy;
+
+/**
+ * Monkey-patch the `window.scrollY` & `window.pageYOffset`
+ * read-only properties to return the Evento Portal window's scroll
+ * position instead.
+ *
+ * @returns {number}
+ */
+function patchedScrollY() {
+  return Math.max(window.parent.scrollY - getPortalOffset(), 0);
+}
+Object.defineProperty(window, "scrollY", { get: patchedScrollY });
+Object.defineProperty(window, "pageYOffset", { get: patchedScrollY });
+
+const iFrameGetBoundingClientRect = Element.prototype.getBoundingClientRect;
+
+/**
+ * Monkey-patch `Element.prototype.getBoundingClientRect` to
+ * incorporate Evento Portal window scroll position.
+ *
+ * @returns {DOMRect}
+ * @this {Element}
+ */
+function patchedGetBoundingClientRect() {
+  const rect = iFrameGetBoundingClientRect.call(this);
+  const y = rect.y - window.scrollY;
+  return new DOMRect(rect.x, y, rect.width, rect.height);
+}
+Element.prototype.getBoundingClientRect = patchedGetBoundingClientRect;
+
+/**
+ * Monkey-patch `window.scrollIntoView` to scroll Evento Portal window
+ * instead.
+ *
+ * @param {Parameters<typeof Element.prototype.scrollIntoView>[0]} arg
+ * @returns {void}
+ * @this {Element}
+ */
+function patchedScrollIntoView(arg) {
+  let behavior;
+  if (typeof arg === "object") {
+    behavior = arg?.behavior;
+    if (arg?.block) {
+      console.warn(
+        "The block option is not supported by the simulated scrollIntoView of the Evento Portal",
+      );
+    }
+    if (arg?.inline) {
+      console.warn(
+        "The inline option is not supported by the simulated scrollIntoView of the Evento Portal",
+      );
+    }
+  } else if (typeof arg === "boolean") {
+    console.warn(
+      "The alignToTop option is not supported by the simulated scrollIntoView of the Evento Portal",
+    );
+  }
+
+  const { top, bottom } = this.getBoundingClientRect();
+  const viewportTop = window.parent.scrollY;
+  const viewportBottom = viewportTop + window.parent.innerHeight;
+  const offset = getPortalOffset();
+
+  if (top + offset < viewportTop || bottom + offset > viewportBottom) {
+    window.parent.scrollTo({ top: top + offset, behavior });
+  }
+}
+Element.prototype.scrollIntoView = patchedScrollIntoView;
+
+/**
+ * Returns the offset of the iframe to the top of the Evento Portal
+ * document.
+ *
+ * @returns {number}
+ */
+function getPortalOffset() {
+  const parentDocument = window.parent.document;
+  const portalRoot = parentDocument?.querySelector("bkd-portal")?.shadowRoot;
+  const contentRoot = portalRoot?.querySelector("bkd-content")?.shadowRoot;
+  const iframe = contentRoot?.querySelector("iframe");
+  return (
+    (iframe?.getBoundingClientRect()?.top ?? 0) +
+    parentDocument.documentElement.scrollTop
+  );
+}
