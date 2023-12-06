@@ -109,8 +109,17 @@ function getMaxPositionedBottom() {
   }, 0);
 }
 
-window.onload = () => {
-  resizeObserver.observe(document.documentElement);
+window.addEventListener("load", () => {
+  // For reasons we don't understand, the <body> in the
+  // kursauschreibung app always has full height in Chrome (not in
+  // Firefox), although there is no CSS causing this and the child
+  // element is smaller. As a workaround we observe the child in the
+  // kursausschreibung app. See also
+  // https://github.com/bkd-mba-fbi/evento-portal/issues/117
+  const mainElement = document.getElementById("kursausschreibung-root")
+    ? document.querySelector("body > div")
+    : document.documentElement;
+  resizeObserver.observe(mainElement);
 
   const body = document.querySelector("body");
   if (body) {
@@ -119,7 +128,7 @@ window.onload = () => {
       childList: true,
     });
   }
-};
+});
 
 ///// HTML lang attribute updating /////
 
