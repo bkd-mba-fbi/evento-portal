@@ -6,6 +6,7 @@ import {
 } from "@badgateway/oauth2-client";
 import { generateQueryString } from "@badgateway/oauth2-client/dist/client";
 import { getCodeChallenge } from "@badgateway/oauth2-client/dist/client/authorization-code";
+import { getEnvSettings } from "../env-settings";
 import { LOCALE_QUERY_PARAM, portalState } from "../state/portal-state";
 import { tokenState } from "../state/token-state";
 import { log } from "./logging";
@@ -19,7 +20,7 @@ import {
 import { isValidToken } from "./token";
 import { clearTokenRenewalTimers } from "./token-renewal";
 
-const envSettings = window.eventoPortal.settings;
+const envSettings = getEnvSettings();
 
 if (typeof envSettings?.oAuthServer !== "string") {
   throw new Error("Invalid 'oAuthServer' setting");
