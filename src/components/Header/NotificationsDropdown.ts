@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import trashIcon from "../../assets/icons/trash.svg?raw";
-import { NotificationData } from "../../utils/fetch.ts";
+import { NotificationData, saveNotificationData } from "../../utils/fetch.ts";
 import { sanitize } from "../../utils/sanitize.ts";
 import { theme } from "../../utils/theme.ts";
 
@@ -105,6 +105,19 @@ export class NotificationsDropdown extends LitElement {
     `,
   ];
 
+  private deleteAllNotifications() {
+    //saveNotificationData();
+    console.log(
+      "Deleting all notification",
+      this.notificationData.map((data) => data.id),
+    );
+  }
+
+  private deleteNotification(id: number) {
+    //saveNotificationData();
+    console.log("Deleting notification", id);
+  }
+
   private renderNotificationData(data: NotificationData) {
     const sanitizedSubject = sanitize(data.subject);
     const sanitizedBody = sanitize(data.body);
@@ -114,7 +127,11 @@ export class NotificationsDropdown extends LitElement {
         <div class="subject">${unsafeHTML(sanitizedSubject)}</div>
         <div class="body">${unsafeHTML(sanitizedBody)}</div>
       </div>
-      <button type="button" aria-label="${msg("Benachrichtigung löschen")}">
+      <button
+        type="button"
+        aria-label="${msg("Benachrichtigung löschen")}"
+        @click=${() => this.deleteNotification(data.id)}
+      >
         ${unsafeHTML(trashIcon)}
       </button>
     </div> `;
@@ -129,7 +146,7 @@ export class NotificationsDropdown extends LitElement {
         <button
           type="button"
           ?disabled=${this.notificationData.length === 0}
-          @click="${() => console.log("delete")}"
+          @click="${() => this.deleteAllNotifications()}"
         >
           ${msg("Alle löschen")}
         </button>

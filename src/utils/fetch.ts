@@ -69,9 +69,20 @@ export async function fetchNotificationData(): Promise<
   return notificationData ? JSON.parse(notificationData) : [];
 }
 
+export function saveNotificationData() {
+  const url = `${envSettings.apiServer}/UserSettings/Cst`;
+  fetchApi(url, { method: "PATCH", body: "body" });
+}
+
 async function fetchApi<T = unknown>(
   url: string | URL,
-  { method = "GET" } = {},
+  {
+    method = "GET",
+    body = undefined,
+  }: Readonly<{
+    method?: string;
+    body?: string;
+  }> = {},
 ): Promise<T> {
   const { accessToken } = tokenState;
   if (!accessToken) {
@@ -83,7 +94,6 @@ async function fetchApi<T = unknown>(
     "Content-Type": "application/json",
   });
 
-  const response = await fetch(url, { method, headers });
-  const json = await response.json();
-  return json;
+  const response = await fetch(url, { method, headers, body });
+  return await response.json();
 }
