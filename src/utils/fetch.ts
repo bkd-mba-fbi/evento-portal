@@ -47,31 +47,42 @@ export function fetchCurrentSubstitutions(): Promise<
 }
 
 const NOTIFICATION_DATA_KEY = "notificationData";
+type UserSettings = Readonly<{
+  Id: string;
+  Settings: ReadonlyArray<UserSetting>;
+}>;
 type UserSetting = Readonly<{
   Key: string;
   Value: string;
 }>;
-export type NotificationData = Readonly<{
+export type NotificationDataEntry = Readonly<{
   id: number;
   subject: string;
   body: string;
 }>;
-export async function fetchNotificationData(): Promise<
-  ReadonlyArray<NotificationData>
+
+export async function fetchNotifications(): Promise<
+  ReadonlyArray<NotificationDataEntry>
 > {
   const url = `${envSettings.apiServer}/UserSettings/Cst`;
-  const { Settings } = await fetchApi<{
-    Settings: ReadonlyArray<UserSetting>;
-  }>(url);
+  const { Settings } = await fetchApi<UserSettings>(url);
   const notificationData = Settings.find(
     (setting) => setting.Key === NOTIFICATION_DATA_KEY,
   )?.Value;
   return notificationData ? JSON.parse(notificationData) : [];
 }
 
-export function saveNotificationData() {
+export function updateNotifications(
+  notifications: ReadonlyArray<NotificationDataEntry>,
+): Promise<unknown> {
   const url = `${envSettings.apiServer}/UserSettings/Cst`;
-  fetchApi(url, { method: "PATCH", body: "body" });
+  const userSettings: UserSettings = {
+    Id: "Cst",
+    Settings: [
+      { Key: NOTIFICATION_DATA_KEY, Value: JSON.stringify(notifications) },
+    ],
+  };
+  return fetchApi(url, { method: "PATCH", body: JSON.stringify(userSettings) });
 }
 
 async function fetchApi<T = unknown>(

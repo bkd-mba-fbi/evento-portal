@@ -4,14 +4,17 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import bellIcon from "../../assets/icons/bell.svg?raw";
 import { DropdownController } from "../../controllers/dropdown.ts";
-import { NotificationData, fetchNotificationData } from "../../utils/fetch.ts";
+import {
+  NotificationDataEntry,
+  fetchNotifications,
+} from "../../utils/fetch.ts";
 import { theme } from "../../utils/theme.ts";
 
 @customElement("bkd-notifications-toggle")
 @localized()
 export class NotificationsToggle extends LitElement {
   @state()
-  notificationData: ReadonlyArray<NotificationData> = [];
+  notifications: ReadonlyArray<NotificationDataEntry> = [];
 
   static styles = [
     theme,
@@ -57,7 +60,7 @@ export class NotificationsToggle extends LitElement {
   );
 
   private async fetch(): Promise<void> {
-    this.notificationData = await fetchNotificationData();
+    this.notifications = await fetchNotifications();
   }
 
   render() {
@@ -68,13 +71,13 @@ export class NotificationsToggle extends LitElement {
         @click="${() => this.dropdown.toggle()}"
       >
         ${unsafeHTML(bellIcon)}
-        <span class="circle" ?hidden=${this.notificationData.length === 0}>
-          ${this.notificationData.length}
+        <span class="circle" ?hidden=${this.notifications.length === 0}>
+          ${this.notifications.length}
         </span>
       </button>
       <bkd-notifications-dropdown
         .open=${this.dropdown.open}
-        .notificationData=${this.notificationData}
+        .notifications=${this.notifications}
       >
       </bkd-notifications-dropdown>`;
   }

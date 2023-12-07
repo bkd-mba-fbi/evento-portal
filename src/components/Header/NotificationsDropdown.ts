@@ -4,7 +4,10 @@ import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import trashIcon from "../../assets/icons/trash.svg?raw";
-import { NotificationData, saveNotificationData } from "../../utils/fetch.ts";
+import {
+  NotificationDataEntry,
+  updateNotifications,
+} from "../../utils/fetch.ts";
 import { sanitize } from "../../utils/sanitize.ts";
 import { theme } from "../../utils/theme.ts";
 
@@ -15,7 +18,7 @@ export class NotificationsDropdown extends LitElement {
   open = false;
 
   @property()
-  notificationData: ReadonlyArray<NotificationData> = [];
+  notifications: ReadonlyArray<NotificationDataEntry> = [];
 
   static styles = [
     theme,
@@ -107,21 +110,18 @@ export class NotificationsDropdown extends LitElement {
   ];
 
   private deleteAllNotifications() {
-    //saveNotificationData();
-    console.log(
-      "Deleting all notification",
-      this.notificationData.map((data) => data.id),
-    );
+    updateNotifications([]);
   }
 
   private deleteNotification(id: number) {
-    //saveNotificationData();
-    console.log("Deleting notification", id);
+    updateNotifications(
+      this.notifications.filter((notification) => notification.id !== id),
+    );
   }
 
-  private renderNotificationData(data: NotificationData) {
-    const sanitizedSubject = sanitize(data.subject);
-    const sanitizedBody = sanitize(data.body);
+  private renderNotification(notification: NotificationDataEntry) {
+    const sanitizedSubject = sanitize(notification.subject);
+    const sanitizedBody = sanitize(notification.body);
 
     return html`<div class="notification">
       <div class="content">
@@ -131,7 +131,7 @@ export class NotificationsDropdown extends LitElement {
       <button
         type="button"
         aria-label="${msg("Benachrichtigung löschen")}"
-        @click=${() => this.deleteNotification(data.id)}
+        @click=${() => this.deleteNotification(notification.id)}
       >
         ${unsafeHTML(trashIcon)}
       </button>
@@ -146,19 +146,19 @@ export class NotificationsDropdown extends LitElement {
         <span>${msg("Benachrichtigungen")}</span>
         <button
           type="button"
-          ?disabled=${this.notificationData.length === 0}
+          ?disabled=${this.notifications.length === 0}
           @click="${() => this.deleteAllNotifications()}"
         >
           ${msg("Alle löschen")}
         </button>
       </div>
       <div class="content">
-        ${this.notificationData.length === 0
+        ${this.notifications.length === 0
           ? msg("Keine Benachrichtigungen")
           : repeat(
-              this.notificationData,
-              (data) => data.id,
-              (data) => this.renderNotificationData(data),
+              this.notifications,
+              (notification) => notification.id,
+              (notification) => this.renderNotification(notification),
             )}
       </div>
     </div>`;
