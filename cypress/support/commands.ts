@@ -84,6 +84,10 @@ Cypress.Commands.add(
       "https://eventotest.api/restApi/TeacherSubstitutions/current",
       [],
     );
+
+    cy.intercept("GET", "https://eventotest.api/restApi/UserSettings/Cst", {
+      Settings: [],
+    });
   },
 );
 
