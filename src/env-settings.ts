@@ -3,6 +3,7 @@ export type EnvSettings = Readonly<{
   oAuthServer: Readonly<string>;
   oAuthPrefix: Readonly<string>;
   oAuthClientId: Readonly<string>;
+  notificationRefreshTime: Readonly<number>;
 }>;
 
 /**
@@ -21,6 +22,7 @@ export function getEnvSettings(): EnvSettings {
       oAuthServer: "",
       oAuthPrefix: "",
       oAuthClientId: "",
+      notificationRefreshTime: 30,
     }
   );
 }

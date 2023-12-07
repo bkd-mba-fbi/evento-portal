@@ -62,6 +62,7 @@ Cypress.Commands.add(
             oAuthServer: "https://eventotest.api",
             oAuthPrefix: "/OAuth",
             oAuthClientId: "cypress",
+            notificationRefreshTime: 30,
           },
         };
       `,
