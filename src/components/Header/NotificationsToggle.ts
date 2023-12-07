@@ -10,6 +10,8 @@ import {
 } from "../../utils/fetch.ts";
 import { theme } from "../../utils/theme.ts";
 
+const envSettings = window.eventoPortal.settings;
+
 @customElement("bkd-notifications-toggle")
 @localized()
 export class NotificationsToggle extends LitElement {
@@ -48,9 +50,26 @@ export class NotificationsToggle extends LitElement {
     `,
   ];
 
+  private interval: NodeJS.Timeout | undefined;
+
   connectedCallback() {
     super.connectedCallback();
     this.fetch();
+    this.interval = setInterval(
+      () => this.fetch(),
+      envSettings.notificationRefreshTime * 1000,
+    );
+  }
+
+  disconnectedCallback() {
+    clearInterval(this.interval);
+    super.disconnectedCallback();
+  }
+
+  private handleUpdateNotifications(
+    event: CustomEvent<{ notifications: ReadonlyArray<NotificationDataEntry> }>,
+  ) {
+    this.notifications = event.detail.notifications;
   }
 
   private dropdown = new DropdownController(
@@ -78,6 +97,7 @@ export class NotificationsToggle extends LitElement {
       <bkd-notifications-dropdown
         .open=${this.dropdown.open}
         .notifications=${this.notifications}
+        @bkdupdatenotifications=${this.handleUpdateNotifications.bind(this)}
       >
       </bkd-notifications-dropdown>`;
   }

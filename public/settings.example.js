@@ -26,5 +26,10 @@ window.eventoPortal = {
      * The OAuth client ID
      */
     oAuthClientId: "example",
+
+    /**
+     * Refresh time for notifications
+     */
+    notificationRefreshTime: 30,
   },
 };

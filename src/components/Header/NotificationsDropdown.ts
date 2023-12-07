@@ -110,12 +110,29 @@ export class NotificationsDropdown extends LitElement {
   ];
 
   private deleteAllNotifications() {
-    updateNotifications([]);
+    const notifications: ReadonlyArray<NotificationDataEntry> = [];
+    updateNotifications(notifications);
+    this.dispatchUpdateNotificationsEvent(notifications);
   }
 
   private deleteNotification(id: number) {
-    updateNotifications(
-      this.notifications.filter((notification) => notification.id !== id),
+    const notifications: ReadonlyArray<NotificationDataEntry> =
+      this.notifications.filter((notification) => notification.id !== id);
+    updateNotifications(notifications);
+    this.dispatchUpdateNotificationsEvent(notifications);
+  }
+
+  private dispatchUpdateNotificationsEvent(
+    notifications: ReadonlyArray<NotificationDataEntry>,
+  ) {
+    this.dispatchEvent(
+      new CustomEvent<{
+        notifications: ReadonlyArray<NotificationDataEntry>;
+      }>("bkdupdatenotifications", {
+        bubbles: true,
+        composed: true,
+        detail: { notifications },
+      }),
     );
   }
 
@@ -154,7 +171,9 @@ export class NotificationsDropdown extends LitElement {
       </div>
       <div class="content">
         ${this.notifications.length === 0
-          ? msg("Keine Benachrichtigungen")
+          ? html`<div class="notification">
+              ${msg("Keine Benachrichtigungen")}
+            </div>`
           : repeat(
               this.notifications,
               (notification) => notification.id,
