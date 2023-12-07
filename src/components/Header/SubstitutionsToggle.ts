@@ -18,15 +18,6 @@ import { SubstitutionsDropdown } from "./SubstitutionsDropdown";
 @customElement("bkd-substitutions-toggle")
 @localized()
 export class SubstitutionsToggle extends LitElement {
-  @query("bkd-substitutions-dropdown")
-  dropdownElement?: SubstitutionsDropdown;
-
-  @state()
-  availableSubstitutions: ReadonlyArray<Substitution> = [];
-
-  @state()
-  activeSubstitution: Substitution | null = null;
-
   static styles = [
     theme,
     css`
@@ -94,17 +85,29 @@ export class SubstitutionsToggle extends LitElement {
     `,
   ];
 
+  @query("button")
+  private toggleElement?: HTMLElement;
+
+  @query("bkd-substitutions-dropdown")
+  private menuElement?: SubstitutionsDropdown;
+
+  @state()
+  private availableSubstitutions: ReadonlyArray<Substitution> = [];
+
+  @state()
+  private activeSubstitution: Substitution | null = null;
+
   private dropdown = new DropdownController(
     this,
-    "substitutions-toggle",
-    "substitutions-menu",
+    () => this.toggleElement ?? null,
+    () => this.menuElement?.shadowRoot ?? null,
     {
       queryItems: () =>
-        this.dropdownElement?.shadowRoot?.querySelectorAll<HTMLElement>(
+        this.menuElement?.shadowRoot?.querySelectorAll<HTMLElement>(
           "a[role='menuitem']",
         ) ?? null,
       queryFocused: () =>
-        (this.dropdownElement?.shadowRoot?.activeElement ??
+        (this.menuElement?.shadowRoot?.activeElement ??
           null) as HTMLElement | null,
     },
   );
@@ -199,14 +202,13 @@ export class SubstitutionsToggle extends LitElement {
 
     return html`
       <button
-        id="substitutions-toggle"
         class=${classMap({
           active: Boolean(this.activeSubstitution),
           open: this.dropdown.open,
         })}
         @click=${this.toggle.bind(this)}
         aria-label=${this.getLabel()}
-        aria-expanded=${this.dropdown.open}
+        .ariaExpanded=${this.dropdown.open}
         aria-haspopup="menu"
       >
         <div class="icon">${unsafeHTML(substitutionIcon)}</div>

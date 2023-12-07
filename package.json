@@ -25,7 +25,7 @@
     "lint": "npm run lint:eslint && npm run lint:ts",
     "cy:run": "cypress run --browser chromium",
     "cy:firefox": "cypress run --browser firefox",
-    "cy:open": "cypress open",
+    "cy:open": "cypress open --e2e",
     "locale:extract": "lit-localize extract",
     "locale:build": "lit-localize build",
     "format": "prettier --write --ignore-unknown \"./**/*.*\"",
