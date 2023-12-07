@@ -124,7 +124,7 @@ export class NavGroupDropdown extends LitElement {
     if (!this.group || !this.open) return;
 
     return html`
-      <ul role="menu" id="group-menu">
+      <ul role="menu">
         ${map(this.group.items, this.renderItem.bind(this))}
       </ul>
     `;

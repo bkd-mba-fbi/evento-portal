@@ -7,8 +7,9 @@ import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
 import arrowDownIcon from "../../assets/icons/arrow-down.svg?raw";
 import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
-import { NavigationGroup, NavigationItem } from "../../settings";
+import { NavigationGroup, NavigationItem, settings } from "../../settings";
 import { portalState } from "../../state/portal-state.ts";
+import { getNavigationItem } from "../../utils/navigation";
 import { buildUrl } from "../../utils/routing.ts";
 import { theme } from "../../utils/theme";
 import {
@@ -19,9 +20,6 @@ import {
 @customElement("bkd-mobile-nav")
 @localized()
 export class MobileNav extends LitElement {
-  @state()
-  openGroup: NavigationGroup | null = null;
-
   static styles = [
     theme,
     css`
@@ -167,6 +165,9 @@ export class MobileNav extends LitElement {
     `,
   ];
 
+  @state()
+  private openGroup: NavigationGroup | null = null;
+
   constructor() {
     super();
     new StateController(this, portalState);
@@ -175,11 +176,38 @@ export class MobileNav extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this.openGroupOfCurrentItem();
+    this.addEventListener("keyup", this.handleKeyup);
   }
+
+  disconnectedCallback(): void {
+    this.removeEventListener("keyup", this.handleKeyup);
+    super.disconnectedCallback();
+  }
+
+  private handleKeyup = (event: KeyboardEvent) => {
+    if (event.key === "Tab") {
+      // When tabbing through the menu, make sure the group of the
+      // element we are focusing is open
+      this.openGroupOfFocusedItem();
+    }
+  };
 
   private openGroupOfCurrentItem(): void {
     if (!this.openGroup) {
       this.openGroup = portalState.navigationGroup;
+    }
+  }
+
+  private openGroupOfFocusedItem(): void {
+    const activeElement = this.shadowRoot?.activeElement;
+    if (activeElement instanceof HTMLElement) {
+      const itemKey = activeElement.dataset.itemKey;
+      if (itemKey) {
+        const { group } = getNavigationItem(settings.navigation, itemKey);
+        if (group && group.label !== this.openGroup?.label) {
+          this.openGroup = group;
+        }
+      }
     }
   }
 
@@ -223,10 +251,11 @@ export class MobileNav extends LitElement {
           group: true,
           open,
         })}
-        aria-expanded=${open}
+        .ariaExpanded=${open}
       >
         <button
           class="group-header"
+          tabindex="-1"
           @click=${(e: MouseEvent) => this.handleGroupClick(e, group)}
         >
           <label> ${group.label} </label>
@@ -250,6 +279,7 @@ export class MobileNav extends LitElement {
       >
         <a
           href=${buildUrl(item)}
+          data-item-key=${item.key}
           @click=${(e: MouseEvent) => this.handleNavItemClick(e, item)}
         >
           ${item.label}

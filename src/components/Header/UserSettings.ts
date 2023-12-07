@@ -1,5 +1,5 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, query } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
@@ -80,10 +80,16 @@ export class UserSettings extends LitElement {
     `,
   ];
 
+  @query("button")
+  private toggleElement?: HTMLElement;
+
+  @query('ul[role="menu"]')
+  private menuElement?: HTMLElement;
+
   private dropdown = new DropdownController(
     this,
-    "settings-toggle",
-    "settings-menu",
+    () => this.toggleElement ?? null,
+    () => this.menuElement ?? null,
     {
       queryItems: () =>
         this.shadowRoot?.querySelectorAll<HTMLElement>("a[role='menuitem']") ??
@@ -133,15 +139,14 @@ export class UserSettings extends LitElement {
     return html`
       <button
         type="button"
-        id="settings-toggle"
         @click=${() => this.dropdown.toggle()}
         aria-label=${msg("Menü Benutzereinstellungen")}
-        aria-expanded=${this.dropdown.open}
+        .ariaExpanded=${this.dropdown.open}
         aria-haspopup="menu"
       >
         <img src="/icons/settings.svg" alt="" width="32" height="32" />
       </button>
-      <ul id="settings-menu" role="menu" ?hidden=${!this.dropdown.open}>
+      <ul role="menu" ?hidden=${!this.dropdown.open}>
         ${map(
           userSettingsItems(portalState.locale),
           this.renderSettingsItem.bind(this),

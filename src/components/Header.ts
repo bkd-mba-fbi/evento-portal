@@ -1,5 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, query } from "lit/decorators.js";
 import { when } from "lit/directives/when.js";
 import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
@@ -9,6 +9,8 @@ import { portalState } from "../state/portal-state";
 import { buildUrl } from "../utils/routing";
 import { theme } from "../utils/theme";
 import { UserSettingsItem } from "../utils/user-settings";
+import { MobileNav } from "./Header/MobileNav";
+import { ServiceNav } from "./Header/ServiceNav";
 
 @customElement("bkd-header")
 @localized()
@@ -120,6 +122,12 @@ export class Header extends LitElement {
     `,
   ];
 
+  @query("bkd-service-nav")
+  serviceNavElement?: ServiceNav;
+
+  @query("bkd-mobile-nav")
+  mobileNavElement?: MobileNav;
+
   constructor() {
     super();
     new StateController(this, portalState);
@@ -127,8 +135,10 @@ export class Header extends LitElement {
 
   private mobileNav = new DropdownController(
     this,
-    "mobile-nav-toggle",
-    "mobile-nav-menu",
+    () =>
+      this.serviceNavElement?.shadowRoot?.querySelector("bkd-hamburger") ??
+      null,
+    () => this.mobileNavElement?.shadowRoot ?? null,
   );
 
   private handleLogoClick(event: MouseEvent) {
@@ -182,7 +192,7 @@ export class Header extends LitElement {
               @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
             ></bkd-service-nav> `,
         )}
-        <a class="logo" href=${buildUrl("home")}
+        <a class="logo" tabindex="1" href=${buildUrl("home")}
           ><img
             src="logo.svg"
             alt=${msg("Evento Startseite")}
@@ -200,7 +210,6 @@ export class Header extends LitElement {
           this.mobileNav.open,
           () =>
             html`<bkd-mobile-nav
-              id="mobile-nav-menu"
               @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
               @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
             ></bkd-mobile-nav>`,

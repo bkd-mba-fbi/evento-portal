@@ -61,10 +61,7 @@ export class ServiceNav extends LitElement {
         <erz-notifications></erz-notifications>
         <bkd-user-settings></bkd-user-settings>
         <bkd-language-switcher></bkd-language-switcher>
-        <bkd-hamburger
-          id="mobile-nav-toggle"
-          .open=${this.mobileNavOpen}
-        ></bkd-hamburger>
+        <bkd-hamburger .open=${this.mobileNavOpen}></bkd-hamburger>
       </nav>
     `;
   }
