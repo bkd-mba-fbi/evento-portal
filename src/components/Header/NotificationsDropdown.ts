@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import trashIcon from "../../assets/icons/trash.svg?raw";
@@ -154,8 +155,10 @@ export class NotificationsDropdown extends LitElement {
       <div class="content">
         ${this.notificationData.length === 0
           ? msg("Keine Benachrichtigungen")
-          : this.notificationData.map((data: NotificationData) =>
-              this.renderNotificationData(data),
+          : repeat(
+              this.notificationData,
+              (data) => data.id,
+              (data) => this.renderNotificationData(data),
             )}
       </div>
     </div>`;
