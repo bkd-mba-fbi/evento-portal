@@ -22,10 +22,6 @@ export class NotificationsToggle extends LitElement {
   static styles = [
     theme,
     css`
-      :host {
-        display: flex;
-      }
-
       button {
         cursor: pointer;
         border: none;
@@ -76,7 +72,7 @@ export class NotificationsToggle extends LitElement {
   private dropdown = new DropdownController(
     this,
     "notifications-toggle",
-    "notifications-menu",
+    "notifications-dropdown",
   );
 
   private async fetch(): Promise<void> {

@@ -28,11 +28,11 @@ export class NotificationsDropdown extends LitElement {
         position: relative;
       }
 
-      #notifications-menu {
+      #notifications-dropdown {
         position: absolute;
         right: 0;
         border: 1px solid var(--bkd-func-bg-grey);
-        margin-top: calc(32px + 0.5rem);
+        margin-top: 0.5rem;
         list-style-type: none;
         background: var(--bkd-func-bg-white);
         z-index: var(--bkd-z-index-dropdown);
@@ -74,7 +74,7 @@ export class NotificationsDropdown extends LitElement {
         flex-direction: column;
         gap: 1rem;
 
-        .content {
+        .text {
           display: flex;
           justify-content: space-between;
         }
@@ -99,7 +99,7 @@ export class NotificationsDropdown extends LitElement {
 
       /* For medium & small screens */
       @media screen and (max-width: 1200px) {
-        #notifications-menu {
+        #notifications-dropdown {
           position: fixed;
           min-width: auto;
           width: 100vw;
@@ -141,7 +141,7 @@ export class NotificationsDropdown extends LitElement {
     const sanitizedBody = sanitize(notification.body);
 
     return html`<div class="notification">
-      <div class="content">
+      <div class="text">
         <div class="subject">${unsafeHTML(sanitizedSubject)}</div>
         <div class="body">${unsafeHTML(sanitizedBody)}</div>
       </div>
@@ -158,7 +158,7 @@ export class NotificationsDropdown extends LitElement {
   render() {
     if (!this.open) return;
 
-    return html`<div id="notifications-menu">
+    return html`<div id="notifications-dropdown">
       <div class="header">
         <span>${msg("Benachrichtigungen")}</span>
         <button
