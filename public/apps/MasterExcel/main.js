@@ -64,7 +64,7 @@ function insertButtonsGrading() {
 
 function insertButtonsTest() {
   // Buttons nicht einfügen, wenn folgendese element nicht vorhanden ist.
-  if ($('erz-test-table-header div div div.collapsed').length < 0) {
+  if ($('erz-test-table-header').length === 0) {
       return;
   }
   
@@ -97,7 +97,7 @@ function insertButtonsTest() {
 
   if(document.getElementsByClassName('desktop').length > 0) {
       var buttons = $(buttons_html);
-      $('erz-tests-header>erz-backlink>div>div.d-flex:nth-child(2)').append(buttons); 
+      $('#excel-import').append(buttons); 
   }
   
 }
