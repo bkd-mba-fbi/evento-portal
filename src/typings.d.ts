@@ -5,7 +5,7 @@ interface Window {
       oAuthServer: Readonly<string>;
       oAuthPrefix: Readonly<string>;
       oAuthClientId: Readonly<string>;
-      notificationRefreshTime: Readonly<string>;
+      notificationRefreshTime: Readonly<number>;
     }>;
   }>;
 }
