@@ -4,13 +4,14 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import bellIcon from "../../assets/icons/bell.svg?raw";
 import { DropdownController } from "../../controllers/dropdown.ts";
+import { getEnvSettings } from "../../env-settings.ts";
 import {
   NotificationDataEntry,
   fetchNotifications,
 } from "../../utils/fetch.ts";
 import { theme } from "../../utils/theme.ts";
 
-const envSettings = window.eventoPortal.settings;
+const envSettings = getEnvSettings();
 
 @customElement("bkd-notifications-toggle")
 @localized()
