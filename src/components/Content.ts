@@ -63,6 +63,8 @@ export class Content extends LitElement {
     `,
   ];
 
+  private renderedOffline = false;
+
   constructor() {
     super();
     new StateController(this, portalState);
@@ -71,10 +73,12 @@ export class Content extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener("message", this.handleMessage);
+    window.addEventListener("online", this.handleOnline);
   }
 
   disconnectedCallback() {
     window.removeEventListener("message", this.handleMessage);
+    window.removeEventListener("online", this.handleOnline);
     super.disconnectedCallback();
   }
 
@@ -87,6 +91,13 @@ export class Content extends LitElement {
     }
   };
 
+  private handleOnline = () => {
+    // Reload the app when we went online and offline page is rendered
+    if (this.renderedOffline) {
+      window.location.reload();
+    }
+  };
+
   private handleResize(height: string): void {
     if (this.iframe) {
       this.iframe.height = height;
@@ -94,6 +105,7 @@ export class Content extends LitElement {
   }
 
   render() {
+    this.renderedOffline = !navigator.onLine;
     if (!navigator.onLine) {
       // Show message when offline
       return html`<main>
