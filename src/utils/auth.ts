@@ -281,7 +281,6 @@ function handleLoginResult(
   // Remember the chosen instance for later logins
   const instanceId = tokenState.accessTokenPayload?.instanceId;
   if (instanceId) {
-    // TODO: move to TokenState as well?
     storeInstance(instanceId);
   }
 
@@ -328,7 +327,7 @@ function handleSubstitutionResult(token: OAuth2Token): void {
   if (window.parent === window) {
     history.replaceState({}, "", url);
   } else {
-    // only do this inside iframe, prevents loading the entire portal app inside the iframe
+    // Only do this inside iframe, prevents loading the entire portal app inside the iframe
     window.parent.location.assign(url);
   }
 }

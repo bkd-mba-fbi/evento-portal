@@ -1,49 +1,39 @@
 [back](../README.md)
 
-# App Integration with iframe
+# App Integration & API
 
-The integration of the various _apps_ (i.e. micro frontends) is achieved with an `<iframe>` to ensure a separation of the runtime environments, a proper cleanup when switching _apps_ and no memory leaks. However, this method comes with some trade-offs & issues.
+## Build Artefacts in public/ Directory
 
-The [public/scripts/iframe.js](../public/scripts/iframe.js) script solves most of these issues and has to be included in an _app_'s `index.html`. It sets up communication between portal & iframe and initializes workarounds.
+A static build of the _apps_ is committed to this repository in the [public/apps/](../public/apps/) directory. In case of the [webapp-schulverwaltung](https://github.com/bkd-mba-fbi/webapp-schulverwaltung) this happens automatically via a GitHub Actions Workflow). For the other _apps_ the latest build has to be committed manually.
 
-## URL Synchronization
+For more details see [Deployment View](./sad.md#deployment-view).
 
-_Apps_ can use client-side hash-routing, that means using the [hash part](https://developer.mozilla.org/en-US/docs/Web/API/URL/hash) of the URL to store application state. The _Evento Portal_ ensures, that the hash part is mapped from the `<iframe>`'s URL to the URL in the browser's location bar and vice versa. This synchronization is achieved as follows:
+## Integration via iframe
 
-- `iframe.js`: Wraps the history API in the iframe to post messages about state changes to the _Evento Portal_:
-  - `history.pushState` in iframe → `bkdAppPushState` message in portal
-  - `history.replaceState` in iframe → `bkdAppReplaceState` message in portal
-  - `hashchange` event in iframe → `bkdAppHashChange` message in portal
-- `<bkd-portal>` component: Registers the above message events and updates the portal state & URL. It also registers the `hashchange` event to propagate changes of the browser's URL to the iframe URL.
+The _Evento Portal_ loads the _apps_ in an `<iframe>` to ensure a proper separation of the runtime environment. For more details on this decision see [ADR 2: App Integration via iframe](./sad.md#adr-2-app-integration-via-iframe).
 
-## iframe Resizing
+To [compensate the limitations](./iframe.md) of the `<iframe>` and setup communication between the _Evento Portal_ and the _app_, each _app_ has to include the [public/scripts/iframe.js](../public/scripts/iframe.js) script in its `index.html`:
 
-Since an iframe has a fixed size, its width & height have to be constantly adjusted to the _app_'s document/contents. A special challenge are absolute positioned elements (like dropdowns or overlays) that just overflow if larger than the document and not cause the document to grow.
+```
+<body>
+  <!-- App contents... -->
+  <script src="../../scripts/iframe.js" type="module"></script>
+</body>
+```
 
-The resizing of the iframe is implemented as such:
+## App Routing
 
-- `iframe.js`: A `ResizeObserver` is used to track changes to the overall height of the _app_'s document. A `bkdAppResize` message is posted if the height changes.
-- `iframe.js`: A `MutationObserver` is used to track the addition or removal of any absolute positioned nodes and to determine the bottom most element with absolute positioning. A `bkdAppResize` message is posted if the height changes.
-- `<bkd-content>` component: Registers the `bkdAppResize` messages and sets the given height on the `<iframe>`.
+_Apps_ can use client-side hash-routing, that means using the [hash part](https://developer.mozilla.org/en-US/docs/Web/API/URL/hash) of the URL to store application state. The _Evento Portal_ ensures, that the hash part is mapped from the `<iframe>`'s URL to the browser URL and vice versa.
 
-## Scrolling
+## Evento Portal ↔ App API
 
-Since the iframe is constantly resized, it never has a vertical scrollbar. This is an issue when _apps_ want to scroll programmatically. Thus the `frame.js` scripts monkey-patches the following parts of the browser API to apply the scrolling in the _Evento Portal_ window instead, incorporating the iframe's top offset:
+An _app_ can rely on the following information that is provided by the _Evento Portal_:
 
-- `window.scrollTo` & `window.scroll`
-- `window.scrollBy`
-- `window.scrollY` & `window.pageYOffset`
-- `Element.prototype.getBoundingClientRect`
-- `Element.prototype.scrollIntoView` (an element is always top aligned, the `alignToTop`, `block` and `inline` options are not supported)
+| What                             | Where                                                                                                                                       | Note                                                                                                                                                                             |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Access token                     | `sessionStorage.getItem("CLX.LoginToken")`                                                                                                  | Value: quoted string (`"ey..."`)                                                                                                                                                 |
+| Access token (legacy)            | `localStorage.getItem("CLX.LoginToken")`                                                                                                    | Value: quoted string (`"ey..."`) <br> ⚠️ Should not be used since there are issues if the user opens different _apps_ in various tabs. Read value from `sessionStorage` instead. |
+| Access token expiration (legacy) | `localStorage.getItem("CLX.TokenExpire")`                                                                                                   | Value: Unix timestamp in milliseconds when access token expires as string.                                                                                                       |
+| User's locale                    | • `localStorage.getItem("uiCulture")`<br>• Document's `lang` attribute (`<html lang="de-CH">`)<br>• `culture_info` property in access token | Value: string of user's locale such as `de-CH` or `fr-CH`                                                                                                                        |
 
-These functions/properties can be used safely by _apps_. What does not work is the `scroll` event.
-
-## Positioning of Elements
-
-Positioning elements relative to the viewport/scroll position – such as modal dialogs – is an issue. The CSS rule `position: fixed` does not work, since the iframe is not a scrolling container (the element will stick to the top of the iframe in this case). _Apps_ have to consider the _Evento Portal_ window's scroll position and the iframe's offset in this case.
-
-Checkout the [BkdModalService](https://github.com/bkd-mba-fbi/webapp-schulverwaltung/blob/main/src/app/shared/services/bkd-modal.service.ts) of the webapp-schulverwaltung as an example.
-
-## Language Attribute
-
-The `iframe.js` script applies the _Evento Portal_'s HTML `lang` attribute to the _app_'s document.
+⚠️ Important: _apps_ should only read, never update the provided values in session- or localStorage.
