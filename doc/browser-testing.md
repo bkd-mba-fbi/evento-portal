@@ -1,10 +1,14 @@
-# Browser support
+# Browser Testing
 
 [back](../README.md)
 
+## Requirements
+
 We support the evergreen browsers (Chrome, Firefox, Safari, Edge).
 
-## Testing with BrowserStack
+## BrowserStack.com
+
+### Live Testing
 
 When testing browser compatibility with [BrowserStack](https://www.browserstack.com/), consider the following combination of Dev Server and URL to use.
 
@@ -14,4 +18,6 @@ When testing browser compatibility with [BrowserStack](https://www.browserstack.
 | Android   | Chrome                | `npm start`                  | `http://localhost:3000`    |                                                                                                              |
 | macOS/iOS | Safari                | `npm run start:browserstack` | `http://bs-local.com:3000` | Add `127.0.0.1 bs-local.com` to `/etc/hosts`<br/>Change `oAuthClientId` to `"browserstack"` In `settings.js` |
 
-In order to log in without two-factor authentication, you will need to enable _Resolve all URLs through my network_ under [_Local testing_](https://www.browserstack.com/docs/live/local-testing/test-using-local-testing#test-websites-hosted-on-private-or-internal-servers).
+### Authentication & 2FA
+
+For untrusted IP ranges, the OAuth provider requires 2FA to login with the test users (i.e. you can't login). If you are in a trusted IP range and want to test the _Evento Portal_ using BrowserStack, you can use [local testing](https://www.browserstack.com/docs/live/local-testing) and activate the _Resolve all URLs through my network_ option.
