@@ -99,8 +99,14 @@ export class NotificationsDropdown extends LitElement {
 
       /* For medium & small screens */
       @media screen and (max-width: 1200px) {
+        :host {
+          position: absolute;
+          top: calc(100% - 0.5rem); /* Place right below header */
+          left: 0;
+          width: 100vw;
+        }
+
         #notifications-dropdown {
-          position: fixed;
           min-width: auto;
           width: 100vw;
           right: 0;
