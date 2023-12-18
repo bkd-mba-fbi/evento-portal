@@ -21,7 +21,7 @@ if (typeof envSettings?.notificationRefreshTime !== "number") {
 @localized()
 export class NotificationsToggle extends LitElement {
   @state()
-  notifications: ReadonlyArray<NotificationDataEntry> = [];
+  notifications: ReadonlyArray<NotificationDataEntry> | undefined = undefined;
 
   static styles = [
     theme,
@@ -80,6 +80,7 @@ export class NotificationsToggle extends LitElement {
   }
 
   private handleDeleteNotification(event: CustomEvent<{ id: number }>) {
+    if (!this.notifications) return;
     const notifications: ReadonlyArray<NotificationDataEntry> =
       this.notifications.filter(
         (notification) => notification.id !== event.detail.id,
@@ -100,8 +101,11 @@ export class NotificationsToggle extends LitElement {
         @click="${() => this.dropdown.toggle()}"
       >
         ${unsafeHTML(bellIcon)}
-        <span class="circle" ?hidden=${this.notifications.length === 0}>
-          ${this.notifications.length}
+        <span
+          class="circle"
+          ?hidden=${!this.notifications || this.notifications.length === 0}
+        >
+          ${this.notifications?.length}
         </span>
       </button>
       <bkd-notifications-dropdown

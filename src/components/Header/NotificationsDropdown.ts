@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
+import spinnerIcon from "../../assets/icons/spinner.svg?raw";
 import trashIcon from "../../assets/icons/trash.svg?raw";
 import { NotificationDataEntry } from "../../utils/fetch.ts";
 import { sanitize } from "../../utils/sanitize.ts";
@@ -15,7 +16,7 @@ export class NotificationsDropdown extends LitElement {
   open = false;
 
   @property()
-  notifications: ReadonlyArray<NotificationDataEntry> = [];
+  notifications: ReadonlyArray<NotificationDataEntry> | undefined = undefined;
 
   static styles = [
     theme,
@@ -62,6 +63,10 @@ export class NotificationsDropdown extends LitElement {
           cursor: default;
           background-color: var(--bkd-func-bg-grey);
         }
+      }
+
+      .spinner {
+        padding: 1rem;
       }
 
       .notification {
@@ -130,6 +135,19 @@ export class NotificationsDropdown extends LitElement {
       }),
     );
   }
+
+  renderContent() {
+    if (!this.notifications)
+      return html`<div class="spinner">${unsafeHTML(spinnerIcon)}</div>`;
+    return this.notifications.length === 0
+      ? html`<div class="notification">${msg("Keine Benachrichtigungen")}</div>`
+      : repeat(
+          this.notifications,
+          (notification) => notification.id,
+          (notification) => this.renderNotification(notification),
+        );
+  }
+
   private renderNotification(notification: NotificationDataEntry) {
     const sanitizedSubject = sanitize(notification.subject);
     const sanitizedBody = sanitize(notification.body);
@@ -157,23 +175,13 @@ export class NotificationsDropdown extends LitElement {
         <span>${msg("Benachrichtigungen")}</span>
         <button
           type="button"
-          ?disabled=${this.notifications.length === 0}
+          ?disabled=${!this.notifications || this.notifications.length === 0}
           @click="${() => this.handleDeleteAllNotifications()}"
         >
           ${msg("Alle löschen")}
         </button>
       </div>
-      <div class="content">
-        ${this.notifications.length === 0
-          ? html`<div class="notification">
-              ${msg("Keine Benachrichtigungen")}
-            </div>`
-          : repeat(
-              this.notifications,
-              (notification) => notification.id,
-              (notification) => this.renderNotification(notification),
-            )}
-      </div>
+      <div class="content">${this.renderContent()}</div>
     </div>`;
   }
 }
