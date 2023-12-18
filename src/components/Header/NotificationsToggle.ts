@@ -39,11 +39,11 @@ export class NotificationsToggle extends LitElement {
         box-shadow: 0 0 0 2px var(--bkd-func-bg-white);
         border-radius: 50%;
         font-weight: 700;
-        font-size: small;
+        font-size: 0.85rem;
         line-height: 1.5;
         text-align: center;
-        width: 20px;
-        height: 20px;
+        width: 1.25rem;
+        height: 1.25rem;
         margin-left: -10px;
         margin-top: 2px;
       }
