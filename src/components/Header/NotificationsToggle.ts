@@ -47,7 +47,7 @@ export class NotificationsToggle extends LitElement {
     `,
   ];
 
-  private interval: NodeJS.Timeout | undefined;
+  private interval: ReturnType<typeof setInterval> | undefined;
 
   connectedCallback() {
     super.connectedCallback();
