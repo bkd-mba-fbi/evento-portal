@@ -2,8 +2,32 @@ describe("Notifications", () => {
   const settings = [
     {
       Key: "notificationData",
-      Value:
-        '[{"id":1,"subject":"Absenzmeldung<br>Berger Laura<br> <div style=\\"opacity: 0.5;\\">05.12.2023 09:30</div>","body":"18.12.2023 <br> 27a, 1 Lektion<br>Arzt- oder Zahnarztbesuch"},{"id":2,"subject":"Absenzmeldung<br>Burkhalter Leuenberger Julianne Sophie Fabienne<br> <div style=\\"opacity: 0.5;\\">05.12.2023 09:52</div>","body":"18.12.2023 <br> 26b, 1 Lektion<br>Arzt- oder Zahnarztbesuch"},{"id":3,"subject":"Absenzmeldung<br>Exemple Amélie<br> <div style=\\"opacity: 0.5;\\">05.12.2023 09:53</div>","body":"22.01.2024 <br> 26b, 1 Lektion<br>Krankheit"},{"id":4,"subject":"Absenzmeldung<br>Muster Anna<br> <div style=\\"opacity: 0.5;\\">05.12.2023 09:54</div>","body":"15.01.2024 <br> 26b, 1 Lektion<br>Krankheit"}]',
+      Value: JSON.stringify([
+        {
+          id: 1,
+          subject:
+            'Absenzmeldung<br>Berger Laura<br> <div style="opacity: 0.5;">05.12.2023 09:30</div>',
+          body: "18.12.2023 <br> 27a, 1 Lektion<br>Arzt- oder Zahnarztbesuch",
+        },
+        {
+          id: 2,
+          subject:
+            'Absenzmeldung<br>Burkhalter Leuenberger Julianne Sophie Fabienne<br> <div style="opacity: 0.5;">05.12.2023 09:52</div>',
+          body: "18.12.2023 <br> 26b, 1 Lektion<br>Arzt- oder Zahnarztbesuch",
+        },
+        {
+          id: 3,
+          subject:
+            'Absenzmeldung<br>Exemple Amélie<br> <div style="opacity: 0.5;">05.12.2023 09:53</div>',
+          body: "22.01.2024 <br> 26b, 1 Lektion<br>Krankheit",
+        },
+        {
+          id: 4,
+          subject:
+            'Absenzmeldung<br>Muster Anna<br> <div style="opacity: 0.5;">05.12.2023 09:54</div>',
+          body: "15.01.2024 <br> 26b, 1 Lektion<br>Krankheit",
+        },
+      ]),
     },
   ];
 
