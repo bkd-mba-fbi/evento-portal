@@ -12,6 +12,9 @@ import {
 import { theme } from "../../utils/theme.ts";
 
 const envSettings = getEnvSettings();
+if (typeof envSettings?.notificationRefreshTime !== "number") {
+  throw new Error("Invalid 'notificationRefreshTime' setting");
+}
 
 @customElement("bkd-notifications-toggle")
 @localized()
