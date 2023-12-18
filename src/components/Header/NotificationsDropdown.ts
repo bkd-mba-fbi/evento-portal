@@ -4,10 +4,7 @@ import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import trashIcon from "../../assets/icons/trash.svg?raw";
-import {
-  NotificationDataEntry,
-  updateNotifications,
-} from "../../utils/fetch.ts";
+import { NotificationDataEntry } from "../../utils/fetch.ts";
 import { sanitize } from "../../utils/sanitize.ts";
 import { theme } from "../../utils/theme.ts";
 
@@ -115,33 +112,24 @@ export class NotificationsDropdown extends LitElement {
     `,
   ];
 
-  private deleteAllNotifications() {
-    const notifications: ReadonlyArray<NotificationDataEntry> = [];
-    updateNotifications(notifications);
-    this.dispatchUpdateNotificationsEvent(notifications);
-  }
-
-  private deleteNotification(id: number) {
-    const notifications: ReadonlyArray<NotificationDataEntry> =
-      this.notifications.filter((notification) => notification.id !== id);
-    updateNotifications(notifications);
-    this.dispatchUpdateNotificationsEvent(notifications);
-  }
-
-  private dispatchUpdateNotificationsEvent(
-    notifications: ReadonlyArray<NotificationDataEntry>,
-  ) {
+  private handleDeleteAllNotifications() {
     this.dispatchEvent(
-      new CustomEvent<{
-        notifications: ReadonlyArray<NotificationDataEntry>;
-      }>("bkdupdatenotifications", {
+      new CustomEvent<void>("bkddeleteallnotifications", {
         bubbles: true,
         composed: true,
-        detail: { notifications },
       }),
     );
   }
 
+  private handleDeleteNotification(id: number) {
+    this.dispatchEvent(
+      new CustomEvent<{ id: number }>("bkddeletenotification", {
+        bubbles: true,
+        composed: true,
+        detail: { id },
+      }),
+    );
+  }
   private renderNotification(notification: NotificationDataEntry) {
     const sanitizedSubject = sanitize(notification.subject);
     const sanitizedBody = sanitize(notification.body);
@@ -154,7 +142,7 @@ export class NotificationsDropdown extends LitElement {
       <button
         type="button"
         aria-label="${msg("Benachrichtigung löschen")}"
-        @click=${() => this.deleteNotification(notification.id)}
+        @click=${() => this.handleDeleteNotification(notification.id)}
       >
         ${unsafeHTML(trashIcon)}
       </button>
@@ -170,7 +158,7 @@ export class NotificationsDropdown extends LitElement {
         <button
           type="button"
           ?disabled=${this.notifications.length === 0}
-          @click="${() => this.deleteAllNotifications()}"
+          @click="${() => this.handleDeleteAllNotifications()}"
         >
           ${msg("Alle löschen")}
         </button>

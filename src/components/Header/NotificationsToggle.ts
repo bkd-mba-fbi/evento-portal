@@ -8,6 +8,7 @@ import { getEnvSettings } from "../../env-settings.ts";
 import {
   NotificationDataEntry,
   fetchNotifications,
+  updateNotifications,
 } from "../../utils/fetch.ts";
 import { theme } from "../../utils/theme.ts";
 
@@ -66,17 +67,26 @@ export class NotificationsToggle extends LitElement {
     super.disconnectedCallback();
   }
 
-  private handleUpdateNotifications(
-    event: CustomEvent<{ notifications: ReadonlyArray<NotificationDataEntry> }>,
-  ) {
-    this.notifications = event.detail.notifications;
-  }
-
   private dropdown = new DropdownController(
     this,
     "notifications-toggle",
     "notifications-dropdown",
   );
+
+  private handleDeleteAllNotifications() {
+    const notifications: ReadonlyArray<NotificationDataEntry> = [];
+    updateNotifications(notifications);
+    this.notifications = notifications;
+  }
+
+  private handleDeleteNotification(event: CustomEvent<{ id: number }>) {
+    const notifications: ReadonlyArray<NotificationDataEntry> =
+      this.notifications.filter(
+        (notification) => notification.id !== event.detail.id,
+      );
+    updateNotifications(notifications);
+    this.notifications = notifications;
+  }
 
   private async fetch(): Promise<void> {
     this.notifications = await fetchNotifications();
@@ -97,7 +107,10 @@ export class NotificationsToggle extends LitElement {
       <bkd-notifications-dropdown
         .open=${this.dropdown.open}
         .notifications=${this.notifications}
-        @bkdupdatenotifications=${this.handleUpdateNotifications.bind(this)}
+        @bkddeleteallnotifications=${this.handleDeleteAllNotifications.bind(
+          this,
+        )}
+        @bkddeletenotification=${this.handleDeleteNotification.bind(this)}
       >
       </bkd-notifications-dropdown>`;
   }
