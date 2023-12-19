@@ -1,5 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, query, state } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import bellIcon from "../../assets/icons/bell.svg?raw";
@@ -11,6 +11,7 @@ import {
   updateNotifications,
 } from "../../utils/fetch.ts";
 import { theme } from "../../utils/theme.ts";
+import { NotificationsDropdown } from "./NotificationsDropdown.ts";
 
 const envSettings = getEnvSettings();
 if (typeof envSettings?.notificationRefreshTime !== "number") {
@@ -26,6 +27,12 @@ export enum NotificationsState {
 @customElement("bkd-notifications-toggle")
 @localized()
 export class NotificationsToggle extends LitElement {
+  @query("button")
+  private toggleElement?: HTMLElement;
+
+  @query("bkd-notifications-dropdown")
+  private dropdownElement?: NotificationsDropdown;
+
   @state()
   notifications?: ReadonlyArray<NotificationDataEntry>;
 
@@ -78,8 +85,8 @@ export class NotificationsToggle extends LitElement {
 
   private dropdown = new DropdownController(
     this,
-    "notifications-toggle",
-    "notifications-dropdown",
+    () => this.toggleElement ?? null,
+    () => this.dropdownElement?.shadowRoot ?? null,
   );
 
   private handleDeleteAllNotifications() {
