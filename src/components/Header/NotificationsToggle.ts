@@ -17,11 +17,20 @@ if (typeof envSettings?.notificationRefreshTime !== "number") {
   throw new Error("Invalid 'notificationRefreshTime' setting");
 }
 
+export enum NotificationsState {
+  PENDING = "pending",
+  ERROR = "error",
+  SUCCESS = "success",
+}
+
 @customElement("bkd-notifications-toggle")
 @localized()
 export class NotificationsToggle extends LitElement {
   @state()
-  notifications: ReadonlyArray<NotificationDataEntry> | undefined = undefined;
+  notifications?: ReadonlyArray<NotificationDataEntry>;
+
+  @state()
+  state = NotificationsState.PENDING;
 
   static styles = [
     theme,
@@ -90,7 +99,12 @@ export class NotificationsToggle extends LitElement {
   }
 
   private async fetch(): Promise<void> {
-    this.notifications = await fetchNotifications();
+    try {
+      this.notifications = await fetchNotifications();
+      this.state = NotificationsState.SUCCESS;
+    } catch (e) {
+      this.state = NotificationsState.ERROR;
+    }
   }
 
   render() {
@@ -103,13 +117,15 @@ export class NotificationsToggle extends LitElement {
         ${unsafeHTML(bellIcon)}
         <span
           class="circle"
-          ?hidden=${!this.notifications || this.notifications.length === 0}
+          ?hidden=${this.state !== NotificationsState.SUCCESS ||
+          this.notifications?.length === 0}
         >
           ${this.notifications?.length}
         </span>
       </button>
       <bkd-notifications-dropdown
         .open=${this.dropdown.open}
+        .state=${this.state}
         .notifications=${this.notifications}
         @bkddeleteallnotifications=${this.handleDeleteAllNotifications.bind(
           this,

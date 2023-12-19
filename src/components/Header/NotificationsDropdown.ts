@@ -8,6 +8,7 @@ import trashIcon from "../../assets/icons/trash.svg?raw";
 import { NotificationDataEntry } from "../../utils/fetch.ts";
 import { sanitize } from "../../utils/sanitize.ts";
 import { theme } from "../../utils/theme.ts";
+import { NotificationsState } from "./NotificationsToggle.ts";
 
 @customElement("bkd-notifications-dropdown")
 @localized()
@@ -16,7 +17,10 @@ export class NotificationsDropdown extends LitElement {
   open = false;
 
   @property()
-  notifications: ReadonlyArray<NotificationDataEntry> | undefined = undefined;
+  state = NotificationsState.PENDING;
+
+  @property()
+  notifications: ReadonlyArray<NotificationDataEntry> = [];
 
   static styles = [
     theme,
@@ -44,6 +48,12 @@ export class NotificationsDropdown extends LitElement {
         align-items: center;
         padding: 1rem;
 
+        h2 {
+          font-size: 1.5rem;
+          font-weight: 300;
+          line-height: 1.16;
+        }
+
         button {
           font-weight: 400;
           background-color: var(--bkd-func-bg-anthrazit);
@@ -65,8 +75,13 @@ export class NotificationsDropdown extends LitElement {
         }
       }
 
-      .spinner {
+      .pending,
+      .error {
         padding: 1rem;
+      }
+
+      .error {
+        color: var(--bkd-func-bg-red);
       }
 
       .notification {
@@ -137,8 +152,12 @@ export class NotificationsDropdown extends LitElement {
   }
 
   renderContent() {
-    if (!this.notifications)
-      return html`<div class="spinner">${unsafeHTML(spinnerIcon)}</div>`;
+    if (this.state === NotificationsState.ERROR)
+      return html`<div class="error">
+        ${msg("Fehler beim Laden der Benachrichtigungen")}
+      </div>`;
+    if (this.state === NotificationsState.PENDING)
+      return html`<div class="pending">${unsafeHTML(spinnerIcon)}</div>`;
     return this.notifications.length === 0
       ? html`<div class="notification">${msg("Keine Benachrichtigungen")}</div>`
       : repeat(
@@ -172,7 +191,7 @@ export class NotificationsDropdown extends LitElement {
 
     return html`<div id="notifications-dropdown">
       <div class="header">
-        <span>${msg("Benachrichtigungen")}</span>
+        <h2>${msg("Benachrichtigungen")}</h2>
         <button
           type="button"
           ?disabled=${!this.notifications || this.notifications.length === 0}
