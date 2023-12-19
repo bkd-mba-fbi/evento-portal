@@ -82,14 +82,17 @@ function onExpiration(
     clearTimeout(expirationTimers[type]);
   }
 
-  if (token) {
-    expirationTimers[type] = setTimeout(callback, getTokenExpireIn(token));
+  const expireIn = token && getTokenExpireIn(token);
+  // Don't set timer for already expired token since it will be
+  // handled by the auth.ts logic and would cause a redirection loop
+  if (expireIn && expireIn > 0) {
+    expirationTimers[type] = setTimeout(callback, expireIn);
     logLazy(() => {
       const { expirationTime } = token;
       const expirationDate = new Date();
       expirationDate.setTime(expirationTime * 1000);
       return `Scheduled ${type} token expiration timeout in ${Math.floor(
-        getTokenExpireIn(token) / 1000 / 60,
+        expireIn / 1000 / 60,
       )} minutes (at ${expirationDate})`;
     });
   }
