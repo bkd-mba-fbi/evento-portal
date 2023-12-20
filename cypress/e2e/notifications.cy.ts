@@ -32,9 +32,11 @@ describe("Notifications", () => {
   ];
 
   beforeEach(() => {
-    cy.intercept("PATCH", "https://eventotest.api/restApi/UserSettings/Cst", {
-      body: {},
-    });
+    cy.intercept(
+      "PATCH",
+      "https://eventotest.api/restApi/UserSettings/Cst",
+      {},
+    );
     cy.login({ roles: ["TeacherRole"], permissions: [] });
   });
 
