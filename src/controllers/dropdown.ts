@@ -27,6 +27,7 @@ export class DropdownController implements ReactiveController {
     private host: ReactiveControllerHost & HTMLElement,
     private queryToggleElement: () => HTMLElement | ShadowRoot | null,
     private queryMenuElement: () => HTMLElement | ShadowRoot | null,
+    private closeOnTab: boolean,
     private itemQueries?: {
       /**
        * Returns all dropdown items
@@ -78,7 +79,9 @@ export class DropdownController implements ReactiveController {
     // Make sure to register events after rendering, for elements to
     // be present
     setTimeout(() => {
-      this.menuElement?.addEventListener("focusout", this.closeOnBlur, true);
+      if (!this.closeOnTab) {
+        this.menuElement?.addEventListener("focusout", this.closeOnBlur, true);
+      }
 
       // To detect clicks into iframe, add event listener to iframe
       // document
@@ -94,7 +97,9 @@ export class DropdownController implements ReactiveController {
   }
 
   private removeListeners(): void {
-    this.menuElement?.removeEventListener("focusout", this.closeOnBlur, true);
+    if (!this.closeOnTab) {
+      this.menuElement?.removeEventListener("focusout", this.closeOnBlur, true);
+    }
     document.removeEventListener("click", this.handleDocumentClick, true);
     this.iframeDocument?.removeEventListener(
       "click",
@@ -141,6 +146,10 @@ export class DropdownController implements ReactiveController {
 
   private handleKeydown = (event: KeyboardEvent) => {
     switch (event.key) {
+      case "Tab": {
+        if (this.closeOnTab) this.close();
+        break;
+      }
       case "Escape": {
         this.close();
         break;

@@ -90,6 +90,7 @@ export class UserSettings extends LitElement {
     this,
     () => this.toggleElement ?? null,
     () => this.menuElement ?? null,
+    true,
     {
       queryItems: () =>
         this.shadowRoot?.querySelectorAll<HTMLElement>("a[role='menuitem']") ??

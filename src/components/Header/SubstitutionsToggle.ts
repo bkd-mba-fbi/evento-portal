@@ -101,6 +101,7 @@ export class SubstitutionsToggle extends LitElement {
     this,
     () => this.toggleElement ?? null,
     () => this.menuElement?.shadowRoot ?? null,
+    this.isLargeScreen(),
     {
       queryItems: () =>
         this.menuElement?.shadowRoot?.querySelectorAll<HTMLElement>(

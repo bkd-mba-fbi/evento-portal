@@ -139,6 +139,7 @@ export class Header extends LitElement {
       this.serviceNavElement?.shadowRoot?.querySelector("bkd-hamburger") ??
       null,
     () => this.mobileNavElement?.shadowRoot ?? null,
+    false,
   );
 
   private handleLogoClick(event: MouseEvent) {

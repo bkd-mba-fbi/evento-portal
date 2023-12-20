@@ -64,6 +64,7 @@ export class NavGroupToggle extends LitElement {
       this.menuElement?.shadowRoot?.querySelector<HTMLElement>(
         'ul[role="menu"]',
       ) ?? null,
+    true,
     {
       queryItems: () =>
         this.menuElement?.shadowRoot?.querySelectorAll<HTMLElement>(

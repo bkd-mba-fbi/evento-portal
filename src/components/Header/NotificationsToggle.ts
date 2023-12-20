@@ -87,6 +87,16 @@ export class NotificationsToggle extends LitElement {
     this,
     () => this.toggleElement ?? null,
     () => this.dropdownElement?.shadowRoot ?? null,
+    true,
+    {
+      queryItems: () =>
+        this.dropdownElement?.shadowRoot?.querySelectorAll<HTMLElement>(
+          "button",
+        ) ?? null,
+      queryFocused: () =>
+        (this.dropdownElement?.shadowRoot?.activeElement ??
+          null) as HTMLElement | null,
+    },
   );
 
   private handleDeleteAllNotifications() {
