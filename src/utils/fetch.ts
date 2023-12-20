@@ -74,7 +74,7 @@ export async function fetchNotifications(): Promise<
 
 export function updateNotifications(
   notifications: ReadonlyArray<NotificationDataEntry>,
-): Promise<unknown> {
+): Promise<void> {
   const url = `${envSettings.apiServer}/UserSettings/Cst`;
   const userSettings: UserSettings = {
     Id: "Cst",
@@ -82,9 +82,30 @@ export function updateNotifications(
       { Key: NOTIFICATION_DATA_KEY, Value: JSON.stringify(notifications) },
     ],
   };
-  return fetchApi(url, { method: "PATCH", body: JSON.stringify(userSettings) });
+  return fetchApi(
+    url,
+    { method: "PATCH", body: JSON.stringify(userSettings) },
+    true,
+  );
 }
 
+function fetchApi(
+  url: string | URL,
+  options:
+    | Readonly<{
+        method?: string;
+        body?: string;
+      }>
+    | undefined,
+  emptyResponse: true,
+): Promise<void>;
+function fetchApi<T = unknown>(
+  url: string | URL,
+  options?: Readonly<{
+    method?: string;
+    body?: string;
+  }>,
+): Promise<T>;
 async function fetchApi<T = unknown>(
   url: string | URL,
   {
@@ -94,7 +115,8 @@ async function fetchApi<T = unknown>(
     method?: string;
     body?: string;
   }> = {},
-): Promise<T> {
+  emptyResponse?: true,
+): Promise<T | void> {
   const { accessToken } = tokenState;
   if (!accessToken) {
     throw new Error("No token available");
@@ -106,5 +128,7 @@ async function fetchApi<T = unknown>(
   });
 
   const response = await fetch(url, { method, headers, body });
-  return await response.json();
+  if (!emptyResponse) {
+    return response.json();
+  }
 }
