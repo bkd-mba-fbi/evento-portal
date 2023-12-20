@@ -24,7 +24,7 @@ const commonPlugins = [
     },
     manifest: {
       name: "Evento",
-      short_name: "EVT",
+      short_name: "Evento",
       description: "Schulverwaltungsapplikation des Kantons Bern",
       theme_color: "#EA161F",
       icons: [
