@@ -4,7 +4,7 @@
 export function submit(
   method: string,
   url: string,
-  body: Record<string, string>
+  body: Record<string, string>,
 ): void {
   const form = document.createElement("form");
   form.method = method;

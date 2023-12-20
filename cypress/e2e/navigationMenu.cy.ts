@@ -1,7 +1,10 @@
 describe("Navigation Menu", () => {
   describe("with 'LessonTeacherRole' & 'TeacherRole' roles", () => {
     beforeEach(() =>
-      cy.login({ roles: ["LessonTeacherRole", "TeacherRole"], permissions: [] })
+      cy.login({
+        roles: ["LessonTeacherRole", "TeacherRole"],
+        permissions: [],
+      }),
     );
 
     describe("desktop", () => {
@@ -18,7 +21,7 @@ describe("Navigation Menu", () => {
           .find("a")
           .should(($links) => {
             expect(
-              $links.toArray().map((link) => link.textContent?.trim())
+              $links.toArray().map((link) => link.textContent?.trim()),
             ).to.deep.eq(["Unterricht", "Absenzen", "Angebote"]);
           });
       });
@@ -46,7 +49,7 @@ describe("Navigation Menu", () => {
             .find("a[role='menuitem']")
             .should(($links) => {
               expect(
-                $links.toArray().map((link) => link.textContent?.trim())
+                $links.toArray().map((link) => link.textContent?.trim()),
               ).to.deep.eq([
                 "Präsenzkontrolle",
                 "Aktuelle Fächer",
@@ -243,16 +246,9 @@ describe("Navigation Menu", () => {
       cy.get("bkd-mobile-nav").within((mobileMenu) => {
         cy.wrap(mobileMenu).should("be.visible");
 
-        expectGroups(["Unterricht", "Absenzen", "Angebote"]);
-
-        expectGroupItems("Unterricht", [
-          "Präsenzkontrolle",
-          "Aktuelle Fächer",
-          "Tests und Bewertung",
-        ]);
+        expectGroups(["Absenzen", "Angebote"]);
 
         expectGroupItems("Absenzen", [
-          "Offene Absenzen entschuldigen",
           "Absenzen bearbeiten",
           "Absenzen auswerten",
         ]);
@@ -379,7 +375,7 @@ describe("Navigation Menu", () => {
 
   function expectGroupItems(
     group: string,
-    expectedItems: ReadonlyArray<string>
+    expectedItems: ReadonlyArray<string>,
   ) {
     return cy.contains("li.group > button", group).should((groupToggle) => {
       const items = groupToggle

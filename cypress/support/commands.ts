@@ -1,4 +1,4 @@
-import { storeToken } from "../../src/utils/storage";
+import { storeAccessToken, storeRefreshToken } from "../../src/utils/storage";
 
 /// <reference types="cypress" />
 // ***********************************************
@@ -48,11 +48,8 @@ Cypress.Commands.add(
   } = {}) => {
     ["Tutoring", "Public", "NG"].forEach((scope) => {
       const token = createToken(scope, { locale, additionalTokenPayload });
-      storeToken(scope, {
-        accessToken: token,
-        expiresAt: Math.floor(Date.now() / 1000) + 60 * 60,
-        refreshToken: token,
-      });
+      storeRefreshToken(token);
+      storeAccessToken(scope, token);
     });
 
     // Mock environment settings
@@ -67,27 +64,27 @@ Cypress.Commands.add(
             oAuthClientId: "cypress",
           },
         };
-      `
+      `,
     );
 
     cy.intercept(
       "GET",
       "https://eventotest.api/restApi/UserSettings/?expand=AccessInfo",
-      { AccessInfo: { Roles: roles, Permissions: permissions } }
+      { AccessInfo: { Roles: roles, Permissions: permissions } },
     ).as("fetchAccessInfo");
 
     cy.intercept(
       "GET",
       "https://eventotest.api/restApi/Configurations/SchoolAppNavigation",
-      { instanceName: "Test" }
+      { instanceName: "Test" },
     );
 
     cy.intercept(
       "GET",
       "https://eventotest.api/restApi/TeacherSubstitutions/current",
-      []
+      [],
     );
-  }
+  },
 );
 
 /**
@@ -102,7 +99,7 @@ function createToken(
     locale: string;
     roles: ReadonlyArray<string>;
     additionalTokenPayload: Record<string, unknown>;
-  }> = {}
+  }> = {},
 ) {
   const header = {
     typ: "JWT",
@@ -131,7 +128,7 @@ function createToken(
   };
 
   return `${btoa(JSON.stringify(header))}.${btoa(
-    JSON.stringify(body)
+    JSON.stringify(body),
   )}.signature`;
 }
 
@@ -164,5 +161,5 @@ Cypress.Commands.add(
           expect(value).to.be.oneOf(["false", "", undefined]);
         }
         return subject;
-      })
+      }),
 );

@@ -1,11 +1,12 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
+import { keyed } from "lit/directives/keyed.js";
+import { when } from "lit/directives/when.js";
+import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
 import { portalState } from "../state/portal-state";
-import { keyed } from "lit/directives/keyed.js";
-import { localized } from "@lit/localize";
+import { tokenState } from "../state/token-state";
 import { theme } from "../utils/theme";
-import { when } from "lit/directives/when.js";
 
 @customElement("bkd-content")
 @localized()
@@ -62,6 +63,8 @@ export class Content extends LitElement {
     `,
   ];
 
+  private renderedOffline = false;
+
   constructor() {
     super();
     new StateController(this, portalState);
@@ -70,10 +73,12 @@ export class Content extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener("message", this.handleMessage);
+    window.addEventListener("online", this.handleOnline);
   }
 
   disconnectedCallback() {
     window.removeEventListener("message", this.handleMessage);
+    window.removeEventListener("online", this.handleOnline);
     super.disconnectedCallback();
   }
 
@@ -86,6 +91,13 @@ export class Content extends LitElement {
     }
   };
 
+  private handleOnline = () => {
+    // Reload the app when we went online and offline page is rendered
+    if (this.renderedOffline) {
+      window.location.reload();
+    }
+  };
+
   private handleResize(height: string): void {
     if (this.iframe) {
       this.iframe.height = height;
@@ -93,12 +105,29 @@ export class Content extends LitElement {
   }
 
   render() {
-    // The keyed directive ensures that the entire iframe and any associated scripts are removed when the application changes.
+    this.renderedOffline = !navigator.onLine;
+    if (!navigator.onLine) {
+      // Show message when offline
+      return html`<main>
+        <h1>${msg("Offline")}</h1>
+        <p>${msg("Keine Verbindung vorhanden.")}</p>
+      </main>`;
+    }
+
+    if (tokenState.scope !== portalState.app.scope) {
+      // Token scope does not match current app, wait for correct
+      // token to be activated in <Portal> component to avoid requests
+      // resulting in 403 due to unsufficient rights.
+      return html`<main></main>`;
+    }
+
+    // The keyed directive ensures that the entire iframe and any
+    // associated scripts are removed when the application changes.
     return html`
       <main>
         ${when(
           portalState.app.heading,
-          () => html`<h1>${portalState.navigationItem.label}</h1>`
+          () => html`<h1>${portalState.navigationItem.label}</h1>`,
         )}
         ${keyed(
           portalState.app.root,
@@ -106,9 +135,9 @@ export class Content extends LitElement {
             <iframe
               id="app"
               title=${portalState.app.key}
-              src=${portalState.app.root + portalState.appPath}
+              src=${`/${portalState.app.root}${portalState.appPath}`}
             ></iframe>
-          `
+          `,
         )}
       </main>
     `;

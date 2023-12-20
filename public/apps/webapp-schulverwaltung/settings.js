@@ -18,7 +18,7 @@ window.schulverwaltung.settings = {
   // Path (without trailing slash, relative to the index.html) to the
   // JavaScript bundles and the assets directory containing image and
   // locale files
-  scriptsAndAssetsPath: '/apps/webapp-schulverwaltung',
+  scriptsAndAssetsPath: "/apps/webapp-schulverwaltung",
 
   // Maximum loaded entries per page, where pagination is in place
   paginationLimit: 200,
@@ -73,22 +73,38 @@ window.schulverwaltung.settings = {
   /**
    * Reports
    */
-  // Id of the report that contains a user's master data (used in my profile)
-  personMasterDataReportId: 0,
+  // Report "Stammblatt" with user's master data (used in my profile)
+  personMasterDataReports: [{ type: "crystal", id: 0 }],
 
-  // Id of the report that contains the open absences with
-  // confirmation values to sign (used in my absences)
-  studentConfirmationReportId: 290036,
+  // Report "Entschuldigungsformular" with open absences sign (used in
+  // my absences by students)
+  studentConfirmationReports: [{ type: "crystal", id: 290036 }],
 
-  // Id of the report used in evaluate absences
-  evaluateAbsencesReportId: 290048,
+  // Report "Auswertung der Absenzen" (used in evaluate absences by
+  // teachers)
+  evaluateAbsencesReports: [
+    { type: "crystal", id: 290048 },
+    { type: "excel", id: 290033 },
+  ],
+
+  // Report "Auswertung der Absenzen" (used in my absences by
+  // students)
+  myAbsencesReports: [{ type: "crystal", id: 290048 }],
 
   // Id of the report used for the course report
   testsByCourseReportId: 290044,
 
-  // Id of the report used for the tests report for a single student
-  testsBySubscriptionReportIdStudent: 290043,
-  testsBySubscriptionReportIdTeacher: 290042,
+  // Report "Tests" with grades of a course (used in events/tests by
+  // teachers)
+  testsByCourseReports: [{ type: "crystal", id: 290044 }],
+
+  // Report including grades of multiple courses for a single student
+  // (used in events/tests by students)
+  testsBySubscriptionStudentReports: [{ type: "crystal", id: 290043 }],
+
+  // Report including grades of multiple courses for a single student
+  // (used in events/tests by teachers)
+  testsBySubscriptionTeacherReports: [{ type: "crystal", id: 290042 }],
 
   /**
    * Groups
@@ -98,11 +114,13 @@ window.schulverwaltung.settings = {
 
   // X-Role-Restriction custom HTTP header values by module
   headerRoleRestriction: {
-    myAbsences: 'StudentRole',
-    presenceControl: 'LessonTeacherRole;TeacherRole;ClassTeacherRole',
-    openAbsences: 'LessonTeacherRole;ClassTeacherRole;TeacherRole',
-    editAbsences: 'LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole',
-    evaluateAbsences: 'LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole',
+    myAbsences: "StudentRole",
+    presenceControl: "LessonTeacherRole;TeacherRole;ClassTeacherRole",
+    openAbsences: "LessonTeacherRole;ClassTeacherRole;TeacherRole",
+    editAbsences:
+      "LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole",
+    evaluateAbsences:
+      "LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole",
   },
 
   /**
@@ -116,43 +134,43 @@ window.schulverwaltung.settings = {
   notificationTypes: {
     gradePublish: {
       de: {
-        label: 'Note publiziert',
-        description: 'Die Note eines Tests wurde publiziert.',
+        label: "Note publiziert",
+        description: "Die Note eines Tests wurde publiziert.",
       },
       fr: {
-        label: 'Note publiée',
+        label: "Note publiée",
         description: "La note d'un test a été publiée.",
       },
     },
-	BM2Student: {
+    BM2Student: {
       de: {
-        label: 'Präsenz im BM2-Unterricht',
+        label: "Präsenz im BM2-Unterricht",
         description:
-          'Sie haben eine Präsenz von <= 85% in einem Fach erreicht.',
+          "Sie haben eine Präsenz von <= 85% in einem Fach erreicht.",
       },
       fr: {
         label: "Présence dans l'enseignement MP2",
         description:
-          'Vous avez atteint une présence de <= 85 % dans une discipline.',
+          "Vous avez atteint une présence de <= 85 % dans une discipline.",
       },
     },
     absenceMessage: {
       de: {
-        label: 'Absenzenmeldung',
+        label: "Absenzenmeldung",
         description:
-          'Fachlehrperson: Lernende melden sich vom Unterricht ab\nKlassenlehrperson: Antrag freier Halbtag',
+          "Fachlehrperson: Lernende melden sich vom Unterricht ab\nKlassenlehrperson: Antrag freier Halbtag",
       },
       fr: {
-        label: 'Annonce des absences',
+        label: "Annonce des absences",
         description:
           "Enseignant-e : les élèves annoncent leur absence\nMaître-sse de classe : demande de demi-journée libre",
       },
     },
     absenceMessageTeacher: {
       de: {
-        label: 'Absenz erfasst (Lehrperson)',
+        label: "Absenz erfasst (Lehrperson)",
         description:
-          'Klassenlehrperson: Eine Fachlehrperson hat eine Absenz für Ihre Lernenden erfasst.',
+          "Klassenlehrperson: Eine Fachlehrperson hat eine Absenz für Ihre Lernenden erfasst.",
       },
       fr: {
         label: "Absence saisie (enseignant-e)",
@@ -162,42 +180,42 @@ window.schulverwaltung.settings = {
     },
     teacherSubstitutions: {
       de: {
-        label: 'Stellvertretung',
+        label: "Stellvertretung",
         description:
-          'Lehrperson: Sie wurden als Stellvertretung für eine andere Lehrperson erfasst.',
+          "Lehrperson: Sie wurden als Stellvertretung für eine andere Lehrperson erfasst.",
       },
       fr: {
-        label: 'Remplacement',
+        label: "Remplacement",
         description:
           "Enseignant-e : vous avez été saisi-e pour remplacer un-e autre enseignant-e.",
       },
     },
     BM2Teacher: {
       de: {
-        label: 'Präsenz im BM2-Unterricht',
+        label: "Präsenz im BM2-Unterricht",
         description:
-          'Fachlehrperson: Im unterrichteten Fach hat ein/e Lernende/r eine Präsenz von <= 85% erreicht.',
+          "Fachlehrperson: Im unterrichteten Fach hat ein/e Lernende/r eine Präsenz von <= 85% erreicht.",
       },
       fr: {
         label: "Présence dans l'enseignement MP2",
         description:
-          'Enseignant-e : Dans la discipline enseignée, un-e élève a atteint une présence de <= 85 %.',
+          "Enseignant-e : Dans la discipline enseignée, un-e élève a atteint une présence de <= 85 %.",
       },
     },
   },
 
   notificationTypesAssignments: [
     {
-      roles: ['StudentRole'],
-      types: ['gradePublish','BM2Student'],
+      roles: ["StudentRole"],
+      types: ["gradePublish", "BM2Student"],
     },
     {
-      roles: ['LessonTeacherRole', 'ClassTeacherRole', 'TeacherRole'],
+      roles: ["LessonTeacherRole", "ClassTeacherRole", "TeacherRole"],
       types: [
-        'absenceMessage',
-        'absenceMessageTeacher',
-        'teacherSubstitutions',
-		'BM2Teacher',
+        "absenceMessage",
+        "absenceMessageTeacher",
+        "teacherSubstitutions",
+        "BM2Teacher",
       ],
     },
   ],
@@ -214,16 +232,15 @@ window.schulverwaltung.settings = {
 
     // Only events with a status id in the following list are fetched
     statusfilter:
-    '14030;14025;14017;14020;10350;10335;10355;10315;10330;10325;10320;10340;10345;10230;10225;10240;10250;10260;10217;10235;10220;10226;10227;10250;10300;10305;10310;14040'
+      "14030;14025;14017;14020;10350;10335;10355;10315;10330;10325;10320;10340;10345;10230;10225;10240;10250;10260;10217;10235;10220;10226;10227;10250;10300;10305;10310;14040",
   },
 
   /**
    * Dashboard
    */
   dashboard: {
-    substitutionsAdminLink: '/?module=substitutionsAdmin',
+    substitutionsAdminLink: "/?module=substitutionsAdmin",
   },
-
 
   /**
    * My absences

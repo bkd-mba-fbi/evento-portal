@@ -2,12 +2,22 @@
   "name": "evento-portal",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://github.com/bkd-mba-fbi/evento-portal/blob/main/README.md",
+  "bugs": {
+    "url": "https://github.com/bkd-mba-fbi/evento-portal/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https@github.com:bkd-mba-fbi/evento-portal.git"
+  },
   "type": "module",
   "scripts": {
     "start": "npm run dev",
+    "start:browserstack": "SSL=true vite --host bs-local.com --port 3000",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "preview:ssl": "echo \"Don't forget to set oAuthClientId: 'browserstack' in public/settings.js\nThe app will be running on https://bs-local.com:3000\" && (cd dist && HOST=bs-local.com PORT=3000 npx https-localhost)",
     "prepare": "husky install",
     "analyze": "npx vite-bundle-visualizer",
     "lint:eslint": "eslint src/**/*.ts",
@@ -15,30 +25,34 @@
     "lint": "npm run lint:eslint && npm run lint:ts",
     "cy:run": "cypress run --browser chromium",
     "cy:firefox": "cypress run --browser firefox",
-    "cy:open": "cypress open",
+    "cy:open": "cypress open --e2e",
     "locale:extract": "lit-localize extract",
     "locale:build": "lit-localize build",
     "format": "prettier --write --ignore-unknown \"./**/*.*\"",
-    "format:upgrade": "npm install --save-exact prettier@latest && npm run format"
+    "format:upgrade": "npm install --save-exact prettier@latest && npm run format",
+    "unused": "npx knip"
   },
   "dependencies": {
-    "@badgateway/oauth2-client": "^2.2.0",
+    "@badgateway/oauth2-client": "^2.2.4",
     "@lit-app/state": "^0.8.4",
     "@lit/localize": "^0.11.4",
     "lit": "^2.6.1"
   },
   "devDependencies": {
-    "@lit/localize-tools": "^0.6.9",
-    "@typescript-eslint/eslint-plugin": "^5.59.6",
-    "@typescript-eslint/parser": "^5.59.6",
-    "cypress": "^12.12.0",
-    "eslint": "^8.40.0",
-    "eslint-config-prettier": "^8.8.0",
+    "@lit/localize-tools": "~0.6.9",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.1",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
+    "cypress": "^13.3.2",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^9.0.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
-    "prettier": "2.8.8",
-    "typescript": "^5.0.2",
-    "vite": "^4.3.2"
+    "lint-staged": "^15.0.2",
+    "prettier": "3.0.3",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0",
+    "vite-plugin-pwa": "^0.16.7"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

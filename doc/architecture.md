@@ -15,7 +15,7 @@
 
 ## App Integration/Evento Portal API
 
-A static build of the _apps_ is committed to this repository in the [public/apps/](../public/apps/) directory. The _Evento Portal_ loads the _apps_ in an `<iframe>` to ensure a separation of the runtime environment, a proper cleanup when switching _apps_ and no memory leaks. The [public/scripts/iframe.js](../public/scripts/iframe.js) script has to be included in an _app_'s `index.html` to setup communication between portal & iframe.
+A static build of the _apps_ is committed to this repository in the [public/apps/](../public/apps/) directory. The _Evento Portal_ loads the _apps_ in an `<iframe>` to ensure a separation of the runtime environment, a proper cleanup when switching _apps_ and no memory leaks. For more details see [App Integration with iframe](./app-integration.md).
 
 _Apps_ can use client-side hash-routing, that means using the [hash part](https://developer.mozilla.org/en-US/docs/Web/API/URL/hash) of the URL to store application state. The _Evento Portal_ ensures, that the hash part is mapped from the `<iframe>`'s URL to the browser URL and vice versa.
 

@@ -44,7 +44,7 @@ describe("Substitutions", () => {
           Substitution: "Billy Preston",
           SubstitutionId: 20,
         },
-      ]
+      ],
     );
   }
 
@@ -58,7 +58,7 @@ describe("Substitutions", () => {
         .spy((req) => {
           req.redirect(`${Cypress.config("baseUrl")}/index.html`, 301);
         })
-        .as("startRequest")
+        .as("startRequest"),
     );
 
     cy.intercept(
@@ -68,7 +68,7 @@ describe("Substitutions", () => {
         .spy((req) => {
           req.redirect(`${Cypress.config("baseUrl")}/index.html`, 301);
         })
-        .as("stopRequest")
+        .as("stopRequest"),
     );
 
     cy.clock(now);

@@ -461,7 +461,7 @@
             // Todo: Combo-Box should be changed so the typed in value is not
             // directly written to model.Value.
             let modelValue = this.get('model.Value');
-            let isValid = !this.get('isDropdown') || this.get('model.DropdownItems').some(v => v.Key == modelValue) || this.get('allowArbitraryText');
+            let isValid = !this.get('isDropdown') || this.get('allowArbitraryText') || this.get('model.DropdownItems').some(v => v.Key == modelValue);
             if (isValid) {
                 this.sendAction('save', this.get('model'));
             } else {

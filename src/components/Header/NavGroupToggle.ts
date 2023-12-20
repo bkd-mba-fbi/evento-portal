@@ -1,19 +1,15 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { localized } from "@lit/localize";
 import { classMap } from "lit/directives/class-map.js";
-
-import { theme } from "../../utils/theme";
-import { NavigationGroup } from "../../settings";
+import { localized } from "@lit/localize";
 import { DropdownController } from "../../controllers/dropdown";
+import { NavigationGroup } from "../../settings";
+import { theme } from "../../utils/theme";
 import { NavGroupDropdown } from "./NavGroupDropdown";
 
 @customElement("bkd-nav-group-toggle")
 @localized()
 export class NavGroupToggle extends LitElement {
-  @query("bkd-nav-group-dropdown")
-  dropdownElement?: NavGroupDropdown;
-
   @property()
   group?: NavigationGroup;
 
@@ -55,19 +51,28 @@ export class NavGroupToggle extends LitElement {
     `,
   ];
 
+  @query("a")
+  private toggleElement?: HTMLElement;
+
+  @query("bkd-nav-group-dropdown")
+  private menuElement?: NavGroupDropdown;
+
   private dropdown = new DropdownController(
     this,
-    "group-toggle",
-    "group-menu",
+    () => this.toggleElement ?? null,
+    () =>
+      this.menuElement?.shadowRoot?.querySelector<HTMLElement>(
+        'ul[role="menu"]',
+      ) ?? null,
     {
       queryItems: () =>
-        this.dropdownElement?.shadowRoot?.querySelectorAll<HTMLElement>(
-          "a[role='menuitem']"
+        this.menuElement?.shadowRoot?.querySelectorAll<HTMLElement>(
+          "a[role='menuitem']",
         ) ?? null,
       queryFocused: () =>
-        (this.dropdownElement?.shadowRoot?.activeElement ??
+        (this.menuElement?.shadowRoot?.activeElement ??
           null) as HTMLElement | null,
-    }
+    },
   );
 
   private toggle(event: Event) {
@@ -84,11 +89,10 @@ export class NavGroupToggle extends LitElement {
 
     return html`
       <a
-        id="group-toggle"
         href="#"
         @click=${this.toggle.bind(this)}
         class=${classMap({ active: Boolean(this.active) })}
-        aria-expanded=${this.dropdown.open}
+        .ariaExpanded=${this.dropdown.open}
         aria-haspopup="menu"
       >
         ${this.group.label}

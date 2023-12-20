@@ -1,13 +1,4 @@
-export type TokenPayload = {
-  instanceId: string;
-  scope: string;
-  locale: string;
-  issueTime: number;
-  expirationTime: number;
-  substitutionId?: number;
-};
-
-export type RawTokenPayload = {
+type RawTokenPayload = {
   instance_id: string;
   scope: string;
   culture_info: string;
@@ -18,6 +9,17 @@ export type RawTokenPayload = {
   nbf: number;
   exp: number;
   substitution_id?: string;
+  holder_roles?: string;
+};
+
+export type TokenPayload = {
+  instanceId: string;
+  scope: string;
+  locale: string;
+  issueTime: number;
+  expirationTime: number;
+  substitutionId?: number;
+  substitutionRoles?: ReadonlyArray<string>;
 };
 
 export function getTokenPayload(token: string): TokenPayload {
@@ -28,6 +30,7 @@ export function getTokenPayload(token: string): TokenPayload {
     nbf: issueTime,
     exp: expirationTime,
     substitution_id: substitutionId,
+    holder_roles: holderRoles,
   } = parseTokenPayload(token);
   return {
     instanceId,
@@ -36,6 +39,7 @@ export function getTokenPayload(token: string): TokenPayload {
     issueTime,
     expirationTime,
     substitutionId: substitutionId ? parseInt(substitutionId, 10) : undefined,
+    substitutionRoles: holderRoles ? holderRoles.split(";") : undefined,
   };
 }
 
@@ -47,7 +51,7 @@ export function getTokenPayload(token: string): TokenPayload {
 export function isValidToken(
   token: string | null,
   scope: string,
-  locale: string
+  locale: string,
 ): token is string {
   if (!token) return false;
 
@@ -59,29 +63,31 @@ export function isValidToken(
   );
 }
 
-export function isTokenExpired(token: string | null): boolean {
+export function isTokenExpired(token: TokenPayload | null): boolean {
   if (!token) return true;
 
-  const { expirationTime } = getTokenPayload(token);
+  const { expirationTime } = token;
   const now = Math.floor(Date.now() / 1000);
   return expirationTime < now;
 }
 
-export function isTokenHalfExpired(token: string | null): boolean;
-export function isTokenHalfExpired(payload: TokenPayload | null): boolean;
-export function isTokenHalfExpired(
-  tokenOrPayload: string | TokenPayload | null
-): boolean {
-  if (!tokenOrPayload) return true;
+export function isTokenHalfExpired(token: TokenPayload | null): boolean {
+  if (!token) return true;
 
-  const { issueTime, expirationTime } =
-    typeof tokenOrPayload === "string"
-      ? getTokenPayload(tokenOrPayload)
-      : tokenOrPayload;
+  const { issueTime, expirationTime } = token;
   const validFor = expirationTime - issueTime;
   const now = Math.floor(Date.now() / 1000);
 
   return expirationTime <= now + validFor / 2;
+}
+
+/**
+ * Returns the time (in milliseconds) the token will expire from now (0
+ * if already expired).
+ */
+export function getTokenExpireIn(token: TokenPayload): number {
+  const { expirationTime } = token;
+  return Math.max(expirationTime * 1000 - Date.now(), 0);
 }
 
 function parseTokenPayload(token: string): RawTokenPayload {
@@ -94,7 +100,7 @@ function parseTokenPayload(token: string): RawTokenPayload {
       .map(function (c) {
         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
       })
-      .join("")
+      .join(""),
   );
 
   return JSON.parse(jsonPayload);

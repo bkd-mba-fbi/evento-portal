@@ -1,11 +1,11 @@
-name: 'Merge Fast Forward'
-description: 'Merge two branches with --ff-only'
+name: "Merge Fast Forward"
+description: "Merge two branches with --ff-only"
 inputs:
   base-ref:
-    description: 'base branch for merging'
+    description: "base branch for merging"
     required: true
   target-ref:
-    description: 'target branch for merging'
+    description: "target branch for merging"
     required: true
 runs:
   using: "composite"

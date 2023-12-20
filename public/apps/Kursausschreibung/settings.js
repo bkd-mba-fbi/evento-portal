@@ -196,12 +196,12 @@ window.kursausschreibung.settings = {
     // when a field is optional or not in the form you can set a default value.
 	// it will overwrite null values in the post to the person endpoint (optional)
     "personDefaultValue": {"CountryId": "CH"},
-    
+
     // property by which the event-list should be sorted (optional)
     "sortEventList": "SubscriptionDateTo",
 
     // Header Offset for scrolling
-    "headerOffset": 55,
+    "headerOffset": 0,
 
     //Button "Subscription with login" visibility when url to content with login readable
     "subscriptionWithLoginURL": null,

@@ -13,7 +13,10 @@ describe("Service Navigation", () => {
         .as("toggle")
         .should("be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").as("serviceNav").should("not.be.visible");
+      cy.get("bkd-user-settings")
+        .find('ul[role="menu"]')
+        .as("serviceNav")
+        .should("not.be.visible");
 
       // Open user settings menu
       cy.get("@toggle").click();
@@ -32,7 +35,10 @@ describe("Service Navigation", () => {
         .as("toggle")
         .should("be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").as("serviceNav").should("not.be.visible");
+      cy.get("bkd-user-settings")
+        .find('ul[role="menu"]')
+        .as("serviceNav")
+        .should("not.be.visible");
 
       // Open user settings menu
       cy.get("@toggle").click();
@@ -41,13 +47,13 @@ describe("Service Navigation", () => {
         .find("a")
         .should((links) =>
           expect(
-            links.toArray().map((link) => link.textContent?.trim())
+            links.toArray().map((link) => link.textContent?.trim()),
           ).to.deep.eq([
             "Mein Profil",
             "Einstellungen",
             "Video-Tutorials",
             "Logout",
-          ])
+          ]),
         );
     });
 
@@ -59,7 +65,10 @@ describe("Service Navigation", () => {
         .as("toggle")
         .should("be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").as("serviceNav").should("not.be.visible");
+      cy.get("bkd-user-settings")
+        .find('ul[role="menu"]')
+        .as("serviceNav")
+        .should("not.be.visible");
 
       // Open user settings menu
       cy.get("@toggle").click();
@@ -78,7 +87,10 @@ describe("Service Navigation", () => {
         .as("toggle")
         .should("be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").as("serviceNav").should("not.be.visible");
+      cy.get("bkd-user-settings")
+        .find('ul[role="menu"]')
+        .as("serviceNav")
+        .should("not.be.visible");
 
       // Open user settings menu
       cy.get("@toggle").click();
@@ -100,7 +112,10 @@ describe("Service Navigation", () => {
         .as("toggle")
         .should("be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").as("serviceNav").should("not.be.visible");
+      cy.get("bkd-user-settings")
+        .find('ul[role="menu"]')
+        .as("serviceNav")
+        .should("not.be.visible");
 
       // Open user settings menu
       cy.get("@toggle").click();
@@ -108,7 +123,7 @@ describe("Service Navigation", () => {
       cy.get("@serviceNav").should("be.visible");
 
       // Close user settings menu
-      cy.get('img[alt="Evento Startseite"]').should("be.visible").click();
+      cy.get("a.logo").click();
       cy.get("@toggle").ariaExpanded(false);
       cy.get("@serviceNav").should("not.be.visible");
     });
@@ -118,8 +133,8 @@ describe("Service Navigation", () => {
         .find("a")
         .should((links) =>
           expect(
-            links.toArray().map((link) => link.textContent.trim())
-          ).to.deep.eq(["de", "fr"])
+            links.toArray().map((link) => link.textContent.trim()),
+          ).to.deep.eq(["de", "fr"]),
         );
     });
   });
@@ -135,7 +150,9 @@ describe("Service Navigation", () => {
       cy.get("button[aria-label='Menü Benutzereinstellungen']")
         .should("not.be.visible")
         .ariaExpanded(false);
-      cy.get("#settings-menu").should("not.be.visible");
+      cy.get("bkd-user-settings")
+        .find('ul[role="menu"]')
+        .should("not.be.visible");
 
       // Open mobile navigation
       cy.get("button[aria-label='Menü']").as("toggle");
@@ -147,7 +164,7 @@ describe("Service Navigation", () => {
         .find("a")
         .should((links) =>
           expect(
-            links.toArray().map((link) => link.textContent?.trim())
+            links.toArray().map((link) => link.textContent?.trim()),
           ).to.deep.eq([
             "Mein Profil",
             "Einstellungen",
@@ -155,7 +172,7 @@ describe("Service Navigation", () => {
             "Logout",
             "de",
             "fr",
-          ])
+          ]),
         );
     });
   });

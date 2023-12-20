@@ -1,6 +1,7 @@
-import { getCurrentAccessToken } from "./storage";
+import { getEnvSettings } from "../env-settings";
+import { tokenState } from "../state/token-state";
 
-const envSettings = window.eventoPortal.settings;
+const envSettings = getEnvSettings();
 
 if (typeof envSettings?.apiServer !== "string") {
   throw new Error("Invalid 'apiServer' setting");
@@ -47,15 +48,15 @@ export function fetchCurrentSubstitutions(): Promise<
 
 async function fetchApi<T = unknown>(
   url: string | URL,
-  { method = "GET" } = {}
+  { method = "GET" } = {},
 ): Promise<T> {
-  const token = getCurrentAccessToken();
-  if (!token) {
+  const { accessToken } = tokenState;
+  if (!accessToken) {
     throw new Error("No token available");
   }
 
   const headers = new Headers({
-    "CLX-Authorization": `token_type=urn:ietf:params:oauth:token-type:jwt-bearer, access_token=${token}`,
+    "CLX-Authorization": `token_type=urn:ietf:params:oauth:token-type:jwt-bearer, access_token=${accessToken}`,
     "Content-Type": "application/json",
   });
 

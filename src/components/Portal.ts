@@ -1,29 +1,30 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { when } from "lit/directives/when.js";
 import { localized } from "@lit/localize";
 import { StateController, Unsubscribe } from "@lit-app/state";
-import { when } from "lit/directives/when.js";
-
-import {
-  customProperties,
-  fontFaces,
-  registerLightDomStyles,
-  theme,
-} from "../utils/theme";
+import { settings } from "../settings";
+import { portalState } from "../state/portal-state";
+import { tokenState } from "../state/token-state.ts";
 import {
   activateTokenForScope,
   createOAuthClient,
   ensureAuthenticated,
   logout,
 } from "../utils/auth";
-import { portalState } from "../state/portal-state";
-import { getHash, getScopeFromUrl, updateHash } from "../utils/routing";
-import { getCurrentAccessToken } from "../utils/storage";
-import { settings } from "../settings";
 import { getInitialLocale } from "../utils/locale";
-import { getNavigationItemByAppPath } from "../utils/navigation.ts";
+import { getNavigationItemByAppPath } from "../utils/navigation";
+import { getHash, getScopeFromUrl, updateHash } from "../utils/routing";
+import {
+  customProperties,
+  fontFaces,
+  registerLightDomStyles,
+  theme,
+} from "../utils/theme";
+import { initializeTokenRenewal } from "../utils/token-renewal.ts";
 
 const oAuthClient = createOAuthClient();
+initializeTokenRenewal(oAuthClient);
 
 const authReady = (async function () {
   // Start Authorization Code Flow with PKCE
@@ -38,7 +39,7 @@ registerLightDomStyles(
     :root {
       ${customProperties}
     }
-  `.toString()
+  `.toString(),
 );
 
 @customElement("bkd-portal")
@@ -78,17 +79,34 @@ export class Portal extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
+    portalState.initialized.then(() => {
+      // When all roles/permissions have been loaded and the current
+      // app does not match the scope of the current token, activate a
+      // token for the app's scope. This can be the case when
+      // previously authenticated as another user and the current user
+      // has no access to the navigation item from the redirect URL,
+      // hence is redirected to home (see
+      // https://github.com/bkd-mba-fbi/evento-portal/issues/106).
+      if (tokenState.scope !== portalState.app.scope) {
+        activateTokenForScope(
+          oAuthClient,
+          portalState.app.scope,
+          portalState.locale,
+        );
+      }
+    });
+
     this.subscriptions.push(
       portalState.subscribeScopeAndLocale(
         (scope, locale) => activateTokenForScope(oAuthClient, scope, locale),
-        true
-      )
+        true,
+      ),
     );
     this.subscriptions.push(
-      portalState.subscribeInstanceName(this.updateTitle.bind(this))
+      portalState.subscribeInstanceName(this.updateTitle.bind(this)),
     );
     this.subscriptions.push(
-      portalState.subscribeNavigationItem(this.updateTitle.bind(this))
+      portalState.subscribeNavigationItem(this.updateTitle.bind(this)),
     );
 
     window.addEventListener("message", this.handleMessage);
@@ -107,11 +125,6 @@ export class Portal extends LitElement {
     this.subscriptions.forEach((unsubscribe) => unsubscribe());
     window.removeEventListener("message", this.handleMessage);
     window.removeEventListener("hashchange", this.handleHashChange);
-  }
-
-  private isAuthenticated(): boolean {
-    const token = getCurrentAccessToken();
-    return Boolean(token);
   }
 
   /**
@@ -155,7 +168,7 @@ export class Portal extends LitElement {
 
     const navigationItem = getNavigationItemByAppPath(
       portalState.navigation,
-      hash
+      hash,
     );
     if (
       navigationItem?.item?.key &&
@@ -184,12 +197,12 @@ export class Portal extends LitElement {
   render() {
     return html`
       ${when(
-        this.authReady && this.isAuthenticated(),
+        this.authReady && tokenState.authenticated,
         () => html`
           <bkd-header @bkdlogout=${this.handleLogout.bind(this)}></bkd-header>
           <bkd-content></bkd-content>
           <bkd-footer></bkd-footer>
-        `
+        `,
       )}
     `;
   }

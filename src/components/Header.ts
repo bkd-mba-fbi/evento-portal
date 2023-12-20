@@ -1,15 +1,16 @@
-import { css, html, LitElement } from "lit";
-import { customElement } from "lit/decorators.js";
-import { localized, msg } from "@lit/localize";
-
-import { theme } from "../utils/theme";
-import { DropdownController } from "../controllers/dropdown";
+import { LitElement, css, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
 import { when } from "lit/directives/when.js";
-import { portalState } from "../state/portal-state";
+import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
-import { buildUrl } from "../utils/routing";
+import { DropdownController } from "../controllers/dropdown";
 import { NavigationItem, settings } from "../settings";
+import { portalState } from "../state/portal-state";
+import { buildUrl } from "../utils/routing";
+import { theme } from "../utils/theme";
 import { UserSettingsItem } from "../utils/user-settings";
+import { MobileNav } from "./Header/MobileNav";
+import { ServiceNav } from "./Header/ServiceNav";
 
 @customElement("bkd-header")
 @localized()
@@ -121,6 +122,12 @@ export class Header extends LitElement {
     `,
   ];
 
+  @query("bkd-service-nav")
+  serviceNavElement?: ServiceNav;
+
+  @query("bkd-mobile-nav")
+  mobileNavElement?: MobileNav;
+
   constructor() {
     super();
     new StateController(this, portalState);
@@ -128,8 +135,10 @@ export class Header extends LitElement {
 
   private mobileNav = new DropdownController(
     this,
-    "mobile-nav-toggle",
-    "mobile-nav-menu"
+    () =>
+      this.serviceNavElement?.shadowRoot?.querySelector("bkd-hamburger") ??
+      null,
+    () => this.mobileNavElement?.shadowRoot ?? null,
   );
 
   private handleLogoClick(event: MouseEvent) {
@@ -139,7 +148,7 @@ export class Header extends LitElement {
   }
 
   private handleNavItemClick(
-    event: CustomEvent<{ item: NavigationItem }>
+    event: CustomEvent<{ item: NavigationItem }>,
   ): void {
     const { item } = event.detail;
 
@@ -151,7 +160,7 @@ export class Header extends LitElement {
   }
 
   private handleSettingsItemClick(
-    event: CustomEvent<{ item: UserSettingsItem; event: Event }>
+    event: CustomEvent<{ item: UserSettingsItem; event: Event }>,
   ): void {
     const { item, event: sourceEvent } = event.detail;
 
@@ -159,7 +168,7 @@ export class Header extends LitElement {
       sourceEvent.preventDefault();
       if (item.key === "logout") {
         this.dispatchEvent(
-          new CustomEvent<void>("bkdlogout", { composed: true, bubbles: true })
+          new CustomEvent<void>("bkdlogout", { composed: true, bubbles: true }),
         );
       } else {
         // Internal navigation
@@ -174,29 +183,36 @@ export class Header extends LitElement {
   render() {
     return html`
       <header>
-        <bkd-service-nav
-          .mobileNavOpen=${this.mobileNav.open}
-          @bkdhamburgertoggle=${() => this.mobileNav.toggle()}
-          @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
-        ></bkd-service-nav>
-        <a class="logo" href=${buildUrl("home")}
+        ${when(
+          navigator.onLine, // Hide service nav when offline
+          () =>
+            html`<bkd-service-nav
+              .mobileNavOpen=${this.mobileNav.open}
+              @bkdhamburgertoggle=${() => this.mobileNav.toggle()}
+              @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
+            ></bkd-service-nav> `,
+        )}
+        <a class="logo" tabindex="1" href=${buildUrl("home")}
           ><img
             src="logo.svg"
             alt=${msg("Evento Startseite")}
             @click=${this.handleLogoClick.bind(this)}
         /></a>
         <div class="logo-caption">${portalState.instanceName}</div>
-        <bkd-nav
-          @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
-        ></bkd-nav>
+        ${when(
+          navigator.onLine, // Hide nav when offline
+          () =>
+            html` <bkd-nav
+              @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
+            ></bkd-nav>`,
+        )}
         ${when(
           this.mobileNav.open,
           () =>
             html`<bkd-mobile-nav
-              id="mobile-nav-menu"
               @bkdnavitemclick=${this.handleNavItemClick.bind(this)}
               @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
-            ></bkd-mobile-nav>`
+            ></bkd-mobile-nav>`,
         )}
       </header>
     `;

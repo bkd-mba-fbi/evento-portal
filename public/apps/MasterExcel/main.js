@@ -64,7 +64,7 @@ function insertButtonsGrading() {
 
 function insertButtonsTest() {
   // Buttons nicht einfügen, wenn folgendese element nicht vorhanden ist.
-  if ($('erz-test-table-header div.collapsed').length < 0) {
+  if ($('erz-test-table-header').length === 0) {
       return;
   }
   
@@ -78,7 +78,7 @@ function insertButtonsTest() {
   
   var tests = X.collectTestNames();
 
-  $('erz-test-table-header div.collapsed').each(function(index) {
+  $('erz-test-table-header div div div.collapsed').each(function(index) {
       var test =  $(this).text();
       test = test.trim();
       if (dropdownItems.indexOf(test) === -1 && tests.indexOf(test) > 0) {
@@ -97,7 +97,7 @@ function insertButtonsTest() {
 
   if(document.getElementsByClassName('desktop').length > 0) {
       var buttons = $(buttons_html);
-      $('erz-tests-header>div.header>div.d-flex:nth-child(2)').append(buttons); 
+      $('#excel-import').append(buttons); 
   }
   
 }

@@ -2,7 +2,7 @@ import { msg } from "@lit/localize";
 
 /**
  * This file contains the static configuration that is part of the
- * build. For environment specific settings, see
+ * build. For environment specific settings, see `env-settings.ts` and
  * `public/settings.example.js`.
  */
 
@@ -200,11 +200,7 @@ export const settings: Settings = {
           {
             key: "presenceControl",
             label: msg("Präsenzkontrolle"),
-            allowedRolesOrPermissions: [
-              "TeacherRole",
-              "LessonTeacherRole",
-              "AbsenceAdministratorRole",
-            ],
+            allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
             appPath: "#/presence-control",
@@ -216,7 +212,6 @@ export const settings: Settings = {
               "TeacherRole",
               "LessonTeacherRole",
               "ClassTeacherRole",
-              "AbsenceAdministratorRole",
             ],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
@@ -225,11 +220,7 @@ export const settings: Settings = {
           {
             key: "tests",
             label: msg("Tests und Bewertung"),
-            allowedRolesOrPermissions: [
-              "TeacherRole",
-              "LessonTeacherRole",
-              "AbsenceAdministratorRole",
-            ],
+            allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",
             appPath: "#/events",
@@ -262,7 +253,6 @@ export const settings: Settings = {
               "TeacherRole",
               "LessonTeacherRole",
               "ClassTeacherRole",
-              "AbsenceAdministratorRole",
             ],
             deniedInstanceIds: null,
             appKey: "schulverwaltung",

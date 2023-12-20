@@ -1,33 +1,23 @@
-import { css, html, LitElement } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { localized, msg } from "@lit/localize";
-
-import { theme } from "../../utils/theme";
-import { DropdownController } from "../../controllers/dropdown";
-import { SubstitutionsDropdown } from "./SubstitutionsDropdown";
-import { fetchCurrentSubstitutions, Substitution } from "../../utils/fetch";
-import { getCurrentAccessToken } from "../../utils/storage";
-import { getTokenPayload } from "../../utils/token";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import substitutionIcon from "../../assets/icons/substitution.svg?raw";
+import { localized, msg } from "@lit/localize";
 import caretIcon from "../../assets/icons/caret.svg?raw";
 import closeSmallIcon from "../../assets/icons/close-small.svg?raw";
-import { submit } from "../../utils/submit";
+import substitutionIcon from "../../assets/icons/substitution.svg?raw";
+import { DropdownController } from "../../controllers/dropdown";
+import { getEnvSettings } from "../../env-settings.ts";
+import { tokenState } from "../../state/token-state.ts";
+import { Substitution, fetchCurrentSubstitutions } from "../../utils/fetch";
 import { buildUrl } from "../../utils/routing.ts";
+import { submit } from "../../utils/submit";
+import { theme } from "../../utils/theme";
+import { SubstitutionsDropdown } from "./SubstitutionsDropdown";
 
 @customElement("bkd-substitutions-toggle")
 @localized()
 export class SubstitutionsToggle extends LitElement {
-  @query("bkd-substitutions-dropdown")
-  dropdownElement?: SubstitutionsDropdown;
-
-  @state()
-  availableSubstitutions: ReadonlyArray<Substitution> = [];
-
-  @state()
-  activeSubstitution: Substitution | null = null;
-
   static styles = [
     theme,
     css`
@@ -95,19 +85,31 @@ export class SubstitutionsToggle extends LitElement {
     `,
   ];
 
+  @query("button")
+  private toggleElement?: HTMLElement;
+
+  @query("bkd-substitutions-dropdown")
+  private menuElement?: SubstitutionsDropdown;
+
+  @state()
+  private availableSubstitutions: ReadonlyArray<Substitution> = [];
+
+  @state()
+  private activeSubstitution: Substitution | null = null;
+
   private dropdown = new DropdownController(
     this,
-    "substitutions-toggle",
-    "substitutions-menu",
+    () => this.toggleElement ?? null,
+    () => this.menuElement?.shadowRoot ?? null,
     {
       queryItems: () =>
-        this.dropdownElement?.shadowRoot?.querySelectorAll<HTMLElement>(
-          "a[role='menuitem']"
+        this.menuElement?.shadowRoot?.querySelectorAll<HTMLElement>(
+          "a[role='menuitem']",
         ) ?? null,
       queryFocused: () =>
-        (this.dropdownElement?.shadowRoot?.activeElement ??
+        (this.menuElement?.shadowRoot?.activeElement ??
           null) as HTMLElement | null,
-    }
+    },
   );
 
   connectedCallback(): void {
@@ -134,11 +136,7 @@ export class SubstitutionsToggle extends LitElement {
   }
 
   private getActiveSubstitutionId(): number | null {
-    const token = getCurrentAccessToken();
-    if (!token) return null;
-
-    const { substitutionId } = getTokenPayload(token);
-    return substitutionId ?? null;
+    return tokenState.accessTokenPayload?.substitutionId ?? null;
   }
 
   private toggle(event: Event) {
@@ -162,10 +160,7 @@ export class SubstitutionsToggle extends LitElement {
 
     // Redirect to backend to get a new access token with the substitution's roles/permissions.
     // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-starten
-    const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
-    this.redirect(
-      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${substitution.Id}/start`
-    );
+    this.redirect(substitution, "start");
   }
 
   private stopSubstitution(): void {
@@ -174,21 +169,20 @@ export class SubstitutionsToggle extends LitElement {
     // Redirect to backend to get access token with the user's
     // original roles/permissions, not the substitution's ones.
     // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-beenden
-    const { oAuthServer, oAuthPrefix } = window.eventoPortal.settings;
-    this.redirect(
-      `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${this.activeSubstitution.Id}/stop`
-    );
+    this.redirect(this.activeSubstitution, "stop");
   }
 
-  private redirect(url: string): void {
+  private redirect(substitution: Substitution, action: "start" | "stop"): void {
+    const { oAuthServer, oAuthPrefix } = getEnvSettings();
+    const url = `${oAuthServer}/${oAuthPrefix}/Authorization/Substitutions/${substitution.Id}/${action}`;
     submit("POST", url, {
-      access_token: getCurrentAccessToken() ?? "",
+      access_token: tokenState.accessToken ?? "",
       redirect_uri: buildUrl("home"),
     });
   }
 
   private handleSubstitutionStart(
-    event: CustomEvent<{ substitution: Substitution }>
+    event: CustomEvent<{ substitution: Substitution }>,
   ): void {
     this.dropdown.close();
     this.startSubstitution(event.detail.substitution);
@@ -208,14 +202,13 @@ export class SubstitutionsToggle extends LitElement {
 
     return html`
       <button
-        id="substitutions-toggle"
         class=${classMap({
           active: Boolean(this.activeSubstitution),
           open: this.dropdown.open,
         })}
         @click=${this.toggle.bind(this)}
         aria-label=${this.getLabel()}
-        aria-expanded=${this.dropdown.open}
+        .ariaExpanded=${this.dropdown.open}
         aria-haspopup="menu"
       >
         <div class="icon">${unsafeHTML(substitutionIcon)}</div>

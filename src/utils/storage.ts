@@ -1,4 +1,3 @@
-import { OAuth2Token } from "@badgateway/oauth2-client";
 import { getTokenPayload } from "./token";
 
 const INSTANCE_KEY = "bkdInstance";
@@ -30,12 +29,14 @@ export function getRefreshToken(): string | null {
   return localStorage.getItem(REFRESH_TOKEN_KEY);
 }
 
-export function storeToken(scope: string, token: OAuth2Token): void {
-  const { refreshToken, accessToken } = token;
-  localStorage.setItem(`${ACCESS_TOKEN_KEY}_${scope}`, accessToken);
+export function storeRefreshToken(refreshToken: string | null): void {
   if (refreshToken) {
     localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
   }
+}
+
+export function storeAccessToken(scope: string, accessToken: string): void {
+  localStorage.setItem(`${ACCESS_TOKEN_KEY}_${scope}`, accessToken);
 }
 
 export function resetAllTokens(): void {
@@ -84,7 +85,7 @@ export function storeCurrentAccessToken(accessToken: string): void {
   //   'bkdLastAccessToken'
   localStorage.setItem(CURRENT_ACCESS_TOKEN_KEY, `"${accessToken}"`);
 
-  // App Raumresevation need TOKEN_EXPIRE in localStorage
+  // App Raumresevation needs TOKEN_EXPIRE in localStorage
   let { expirationTime } = getTokenPayload(accessToken);
   expirationTime = expirationTime * 1000;
   localStorage.setItem(TOKEN_EXPIRE, expirationTime.toString());
@@ -108,7 +109,7 @@ export function consumeLoginState(): {
 
 export function storeLoginState(
   codeVerifier: string,
-  redirectUri?: string
+  redirectUri?: string,
 ): void {
   sessionStorage.setItem(CODE_VERIFIER_KEY, codeVerifier);
   if (redirectUri) {

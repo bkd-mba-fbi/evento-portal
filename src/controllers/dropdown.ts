@@ -1,7 +1,16 @@
 import { ReactiveController, ReactiveControllerHost } from "lit";
+import { isEqualOrContains } from "../utils/dom";
 
 export class DropdownController implements ReactiveController {
   open = false;
+
+  private get toggleElement(): HTMLElement | ShadowRoot | null {
+    return this.queryToggleElement();
+  }
+
+  private get menuElement(): HTMLElement | ShadowRoot | null {
+    return this.queryMenuElement();
+  }
 
   private get items(): ReadonlyArray<HTMLElement> {
     const items = this.itemQueries?.queryItems && this.itemQueries.queryItems();
@@ -15,9 +24,9 @@ export class DropdownController implements ReactiveController {
   }
 
   constructor(
-    private host: ReactiveControllerHost,
-    private toggleButtonId: string,
-    private menuId: string,
+    private host: ReactiveControllerHost & HTMLElement,
+    private queryToggleElement: () => HTMLElement | ShadowRoot | null,
+    private queryMenuElement: () => HTMLElement | ShadowRoot | null,
     private itemQueries?: {
       /**
        * Returns all dropdown items
@@ -28,7 +37,7 @@ export class DropdownController implements ReactiveController {
        * Returns the currently focused item
        */
       queryFocused: () => HTMLElement | null;
-    }
+    },
   ) {
     this.host.addController(this);
   }
@@ -42,10 +51,11 @@ export class DropdownController implements ReactiveController {
     this.host.requestUpdate();
 
     if (this.open) {
-      this.closeOthers();
       this.addListeners();
     } else {
-      this.removeListeners();
+      setTimeout(() => {
+        this.removeListeners();
+      });
     }
   }
 
@@ -55,28 +65,78 @@ export class DropdownController implements ReactiveController {
     }
   }
 
+  /**
+   * Use this function to escape current callstack to avoid
+   * interfering with any toggle calls that would reopen the menu
+   * again instead of closing it.
+   */
+  private closeDeferred(): void {
+    setTimeout(() => this.close());
+  }
+
   private addListeners(): void {
-    document.addEventListener("click", this.handleClick, true);
-    document.addEventListener("keydown", this.handleKeydown, true);
-    document.addEventListener(
-      "bkddropdowntoggleclose",
-      this.handleCloseOthers as EventListener
-    );
+    // Make sure to register events after rendering, for elements to
+    // be present
+    setTimeout(() => {
+      this.menuElement?.addEventListener("focusout", this.closeOnBlur, true);
+
+      // To detect clicks into iframe, add event listener to iframe
+      // document
+      this.iframeDocument?.addEventListener(
+        "click",
+        this.handleIframeClick,
+        true,
+      );
+    });
+    document.addEventListener("click", this.handleDocumentClick, true);
+
+    this.host.addEventListener("keydown", this.handleKeydown, true);
   }
 
   private removeListeners(): void {
-    document.removeEventListener("click", this.handleClick, true);
-    document.removeEventListener("keydown", this.handleKeydown, true);
-    document.removeEventListener(
-      "bkddropdowntoggleclose",
-      this.handleCloseOthers as EventListener
+    this.menuElement?.removeEventListener("focusout", this.closeOnBlur, true);
+    document.removeEventListener("click", this.handleDocumentClick, true);
+    this.iframeDocument?.removeEventListener(
+      "click",
+      this.handleIframeClick,
+      true,
     );
+
+    this.host.removeEventListener("keydown", this.handleKeydown, true);
   }
 
-  private handleClick = (event: MouseEvent) => {
-    if (!this.targetMatchesId(event, [this.toggleButtonId, this.menuId])) {
-      this.close();
+  /**
+   * Close dropdown when tabbing out of menu.
+   */
+  private closeOnBlur = (event: Event) => {
+    if (this.menuElement && "relatedTarget" in event) {
+      if (!this.menuElement.contains(event.relatedTarget as Node | null)) {
+        this.closeDeferred();
+      }
     }
+  };
+
+  /**
+   * Close dropdown when clicking outside of toggle and menu
+   */
+  private handleDocumentClick = (event: MouseEvent) => {
+    const target = event.composedPath()[0] as HTMLElement | undefined;
+    if (!target) return;
+
+    const outsideToggle =
+      this.toggleElement && !isEqualOrContains(this.toggleElement, target);
+    const outsideMenu =
+      this.menuElement && !isEqualOrContains(this.menuElement, target);
+    if (outsideToggle && outsideMenu) {
+      this.closeDeferred();
+    }
+  };
+
+  /**
+   * Close dropdown when clicking into iframe
+   */
+  private handleIframeClick = () => {
+    this.closeDeferred();
   };
 
   private handleKeydown = (event: KeyboardEvent) => {
@@ -98,6 +158,13 @@ export class DropdownController implements ReactiveController {
     }
   };
 
+  private get iframeDocument() {
+    const portal = document.querySelector("bkd-portal")?.shadowRoot;
+    const content = portal?.querySelector("bkd-content")?.shadowRoot;
+    const iframe = content?.querySelector("iframe");
+    return iframe?.contentDocument ?? null;
+  }
+
   private activeLinkIndex(): number | null {
     const index = this.focusedItem ? this.items.indexOf(this.focusedItem) : -1;
     return index === -1 ? null : index;
@@ -116,34 +183,5 @@ export class DropdownController implements ReactiveController {
     if (next > last) return first;
     if (next < first) return last;
     return next;
-  }
-
-  private handleCloseOthers = (
-    event: CustomEvent<{ source: DropdownController }>
-  ) => {
-    const { source } = event.detail;
-    if (source !== this) {
-      this.close();
-    }
-  };
-
-  private closeOthers(): void {
-    document.dispatchEvent(
-      new CustomEvent<{ source: DropdownController }>(
-        "bkddropdowntoggleclose",
-        { detail: { source: this } }
-      )
-    );
-  }
-
-  /**
-   * Whether the event originates from an element with any of the given ids.
-   */
-  private targetMatchesId(event: Event, ids: ReadonlyArray<string>): boolean {
-    // Apparently we cannot use `closest` due to shadow dom
-    // restrictions, but we can observe the `composedPath`
-    return event
-      .composedPath()
-      .some((element) => ids.includes((element as HTMLElement).id));
   }
 }
