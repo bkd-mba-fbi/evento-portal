@@ -83,21 +83,17 @@ export class NotificationsToggle extends LitElement {
     super.disconnectedCallback();
   }
 
-  private dropdown = new DropdownController(
-    this,
-    () => this.toggleElement ?? null,
-    () => this.dropdownElement?.shadowRoot ?? null,
-    true,
-    {
-      queryItems: () =>
-        this.dropdownElement?.shadowRoot?.querySelectorAll<HTMLElement>(
-          "button",
-        ) ?? null,
-      queryFocused: () =>
-        (this.dropdownElement?.shadowRoot?.activeElement ??
-          null) as HTMLElement | null,
-    },
-  );
+  private dropdown = new DropdownController(this, {
+    queryToggleElement: () => this.toggleElement ?? null,
+    queryMenuElement: () => this.dropdownElement?.shadowRoot ?? null,
+    queryItems: () =>
+      this.dropdownElement?.shadowRoot?.querySelectorAll<HTMLElement>(
+        "button",
+      ) ?? null,
+    queryFocused: () =>
+      (this.dropdownElement?.shadowRoot?.activeElement ??
+        null) as HTMLElement | null,
+  });
 
   private handleDeleteAllNotifications() {
     const notifications: ReadonlyArray<NotificationDataEntry> = [];

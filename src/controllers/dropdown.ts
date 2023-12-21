@@ -5,39 +5,51 @@ export class DropdownController implements ReactiveController {
   open = false;
 
   private get toggleElement(): HTMLElement | ShadowRoot | null {
-    return this.queryToggleElement();
+    return this.options.queryToggleElement();
   }
 
   private get menuElement(): HTMLElement | ShadowRoot | null {
-    return this.queryMenuElement();
+    return this.options.queryMenuElement();
   }
 
   private get items(): ReadonlyArray<HTMLElement> {
-    const items = this.itemQueries?.queryItems && this.itemQueries.queryItems();
+    const items = this.options?.queryItems && this.options.queryItems();
     return Array.from(items ?? []);
   }
 
   private get focusedItem(): HTMLElement | null {
-    return this.itemQueries?.queryFocused
-      ? this.itemQueries.queryFocused()
-      : null;
+    return this.options?.queryFocused ? this.options.queryFocused() : null;
   }
 
   constructor(
     private host: ReactiveControllerHost & HTMLElement,
-    private queryToggleElement: () => HTMLElement | ShadowRoot | null,
-    private queryMenuElement: () => HTMLElement | ShadowRoot | null,
-    private closeOnTab: boolean,
-    private itemQueries?: {
+    private options: {
+      /**
+       * Returns the dropdown toggle element
+       */
+      queryToggleElement: () => HTMLElement | ShadowRoot | null;
+
+      /**
+       * Returns the dropdown menu element
+       */
+      queryMenuElement: () => HTMLElement | ShadowRoot | null;
+
+      /**
+       * Per default the dropdown menu is closed when the user presses tab and
+       * the focus continues outside of the dropdown. Set to true to keep menu
+       * open and continue with focus inside dropdown.
+       */
+      tabInside?: boolean;
+
       /**
        * Returns all dropdown items
        */
-      queryItems: () => NodeListOf<HTMLElement> | null;
+      queryItems?: () => NodeListOf<HTMLElement> | null;
 
       /**
        * Returns the currently focused item
        */
-      queryFocused: () => HTMLElement | null;
+      queryFocused?: () => HTMLElement | null;
     },
   ) {
     this.host.addController(this);
@@ -79,7 +91,7 @@ export class DropdownController implements ReactiveController {
     // Make sure to register events after rendering, for elements to
     // be present
     setTimeout(() => {
-      if (!this.closeOnTab) {
+      if (this.options.tabInside) {
         this.menuElement?.addEventListener("focusout", this.closeOnBlur, true);
       }
 
@@ -97,7 +109,7 @@ export class DropdownController implements ReactiveController {
   }
 
   private removeListeners(): void {
-    if (!this.closeOnTab) {
+    if (this.options.tabInside) {
       this.menuElement?.removeEventListener("focusout", this.closeOnBlur, true);
     }
     document.removeEventListener("click", this.handleDocumentClick, true);
@@ -147,7 +159,7 @@ export class DropdownController implements ReactiveController {
   private handleKeydown = (event: KeyboardEvent) => {
     switch (event.key) {
       case "Tab": {
-        if (this.closeOnTab) this.close();
+        if (!this.options.tabInside) this.close();
         break;
       }
       case "Escape": {
