@@ -20,4 +20,4 @@ When testing browser compatibility with [BrowserStack](https://www.browserstack.
 
 ### Authentication & 2FA
 
-For untrusted IP ranges, the OAuth provider requires 2FA to login with the test users (i.e. you can't login). If you are in a trusted IP range and want to test the _Evento Portal_ using BrowserStack, you can use [local testing](https://www.browserstack.com/docs/live/local-testing) and activate the _Resolve all URLs through my network_ option.
+For untrusted IP ranges, the OAuth provider requires 2FA to log in with the test users (i.e. you can't log in). If you are in a trusted IP range and want to test the _Evento Portal_ using BrowserStack, you can use [local testing](https://www.browserstack.com/docs/live/local-testing) and activate the _Resolve all URLs through my network_ option.

@@ -33,12 +33,12 @@ Goals:
 | Token refresh               | Access tokens are automatically refreshed so they don't expire.                                                                                                                                                                                                                           |
 | Token for _apps_            | The access token is made available in session storage to the _apps_.                                                                                                                                                                                                                      |
 | Language switching          | A user can switch the language between German and French.                                                                                                                                                                                                                                 |
-| Language/Tenant persistance | The selected tenant and language is remembered when logging in the next time with the same browser.                                                                                                                                                                                       |
+| Language/Tenant persistence | The selected tenant and language is remembered when logging in the next time with the same browser.                                                                                                                                                                                       |
 | Base layout                 | Renders the base layout with header & footer according to the [CI/CD of the Canton of Bern](https://www.be.ch/cd).                                                                                                                                                                        |
 | Navigation menu             | A navigation menu is rendered, providing entry points for _modules_ of the various _apps_. The navigation items are available depending on the user's roles and permissions. No dynamic configuration is necessary for the definition of the navigation items, structure and permissions. |
-| _App_ integration           | The various _apps_, implemented with different frontend technologies (such as Angular or Ember) are integrated in a way they don't interfere with each other and are cleaned-up propertly when switching apps.                                                                            |
+| _App_ integration           | The various _apps_, implemented with different frontend technologies (such as Angular or Ember) are integrated in a way they don't interfere with each other and are cleaned-up properly when switching apps.                                                                             |
 | _App_ routing               | The _apps_' client-side routing is preserved.                                                                                                                                                                                                                                             |
-| Teacher substitution        | Teachers can start & stop substituting other teachers, temporarily gaining the substitutee's permissions.                                                                                                                                                                                 |
+| Teacher substitution        | Teachers can start & stop substituting other teachers, temporarily gaining the permissions of the substitute.                                                                                                                                                                             |
 | User notifications          | A user's notifications are displayed (and regularly updated) and can be read/deleted by the user.                                                                                                                                                                                         |
 | Progressive Web App (PWA)   | The _Evento Portal_ is installable as a PWA and offers a simple offline page when no internet connection is available.                                                                                                                                                                    |
 
@@ -103,7 +103,7 @@ graph LR
   subgraph evento ["EVENTO (SLH)"]
     evento-api[REST API]
     evento-oauth[OAuth Provider]
-    evento-gui[GUI]
+    evento-gui[Client Application]
   end
 
   student --> |uses| portal
@@ -135,13 +135,13 @@ graph LR
 | Apps                          | Various mini applications – like [webapp-schulverwaltung](https://github.com/bkd-mba-fbi/webapp-schulverwaltung) (Angular) or [kursausschreibung](https://github.com/bkd-mba-fbi/kursausschreibung) (Ember) – that provide a frontend for different aspects of the daily school routine. They may consist of multiple _modules_ like "presence control" or "tests" that are individually integrated in the _Evento Portal_'s navigation. |
 | Evento Portal Lit Application | The [evento-portal](https://github.com/bkd-mba-fbi/evento-portal/) is the Lit application that implements authentication, the rendering of the base layout with navigation, base routing as well as the integration of the _apps_ via iframe.                                                                                                                                                                                            |
 | Evento Portal                 | The _Evento Portal_ as a whole consists of the _Evento Portal Lit Application_ on the one hand, and the compiled artifacts of the various _apps_, which [are part of the repository](https://github.com/bkd-mba-fbi/evento-portal/tree/feature/68-sad/public/apps), on the other.                                                                                                                                                        |
-| EVENTO                        | The campus management system by [Swiss Learning Hub](https://www.swisslearninghub.com/) that incorprates a REST/JSON API and an OAuth 2.0 provider.                                                                                                                                                                                                                                                                                      |
+| EVENTO                        | The campus management system by [Swiss Learning Hub](https://www.swisslearninghub.com/) that incorporates a REST/JSON API and an OAuth 2.0 provider.                                                                                                                                                                                                                                                                                     |
 
 ### Technical Interfaces
 
 - [EVENTO API](https://clx-evento.bitbucket.io/master_eventodoc/Api/)
 - [EVENTO OAuth 2.0 Provider](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Login-OAuth-Server/)
-- [_App_ integration via iframe](./iframe.md)
+- [iframe Limitations & Workarounds](./iframe.md)
 
 # Solution Strategy
 
@@ -221,11 +221,11 @@ sequenceDiagram
   deactivate app
 ```
 
-This flow is implemented with the help of the [@badgateway/oauth2-client](https://www.npmjs.com/package/@badgateway/oauth2-client) library in [auth.ts](../src/utils/auth.ts). The storing of the tokens is realized with [token-state.ts](../src/state/token-state.ts). Also checkout the EVENTO documentation page [OAuth 2.0 Authorization Code Flow mit Proof Key for Code Exchange (PKCE)](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Login-OAuth-Server/#authorization-code-flow-mit-proof-key-for-code-exchange-pkce).
+This flow is implemented with the help of the [@badgateway/oauth2-client](https://www.npmjs.com/package/@badgateway/oauth2-client) library in [auth.ts](../src/utils/auth.ts). The storing of the tokens is realized with [token-state.ts](../src/state/token-state.ts). See also the EVENTO documentation page [OAuth 2.0 Authorization Code Flow mit Proof Key for Code Exchange (PKCE)](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Login-OAuth-Server/#authorization-code-flow-mit-proof-key-for-code-exchange-pkce).
 
 ## Switch Apps/Scopes
 
-The access tokens are bound to a specific [OAuth scope](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/ApplicationScopes_Intro/) that is specified when getting a token via login page or refresh token endpoint. Each _app_ requires a certain scope since the scope determines what the user can access. Due to this design by the _Evento API_, it is not possible to aquire and work with a single token for multiple scopes.
+The access tokens are bound to a specific [OAuth scope](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/ApplicationScopes_Intro/) that is specified when getting a token via login page or refresh token endpoint. Each _app_ requires a certain scope since the scope determines what the user can access. Due to this design by the _Evento API_, it is not possible to acquire and work with a single token for multiple scopes.
 
 The _Evento Portal_ handles tokens & scopes as follows:
 
@@ -280,8 +280,8 @@ Apparently, at the time writing this, the _Evento API_ does not provide any way 
   - If the refresh token _fully expired_, redirect to the login page (as described in the "Authentication" flow above).
   - If the access token _half expired_, redirect to the [refresh token endpoint](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/RefreshToken/#refresh-mit-public-client) to get a new one. Like this, we try to make sure that the token does not expire during usage of the _apps_.
 - Start timers to detect when tokens expire:
-  - If the refresh token _fully expired_ redirect to the login page (as described in the "Authentication" flow above).
-  - If the access token _fully expired_, redirect to the [refresh token endpoint](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/RefreshToken/#refresh-mit-public-client) to get a new one.
+  - If the refresh token expired (timer fires), redirect to the login page (as described in the "Authentication" flow above).
+  - If the access token expired (time fires), redirect to the [refresh token endpoint](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/RefreshToken/#refresh-mit-public-client) to get a new one.
 
 The checks on navigation are implemented in [auth.ts](../src/utils/auth.ts), the renewal on expiration is implemented in [token-renewal.ts](../src/utils/token-renewal.ts).
 
@@ -374,6 +374,10 @@ graph TD
     schulverwaltungAction("build.yml Action")
   end
 
+  subgraph github-kursausschreibung["GitHub kursausschreibung"]
+    kursausschreibung["Repository"]
+  end
+
   subgraph github-portal["GitHub evento-portal"]
     portal["Repository"]
     pages["GitHub Pages"]
@@ -381,10 +385,7 @@ graph TD
 
     action-netlify("deployTestEnv Action")
     action-container("container-build Action")
-  end
-
-  subgraph github-kursausschreibung["GitHub kursausschreibung"]
-    kursausschreibung["Repository"]
+    action-hotfix-container("hotfix-container-build Action")
   end
 
   subgraph provider-netlify["Netlify"]
@@ -416,13 +417,17 @@ graph TD
   action-netlify --> |"build & upload ZIP"| pages
   pages <--> |watch & deploy| netlify
 
-  portal --> |"on push (test, development, hotfix-*)"| action-container
+  portal --> |"manual-dispatch (test, production)"| action-container
+  portal --> |"manual dispatch (hotfix-*)"| action-hotfix-container
+  action-container --> |merge to release branches| portal
   action-container --> |push & tag Docker image| registry
+  action-hotfix-container --> |push & tag Docker image| registry
   registry <--> |watch & deploy 'test' tag| test
   registry <--> |watch & deploy 'production' tag| production
+  registry <--> |deploy 'hotfix' tag| production
 ```
 
-For more details, consider [Branching, Releasing & Deployment](./releasing.md).
+For more details, consider [Deployment](./deployment.md).
 
 # Architecture Decisions
 
@@ -434,7 +439,7 @@ The _Evento Portal_ replaces the _EventoWeb_ and should render a base layout, a 
 
 ### Decision
 
-- Due to the vague requirements of the targeted operations environement at the time of planning the project, we decided to implement the _Evento Portal_ as a Client-side rendered application.
+- Due to the vague requirements of the targeted operations environment at the time of planning the project, we decided to implement the _Evento Portal_ as a Client-side rendered application.
 - Since we have to integrate _apps_ based on different technologies (Angular, Ember), we choose to build a lightweight, framework-agnostic frontend with Lit and Web Components.
 
 Alternatives:
@@ -444,9 +449,9 @@ Alternatives:
 ### Consequences
 
 - The static files we get as build artifacts can be served with any web server and are completely stateless.
-- The OAuth 2.0 authentication flow has to be implement client-side originating from an untrusted client. The refresh & access token must be available to the client and will be stored in the browser.
+- The OAuth 2.0 authentication flow has to be implemented client-side originating from an untrusted client. The refresh & access token must be available to the client and will be stored in the browser.
 - Thanks to the shadow DOM Web Components feature any stylesheets on the page will not interfere with styles of components and vice versa.
-- Since we have a single page application (SPA), the page will not be reloaded on navigation. Therefore the JavaScript frameworks of the integrated _apps_ have to be bootstrapped/destroyed cleanly (see ADR 2).
+- Since we have a single page application (SPA), the page will not be reloaded on navigation. Therefore, the JavaScript frameworks of the integrated _apps_ have to be bootstrapped/destroyed cleanly (see ADR 2).
 
 ## ADR 2: App Integration via iframe
 

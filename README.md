@@ -24,6 +24,7 @@ Download the [latest build](https://bkd-mba-fbi.github.io/evento-portal/evento-p
 - [Setup & Development](./doc/development.md) – Start local development, run linting & tests
 - [Git Workflow](./doc/git.md) – Branching & commit messages
 - [Internationalization (I18n)](./doc/i18n.md) – Translating texts
+- [Prettier](doc/prettier.md) – Source code formatting
 - [Design](./doc/design.md) – Responsive Design & CI/CD
 - [Browser Testing](./doc/browser-testing.md) – Support & BrowserStack.com
 - [Progressive Web App (PWA)](./doc/pwa.md) – Installability & offline support

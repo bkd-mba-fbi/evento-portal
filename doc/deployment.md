@@ -43,5 +43,5 @@ A hotfix is necessary if a critical problem occurs in production that needs to b
 
 - To release & deploy a hotfix to the _production_ environment, BKD manually dispatches the [hotfix-container-build.yml](../.github/workflows/hotfix-container-build.yml) workflow (see [Release Instructions](./releasing.md)).
 - The workflow merges the hotfix branch into the `production` branch.
-- It builds a Docker image and will tag it with the `hotfix` tag and the automatically incremented version tag. Note: The version for hotfixes will be incremented on the patch level. If you create a hotfix from 1.3.0, the first hotfix build will recieve the version 1.3.1.
+- It builds a Docker image and will tag it with the `hotfix` tag and the automatically incremented version tag. Note: The version for hotfixes will be incremented on the patch level. If you create a hotfix from 1.3.0, the first hotfix build will receive the version 1.3.1.
 - Bedag has to advise the deployment for the _production_ environment to pull the image with the `hotfix` tag.
