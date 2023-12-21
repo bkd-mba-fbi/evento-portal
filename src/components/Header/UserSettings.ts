@@ -86,18 +86,15 @@ export class UserSettings extends LitElement {
   @query('ul[role="menu"]')
   private menuElement?: HTMLElement;
 
-  private dropdown = new DropdownController(
-    this,
-    () => this.toggleElement ?? null,
-    () => this.menuElement ?? null,
-    {
-      queryItems: () =>
-        this.shadowRoot?.querySelectorAll<HTMLElement>("a[role='menuitem']") ??
-        null,
-      queryFocused: () =>
-        (this.shadowRoot?.activeElement ?? null) as HTMLElement | null,
-    },
-  );
+  private dropdown = new DropdownController(this, {
+    queryToggleElement: () => this.toggleElement ?? null,
+    queryMenuElement: () => this.menuElement ?? null,
+    queryItems: () =>
+      this.shadowRoot?.querySelectorAll<HTMLElement>("a[role='menuitem']") ??
+      null,
+    queryFocused: () =>
+      (this.shadowRoot?.activeElement ?? null) as HTMLElement | null,
+  });
 
   constructor() {
     super();

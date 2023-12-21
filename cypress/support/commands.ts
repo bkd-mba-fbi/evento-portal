@@ -62,6 +62,7 @@ Cypress.Commands.add(
             oAuthServer: "https://eventotest.api",
             oAuthPrefix: "/OAuth",
             oAuthClientId: "cypress",
+            notificationRefreshTime: 30,
           },
         };
       `,
@@ -84,6 +85,10 @@ Cypress.Commands.add(
       "https://eventotest.api/restApi/TeacherSubstitutions/current",
       [],
     );
+
+    cy.intercept("GET", "https://eventotest.api/restApi/UserSettings/Cst", {
+      Settings: [],
+    });
   },
 );
 

@@ -97,20 +97,18 @@ export class SubstitutionsToggle extends LitElement {
   @state()
   private activeSubstitution: Substitution | null = null;
 
-  private dropdown = new DropdownController(
-    this,
-    () => this.toggleElement ?? null,
-    () => this.menuElement?.shadowRoot ?? null,
-    {
-      queryItems: () =>
-        this.menuElement?.shadowRoot?.querySelectorAll<HTMLElement>(
-          "a[role='menuitem']",
-        ) ?? null,
-      queryFocused: () =>
-        (this.menuElement?.shadowRoot?.activeElement ??
-          null) as HTMLElement | null,
-    },
-  );
+  private dropdown = new DropdownController(this, {
+    queryToggleElement: () => this.toggleElement ?? null,
+    queryMenuElement: () => this.menuElement?.shadowRoot ?? null,
+    tabInside: !this.isLargeScreen(),
+    queryItems: () =>
+      this.menuElement?.shadowRoot?.querySelectorAll<HTMLElement>(
+        "a[role='menuitem']",
+      ) ?? null,
+    queryFocused: () =>
+      (this.menuElement?.shadowRoot?.activeElement ??
+        null) as HTMLElement | null,
+  });
 
   connectedCallback(): void {
     super.connectedCallback();

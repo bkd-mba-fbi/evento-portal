@@ -32,6 +32,7 @@ export const templates = {
   saac6cc64d5c17b4f: `Administration`,
   sac1056b6664675ca: `Réserver des salles et des appareils`,
   sb5ffc0faf2cf16da: `Formation continue interne`,
+  sb993cc3240e32971: `Aucune notification`,
   sbd4575edfbf5c84f: `Navigation principale`,
   sc202079fc13ee45a: `Disciplines actuelles`,
   sc217172426ab34d5: `Formation (continue)`,
@@ -42,8 +43,10 @@ export const templates = {
   sccb8c6ab6c0cf3e6: `Terminer le remplacement`,
   scde3342a428aaee8: `Hors ligne`,
   scfa1631260cdd84a: `Tests et évalution`,
+  scff9b2b73fc9a17f: `Notifications`,
   sd10fcf5b06af72f6: `Navigation service`,
   sd11a46c2e7022f58: `Impressum`,
+  sda82f4406693e77c: `Tout effacer`,
   sd79be54b222abcae: `Aucune connexion disponible.`,
   sec148f76974d9b06: `Saisir des détails d'inscription`,
 };

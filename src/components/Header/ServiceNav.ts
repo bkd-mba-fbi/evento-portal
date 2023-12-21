@@ -58,7 +58,7 @@ export class ServiceNav extends LitElement {
     return html`
       <nav aria-label=${msg("Servicenavigation")}>
         <bkd-substitutions-toggle></bkd-substitutions-toggle>
-        <erz-notifications></erz-notifications>
+        <bkd-notifications-toggle></bkd-notifications-toggle>
         <bkd-user-settings></bkd-user-settings>
         <bkd-language-switcher></bkd-language-switcher>
         <bkd-hamburger .open=${this.mobileNavOpen}></bkd-hamburger>

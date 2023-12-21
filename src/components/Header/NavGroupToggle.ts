@@ -57,23 +57,20 @@ export class NavGroupToggle extends LitElement {
   @query("bkd-nav-group-dropdown")
   private menuElement?: NavGroupDropdown;
 
-  private dropdown = new DropdownController(
-    this,
-    () => this.toggleElement ?? null,
-    () =>
+  private dropdown = new DropdownController(this, {
+    queryToggleElement: () => this.toggleElement ?? null,
+    queryMenuElement: () =>
       this.menuElement?.shadowRoot?.querySelector<HTMLElement>(
         'ul[role="menu"]',
       ) ?? null,
-    {
-      queryItems: () =>
-        this.menuElement?.shadowRoot?.querySelectorAll<HTMLElement>(
-          "a[role='menuitem']",
-        ) ?? null,
-      queryFocused: () =>
-        (this.menuElement?.shadowRoot?.activeElement ??
-          null) as HTMLElement | null,
-    },
-  );
+    queryItems: () =>
+      this.menuElement?.shadowRoot?.querySelectorAll<HTMLElement>(
+        "a[role='menuitem']",
+      ) ?? null,
+    queryFocused: () =>
+      (this.menuElement?.shadowRoot?.activeElement ??
+        null) as HTMLElement | null,
+  });
 
   private toggle(event: Event) {
     event.preventDefault();

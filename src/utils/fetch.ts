@@ -46,10 +46,77 @@ export function fetchCurrentSubstitutions(): Promise<
   return fetchApi<ReadonlyArray<Substitution>>(url);
 }
 
+const NOTIFICATION_DATA_KEY = "notificationData";
+type UserSettings = Readonly<{
+  Id: string;
+  Settings: ReadonlyArray<UserSetting>;
+}>;
+type UserSetting = Readonly<{
+  Key: string;
+  Value: string;
+}>;
+export type NotificationDataEntry = Readonly<{
+  id: number;
+  subject: string;
+  body: string;
+}>;
+
+export async function fetchNotifications(): Promise<
+  ReadonlyArray<NotificationDataEntry>
+> {
+  const url = `${envSettings.apiServer}/UserSettings/Cst`;
+  const { Settings } = await fetchApi<UserSettings>(url);
+  const notificationData = Settings.find(
+    (setting) => setting.Key === NOTIFICATION_DATA_KEY,
+  )?.Value;
+  return notificationData ? JSON.parse(notificationData) : [];
+}
+
+export function updateNotifications(
+  notifications: ReadonlyArray<NotificationDataEntry>,
+): Promise<void> {
+  const url = `${envSettings.apiServer}/UserSettings/Cst`;
+  const userSettings: UserSettings = {
+    Id: "Cst",
+    Settings: [
+      { Key: NOTIFICATION_DATA_KEY, Value: JSON.stringify(notifications) },
+    ],
+  };
+  return fetchApi(
+    url,
+    { method: "PATCH", body: JSON.stringify(userSettings) },
+    true,
+  );
+}
+
+function fetchApi(
+  url: string | URL,
+  options:
+    | Readonly<{
+        method?: string;
+        body?: string;
+      }>
+    | undefined,
+  emptyResponse: true,
+): Promise<void>;
+function fetchApi<T = unknown>(
+  url: string | URL,
+  options?: Readonly<{
+    method?: string;
+    body?: string;
+  }>,
+): Promise<T>;
 async function fetchApi<T = unknown>(
   url: string | URL,
-  { method = "GET" } = {},
-): Promise<T> {
+  {
+    method = "GET",
+    body = undefined,
+  }: Readonly<{
+    method?: string;
+    body?: string;
+  }> = {},
+  emptyResponse?: true,
+): Promise<T | void> {
   const { accessToken } = tokenState;
   if (!accessToken) {
     throw new Error("No token available");
@@ -60,7 +127,8 @@ async function fetchApi<T = unknown>(
     "Content-Type": "application/json",
   });
 
-  const response = await fetch(url, { method, headers });
-  const json = await response.json();
-  return json;
+  const response = await fetch(url, { method, headers, body });
+  if (!emptyResponse) {
+    return response.json();
+  }
 }

@@ -133,13 +133,14 @@ export class Header extends LitElement {
     new StateController(this, portalState);
   }
 
-  private mobileNav = new DropdownController(
-    this,
-    () =>
-      this.serviceNavElement?.shadowRoot?.querySelector("bkd-hamburger") ??
-      null,
-    () => this.mobileNavElement?.shadowRoot ?? null,
-  );
+  private mobileNav = new DropdownController(this, {
+    queryToggleElement: () =>
+      this.serviceNavElement?.shadowRoot?.querySelector<HTMLElement>(
+        "bkd-hamburger",
+      ) ?? null,
+    queryMenuElement: () => this.mobileNavElement?.shadowRoot ?? null,
+    tabInside: true,
+  });
 
   private handleLogoClick(event: MouseEvent) {
     event.preventDefault();
