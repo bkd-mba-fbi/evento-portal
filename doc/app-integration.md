@@ -4,7 +4,7 @@
 
 ## Build Artefacts in public/ Directory
 
-A static build of the _apps_ is committed to this repository in the [public/apps/](../public/apps/) directory. In case of the [webapp-schulverwaltung](https://github.com/bkd-mba-fbi/webapp-schulverwaltung) this happens automatically via a GitHub Actions Workflow). For the other _apps_ the latest build has to be committed manually.
+A static build of the _apps_ is committed to this repository in the [public/apps/](../public/apps/) directory. In case of the [webapp-schulverwaltung](https://github.com/bkd-mba-fbi/webapp-schulverwaltung) this happens automatically via a GitHub Actions Workflow. For the other _apps_ the latest build has to be committed manually.
 
 For more details see [Deployment View](./sad.md#deployment-view).
 

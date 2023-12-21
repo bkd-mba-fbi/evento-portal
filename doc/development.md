@@ -19,9 +19,9 @@ Start the development server:
 npm start
 ```
 
-The application is now running on http://localhost:3000
+The application is then running on http://localhost:3000.
 
-To be able to login with the test users you have to be in a trusted IP range or the OAuth provider requires 2FA to login (i.e. you can't login).
+To be able to log in with the test users you have to be in a trusted IP range or the OAuth provider requires 2FA to login (i.e. you can't log in).
 
 ## Build
 
@@ -33,11 +33,17 @@ npm run build
 
 The build artifacts will be stored in the `dist/` directory.
 
+You can also visualize the contents of the generated bundle by running:
+
+```
+npm run analyze
+```
+
 ## Linting & Testing
 
 ### Linting
 
-Run TypeScript compiler & ESLint:
+Verify TypeScript typing and check source files with [ESLint](https://eslint.org/):
 
 ```
 npm run lint

@@ -4,48 +4,57 @@
 
 ```mermaid
 gitGraph
-   commit tag: "1.3.0"
+  commit tag: "1.3.0"
 
-   branch test order: 3
+  branch test order: 3
 
-   checkout main
-   branch production order: 4
+  checkout main
+  branch production order: 4
 
-   checkout main
-   commit
+  checkout main
+  commit
 
-   branch feature/1001-footer-links order: 1
-   checkout feature/1001-footer-links
-   commit
-   commit
-   commit
-   checkout main
-   merge feature/1001-footer-links
+  branch feature/1001-footer-links order: 1
+  checkout feature/1001-footer-links
+  commit
+  commit
+  commit
+  checkout main
+  merge feature/1001-footer-links
 
-   branch bug/1002-fix-styling order: 2
-   checkout bug/1002-fix-styling
-   commit
-   checkout main
-   merge bug/1002-fix-styling
+  branch bug/1002-fix-styling order: 2
+  checkout bug/1002-fix-styling
+  commit
+  checkout main
+  merge bug/1002-fix-styling
 
-   commit
-   commit
+  commit
+  commit
 
-   checkout test
-   merge main tag: "1.4.0"
+  checkout test
+  merge main tag: "1.4.0"
 
-   checkout production
-   merge test tag: "1.4.0"
+  checkout production
+  merge test tag: "1.4.0"
 
-   checkout main
-   branch hotfix/1003-critical-issue order: 5
-   commit
-   checkout production
-   merge hotfix/1003-critical-issue tag: "1.4.1"
+  checkout production
+  branch hotfix/1003-critical-issue order: 5
 
-   checkout main
-   commit
-   commit
+  checkout main
+  commit
+  commit
+
+  checkout hotfix/1003-critical-issue
+  commit tag: "1.4.1"
+
+  checkout production
+  merge hotfix/1003-critical-issue
+
+  checkout test
+  merge hotfix/1003-critical-issue
+
+  checkout main
+  merge hotfix/1003-critical-issue
 ```
 
 - The active development happens in the `main` branch.
@@ -61,7 +70,7 @@ gitGraph
 
 Inspired by the article [How to Write a Git Commit Message](https://cbea.ms/git-commit/), we follow this convention for Git commit messages:
 
-- Language: Englisch
+- Language: English
 - Short and concise message, ideally under 50 characters ([Details](https://cbea.ms/git-commit/#limit-50))
 - Capitalize the message ([Details](https://cbea.ms/git-commit/#capitalize))
 - Do not end the message with a period ([Details](https://cbea.ms/git-commit/#end))

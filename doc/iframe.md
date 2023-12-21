@@ -28,7 +28,7 @@ The resizing of the iframe is implemented as such:
 
 ## Scrolling
 
-Since the iframe is constantly resized, it never has a vertical scrollbar. This is an issue when _apps_ want to scroll programmatically. Thus the `frame.js` scripts monkey-patches the following parts of the browser API to apply the scrolling in the _Evento Portal_ window instead, incorporating the iframe's top offset:
+Since the iframe is constantly resized, it never has a vertical scrollbar. This is an issue when _apps_ want to scroll programmatically. Thus, the `frame.js` scripts monkey-patches the following parts of the browser API to apply the scrolling in the _Evento Portal_ window instead, incorporating the iframe's top offset:
 
 - `window.scrollTo` & `window.scroll`
 - `window.scrollBy`

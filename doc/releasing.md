@@ -50,7 +50,7 @@ You can build & deploy new releases with GitHub Actions as described in the foll
       git push
       ```
 
-   1. Merge the hofix branch into `main`:
+   1. Merge the hotfix branch into `main`:
 
       ```
       git checkout main
