@@ -39,6 +39,10 @@ export class NotificationsDropdown extends LitElement {
         background: var(--bkd-func-bg-white);
         z-index: var(--bkd-z-index-dropdown);
         min-width: 33vw;
+        max-height: 90vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
       }
 
       .header {
@@ -73,6 +77,10 @@ export class NotificationsDropdown extends LitElement {
           cursor: default;
           background-color: var(--bkd-func-bg-grey);
         }
+      }
+
+      .content {
+        overflow-y: auto;
       }
 
       .pending,
