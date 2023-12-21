@@ -75,4 +75,4 @@ Inspired by the article [How to Write a Git Commit Message](https://cbea.ms/git-
 - Capitalize the message ([Details](https://cbea.ms/git-commit/#capitalize))
 - Do not end the message with a period ([Details](https://cbea.ms/git-commit/#end))
 - Use the imperative mood, so `Fix bug with X` instead of `Fixed bug with X` or `More fixes for broken stuff` ([Details](https://cbea.ms/git-commit/#imperative))
-- If available, reference issue: `Add X #12345`
+- If available, reference issue: `Add X #123`

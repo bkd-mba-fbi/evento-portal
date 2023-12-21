@@ -36,4 +36,6 @@ An _app_ can rely on the following information that is provided by the _Evento P
 | Access token expiration (legacy) | `localStorage.getItem("CLX.TokenExpire")`                                                                                                   | Value: Unix timestamp in milliseconds when access token expires as string.                                                                                                       |
 | User's locale                    | • `localStorage.getItem("uiCulture")`<br>• Document's `lang` attribute (`<html lang="de-CH">`)<br>• `culture_info` property in access token | Value: string of user's locale such as `de-CH` or `fr-CH`                                                                                                                        |
 
-⚠️ Important: _apps_ should only read, never update the provided values in session- or localStorage.
+⚠️ Important: _Apps_ should only read, never update the provided values in session- or localStorage.
+
+⚠️ Important: Note, that for historical reasons the tokens are stored including double quotes (older _apps_ assume it to be a valid JSON string and execute `JSON.parse` on the value).

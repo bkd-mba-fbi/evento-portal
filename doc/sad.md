@@ -139,8 +139,8 @@ graph LR
 
 ### Technical Interfaces
 
-- [EVENTO API](https://clx-evento.bitbucket.io/master_eventodoc/Api/)
-- [EVENTO OAuth 2.0 Provider](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Login-OAuth-Server/)
+- [EVENTO API](https://clx-evento.bitbucket.io/master_eventodoc/Api/) (external documentation)
+- [EVENTO OAuth 2.0 Provider](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Login-OAuth-Server/) (external documentation)
 - [iframe Limitations & Workarounds](./iframe.md)
 
 # Solution Strategy
@@ -221,7 +221,7 @@ sequenceDiagram
   deactivate app
 ```
 
-This flow is implemented with the help of the [@badgateway/oauth2-client](https://www.npmjs.com/package/@badgateway/oauth2-client) library in [auth.ts](../src/utils/auth.ts). The storing of the tokens is realized with [token-state.ts](../src/state/token-state.ts). See also the EVENTO documentation page [OAuth 2.0 Authorization Code Flow mit Proof Key for Code Exchange (PKCE)](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Login-OAuth-Server/#authorization-code-flow-mit-proof-key-for-code-exchange-pkce).
+This flow is implemented with the help of the [@badgateway/oauth2-client](https://www.npmjs.com/package/@badgateway/oauth2-client) library in [auth.ts](../src/utils/auth.ts). The persistance of the tokens in the browser is realized with [token-state.ts](../src/state/token-state.ts). See also the EVENTO documentation page [OAuth 2.0 Authorization Code Flow mit Proof Key for Code Exchange (PKCE)](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Login-OAuth-Server/#authorization-code-flow-mit-proof-key-for-code-exchange-pkce).
 
 ## Switch Apps/Scopes
 
@@ -278,7 +278,7 @@ Apparently, at the time writing this, the _Evento API_ does not provide any way 
 
 - Whenever the scope changes, i.e. the user clicked in the navigation:
   - If the refresh token _fully expired_, redirect to the login page (as described in the "Authentication" flow above).
-  - If the access token _half expired_, redirect to the [refresh token endpoint](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/RefreshToken/#refresh-mit-public-client) to get a new one. Like this, we try to make sure that the token does not expire during usage of the _apps_.
+  - If the access token _half expired_, redirect to the [refresh token endpoint](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/RefreshToken/#refresh-mit-public-client) to get a new one. Like this, we try to make sure that the token does not expire during usage of the _apps_ (in a potentially unsaved state).
 - Start timers to detect when tokens expire:
   - If the refresh token expired (timer fires), redirect to the login page (as described in the "Authentication" flow above).
   - If the access token expired (time fires), redirect to the [refresh token endpoint](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/RefreshToken/#refresh-mit-public-client) to get a new one.
