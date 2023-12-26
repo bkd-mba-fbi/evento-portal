@@ -17,6 +17,7 @@
             this.set('savingCount', 0);
             this.set('availableHeaderList', []);
             this.set('currentHeaderIndex', 0);
+            this.set('currentHeaderId', 'grade');
             this.set('toggleModal', false);
             this.set('showDefaultNoteModal', false);
             this.set('showDeleteNoteModal', false);
@@ -51,6 +52,20 @@
         },
 
         actions: {
+            addUnregisteredStudent(){
+                var item = api.helpers.transformUnregisteredStudent({
+                    FullName: "",
+                    Comment: ""
+                }, this.get('model.UnregisteredStudents').length, this.get('model.SubscriptionDetails'));
+
+                this.get('model.UnregisteredStudents').push(item);
+                console.log(this.get('model.UnregisteredStudents'));
+                this.set('model.UnregisteredStudents', this.get('model.UnregisteredStudents').concat([]));
+
+                Ember.run.schedule("afterRender",this,function() {
+                    document.querySelector('table.unregisteredStudents tr:last-child input.fullName')?.focus();
+                });
+            },
             dismissNotice(msg, i) {
                 return this.dismissNotice(msg, i);
             },
@@ -197,6 +212,7 @@
 
                 var headers = this.get('availableHeaderList');
                 this.set('currentHeaderIndex', headers.data.findIndex(a => a.header === item.header));
+                this.set('currentHeaderId', item.id);
             },
 
             cancelClicked: function () {
@@ -336,6 +352,12 @@
                             that.set('toggleModal', true);
                         }).appendTo(contextMenu);
 
+                        if (that.model.IsUnregisteredStudentsEnabled) {
+                            var method_three = guiHelpers.getDiv(undefined, translate.getString('addUnregisteredStudent'));
+                            method_three.click(function () {
+                                that.send('addUnregisteredStudent');
+                            }).appendTo(contextMenu);
+                        }
                     },
                     true);
             },
@@ -350,8 +372,9 @@
                 var headerDetails = JSON.parse(JSON.stringify(this.get('headerDetails')));
                 var currentHeaderIndex = this.get('currentHeaderIndex');
 
-                var itemObject = (translationKey, isVisible = false) => {
+                var itemObject = (headerId, translationKey, isVisible = false) => {
                     return {
+                        id: headerId,
                         original: translationKey,
                         isActive: false,
                         header: ['comment', 'grade'].includes(translationKey) ? translate.getString(translationKey) : translationKey,
@@ -361,15 +384,15 @@
 
                 for (var header of headerDetails) {
                     if (header.VssBezeichnung)
-                        menuItems.push(itemObject(header.VssBezeichnung));
+                        menuItems.push(itemObject(header.VssId, header.VssBezeichnung));
                 }
 
                 if (this.model.Event && this.model.Event.Scale) {
                     if (this.model.Event.Scale.CommentsAllowed) {
-                        menuItems.unshift(itemObject('comment'));
+                        menuItems.unshift(itemObject('comment', 'comment'));
                     }
                     if (this.model.Event.Scale) {
-                        menuItems.unshift(itemObject('grade'));
+                        menuItems.unshift(itemObject('grade', 'grade'));
                     }
                 }
 

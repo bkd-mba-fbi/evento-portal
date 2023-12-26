@@ -158,6 +158,15 @@
             },
             formatPhone: function (text) {
                 return '<a href="tel:' + text + '">' + text + '</a>';
+            },
+
+            debounce(timeout, func) {
+                timeout = timeout || 500;
+                let timer;
+                return function (...args) {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => { func.apply(this, args); }, timeout);
+                };
             }
         },
 

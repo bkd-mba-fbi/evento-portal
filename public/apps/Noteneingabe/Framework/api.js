@@ -4,8 +4,9 @@
     'ember',
     'storage',
     'constants',
-    'loginHelpers'
-], function ($, appConfig, ember, storage, constants, loginHelpers) {
+    'loginHelpers',
+    'settings',
+], function ($, appConfig, ember, storage, constants, loginHelpers, settings) {
 	var tryParseJson = function (str) {
         try {
             return JSON.parse(str);
@@ -26,6 +27,9 @@
             },
             getConfigurations: function(configType) {
                 return api.getEmber('Configurations/' + configType);
+            },
+            getGradingConfiguration: function() {
+                return api.getEmber('Configurations/Grading');
             },
             getAddresses: function(idPerson) {
                 return api.getEmber('Addresses/?idPerson=' + idPerson);
@@ -125,6 +129,9 @@
             getGradingItems: function(idEvent) {
                 return api.getEmber('GradingItems/?idEvent=' + idEvent);
             },
+            getGradingItemsForUnregisteredStudents: function(idEvent) {
+                return api.getEmber(`Events/${idEvent}/UnregisteredStudents`);
+            },
             getGradingScale: function(idGradingScale) {
                 return api.getEmber('GradingScales/' + idGradingScale);
             },
@@ -134,6 +141,74 @@
             getEventsToBeGraded: function() {
                 return api.getEmber('/Events/Gradings');
             },
+        },
+
+        helpers: {
+            // Transforms data for UnregisteredStudents from the format in which
+            // they are stored, into a format that more closely resembles a
+            // GradingItem, so they can be used with the same controls that
+            // often expect a specific structure.
+            transformUnregisteredStudents(items, subscriptionDetails, columnAdIds, contentAdIds) {
+                return items.map((v, index) => {
+                    return api.helpers.transformUnregisteredStudent(v, index, subscriptionDetails, columnAdIds, contentAdIds)
+                })
+            },
+            transformUnregisteredStudent(data, index, subscriptionDetails, columnAdIds, contentAdIds) {    
+                var subscriptionId = subscriptionDetails[0].IdSubscription;
+                subscriptionDetails = subscriptionDetails.filter(v => v.IdSubscription == subscriptionId);
+
+                columnAdIds ??= settings.grading.adColumns;
+                contentAdIds ??= settings.grading.adRange;
+
+                var item = {
+                    "FullName": data.FullName,
+                    "GradeId": parseInt(data.GradeId),
+                    "Grade": data.GradeId ? null : data.Grade,
+                    "Comment": data.Comment,
+                    "MatriculationNumber": data.MatriculationNumber,
+                    "toggleClassName": 'collapseTriangle triangleCollapsed',
+                    "isExpanded": false,
+                };
+                var sdMap = {};
+                var sdItems = [];
+                var sdColumnItems = [];
+                for(var sd of data.SubscriptionDetails ?? []) {
+                    sdMap[sd.VssId] = sd;
+                }
+                for (var sd of subscriptionDetails) {
+                    var sdItem = {
+                        Id: `SD-${index}-${sd.VssId}`,
+                        IdObject: `SD-${index}-${sd.VssId}`,
+                        VssId: sd.VssId,
+                        VssBezeichnung: sd.VssBezeichnung,
+                        VssDesignation: sd.VssDesignation,
+                        VssStyleDescription: sd.VssStyleDescription,
+                        VssType: sd.VssType,
+                        DropdownItems: sd.DropdownItems,
+                        EnteringType: sd.EnteringType,
+                        Required: sd.Required,
+                        ContentTypeId: sd.ContentTypeId,
+                        ShowAsRadioButtons: sd.ShowAsRadioButtons,
+                        Tooltip: sd.Tooltip,
+                        VssTypEx: sd.VssTypEx,
+                        VssStyle: sd.VssStyle,
+                    };
+                    if (sdMap[sd.VssId]) {
+                        sdItem.Value = sdMap[sd.VssId].Value;
+                    }
+
+                    if (columnAdIds.contains(sdItem.VssId)) {
+                        sdColumnItems.push(sdItem);
+                    } else if (contentAdIds.contains(sdItem.VssId)) {
+                        sdItems.push(sdItem);
+                    }
+                    
+                }
+                item.SubscriptionDetailColumns = sdColumnItems;
+                item.SubscriptionDetails = sdItems;
+
+                return item;
+            }
         },
 
         //common urls
@@ -324,13 +399,19 @@
         updateGradingItem: function(model, success, error) {
             api.put('GradingItems/' + model.IdSubscription, model, success, error);
         },
-
         updateGradingItems: function(idEvent, models, success, error) {
             api.put('GradingItems/?idEvent=' + idEvent, models, success, error);
         },
-
+        updateUnregisteredStudents: function(idEvent, model, success, error) {
+            api.put(
+                `Events/${idEvent}/UnregisteredStudents`,
+                model,
+                success,
+                error
+            );
+        },
         updateExcelGradingList: function(file, idEvent, ads, success, error) {
-            api.postFile('Files/ExcelGradingLists/' + idEvent + '?ads=' + ads + '&token=' + api.getLoginToken(),
+            api.postFile(`Files/ExcelGradingLists/${idEvent}?ads=${ads}&token=${api.getLoginToken()}`,
                 file,
                 success, error);
         },
