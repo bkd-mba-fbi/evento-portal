@@ -87,7 +87,7 @@
     });
 
     app.loadGradingModels = function(params) {
-        return new ember.RSVP.hash({
+        var result = {
             Event: api.ember.getEvent(params.idEvent).then(function (event) {
                 return new ember.RSVP.Promise(function (resolve) {
                     if (!event || !event.GradingScaleId) {
@@ -102,7 +102,28 @@
                 });
             }),
             SubscriptionDetails: api.ember.getSubscriptionDetailsByEvent(params.idEvent),
-            GradingItems: api.ember.getGradingItems(params.idEvent)
+            GradingItems: api.ember.getGradingItems(params.idEvent),
+        }; 
+
+        var unregisteredStudents = Promise.all([api.ember.getGradingItemsForUnregisteredStudents(params.idEvent), result.SubscriptionDetails])
+            .then(([unregisteredStudents, subscriptionDetails]) => {
+                var isUnregisteredStudentsEnabled = unregisteredStudents != null;
+                result.IsUnregisteredStudentsEnabled = isUnregisteredStudentsEnabled;
+
+                if (isUnregisteredStudentsEnabled) {
+                    var unregisteredStudentsTransformed = api.helpers.transformUnregisteredStudents(unregisteredStudents, subscriptionDetails, settings.grading.adColumns, settings.grading.adRange);
+                    return unregisteredStudentsTransformed;
+                } else {
+                    return [];
+                }
+            });
+
+        result.UnregisteredStudents = unregisteredStudents;
+        result.IsUnregisteredStudentsEnabled = false;
+
+        return new ember.RSVP.hash(result).then(v => {
+            v.IsUnregisteredStudentsEnabled = result.IsUnregisteredStudentsEnabled;
+            return v;
         });
     };
 
