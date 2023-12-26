@@ -9,16 +9,16 @@
   <base href="/">
 
   <!-- CLX -->
-  <link rel="stylesheet" href="./assets/css/bootstrap-clx.min.css?bust=22.2.20230420165944">
+  <link rel="stylesheet" href="./assets/css/bootstrap-clx.min.css?bust=23.2.20231215030941">
 
-  <link href="./assets/icons/open-iconic/css/open-iconic-bootstrap.min.css?bust=22.2.20230420165944" rel="stylesheet">
+  <link href="./assets/icons/open-iconic/css/open-iconic-bootstrap.min.css?bust=23.2.20231215030941" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <title>Raumreservation</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
   <link rel="icon" sizes="64x64" href="./assets/icons/appicon.png">
-<link rel="stylesheet" href="styles.css?bust=22.2.20230420165944"></head>
+<link rel="stylesheet" href="styles.css?bust=23.2.20231215030941"></head>
 
 <body>
 
@@ -29,6 +29,6 @@
     </div>
   </app-root>
 
-<script type="text/javascript" src="runtime.js?bust=22.2.20230420165944"></script><script type="text/javascript" src="polyfills.js?bust=22.2.20230420165944"></script><script type="text/javascript" src="main.js?bust=22.2.20230420165944"></script></body>
+<script type="text/javascript" src="runtime.js?bust=23.2.20231215030941"></script><script type="text/javascript" src="polyfills.js?bust=23.2.20231215030941"></script><script type="text/javascript" src="main.js?bust=23.2.20231215030941"></script></body>
 
 </html>
