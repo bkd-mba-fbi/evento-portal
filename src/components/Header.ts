@@ -184,6 +184,13 @@ export class Header extends LitElement {
   render() {
     return html`
       <header>
+        <a class="logo" href=${buildUrl("home")}
+          ><img
+            src="logo.svg"
+            alt=${msg("Evento Startseite")}
+            @click=${this.handleLogoClick.bind(this)}
+        /></a>
+        <div class="logo-caption">${portalState.instanceName}</div>
         ${when(
           navigator.onLine, // Hide service nav when offline
           () =>
@@ -193,13 +200,6 @@ export class Header extends LitElement {
               @bkdsettingsitemclick=${this.handleSettingsItemClick.bind(this)}
             ></bkd-service-nav> `,
         )}
-        <a class="logo" tabindex="1" href=${buildUrl("home")}
-          ><img
-            src="logo.svg"
-            alt=${msg("Evento Startseite")}
-            @click=${this.handleLogoClick.bind(this)}
-        /></a>
-        <div class="logo-caption">${portalState.instanceName}</div>
         ${when(
           navigator.onLine, // Hide nav when offline
           () =>
