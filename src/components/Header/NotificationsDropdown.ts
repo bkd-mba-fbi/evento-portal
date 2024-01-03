@@ -45,38 +45,38 @@ export class NotificationsDropdown extends LitElement {
         flex-direction: column;
       }
 
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 300;
+        line-height: 1.16;
+      }
+
       .header {
         display: flex;
         justify-content: space-between;
         border-bottom: 1px solid var(--bkd-func-bg-grey);
         align-items: center;
         padding: 1rem;
+      }
 
-        h2 {
-          font-size: 1.5rem;
-          font-weight: 300;
-          line-height: 1.16;
-        }
+      .header button {
+        font-weight: 400;
+        background-color: var(--bkd-func-bg-anthrazit);
+        color: var(--bkd-func-bg-white);
+        border-radius: 40px;
+        border: none;
+        padding: 0.5rem 1.5rem;
+        cursor: pointer;
+      }
 
-        button {
-          font-weight: 400;
-          background-color: var(--bkd-func-bg-anthrazit);
-          color: var(--bkd-func-bg-white);
-          border-radius: 40px;
-          border: none;
-          padding: 0.5rem 1.5rem;
-          cursor: pointer;
-        }
+      .header button:hover,
+      .header button:focus {
+        background-color: var(--bkd-func-bg-anthrazit-hover);
+      }
 
-        button:hover,
-        button:focus {
-          background-color: var(--bkd-func-bg-anthrazit-hover);
-        }
-
-        button:disabled {
-          cursor: default;
-          background-color: var(--bkd-func-bg-grey);
-        }
+      .header button:disabled {
+        cursor: default;
+        background-color: var(--bkd-func-bg-grey);
       }
 
       .content {
@@ -98,28 +98,28 @@ export class NotificationsDropdown extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 1rem;
+      }
 
-        .text {
-          display: flex;
-          justify-content: space-between;
-        }
+      .notification button {
+        align-self: end;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        padding: 0;
+        display: flex;
+      }
 
-        .subject {
-          padding-right: 1rem;
-        }
+      .text {
+        display: flex;
+        justify-content: space-between;
+      }
 
-        .body {
-          text-align: right;
-        }
+      .subject {
+        padding-right: 1rem;
+      }
 
-        button {
-          align-self: end;
-          cursor: pointer;
-          border: none;
-          background: transparent;
-          padding: 0;
-          display: flex;
-        }
+      .body {
+        text-align: right;
       }
 
       /* For medium & small screens */

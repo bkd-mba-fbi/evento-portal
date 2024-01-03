@@ -12,11 +12,11 @@ We support the evergreen browsers (Chrome, Firefox, Safari, Edge).
 
 When testing browser compatibility with [BrowserStack](https://www.browserstack.com/), consider the following combination of Dev Server and URL to use.
 
-| OS        | Browser               | Dev Server                   | URL                        | Additional configuration                                                                                     |
-| --------- | --------------------- | ---------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| Windows   | Chrome, Firefox, Edge | `npm start`                  | `http://localhost:3000`    |                                                                                                              |
-| Android   | Chrome                | `npm start`                  | `http://localhost:3000`    |                                                                                                              |
-| macOS/iOS | Safari                | `npm run start:browserstack` | `http://bs-local.com:3000` | Add `127.0.0.1 bs-local.com` to `/etc/hosts`<br/>Change `oAuthClientId` to `"browserstack"` In `settings.js` |
+| OS        | Browser               | Dev Server                   | URL                         | Additional configuration                                                                                     |
+| --------- | --------------------- | ---------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Windows   | Chrome, Firefox, Edge | `npm start`                  | `http://localhost:3000`     |                                                                                                              |
+| Android   | Chrome                | `npm start`                  | `http://localhost:3000`     |                                                                                                              |
+| macOS/iOS | Safari                | `npm run start:browserstack` | `https://bs-local.com:3000` | Add `127.0.0.1 bs-local.com` to `/etc/hosts`<br/>Change `oAuthClientId` to `"browserstack"` In `settings.js` |
 
 ### Authentication & 2FA
 
