@@ -183,7 +183,7 @@ export class Header extends LitElement {
 
   render() {
     return html`
-      <header>
+      <header role="banner">
         <a class="logo" href=${buildUrl("home")}
           ><img
             src="logo.svg"
