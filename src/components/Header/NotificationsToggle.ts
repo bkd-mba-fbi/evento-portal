@@ -125,6 +125,7 @@ export class NotificationsToggle extends LitElement {
         id="notifications-toggle"
         type="button"
         aria-label="${msg("Benachrichtigungen")}"
+        aria-expanded=${this.dropdown.open}
         @click="${() => this.dropdown.toggle()}"
       >
         ${unsafeHTML(bellIcon)}

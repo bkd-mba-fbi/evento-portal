@@ -89,7 +89,7 @@ export class NavGroupToggle extends LitElement {
         href="#"
         @click=${this.toggle.bind(this)}
         class=${classMap({ active: Boolean(this.active) })}
-        .ariaExpanded=${this.dropdown.open}
+        aria-expanded=${this.dropdown.open}
         aria-haspopup="menu"
       >
         ${this.group.label}

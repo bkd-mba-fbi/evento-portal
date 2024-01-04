@@ -251,7 +251,7 @@ export class MobileNav extends LitElement {
           group: true,
           open,
         })}
-        .ariaExpanded=${open}
+        aria-expanded=${open}
       >
         <button
           class="group-header"
