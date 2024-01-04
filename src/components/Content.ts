@@ -108,7 +108,7 @@ export class Content extends LitElement {
     this.renderedOffline = !navigator.onLine;
     if (!navigator.onLine) {
       // Show message when offline
-      return html`<main>
+      return html`<main role="main">
         <h1>${msg("Offline")}</h1>
         <p>${msg("Keine Verbindung vorhanden.")}</p>
       </main>`;
@@ -118,13 +118,13 @@ export class Content extends LitElement {
       // Token scope does not match current app, wait for correct
       // token to be activated in <Portal> component to avoid requests
       // resulting in 403 due to unsufficient rights.
-      return html`<main></main>`;
+      return html`<main role="main"></main>`;
     }
 
     // The keyed directive ensures that the entire iframe and any
     // associated scripts are removed when the application changes.
     return html`
-      <main>
+      <main role="main">
         ${when(
           portalState.app.heading,
           () => html`<h1>${portalState.navigationItem.label}</h1>`,

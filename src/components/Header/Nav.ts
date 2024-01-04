@@ -46,7 +46,7 @@ export class Nav extends LitElement {
   }
 
   render() {
-    return html`<nav aria-label=${msg("Hauptnavigation")}>
+    return html`<nav role="navigation" aria-label=${msg("Hauptnavigation")}>
       ${map(portalState.navigation, (group) =>
         this.renderGroupToggle(
           group,

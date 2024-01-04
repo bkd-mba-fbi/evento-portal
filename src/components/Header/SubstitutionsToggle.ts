@@ -206,7 +206,7 @@ export class SubstitutionsToggle extends LitElement {
         })}
         @click=${this.toggle.bind(this)}
         aria-label=${this.getLabel()}
-        .ariaExpanded=${this.dropdown.open}
+        aria-expanded=${this.dropdown.open}
         aria-haspopup="menu"
       >
         <div class="icon">${unsafeHTML(substitutionIcon)}</div>

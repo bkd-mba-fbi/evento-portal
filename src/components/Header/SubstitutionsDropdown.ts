@@ -228,8 +228,9 @@ export class SubstitutionsDropdown extends LitElement {
 
     return html`
       <ul role="menu" id="substitutions-menu">
-        <li class="dropdown-menu-header">
+        <li role="presentation" class="dropdown-menu-header">
           <button
+            role="menuitem"
             class="dropdown-menu-close"
             @click=${this.handleCloseClick.bind(this)}
           >
@@ -243,8 +244,8 @@ export class SubstitutionsDropdown extends LitElement {
         ${when(
           this.activeSubstitution,
           () =>
-            html`<li class="dropdown-menu-stop">
-              <button @click=${this.handleStopClick.bind(this)}>
+            html`<li role="presentation" class="dropdown-menu-stop">
+              <button role="menuitem" @click=${this.handleStopClick.bind(this)}>
                 ${msg("Stellvertretung beenden")}
               </button>
             </li>`,

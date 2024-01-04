@@ -251,7 +251,7 @@ export class MobileNav extends LitElement {
           group: true,
           open,
         })}
-        .ariaExpanded=${open}
+        aria-expanded=${open}
       >
         <button
           class="group-header"
@@ -305,7 +305,7 @@ export class MobileNav extends LitElement {
 
   render() {
     return html`
-      <nav aria-label=${msg("Mobile Navigation")}>
+      <nav role="navigation" aria-label=${msg("Mobile Navigation")}>
         <ul class="nav">
           ${map(portalState.navigation, this.renderGroup.bind(this))}
         </ul>
