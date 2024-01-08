@@ -184,11 +184,11 @@ export class Header extends LitElement {
   render() {
     return html`
       <header role="banner">
-        <a class="logo" href=${buildUrl("home")}
-          ><img
-            src="logo.svg"
-            alt=${msg("Evento Startseite")}
-            @click=${this.handleLogoClick.bind(this)}
+        <a
+          class="logo"
+          href=${buildUrl("home")}
+          @click=${this.handleLogoClick.bind(this)}
+          ><img src="logo.svg" alt=${msg("Evento Startseite")}
         /></a>
         <div class="logo-caption">${portalState.instanceName}</div>
         ${when(
