@@ -15,6 +15,10 @@ function loadJS(FILE_URL, async = true) {
 loadJS('../MasterExcel/jquery.min.js', true);
 loadJS('../MasterExcel/X.js', false);
 
+function getLanguage(){
+  return X.language();
+}
+
 
   // Funktion um Buttons einzufügen
 function insertButtonsGrading() {
@@ -39,16 +43,16 @@ function insertButtonsGrading() {
       '\
 <div id="overlay-toggle-embedded" class="btn-clearGrades ms-2 dropdown-toggle excelDropdown">\
 <span>' +
-      X.strings[X.lang].views[2].start_dropdown +
+      X.strings[getLanguage()].views[2].start_dropdown +
       ' </span>\
 <div class="excelDropdown-content">\
 <a class="textButton" onclick="X.showOverlay(2);"> ' +
-      X.strings[X.lang].views[2].start_button +
+      X.strings[getLanguage()].views[2].start_button +
       " </a>" +
       (appendExcelBt.length > 0
         ? '\
 <a class="textButton" onclick="X.showOverlay(3);"> ' +
-          X.strings[X.lang].views[3].start_button +
+          X.strings[getLanguage()].views[3].start_button +
           " </a>"
         : "") +
       "\
@@ -89,7 +93,7 @@ function insertButtonsTest() {
   });              
   
   var buttons_html = '<button id="overlay-toggle-embedded-test" type="button" class="btn btn-outline-primary ms-2 dropdown-toggle excelDropdown">\
-      <span>' + X.strings[X.lang].views[2].start_dropdown + ' </span>\
+      <span>' + X.strings[getLanguage()].views[2].start_dropdown + ' </span>\
       <div class="excelDropdown-content">'
       +dropdownItems+
   '</div> </button>';
