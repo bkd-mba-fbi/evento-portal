@@ -39,7 +39,7 @@ export class Hamburger extends LitElement {
     return html`
       <button
         class="hamburger"
-        .ariaExpanded=${this.open}
+        aria-expanded=${this.open}
         aria-label=${msg("Menü")}
         @click=${this.toggle.bind(this)}
       >

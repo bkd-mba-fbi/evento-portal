@@ -56,7 +56,7 @@ export class ServiceNav extends LitElement {
 
   render() {
     return html`
-      <nav aria-label=${msg("Servicenavigation")}>
+      <nav role="navigation" aria-label=${msg("Servicenavigation")}>
         <bkd-substitutions-toggle></bkd-substitutions-toggle>
         <bkd-notifications-toggle></bkd-notifications-toggle>
         <bkd-user-settings></bkd-user-settings>

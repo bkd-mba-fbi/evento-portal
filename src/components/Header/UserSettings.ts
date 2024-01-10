@@ -138,7 +138,7 @@ export class UserSettings extends LitElement {
         type="button"
         @click=${() => this.dropdown.toggle()}
         aria-label=${msg("Menü Benutzereinstellungen")}
-        .ariaExpanded=${this.dropdown.open}
+        aria-expanded=${this.dropdown.open}
         aria-haspopup="menu"
       >
         <img src="/icons/settings.svg" alt="" width="32" height="32" />

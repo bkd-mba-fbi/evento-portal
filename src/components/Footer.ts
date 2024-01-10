@@ -96,7 +96,7 @@ export class Footer extends LitElement {
 
   render() {
     return html`
-      <footer>
+      <footer role="contentinfo">
         <div class="copyright">${msg("© Bildungs- und Kulturdirektion")}</div>
         <div class="footer-nav">
           <a
