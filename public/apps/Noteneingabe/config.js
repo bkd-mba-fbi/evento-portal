@@ -1,6 +1,6 @@
 define({
     // add the version here to force cache to reload files
-    urlArgs: 'bust=EVT2022.R2.P2.20230420041833',
+    urlArgs: 'bust=EVT2023.R2.20231215030709',
     //baseUrl: '../JSModules',
     app_name: 'CLX.Evento Modules',
     shim: {
@@ -69,6 +69,7 @@ define({
         'templates/grading': {
             deps: [
                 'components/gradingItemComponent',
+                'components/unregisteredStudentsComponent',
                 'controllers/gradingController'
             ]
         },
@@ -186,6 +187,7 @@ define({
         'applicationHelpers': './Framework/applicationHelpers',
         'guiHelpers': './Framework/guiHelpers',
         'urlHelpers': './Framework/urlHelpers',
+        'webModuleConfig': './Framework/webModuleConfig',
         'arrayHelpers': './Framework/arrayHelpers',
         'mathHelpers': './Framework/mathHelpers',
         'flotHelpers': './Framework/flotHelpers',
@@ -200,6 +202,7 @@ define({
         'htmlTemplates': './App/HtmlTemplates',
         'controllers': './App/Controllers',
         'components': './App/Components',
+        'helpers': './App/Helpers',
         'views': './App/Views',
         'constants': './Framework/constants',
         /*libs*/

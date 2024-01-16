@@ -14,9 +14,9 @@
                 this.loginRedirectUrl += '/Authorization/';
                 this.loginRedirectUrl += appConfig.instanceId;
                 this.loginRedirectUrl += '/Login';
-                this.loginRedirectUrl += '?clientId=';
+                this.loginRedirectUrl += '?client_id=';
                 this.loginRedirectUrl += appConfig.clientId;
-                this.loginRedirectUrl += '&redirectUrl=';
+                this.loginRedirectUrl += '&redirect_uri=';
                 this.loginRedirectUrl += encodeURIComponent(appConfig.webBaseUrl);
 
                 var culture = urlHelpers.getParamIfSet('culture_info');
@@ -29,7 +29,7 @@
                 //refreshTokenUrl
                 this.refreshTokenUrl = appConfig.oauthUrl;
                 this.refreshTokenUrl += '/Authorization/RefreshPublic';
-                this.refreshTokenUrl += '?redirectUrl=';
+                this.refreshTokenUrl += '?redirect_uri=';
                 this.refreshTokenUrl += encodeURIComponent(appConfig.webBaseUrl);
                 this.refreshTokenUrl += '&refresh_token=##refreshToken##&culture_Info=##cultureInfo##&application_scope=';
                 if (settings.applicationScope)

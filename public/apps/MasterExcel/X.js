@@ -223,7 +223,7 @@ var X = {
 	#tsv-overlay-inner { height: 90%; padding: 5% 5%; } \
 	#tsv-overlay-inner-2 { height: 100%; } \
 	/* Bugfix: Google Chrome ändert nur bei display:block Textfeldern mit CSS die Höhe */ \
-	#tsv-data { width: 100%; height: 100%; margin-bottom: 1em; display: block; } \
+	#tsv-data { width: 100%; height: 50%; margin-bottom: 1em; display: block; } \
 	/* Bugfix: MSIE kennt "position: fixed" nicht */ \
 	#tsv-overlay { _position: absolute; } \
 </style>\

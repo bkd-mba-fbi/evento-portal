@@ -18,6 +18,8 @@ You can build & deploy new releases with GitHub Actions as described in the foll
 
 1. Create a hotfix branch named `hotfix/1234-short-description` from the `production` branch (with `1234` being the issue number and `short-description` being a summary of the purpose of the branch).
 
+1. Test hotfix on your environment.
+
 1. Commit your fixes to the hotfix branch, then push the hotfix branch.
 
 1. In the tab bar of the GitHub project select _Actions_:<br>![Release Workflow](assets/images/release_step_1.png)
@@ -30,7 +32,7 @@ You can build & deploy new releases with GitHub Actions as described in the foll
 
 1. When finished, the [package repository](https://github.com/bkd-mba-fbi/evento-portal/pkgs/container/evento-portal) should look similar to the following screenshot:<br>![Hotfix Releases](assets/images/hotfix.png)
 
-1. Now you can advise Bedag to deploy the hotfix.
+1. Now your hotfix will be deploy automatic to test and production.
 
 1. To complete the process, you have to merge back the hotfix changes to `production`, `test` and `main`, or otherwise they would be missing in the next (regular or hotfix) release.
 
