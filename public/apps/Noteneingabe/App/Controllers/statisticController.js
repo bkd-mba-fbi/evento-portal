@@ -3,6 +3,7 @@
     'ember',
     'mathHelpers',
     'uiSettings',
+    'webModuleConfig',
     'translate',
     'flotHelpers',
     'arrayHelpers',
@@ -10,18 +11,28 @@
     'settings',
     'storage',
     'constants',
-    'application'
-], function ($, ember, mathHelpers, uiSettings, translate, flotHelpers, arrayHelpers, api, settings, storage, constants, app) {
+    'application',
+    'helpers/eq'
+], function ($, ember, mathHelpers, uiSettings, webModuleConfig, translate, flotHelpers, arrayHelpers, api, settings, storage, constants, app, eq) {
     app.StatisticController = ember.Controller.extend({
         init: function () {
-            var that = this;
-            
-            ember.run.scheduleOnce('render', function() {
-                var statusId = that.get('model.Event.StatusId');
+            ember.run.scheduleOnce('render', () => {
+                this.set('selectedColumn', 'grade');
+                this.set('statusProcesses', []);
+                webModuleConfig.then(v => {
+                    if (v != null) {
+                        this.set('BerichtId', v.IdBericht);
+                        this.set('abschlussArt', v.AbschlussArt);
+                        this.set('showStudentsTable', v.AuswertungMitPersonen);
+                    } else {
+                        this.set('BerichtId', settings.reports.finalizeGrading);
+                        this.set('abschlussArt', settings.reports.finalizeGrading ? 'Druck' : null);
+                    }
+                });
 
-                api.getStatusProcesses('forward', statusId, false, function(statusProcesses) {
-    
-                    that.set('statusProcesses', statusProcesses);
+                var statusId = this.get('model.Event.StatusId');
+                api.getStatusProcesses('forward', statusId, false, (statusProcesses) => {
+                    this.set('statusProcesses', statusProcesses);
                 });
             });
         },
@@ -43,9 +54,10 @@
                     ////finish
                     this.set('showValidationMessage', false);
                     var keys = this.get('model.Event.Id');
-                    if (settings.reports.finalizeGrading > 0) {
+                    var berichtId = this.get('BerichtId');
+                    if (this.get('abschlussArt') == 'Druck' && berichtId) {
                         var url = api.getCrystalReportUrl(constants.reportContext.anlass,
-                            settings.reports.finalizeGrading,
+                            berichtId,
                             keys);
                         window.open(url, '_blank');
                     }
@@ -75,10 +87,10 @@
                         api.processStatus(newSp,
                             function () {
                                 if (document.referrer)
-                                    window.parent.location.href = document.referrer;
+                                    window.location.href = document.referrer;
                                 else {
                                     if (settings.gradingRedirectUrl)
-                                        window.parent.location.href = settings.gradingRedirectUrl;
+                                        window.location.href = settings.gradingRedirectUrl;
                                     else
                                         alert('no referrer');
                                 }
@@ -96,7 +108,11 @@
             back: function() {
                 this.set('showValidationMessage', false); 
                 window.history.back();
-            }
+            },
+
+            setSelectedColumn: function (columnId) {
+                this.set('selectedColumn', columnId);
+            },
         },
 
         getNextStatusProcess: function(statusProcesses) {
@@ -116,6 +132,38 @@
             return (this.get('statusProcesses') || []).length > 0;
         }),
 
+        gradingItemsPrepared: ember.computed('model.GradingItems', function() {
+            var columnDetailIds = this.get('columnDetails').map(v => v.VssId);
+
+            return this.get('model.GradingItems').map(v => {
+                var details = this.get('model.SubscriptionDetails').filter(detail => detail.IdPerson == v.IdPerson && columnDetailIds.includes(detail.VssId));
+                var obj =  {
+                    name: v.PersonFullname,
+                    matriculationNumber: v.MatriculationNumber,
+                    grade: this.getGradeValue(v.IdGrade, v.GradeValue),
+                    comment: v.Comment,
+                    details: details,
+                };
+                return obj;
+            });
+        }),
+
+        unregisteredStudentsPrepared: ember.computed('model.GradingItems', function() {
+            var columnDetailIds = this.get('columnDetails').map(v => v.VssId);
+
+            return this.get('model.UnregisteredStudents').map(v => {
+                var details = v.SubscriptionDetails.concat(v.SubscriptionDetailColumns).filter(v => columnDetailIds.includes(v.VssId));
+                var obj = {
+                    name: v.FullName,
+                    matriculationNumber: v.MatriculationNumber,
+                    grade: this.getGradeValue(v.GradeId, v.Grade),
+                    comment: v.Comment,
+                    details: details,
+                };
+                return obj;
+            });
+        }),
+
         isReadOnly: ember.computed('model.Event.StatusId',
         {
             get: function () {
@@ -126,15 +174,60 @@
             }
         }),
 
-        canProceed: ember.computed('isReadOnly', 'hasForwardEventStatus', 
+        canProceed: ember.computed('isReadOnly', 'hasForwardEventStatus', 'abschlussArt', 'statusProcesses',  
         {
             get: function() {
+                if (this.get('abschlussArt') == 'Mail') {
+                    return this.get('statusProcesses').length == 1 && this.get('statusProcesses')[0].StatusCodes.includes(20);
+                }
                 return this.get('hasForwardEventStatus') && !this.get('isReadOnly');
             }
         }),
 
         modelChanged: ember.observer('model', function () {
             this.set('invalidValidationCount', undefined);
+        }),
+
+        columnDetails: ember.computed('model.SubscriptionDetails', {
+            get: function() {
+                var allSubscriptionDetails = this.get('model.SubscriptionDetails') ?? [];
+                var subscriptionDetails = allSubscriptionDetails.length == 0 ? [] : allSubscriptionDetails.filter(v => v.SubscriptionId == allSubscriptionDetails[0].SubscriptionId);
+                var columnDetails = subscriptionDetails.filter(v => settings.grading.adColumns.includes(v.IdAnmeldeVSS));
+                return columnDetails;
+            }
+        }),
+
+        subscriptionDetails: ember.computed('model.SubscriptionDetails', {
+            get: function() {
+                var allSubscriptionDetails = this.get('model.SubscriptionDetails') ?? [];
+                var subscriptionDetails = allSubscriptionDetails.length == 0 ? [] : allSubscriptionDetails.filter(v => v.SubscriptionId == allSubscriptionDetails[0].SubscriptionId);
+                return subscriptionDetails;
+            }
+        }),
+
+        availableColumns: ember.computed('subscriptionDetails', {
+            get: function() {
+                var subscriptionDetails = (this.get('subscriptionDetails') ?? []).filter(v => settings.grading.adColumns.includes(v.VssId));
+                var items = [
+                    {
+                        id: 'grade',
+                        label: translate.getString('grade'),
+                    },
+                    {
+                        id: 'comment',
+                        label: translate.getString('comment'),
+                    }
+                ];
+
+                for (let detail of subscriptionDetails) {
+                    items.push({
+                        id: detail.VssId,
+                        label: detail.VssBezeichnung
+                    });
+                }
+
+                return items;
+            }
         }),
 
         headerDetails: ember.computed('model.SubscriptionDetails', {
@@ -222,35 +315,35 @@
             }
         }),
 
-        finishButtonText: ember.computed({
-            get: function () {
-                return settings.reports.finalizeGrading
-                    ? translate.getString('finalizeAndPrint')
-                    : translate.getString('finalizeGrading');
+        finishButtonText: ember.computed('abschlussArt', 'statusProcesses', {
+            get: function() {
+                if (this.get('abschlussArt') == 'Druck') {
+                    return translate.getString('finalizeAndPrint');
+                }
+                if (this.get('abschlussArt') == 'Mail') {
+                    return translate.getString('finalizeAndMail');
+                }
+                return translate.getString('finalizeGrading');
             }
         }),
 
         gradeValues: ember.computed('model',
         {
             get: function() {
-                var that = this;
-                var gradeValues = [];
+                var gradingItems = this.get('model.GradingItems') || [];
+                var unregisteredStudents = this.get('model.UnregisteredStudents') || [];
 
-                var gradingItems = this.get('model.GradingItems');
-                $.each(gradingItems,
-                    function() {
-                        var value = that.getGradeValue(this);
-                        if (value !== undefined) {
-                            gradeValues.push(value);
-                        }
-                    });
-                gradeValues.sort();
+                var gradeValues = gradingItems.map(v => this.getGradeValueFromItem(v)).filter(v => v !== undefined);
+                var unregisteredGradeValues =  unregisteredStudents.map(v => this.getGradeValue(v.GradeId, v.Grade)).filter(v => v !== undefined);
+                var allGradeValues = gradeValues.concat(unregisteredGradeValues);
 
-                return gradeValues;
+                allGradeValues.sort();
+
+                return allGradeValues;
             }
         }),
 
-        getGradeValue: function(gradingItem) {
+        getGradeValueFromItem: function(gradingItem) {
             if (gradingItem.GradeValue > 0)
                 return gradingItem.GradeValue;
 
@@ -258,6 +351,21 @@
             if (scale != undefined) {
                 var grade = scale.Grades.filter(function(g) {
                     return g.Id === gradingItem.IdGrade;
+                });
+                if (grade.length > 0)
+                    return grade[0].Value;
+            }
+            return undefined;
+        },
+
+        getGradeValue: function(gradeId, gradeValue) {
+            if (gradeValue > 0)
+                return gradeValue;
+
+            var scale = this.get('model.Event.Scale');
+            if (scale != undefined) {
+                var grade = scale.Grades.filter(function(g) {
+                    return g.Id === gradeId;
                 });
                 if (grade.length > 0)
                     return grade[0].Value;

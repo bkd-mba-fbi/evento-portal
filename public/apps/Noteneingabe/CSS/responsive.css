@@ -1,4 +1,4 @@
-﻿.mobile {
+.mobile {
   display: none;
 }
 
@@ -24,14 +24,16 @@ td.not-mobile {
   width: 34rem !important;
   height: auto !important;
   left: calc(45% - 15rem) !important;
-  top: 30% !important;
+  top: calc(30%) !important;
 }
+
 .settings-overlay.gradesActionPrompt .dialogDraggable .dialog {
   left: initial !important;
   top: initial !important;
   min-width: initial !important;
   min-height: auto !important;
 }
+
 .settings-overlay.gradesActionPrompt .dialogDraggable .modal_container .content_body {
   padding: 2rem;
   padding-bottom: 1rem;
@@ -41,6 +43,7 @@ td.not-mobile {
   padding: 2rem;
   float: right;
 }
+
 .dialogDraggable .modal_container > .default_notes > .buttons {
   padding-top: initial;
 }
@@ -73,6 +76,7 @@ td.not-mobile {
     margin: 0.4rem 0 0.4rem 0;
   }
 }
+
 @media only screen and (max-device-width: 1024px) and (min-device-width: 575px), only screen and (max-width: 1024px) and (min-width: 575px) {
   div.col12, div.col6, div.col5, div.col4, div.col3, div.col2 {
     width: 100%;
@@ -139,6 +143,7 @@ td.not-mobile {
     max-width: 20rem;
   }
 }
+
 @media only screen and (max-width: 575px), only screen and (max-device-width: 575px) {
   #CLX_Root .content {
     width: 100%;

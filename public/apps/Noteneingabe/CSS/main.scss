@@ -326,20 +326,15 @@ header {
         padding-right: .7rem; 
         position: relative; 
         line-height: 30px;
-
-        .btn-clearGrades {
+        margin-right: 1rem;
+        
+        .btn-clearGrades,
+        .btn-applyGrade,
+        .btn-addUnregisteredStudent {
             width: auto;
             height: auto;
             border: 2px solid $mediumBlue;
             padding: .5rem 1rem;
-        }
-
-        .btn-applyGrade{
-            width: auto; 
-            height: auto; 
-            border: 2px solid $mediumBlue; 
-            padding: .5rem 1rem; 
-            margin-right: 1rem;
         }
     }
 
@@ -361,6 +356,10 @@ header {
     //     background: #005189;
     //     color: #fff; 
     // }
+
+    .groupContainer {
+        margin-bottom: 20px;
+    }
 }   
 
 //////////////// specialized html elements

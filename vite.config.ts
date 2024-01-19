@@ -26,7 +26,7 @@ const commonPlugins = [
       name: "Evento",
       short_name: "Evento",
       description: "Schulverwaltungsapplikation des Kantons Bern",
-      theme_color: "#EA161F",
+      theme_color: "#3C505A",
       icons: [
         {
           src: "icons/pwa-64x64.png",
