@@ -1,10 +1,14 @@
-export type EnvSettings = Readonly<{
+/**
+ * EnvSettings with Readonly<> they must set in settings.js 
+ * every other EnvSettings have default value and set log entry if not set
+ */
+export type EnvSettings = {
   apiServer: Readonly<string>;
   oAuthServer: Readonly<string>;
   oAuthPrefix: Readonly<string>;
   oAuthClientId: Readonly<string>;
-  notificationRefreshTime: Readonly<number>;
-}>;
+  notificationRefreshTime: number;
+};
 
 /**
  * Returns the environment specific settings as defined in
