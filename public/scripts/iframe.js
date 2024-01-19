@@ -7,6 +7,12 @@
 
 ///// iframe resizing /////
 
+
+/**
+* Fix scrollbar flickering on iframe resizing. Hidden overflow-y on html element.
+ */
+document.getElementsByTagName('html')[0].style.overflowY = 'hidden';
+
 /**
  * An array to track the absolute positioned elements
  *
