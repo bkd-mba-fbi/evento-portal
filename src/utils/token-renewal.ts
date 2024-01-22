@@ -50,7 +50,7 @@ function renewRefreshTokenOnExpiration(
 
     log(`Refresh token expired, redirect to login`);
     const { scope, locale } = accessToken;
-    redirect(client, scope, locale, loginUrl);
+    redirect(loginUrl, { client, scope, locale });
   });
 }
 
@@ -65,7 +65,7 @@ function renewAccessTokenOnExpiration(
     log(
       `Access token for scope "${scope}" and locale "${locale}" expired, redirect for token fetch/refresh`,
     );
-    redirect(client, scope, locale, refreshUrl);
+    redirect(refreshUrl, { client, scope, locale });
   });
 }
 
