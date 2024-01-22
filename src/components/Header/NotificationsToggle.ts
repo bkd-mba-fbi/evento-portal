@@ -10,14 +10,14 @@ import {
   fetchNotifications,
   updateNotifications,
 } from "../../utils/fetch.ts";
+import { log } from "../../utils/logging.ts";
 import { theme } from "../../utils/theme.ts";
 import { NotificationsDropdown } from "./NotificationsDropdown.ts";
-import { log } from "../../utils/logging.ts";
 
 const envSettings = getEnvSettings();
 if (typeof envSettings?.notificationRefreshTime !== "number") {
   log("Invalid 'notificationRefreshTime' setting default set to 30sec");
-  envSettings.notificationRefreshTime = 30
+  envSettings.notificationRefreshTime = 30;
 }
 
 export enum NotificationsState {

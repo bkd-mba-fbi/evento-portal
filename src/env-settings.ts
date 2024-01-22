@@ -1,5 +1,5 @@
 /**
- * EnvSettings with Readonly<> they must set in settings.js 
+ * EnvSettings with Readonly<> they must set in settings.js
  * every other EnvSettings have default value and set log entry if not set
  */
 export type EnvSettings = {
