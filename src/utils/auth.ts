@@ -7,9 +7,11 @@ import {
 import { generateQueryString } from "@badgateway/oauth2-client/dist/client";
 import { getCodeChallenge } from "@badgateway/oauth2-client/dist/client/authorization-code";
 import { getEnvSettings } from "../env-settings";
+import { settings } from "../settings";
 import { LOCALE_QUERY_PARAM, portalState } from "../state/portal-state";
 import { tokenState } from "../state/token-state";
 import { log } from "./logging";
+import { buildUrl } from "./routing";
 import {
   consumeLoginState,
   getAccessToken,
@@ -104,7 +106,7 @@ export async function activateTokenForScope(
   if (tokenState.isRefreshTokenExpired()) {
     // Not authenticated or refresh token expired, redirect to login
     log("Not authenticated or refresh token expired, redirect to login");
-    return redirect(client, scope, locale, loginUrl);
+    return redirect(loginUrl, { client, scope, locale });
   }
 
   const currentAccessToken = tokenState.accessToken;
@@ -127,7 +129,7 @@ export async function activateTokenForScope(
     log(
       `No token for scope "${scope}" and locale "${locale}" present or half expired, redirect for token fetch/refresh`,
     );
-    await redirect(client, scope, locale, refreshUrl);
+    await redirect(refreshUrl, { client, scope, locale });
   }
 }
 
@@ -157,7 +159,12 @@ export async function logout(client: OAuth2Client): Promise<void> {
     clearTokenRenewalTimers();
 
     // Redirect to login with scope/locale of current token
-    await redirect(client, scope, locale, loginUrl);
+    await redirect(loginUrl, {
+      client,
+      scope,
+      locale,
+      redirectUri: new URL(buildUrl(settings.navigationHome)), // Make sure the user lands on home after the next login
+    });
   }
 }
 
@@ -168,48 +175,60 @@ function getAuthorizationEndpoint(): string {
     : `${envSettings.oAuthPrefix}/Authorization/Login`;
 }
 
+type RedirectOptions = {
+  client: OAuth2Client;
+  scope: string;
+  locale: string;
+
+  /**
+   * URL to redirect to when coming back from OAuth provider (default
+   * is current location).
+   */
+  redirectUri?: URL;
+};
+
 type RedirectUrlBuilder = (
-  client: OAuth2Client,
-  scope: string,
-  locale: string,
-  redirectUri: string,
-  codeVerifier: string,
+  options: Required<RedirectOptions> & {
+    codeVerifier: string;
+  },
 ) => Promise<URL>;
 
 export async function redirect(
-  client: OAuth2Client,
-  scope: string,
-  locale: string,
   buildUrl: RedirectUrlBuilder,
-): Promise<void> {
-  const codeVerifier = await generateCodeVerifier(); // Random PKCE code
-  const redirectUri = new URL(document.location.href); // URL to come back to after login
-  redirectUri.searchParams.set(LOCALE_QUERY_PARAM, locale); // Use the "new locale" (if the user switches language), not the current one
-  storeLoginState(codeVerifier, redirectUri.toString());
-
-  const url = await buildUrl(
+  {
     client,
     scope,
     locale,
-    redirectUri.toString(),
+    redirectUri = new URL(document.location.href),
+  }: RedirectOptions,
+): Promise<void> {
+  const codeVerifier = await generateCodeVerifier(); // Random PKCE code
+  redirectUri.searchParams.set(LOCALE_QUERY_PARAM, locale); // Use the "new locale" (if the user switches language), not the current one
+  storeLoginState(codeVerifier, redirectUri.toString());
+
+  const url = await buildUrl({
+    client,
+    scope,
+    locale,
+    redirectUri,
     codeVerifier,
-  );
+  });
   document.location.href = url.toString();
 }
 
-export const loginUrl: RedirectUrlBuilder = async (
+export const loginUrl: RedirectUrlBuilder = async ({
   client,
   scope,
   locale,
   redirectUri,
   codeVerifier,
-) => {
+}) => {
   const url = new URL(await client.getEndpoint("authorizationEndpoint"));
 
   const [codeChallengeMethod, codeChallenge] =
     await getCodeChallenge(codeVerifier);
   url.searchParams.set("clientId", client.settings.clientId);
-  url.searchParams.set("redirectUrl", redirectUri);
+  url.searchParams.set("redirectUrl", redirectUri.toString());
   url.searchParams.set("culture_info", locale);
   url.searchParams.set("application_scope", scope);
   url.searchParams.set("response_type", "code");
@@ -221,13 +240,13 @@ export const loginUrl: RedirectUrlBuilder = async (
   return url;
 };
 
-export const refreshUrl: RedirectUrlBuilder = async (
+export const refreshUrl: RedirectUrlBuilder = async ({
   client,
   scope,
   locale,
   redirectUri,
   codeVerifier,
-) => {
+}) => {
   const url = new URL(
     `${envSettings.oAuthPrefix}/Authorization/RefreshPublic`,
     client.settings.server,
@@ -237,7 +256,7 @@ export const refreshUrl: RedirectUrlBuilder = async (
     await getCodeChallenge(codeVerifier);
 
   // url.searchParams.set("clientId", client.settings.clientId);
-  url.searchParams.set("redirectUrl", redirectUri);
+  url.searchParams.set("redirectUrl", redirectUri.toString());
   url.searchParams.set("culture_info", locale);
   url.searchParams.set("application_scope", scope);
   url.searchParams.set("refresh_token", tokenState.refreshToken ?? "");
