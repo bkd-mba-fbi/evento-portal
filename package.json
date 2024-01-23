@@ -36,25 +36,25 @@
     "@badgateway/oauth2-client": "^2.2.4",
     "@lit-app/state": "^1.0.0",
     "@lit/localize": "^0.12.1",
-    "dompurify": "^3.0.6",
-    "lit": "^3.1.0"
+    "dompurify": "^3.0.8",
+    "lit": "^3.1.1"
   },
   "devDependencies": {
     "@lit/localize-tools": "~0.7.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/dompurify": "^3.0.5",
-    "@typescript-eslint/eslint-plugin": "^6.17.0",
-    "@typescript-eslint/parser": "^6.17.0",
-    "@vitejs/plugin-basic-ssl": "^1.0.2",
-    "cypress": "^13.6.2",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "cypress": "^13.6.3",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-lit-a11y": "^4.1.1",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
-    "prettier": "3.1.1",
+    "prettier": "3.2.4",
     "typescript": "^5.3.3",
-    "vite": "^5.0.10",
+    "vite": "^5.0.12",
     "vite-plugin-pwa": "^0.17.4"
   },
   "lint-staged": {
