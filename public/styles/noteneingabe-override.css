@@ -149,6 +149,11 @@ pre {
   width: 1.5rem !important;
 }
 
+#CLX_Root #pdfIcon {
+  height: inherit !important;
+  width: inherit !important;
+}
+
 button:hover path[stroke="#666"],
 button:hover rect[stroke="#666"],
 button:hover circle[stroke="#666"],

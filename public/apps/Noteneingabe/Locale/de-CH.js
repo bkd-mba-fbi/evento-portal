@@ -16,6 +16,7 @@
         'logout': 'Abmelden',
         'grading': 'Bewertung',
         'statistic': 'Auswertung der Bewertung',
+        'statisticTitle': '',
         'host': 'Veranstalter',
         'management': 'Leitung',
         'name': 'Name',
