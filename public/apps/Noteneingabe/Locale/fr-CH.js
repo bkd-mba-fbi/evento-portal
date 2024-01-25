@@ -16,6 +16,7 @@
         'logout': 'Déconnexion',
         'grading': 'Saisie de notes',
         'statistic': 'Evaluation de la saisie',
+        'statisticTitle': '',
         'host': 'Organisateur',
         'management': 'Direction',
         'name': 'Nom',

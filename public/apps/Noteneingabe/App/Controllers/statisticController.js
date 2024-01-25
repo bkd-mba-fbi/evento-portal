@@ -87,10 +87,10 @@
                         api.processStatus(newSp,
                             function () {
                                 if (document.referrer)
-                                    window.location.href = document.referrer;
+                                    window.parent.location.href = document.referrer;
                                 else {
                                     if (settings.gradingRedirectUrl)
-                                        window.location.href = settings.gradingRedirectUrl;
+                                        window.parent.location.href = settings.gradingRedirectUrl;
                                     else
                                         alert('no referrer');
                                 }
