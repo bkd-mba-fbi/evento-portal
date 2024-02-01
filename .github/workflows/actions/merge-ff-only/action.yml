@@ -16,7 +16,9 @@ runs:
       shell: bash
     - run: git merge --ff-only origin/${{ inputs.base-ref }}
       shell: bash
-    - run: git log -n 1 --tags
+    - run: echo "Latest commit:" && git log -n 1
+      shell: bash
+    - run: echo "Latest tag:" && git log -n 1 --tags
       shell: bash
     - run: git push
       shell: bash

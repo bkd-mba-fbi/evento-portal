@@ -65,6 +65,12 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
+        with:
+          # Make sure we actually fetch the HEAD with the previously
+          # merged commits from main, instead of the latest commit of
+          # the release branch at the time this workflow has been
+          # started (before merge)
+          ref: HEAD
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
