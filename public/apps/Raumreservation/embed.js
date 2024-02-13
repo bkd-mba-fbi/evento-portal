@@ -26,6 +26,8 @@
         "useHashRouting": true,
         "assetPath": baseURL + 'assets/',
         "AllowFurtherEvents": true,
+        "DefaultTimePeriod": 45,
+        "DefaultTimeFragmentation": 5,
         "RoomColumns": [
           {
             "Column": "Room",
