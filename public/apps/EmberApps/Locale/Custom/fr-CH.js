@@ -20,7 +20,7 @@ define(function() {
         'subscriptionDetailDoesNotExist':  'le détail d\'inscription n\'existe pas',
         'notEditable':                     'le détail d\'inscription n\'est pas disponible pour la saisie en ligne',
         'invalidSubscriptionDetailValue':  'le détail d\'inscription a une valeur non valide',
-        'goBackToStart':                   'Toutes les nouvelles valuers ont été transmises. Vous pouvez saisir d\'autres données en cliquant sur le bouton saisie.',
+        'goBackToStart':                   'Toutes les nouvelles valuers ont été transmises.',
         'continueWithErrors':              'Toutes les données validées dans la colonne statut vont être transmises.',
         'ok':                              'ok',
         'studentM':                        'Élève',
