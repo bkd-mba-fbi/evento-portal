@@ -61,12 +61,23 @@
 .dialogFooter {
     background-color: transparent;
     padding: 0;
+    flex-direction: row !important;
+}
+
+.float-right {
+    right: 0;
+    position: absolute;
 }
 
 .btn-primary {
     background-color: var(--bs-btn-bg)  !important;
     border-color: var(--bs-btn-border-color) !important;
     color: var(--bs-btn-color) !important;
+}
+
+.btn-secondary {
+    border-color: var(--bs-btn-border-color) !important;
+    background: var(--bs-btn-bg) !important;
 }
 
 /* overwrite main.css so the height of the textarea isn't always 5rem */
@@ -98,7 +109,7 @@
 
 /* center text */
 .readSubscriptionDetails .center-text {
-    text-align: center;
+    text-align: center !important;
 }
 
 /* show the default cursor for disabled links */

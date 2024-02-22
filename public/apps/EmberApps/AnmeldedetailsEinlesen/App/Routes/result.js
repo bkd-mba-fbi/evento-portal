@@ -30,7 +30,7 @@ define([
 
             // put a reference to the subscriptionDetails object on the model
             model.set('subscriptionDetails', subscriptionDetails);
-
+            model.set('error',false);
 
             // put the new subscriptionDetails on the server one after another
             subscriptionDetails.reduce(function (previous, item) {
@@ -43,13 +43,32 @@ define([
                     var raw = item.get('raw');
                     raw.Value = item.get('newValue');
 
-                    return new ember.RSVP.Promise(function (resolve) {
+                    item.set('loading', true);
+                    new ember.RSVP.Promise(function (resolve) {
                         // set the new value of the subscriptionDetail
                         api.updateSubscriptionDetail(raw, function () {
                             item.set('uploaded', true);
+                            item.set('loading', false);
                             resolve();
                         });
+                        ember.Instrumentation.subscribe('validationErrorOccurred',{
+                            before(name, timestamp, payload) {
+                                var message =  payload.responseJSON.Issues[0].Message;
+                                if (payload.status === 409 && message.search(item.subscriptionDetailId) > 0 ) {
+                                    item.set('errorUpload', message);
+                                    item.set('uploaded', false);
+                                    item.set('loading', false);
+                                    model.set('error',true);
+                   
+                                }
+                            },
+                            after(name, timestamp, payload) {
+           
+                            }
+                          });
+                        
                     });
+                    
                 });
             }, ember.RSVP.Promise.resolve()).then(function () {
                 // every detail has bee sent
