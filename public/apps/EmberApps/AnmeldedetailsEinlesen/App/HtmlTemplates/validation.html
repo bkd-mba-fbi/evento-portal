@@ -9,6 +9,7 @@
                 <th>{{translate "oldValue"}}</th>
                 <th>{{translate "newValue"}}</th>
                 <th>{{translate "status"}}</th>
+                <th>{{translate "fehler"}}</th>
             </tr>
         </thead>
         <tbody>
@@ -21,15 +22,26 @@
                 <td>{{subscriptionDetail.oldValue}}</td>
                 <td>{{subscriptionDetail.newValue}}</td>
                 <td>
-                    {{#if subscriptionDetail.error}}
-                    <i class="material-icons" title={{subscriptionDetail.error}}>cancel</i>
-                    {{else}}
-                    <i class="material-icons">check_circle</i>
-                    {{/if}}
+                    <div>
+                        {{#if subscriptionDetail.error}}
+                            <i class="material-icons text-danger">cancel</i> 
+                        {{else}}
+                        <i class="material-icons text-success">check_circle</i>
+                        {{/if}}
+                    </div>
                 </td>
+                <td>{{subscriptionDetail.error}}</td>
                 {{else}}
                 {{! we don't yet know the values of the other fields }}
-                <td colspan="6">{{icon "loadingAnimation"}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td colspan="6">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                    </div>
+                </td>
                 {{/if}}
             </tr>
             {{/each}}
@@ -37,15 +49,17 @@
     </table>
 </div>
 <div class="dialogFooter">
-    <i class="material-icons-outlined">info</i>{{translate "continueWithErrors"}}
+    <div class="">
+        {{#link-to "input" tagName="button" class="btn btn-secondary" disabledWhen=cannotGoBack}}
+            <div>{{translate "correct"}}</div>
+        {{/link-to}}
+    </div>
+    <div>
+        {{translate "continueWithErrors"}}
+    </div>
     <div>
         {{#link-to "result" tagName="button" class="btn btn-primary" disabledWhen=cannotContinue}}
             <div>{{translate "submit"}}</div>
-        {{/link-to}}
-    </div>
-    <div class="">
-        {{#link-to "input" tagName="button" class="btn btn-primary" disabledWhen=cannotGoBack}}
-            <div>{{translate "correct"}}</div>
         {{/link-to}}
     </div>
 </div>
