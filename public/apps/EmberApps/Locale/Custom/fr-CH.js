@@ -12,6 +12,7 @@ define(function() {
         'oldValue':                        'Valeur antérieure',
         'newValue':                        'Nouvelle valeur',
         'status':                          'Statut',
+        'fehler':                          'Error',
         'correct':                         'Corriger',
         'submit':                          'Enregistrer',
         'incorrectFormat':                 'Les données saisies ne correspondent pas au format recommandé.',
