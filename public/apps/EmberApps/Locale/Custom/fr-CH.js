@@ -22,6 +22,7 @@ define(function() {
         'notEditable':                     'le détail d\'inscription n\'est pas disponible pour la saisie en ligne',
         'invalidSubscriptionDetailValue':  'le détail d\'inscription a une valeur non valide',
         'goBackToStart':                   'Toutes les nouvelles valuers ont été transmises.',
+        'goBackToStartError':              'Toutes les nouvelles valeurs n\'ont pas pu être mises à jour avec succès. Veuillez vérifier la colonne statut.',
         'continueWithErrors':              'Toutes les données validées dans la colonne statut vont être transmises.',
         'ok':                              'ok',
         'studentM':                        'Élève',
