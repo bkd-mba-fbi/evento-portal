@@ -54,7 +54,7 @@ define([
                         ember.Instrumentation.subscribe('validationErrorOccurred',{
                             before(name, timestamp, payload) {
                                 var message =  payload.responseJSON.Issues[0].Message;
-                                if (payload.status === 409 && message.search(item.subscriptionDetailId) > 0 ) {
+                                if (payload.status === 409 && message.search(item.subscriptionDetailId) > 0 && message.search('= '+item.newValue) > 0) {
                                     item.set('errorUpload', message);
                                     item.set('uploaded', false);
                                     item.set('loading', false);
