@@ -75,9 +75,8 @@
     color: var(--bs-btn-color) !important;
 }
 
-.btn-secondary {
-    border-color: var(--bs-btn-border-color) !important;
-    background: var(--bs-btn-bg) !important;
+.btn-outline-secondary{
+    border: 1px solid #000 !important;
 }
 
 /* overwrite main.css so the height of the textarea isn't always 5rem */
