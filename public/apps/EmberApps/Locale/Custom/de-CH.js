@@ -22,7 +22,7 @@ define(function() {
         'notEditable':                     'Das Anmeldedetail ist nicht für die Interneteingabe freigegeben',
         'invalidSubscriptionDetailValue':  'Das Anmeldedetail hat einen ungültigen Wert',
         'goBackToStart':                   'Alle neuen Werte wurden hochgeladen.',
-        'goBackToStartError':              'Es konnten nicht alle neuen Werte erfolgreich aktualisiert werden. Bitte prüfen sie die Spalte Status.',
+        'goBackToStartError':              'Es konnten nicht alle neuen Werte erfolgreich aktualisiert werden. Bitte prüfen Sie die Spalte Status',
         'continueWithErrors':              'Es werden alle in der Spalte Status validierten Datensätze übernommen.',
         'ok':                              'Ok',
         'studentM':                        'Teilnehmer',
