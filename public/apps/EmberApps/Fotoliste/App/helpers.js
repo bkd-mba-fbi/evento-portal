@@ -17,7 +17,7 @@ define(['constants', 'translate', 'appConfig', 'api'], function (constants, tran
                 } else
                     return undefined;
 
-            } else if (subscriptionDetail.DropdownItems !== null) {
+            } else if (subscriptionDetail.DropdownItems !== null && subscriptionDetail.VssStyle !== "CB") {
                 var key = value;
                 var items = subscriptionDetail.DropdownItems;
                 for (var i = 0; i < items.length; i++) {
