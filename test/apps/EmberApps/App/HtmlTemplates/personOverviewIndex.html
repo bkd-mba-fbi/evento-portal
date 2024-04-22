@@ -1,0 +1,212 @@
+<h3>{{model.person.FirstName}} {{model.person.MiddleName}} {{model.person.LastName}}</h3>
+{{#if model.person.IsEmployee}}
+<div class="dialogInfo">{{icon 'info'}} {{translate 'personReadOnlyInfo'}}</div>
+{{/if}}
+<div class="row">
+    <div class="col6">
+        <table class="dialogInfoTable">
+            <tbody>
+            <tr>
+                <td>{{translate 'formOfAddress'}}:</td>
+                <td>{{model.person.FormOfAddress}}</td>
+            </tr>
+            <tr>
+                <td>{{translate 'birthdate'}}:</td>
+                <td>{{dateFormat model.person.Birthdate}}</td>
+            </tr>
+            <tr>
+                <td>{{translate 'homeCountry'}}:</td>
+                <td>{{model.person.HomeCountry}}</td>
+            </tr>
+            <tr>
+                <td>{{translate 'matriculationNumber'}}:</td>
+                <td>{{model.person.MatriculationNumber}}</td>
+            </tr>
+            <tr>
+                <td>{{translate 'socialSecurityNumber'}}:</td>
+                <td>{{model.person.SocialSecurityNumber}}</td>
+            </tr>
+            <tr>
+                <td>{{translate 'nativeLanguage'}}:</td>
+                <td>{{model.person.NativeLanguageTranslated}}</td>
+            </tr>
+            <tr>
+                <td>{{translate 'nationality'}}:</td>
+                <td>{{model.person.Nationality}}</td>
+            </tr>
+            {{#if isSwiss}}
+            <tr>
+                <td>{{translate 'homeTown'}}:</td>
+                <td>{{model.person.HomeTown}}</td>
+            </tr>
+            {{/if}}
+            {{#unless isSwiss}}
+            <tr>
+                <td>{{translate 'stayPermit'}}:</td>
+                <td>{{model.person.StayPermitTranslated}}</td>
+            </tr>
+                {{#if hasStayPermit}}
+                <tr>
+                    <td>{{translate 'stayPermitExpiry'}}:</td>
+                    <td>{{dateFormat model.person.StayPermitExpiry}}</td>
+                </tr>
+                {{/if}}
+            {{/unless}}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col6">
+        <h4 class="rowTitle">{{translate 'availability'}}</h4>
+        <table class="dialogInfoTable">
+            <tr>
+                <td>{{translate 'email'}}:</td>
+                <td>
+                    {{#if model.person.Email}}
+                    {{model.person.Email}}
+                    {{else}}
+                    {{model.person.Email2}}
+                    {{/if}}
+                </td>
+            </tr>
+            <tr>
+                <td>{{translate 'privatePhone'}}:</td>
+                <td>{{model.person.PhonePrivate}}</td>
+            </tr>
+            <tr>
+                <td>{{translate 'mobilePhone'}}:</td>
+                <td>{{model.person.PhoneMobile}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="col12 colLine">
+        <div class="editControl">
+           {{#unless model.person.IsEmployee}}
+            {{#link-to 'personEdit' class="textButton"}}
+            {{icon 'edit'}}
+            <div>{{translate 'edit'}}</div>
+            {{/link-to}}
+           {{/unless}}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col4">
+        <div>
+            <h4 class="rowTitle">{{translate 'homeAddress'}}</h4>
+            {{#unless model.person.IsEmployee}}
+            <pre class="address">{{model.person.AddressLine1}}
+{{model.person.Zip}} {{model.person.Location}}
+{{model.person.Country}}
+        </pre>
+
+            <div class="colLine editControl">
+                {{#unless model.person.IsEditable}}
+                {{#if model.homeAddressKind}}
+                {{#link-to 'addressNew' 'home' model.homeAddressKind class="textButton"}}
+                {{icon 'edit'}}
+                <div>{{translate 'edit'}}</div>
+                {{/link-to}}
+                {{/if}}
+                {{/unless}}
+            </div>
+
+            {{#if model.homeAddressMutation}}
+            <h4 class="rowTitle">{{translate 'newHomeAddress'}}</h4>
+            <div class="blockNote">{{translate 'addressMutationHint'}}</div>
+            {{address-label address=model.homeAddressMutation}}
+            <div class="colLine editControl">
+                {{#link-to 'addressEdit' 'home' model.homeAddressMutation.Id class="textButton"}}
+                {{icon 'edit'}}
+                <div>{{translate 'edit'}}</div>
+                {{/link-to}}
+            </div>
+            {{/if}}
+            {{/unless}}
+        </div>
+    </div>
+
+    <div class="col4">
+        <div>
+            <h4 class="rowTitle">{{translate 'correspondenceAddress'}}</h4>
+            {{#if model.person.CorrespondenceAddress}}
+            <pre class="address">{{model.person.CorrespondenceAddress}}</pre>
+            {{/if}}
+
+            <div class="colLine editControl">
+                {{#if model.correspondenceAddressKind}}
+                {{#unless model.correspondenceAddressMutation}}
+                    {{#link-to 'addressNew' 'correspondence' model.correspondenceAddressKind class="textButton"}}
+                        {{icon 'edit'}}
+                        <div>{{translate 'edit'}}</div>
+                    {{/link-to}}
+                {{/unless}}
+                {{/if}}
+                {{#if model.canChangeCorrespondence}}
+                {{#if model.correspondenceDirectAddressMutation}}
+                    {{#link-to 'addressEdit' 'correspondenceDirect' model.correspondenceDirectAddressMutation.Id class="textButton"}}
+                        {{icon 'edit'}}
+                        <div>{{translate 'edit'}}</div>
+                    {{/link-to}}
+                {{else}}
+                    {{#link-to 'addressNew' 'correspondenceDirect' model.correspondenceDirectAddressKind class="textButton"}}
+                        {{icon 'edit'}}
+                        <div>{{translate 'edit'}}</div>
+                    {{/link-to}}
+                {{/if}}
+                {{/if}}
+            </div>
+
+            {{#unless model.canChangeCorrespondence}}
+            {{#if model.correspondenceAddressMutation}}
+            <h4 class="rowTitle">{{translate 'newCorrespondenceAddress'}}</h4>
+            <div class="blockNote">{{translate 'addressMutationHint'}}</div>
+            {{address-label address=model.correspondenceAddressMutation}}
+            <div class="colLine editControl">
+                {{#link-to 'addressEdit' 'correspondence' model.correspondenceAddressMutation.Id class="textButton"}}
+                {{icon 'edit'}}
+                <div>{{translate 'edit'}}</div>
+                {{/link-to}}
+            </div>
+            {{/if}}
+            {{/unless}}
+        </div>
+    </div>
+
+    <div class="col4">
+        <div>
+            <h4 class="rowTitle">{{translate 'billingAddress'}}</h4>
+            {{#if model.person.BillingAddress}}
+            <pre class="address">{{model.person.BillingAddress}}</pre>
+            {{/if}}
+
+            <div class="colLine editControl">
+                {{#if model.billingAddressKind}}
+                {{#unless model.billingAddressMutation}}
+                {{#link-to 'addressNew' 'billing' model.billingAddressKind class="textButton"}}
+                {{icon 'edit'}}
+                <div>{{translate 'edit'}}</div>
+                {{/link-to}}
+                {{/unless}}
+                {{/if}}
+            </div>
+
+            {{#if model.billingAddressMutation}}
+            <h4 class="rowTitle">{{translate 'newBillingAddress'}}</h4>
+            <div class="blockNote">{{translate 'addressMutationHint'}}</div>
+            {{address-label address=model.billingAddressMutation}}
+            <div class="colLine editControl">
+                {{#link-to 'addressEdit' 'billing' model.billingAddressMutation.Id class="textButton"}}
+                {{icon 'edit'}}
+                <div>{{translate 'edit'}}</div>
+                {{/link-to}}
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+
+
