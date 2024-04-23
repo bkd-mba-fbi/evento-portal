@@ -2,13 +2,21 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 <file target-language="fr-CH" source-language="de-CH" original="lit-localize-inputs" datatype="plaintext">
 <body>
-<trans-unit id="sc874744fb4632e62">
-  <source>Rechtliche Hinweise</source>
-  <target state="translated">Mentions légales</target>
+<trans-unit id="s8bb0b618bf59b96e">
+  <source>Fotoliste</source>
+  <target state="translated">Détails de l'événement</target>
 </trans-unit>
-<trans-unit id="sd11a46c2e7022f58">
-  <source>Impressum</source>
-  <target state="translated">Impressum</target>
+<trans-unit id="s8e7e1013bc071156">
+  <source>Noteneingabe</source>
+  <target state="translated">Saisie des notes</target>
+</trans-unit>
+<trans-unit id="s79382e84e0818a6e">
+  <source>Mein Profil</source>
+  <target state="translated">Mon profil</target>
+</trans-unit>
+<trans-unit id="s784d82bd15c49b4a">
+  <source>Einstellungen</source>
+  <target state="translated">Paramètres</target>
 </trans-unit>
 <trans-unit id="s6ab9bf010cfc8931">
   <source>Unterricht</source>
@@ -26,6 +34,14 @@
   <source>Tests und Bewertung</source>
   <target state="translated">Tests et évalution</target>
 </trans-unit>
+<trans-unit id="s2e7964a3ed3ff4b2">
+  <source>Stellvertretung erfassen</source>
+  <target state="translated">Saisir un remplacement</target>
+</trans-unit>
+<trans-unit id="s676022c035fe65f5">
+  <source>Stellvertretung ausüben</source>
+  <target state="translated">Effectuer un remplacement</target>
+</trans-unit>
 <trans-unit id="s2ccb1c31fa62fea1">
   <source>Absenzen</source>
   <target state="translated">Absences</target>
@@ -41,6 +57,14 @@
 <trans-unit id="s805a26293333f4d7">
   <source>Absenzen auswerten</source>
   <target state="translated">Évaluer les absences</target>
+</trans-unit>
+<trans-unit id="sc217172426ab34d5">
+  <source>Aus-/Weiterbildung</source>
+  <target state="translated">Formation (continue)</target>
+</trans-unit>
+<trans-unit id="s005058d82b713689">
+  <source>Noten</source>
+  <target state="translated">Notes</target>
 </trans-unit>
 <trans-unit id="s7459bbd6ff0ec70a">
   <source>Angebote</source>
@@ -58,10 +82,6 @@
   <source>Räume und Geräte reservieren</source>
   <target state="translated">Réserver des salles et des appareils</target>
 </trans-unit>
-<trans-unit id="s005058d82b713689">
-  <source>Noten</source>
-  <target state="translated">Notes</target>
-</trans-unit>
 <trans-unit id="saac6cc64d5c17b4f">
   <source>Administration</source>
   <target state="translated">Administration</target>
@@ -70,41 +90,161 @@
   <source>Stellvertretungen administrieren</source>
   <target state="translated">Gérer les remplacements</target>
 </trans-unit>
+<trans-unit id="s2faf4f61874da789">
+  <source>Personen und Institutionen suchen</source>
+  <target state="translated">Rechercher des personnes et des institutions</target>
+</trans-unit>
 <trans-unit id="sec148f76974d9b06">
   <source>Anmeldedetails einlesen</source>
   <target state="translated">Saisir des détails d'inscription</target>
 </trans-unit>
-<trans-unit id="s321998fa37fe89be">
-  <source>© Bildungs- und Kulturdirektion</source>
-  <target state="translated">© Direction de l'instruction publique et de la culture</target>
+<trans-unit id="sfb4410b48e95fa73">
+  <source>Kontakt</source>
+  <target state="translated">Contact</target>
+</trans-unit>
+<trans-unit id="sc874744fb4632e62">
+  <source>Rechtliche Hinweise</source>
+  <target state="translated">Mentions légales</target>
+</trans-unit>
+<trans-unit id="sd11a46c2e7022f58">
+  <source>Impressum</source>
+  <target state="translated">Impressum</target>
 </trans-unit>
 <trans-unit id="sc265a7e29e120db0">
   <source>Evento</source>
   <target state="translated">Evento</target>
 </trans-unit>
-<trans-unit id="sc42d48a091dc3230">
-  <source>Evento Startseite</source>
-  <target state="translated">Page d'accueil Evento</target>
+<trans-unit id="scde3342a428aaee8">
+  <source>Offline</source>
+  <target state="translated">Hors ligne</target>
 </trans-unit>
-<trans-unit id="s6d8b7baee47fca15">
-  <source>Menü</source>
-  <target state="translated">Menu</target>
+<trans-unit id="sd79be54b222abcae">
+  <source>Keine Verbindung vorhanden.</source>
+  <target state="translated">Aucune connexion disponible.</target>
 </trans-unit>
-<trans-unit id="sc42d48a091dc3230">
-  <source>Evento Startseite</source>
-  <target state="translated">Page d'accueil Evento</target>
+<trans-unit id="s321998fa37fe89be">
+  <source>© Bildungs- und Kulturdirektion</source>
+  <target state="translated">© Direction de l'instruction publique et de la culture</target>
 </trans-unit>
-<trans-unit id="s1a8b197f436e88ab">
-  <source>Menü Benutzereinstellungen</source>
-  <target state="translated">Menu paramètres</target>
+<trans-unit id="s41ff2c74cc56bc8f">
+  <source>Lernende, Lehrpersonen und Schulmitarbeitende wenden sich bei Fehlermeldungen in Evento Web oder Fragen zu dieser Fachapplikation an die zuständige Stelle in ihrer Schule. Diese wird von der Schule kommuniziert. Im Zweifelsfall kontaktieren Sie bitte das Schulsekretariat.</source>
+  <target state="translated">En cas de message d’erreur dans Evento Web ou de questions au sujet de cette application, les élèves, les membres du corps enseignant et les collaboratrices et collaborateurs des écoles peuvent contacter le service compétent de leur établissement. L’école indique aux élèves le service concerné. En cas de doute, veuillez contacter le secrétariat de l’école.</target>
 </trans-unit>
-<trans-unit id="s79382e84e0818a6e">
-  <source>Mein Profil</source>
-  <target state="translated">Mon profil</target>
+<trans-unit id="s8218de939c80532c">
+  <source>Inhaltsverantwortung</source>
+  <target state="translated">Responsabilité du contenu</target>
 </trans-unit>
-<trans-unit id="s784d82bd15c49b4a">
-  <source>Einstellungen</source>
-  <target state="translated">Paramètres</target>
+<trans-unit id="sea31a3191cc166f8">
+  <source>Zuständige Schule, siehe Kontakt</source>
+  <target state="translated">École compétente, voir Contact</target>
+</trans-unit>
+<trans-unit id="sef3cc5f0adf7abc3">
+  <source>Fachapplikation</source>
+  <target state="translated">Application</target>
+</trans-unit>
+<trans-unit id="sf4fb738671432c9c">
+  <source>Bildungs- und Kulturdirektion des Kantons Bern
+Mittelschul- und Berufsbildungsamt
+Fachbereich Informatikanwendungen
+Kasernenstrasse 27
+3013 Bern</source>
+  <target state="translated">Direction de l’instruction publique et de la culture du canton de Berne
+Office des écoles moyennes et de la formation professionnelle
+Unité Applications informatiques
+Kasernenstrasse 27
+3013 Berne</target>
+</trans-unit>
+<trans-unit id="s63e457bc703a3030">
+  <source>E-Mail</source>
+  <target state="translated">Courriel</target>
+</trans-unit>
+<trans-unit id="s71d64f3daba42f69">
+  <source>Betrieb und Technik</source>
+  <target state="translated">Exploitation et questions techniques</target>
+</trans-unit>
+<trans-unit id="sd58f707de5fe6c23">
+  <source>Haftungsausschluss</source>
+  <target state="translated">Exclusion de la responsabilité</target>
+</trans-unit>
+<trans-unit id="s0ae8b0f434f47faa">
+  <source>Die Inhalte dieser Fachapplikation sind ein Datenangebot der zuständigen Schule. Obwohl diese die Daten regelmässig auf Richtigkeit und Aktualität hin prüft, lehnen wir, soweit gesetzlich zulässig, jede Haftung für unerwünschte Folgen aus dem Gebrauch dieser Daten ab.</source>
+  <target state="translated">Les contenus de cette application informatique sont mis à disposition par l’établissement concerné. Bien qu’ils soient régulièrement vérifiés et mis à jour, nous déclinons toute responsabilité, pour autant que la loi le permette, en cas de conséquence indésirable liée à leur utilisation.</target>
+</trans-unit>
+<trans-unit id="s0755fb794c2b9b3d">
+  <source>Diese Fachapplikation enthält Links zu Angeboten von Dritten. Sie benutzen diese Links auf eigenes Risiko. Für die Inhalte dieser anderen Webseiten übernehmen wir keine Verantwortung. Von unserer Haftung ausgeschlossen ist namentlich die Garantie für die ständige Verfügbarkeit unserer Fachapplikation sowie Schäden (z.B. wegen Verbindungsunterbruch oder schädlicher Software), die durch die Benutzung dieser Fachapplikation entstehen könnten.</source>
+  <target state="translated">Cette application contient des liens hypertextes menant à des offres proposées par des tiers. Vous utilisez ces liens à vos propres risques. Nous ne répondons pas du contenu publié sur ces autres sites Internet. Sont notamment exclus de notre responsabilité la garantie que notre application soit disponible en permanence ainsi que les dommages liés à son utilisation (p. ex. en raison d’une interruption de la connexion ou d’un logiciel malveillant).</target>
+</trans-unit>
+<trans-unit id="s44d2798b4a925e79">
+  <source>Immaterialgüterrechte</source>
+  <target state="translated">Propriété intellectuelle</target>
+</trans-unit>
+<trans-unit id="sa981ad28edcf81e5">
+  <source>Sichtbare Elemente (Bilder/Icons) dieser Fachapplikation können Dritten gehören. Diese Elemente dürfen deshalb grundsätzlich nicht verwendet werden. Der Kanton Bern kann deren Verwendung ausserhalb der Webseite auf Anfrage erlauben, sofern er dazu selbst berechtigt ist. Für solche Anfragen wenden Sie sich bitte an die Stelle, die für die Fachapplikation verantwortlich ist. Die Kontaktangaben finden Sie im Impressum.</source>
+  <target state="translated">Il se peut que des éléments figurant dans l’application (images, icônes) soient la propriété de tiers. Leur utilisation est donc interdite. Sur demande, le canton de Berne peut cependant autoriser l’utilisation, en dehors du site web, des éléments dont il détient les droits. Veuillez adresser vos demandes à cet effet au service responsable de l’application, dont les coordonnées figurent dans l’impressum.</target>
+</trans-unit>
+<trans-unit id="s66a8ea9d4609abf8">
+  <source>Datenschutzerklärung</source>
+  <target state="translated">Politique de confidentialité</target>
+</trans-unit>
+<trans-unit id="sf49fc5f227269877">
+  <source>Verantwortliche Stelle im Sinne der Datenschutzgesetze, unter anderem auch der EU-Datenschutzgrundverordnung (DSGVO), ist:</source>
+  <target state="translated">Le service responsable de l’application au sens de la législation sur la protection des données, et notamment du règlement général de l’UE sur la protection des données (RGPD), est :</target>
+</trans-unit>
+<trans-unit id="sda7b78ee4d822af5">
+  <source>Datenbearbeitung</source>
+  <target state="translated">Traitement des données</target>
+</trans-unit>
+<trans-unit id="s64629ecd4900e6de">
+  <source>Der zum Betrieb dieser Fachapplikation eingesetzte Leistungserbringer des Kantons Bern bearbeitet teilweise die IP-Adresse oder technische Angaben der Endgeräte von Personen, die diese Webseite besuchen. Der Leistungserbringer untersteht einer Datenschutzgesetzgebung mit einem dem Berner Recht gleichwertigem Datenschutzniveau. Die IP-Adresse wird verschlüsselt übertragen und vor der weiteren Bearbeitung anonymisiert.</source>
+  <target state="translated">Le fournisseur de prestations du canton de Berne qui assure l’exploitation de cette application traite l’adresse IP ou les données techniques des appareils des personnes qui l’utilisent. Le degré de protection des données prévu par la législation que ce fournisseur est tenu de respecter équivaut à celui prévu dans le droit bernois. Avant traitement, l’adresse IP est transmise de manière cryptée et anonymisée.</target>
+</trans-unit>
+<trans-unit id="s1381f1fa0b3ddb62">
+  <source>Mit der Benutzung dieser Fachapplikation stimmen Sie dieser Datenbearbeitung soweit erforderlich zu. Sie erfolgt im Einzelnen wie folgt:</source>
+  <target state="translated">En utilisant cette application, vous acceptez le traitement des données citées, dans la mesure de ce qui est nécessaire. Voici des informations détaillées relatives au traitement des données :</target>
+</trans-unit>
+<trans-unit id="s2f3ed4ae7b042337">
+  <source>Leistungserbringer</source>
+  <target state="translated">Fournisseur de prestations</target>
+</trans-unit>
+<trans-unit id="se33353371b3ee38b">
+  <source>Bearbeitete Daten</source>
+  <target state="translated">Données traitées</target>
+</trans-unit>
+<trans-unit id="s751e73928c2bd1b0">
+  <source>Grund der Bearbeitung</source>
+  <target state="translated">Raison du traitement</target>
+</trans-unit>
+<trans-unit id="s53f771f096f6dee7">
+  <source>IP-Adresse, technische Angaben zum Betriebssystem und Webbrowser, Referrer-URL, Hostname, Uhrzeit</source>
+  <target state="translated">Adresse IP, données techniques relatives au système d’exploitation et au navigateur web, URL référent, nom d’hôte et heure</target>
+</trans-unit>
+<trans-unit id="s84044e9a5f99c170">
+  <source>Logdaten des Webserves des Kantons Bern zum Erkennen und Beheben von technischen Störungen und Angriffen.</source>
+  <target state="translated">Données du journal du serveur web du canton de Berne afin d’identifier et de traiter des problèmes techniques et des attaques.</target>
+</trans-unit>
+<trans-unit id="sc354c34c1a7cbcc4">
+  <source>Cookies</source>
+  <target state="translated">Cookies</target>
+</trans-unit>
+<trans-unit id="s6083633db7f4cf90">
+  <source>Diese Webseite setzt keine Cookies ein.</source>
+  <target state="translated">La présente application n’utilise pas de cookies.</target>
+</trans-unit>
+<trans-unit id="s3490946cb9fc3368">
+  <source>Soziale Medien</source>
+  <target state="translated">Réseaux sociaux</target>
+</trans-unit>
+<trans-unit id="seae9439e8d8e58e7">
+  <source>Soweit diese Fachapplikation auf soziale Medien wie YouTube verweist, geschieht das nur durch Links, nicht etwa durch das Ausführen von Programmen (Plug-ins). Mit dem Aufrufen dieser Fachapplikation werden daher keine Personendaten an die sozialen Medien übertragen.</source>
+  <target state="translated">La présente application renvoie uniquement vers des réseaux sociaux tels que YouTube au moyen de liens et non via l’exécution de programmes (plug-in). Ainsi, aucune donnée personnelle n’est transmise aux réseaux sociaux lorsque vous utilisez l’application.</target>
+</trans-unit>
+<trans-unit id="s17b1ac4c36efd642">
+  <source>Kontakt bei Fragen</source>
+  <target state="translated">Contact</target>
+</trans-unit>
+<trans-unit id="s30c3ae3fb64d10bd">
+  <source>Wenn Sie Fragen zum Datenschutz im Zusammenhang mit dieser Fachapplikation haben, können Sie sich an die Stelle wenden, die für die Fachapplikation verantwortlich ist. Die Kontaktangaben finden Sie im Impressum.</source>
+  <target state="translated">Si vous avez des questions sur la protection des données en lien avec la présente application, vous pouvez vous adresser au service responsable de l’application, dont les coordonnées figurent dans l’impressum.</target>
 </trans-unit>
 <trans-unit id="s66fb201578f6f6c2">
   <source>Video-Tutorials</source>
@@ -114,67 +254,77 @@
   <source>Logout</source>
   <target state="translated">Se déconnecter</target>
 </trans-unit>
-<trans-unit id="s8bb0b618bf59b96e">
-  <source>Fotoliste</source>
-  <target state="translated">Détails de l'événement</target>
-</trans-unit>
-<trans-unit id="s8e7e1013bc071156">
-  <source>Noteneingabe</source>
-  <target state="translated">Saisie des notes</target>
-</trans-unit>
-<trans-unit id="s885970c4ee8d21cc">
-  <source>Schliessen</source>
-  <target state="translated">Fermer</target>
-</trans-unit>
-<trans-unit id="s676022c035fe65f5">
-  <source>Stellvertretung ausüben</source>
-  <target state="translated">Effectuer un remplacement</target>
-</trans-unit>
 <trans-unit id="s918230658d993873">
   <source>Mobile Navigation</source>
   <target state="translated">Navigation mobile</target>
-</trans-unit>
-<trans-unit id="sbd4575edfbf5c84f">
-  <source>Hauptnavigation</source>
-  <target state="translated">Navigation principale</target>
 </trans-unit>
 <trans-unit id="sd10fcf5b06af72f6">
   <source>Servicenavigation</source>
   <target state="translated">Navigation service</target>
 </trans-unit>
-<trans-unit id="s2e7964a3ed3ff4b2">
-  <source>Stellvertretung erfassen</source>
-  <target state="translated">Saisir un remplacement</target>
+<trans-unit id="sc42d48a091dc3230">
+  <source>Evento Startseite</source>
+  <target state="translated">Page d'accueil Evento</target>
 </trans-unit>
-<trans-unit id="s2faf4f61874da789">
-  <source>Personen und Institutionen suchen</source>
-  <target state="translated">Rechercher des personnes et des institutions</target>
+<trans-unit id="s6d8b7baee47fca15">
+  <source>Menü</source>
+  <target state="translated">Menu</target>
 </trans-unit>
-<trans-unit id="sc217172426ab34d5">
-  <source>Aus-/Weiterbildung</source>
-  <target state="translated">Formation (continue)</target>
+<trans-unit id="sbd4575edfbf5c84f">
+  <source>Hauptnavigation</source>
+  <target state="translated">Navigation principale</target>
+</trans-unit>
+<trans-unit id="s885970c4ee8d21cc">
+  <source>Schliessen</source>
+  <target state="translated">Fermer</target>
 </trans-unit>
 <trans-unit id="sccb8c6ab6c0cf3e6">
   <source>Stellvertretung beenden</source>
   <target state="translated">Terminer le remplacement</target>
 </trans-unit>
+<trans-unit id="sd0195378eb1d12a7">
+  <source>Fehler beim Laden der Benachrichtigungen</source>
+  <target state="translated">Erreur lors du chargement des notifications</target>
+</trans-unit>
+<trans-unit id="sb993cc3240e32971">
+  <source>Keine Benachrichtigungen</source>
+  <target state="translated">Aucune notification</target>
+</trans-unit>
+<trans-unit id="s05ec46839b2c45c3">
+  <source>Benachrichtigung löschen</source>
+  <target state="translated">Supprimer la notification</target>
+</trans-unit>
 <trans-unit id="scff9b2b73fc9a17f">
   <source>Benachrichtigungen</source>
   <target state="translated">Notifications</target>
-<trans-unit id="scde3342a428aaee8">
-  <source>Offline</source>
-  <target state="translated">Hors ligne</target>
 </trans-unit>
 <trans-unit id="sda82f4406693e77c">
   <source>Alle löschen</source>
   <target state="translated">Tout effacer</target>
 </trans-unit>
-<trans-unit id="sb993cc3240e32971">
-  <source>Keine Benachrichtigungen</source>
-  <target state="translated">Aucune notification</target>
-<trans-unit id="sd79be54b222abcae">
-  <source>Keine Verbindung vorhanden.</source>
-  <target state="translated">Aucune connexion disponible.</target>
+<trans-unit id="s1a8b197f436e88ab">
+  <source>Menü Benutzereinstellungen</source>
+  <target state="translated">Menu paramètres</target>
+</trans-unit>
+<trans-unit id="sf6588ea1b5ceacff">
+  <source>Mittelschul- und Berufsbildungsamt
+Kasernenstrasse 27
+3013 Bern</source>
+  <target state="translated">Office des écoles moyennes et de la formation professionnelle
+Kasernenstrasse 27
+3013 Berne</target>
+</trans-unit>
+<trans-unit id="sccb118772784d38c">
+  <source>Bedag Informatik AG
+Engehaldenstrasse 12
+3012 Bern</source>
+  <target state="translated">Bedag Informatique SA
+Engehaldenstrasse 12
+3012 Berne</target>
+</trans-unit>
+<trans-unit id="s269516fd03223694">
+  <source>https://www.be.ch/mba</source>
+  <target state="translated">https://www.be.ch/omp</target>
 </trans-unit>
 </body>
 </file>

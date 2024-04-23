@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
+import { choose } from "lit/directives/choose.js";
 import { keyed } from "lit/directives/keyed.js";
 import { when } from "lit/directives/when.js";
 import { localized, msg } from "@lit/localize";
@@ -31,6 +32,8 @@ export class Content extends LitElement {
         font-size: 3.375rem;
         font-weight: 100;
         line-height: 2.25rem;
+        letter-spacing: 0.01rem;
+        word-spacing: 0.025rem;
         margin: 0 0 calc(3.375rem / 2) 0;
       }
 
@@ -104,6 +107,33 @@ export class Content extends LitElement {
     }
   }
 
+  private renderAppIframe() {
+    return html`${keyed(
+      portalState.app.root,
+      html`
+        <iframe
+          id="app"
+          title=${portalState.app.key}
+          src=${`/${portalState.app.root}${portalState.appPath}`}
+        ></iframe>
+      `,
+    )}`;
+  }
+
+  private renderFooterContent() {
+    return html`
+      ${choose(
+        portalState.navigationItemKey,
+        [
+          ["contact", () => html`<bkd-contact></bkd-contact>`],
+          ["legal", () => html`<bkd-legal></bkd-legal>`],
+          ["imprint", () => html`<bkd-imprint></bkd-imprint>`],
+        ],
+        () => html``,
+      )}
+    `;
+  }
+
   render() {
     this.renderedOffline = !navigator.onLine;
     if (!navigator.onLine) {
@@ -129,15 +159,10 @@ export class Content extends LitElement {
           portalState.app.heading,
           () => html`<h1>${portalState.navigationItem.label}</h1>`,
         )}
-        ${keyed(
-          portalState.app.root,
-          html`
-            <iframe
-              id="app"
-              title=${portalState.app.key}
-              src=${`/${portalState.app.root}${portalState.appPath}`}
-            ></iframe>
-          `,
+        ${when(
+          portalState.app.key === "footer",
+          () => this.renderFooterContent(),
+          () => this.renderAppIframe(),
         )}
       </main>
     `;
