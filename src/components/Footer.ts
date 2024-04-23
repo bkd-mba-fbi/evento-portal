@@ -1,8 +1,11 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
 import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
+import { NavigationItem, settings } from "../settings";
 import { portalState } from "../state/portal-state";
+import { buildUrl } from "../utils/routing";
 import { theme } from "../utils/theme";
 
 @customElement("bkd-footer")
@@ -94,27 +97,30 @@ export class Footer extends LitElement {
     new StateController(this, portalState);
   }
 
+  private renderFooterLink(item: NavigationItem) {
+    const url = buildUrl(item);
+    return html`
+      <a
+        href=${url}
+        @click=${(event: MouseEvent) => {
+          event?.preventDefault();
+          portalState.navigate(new URL(url));
+        }}
+        >${item.label}</a
+      >
+    `;
+  }
+
   render() {
     return html`
       <footer role="contentinfo">
         <div class="copyright">${msg("© Bildungs- und Kulturdirektion")}</div>
         <div class="footer-nav">
-          <a
-            href=${`https://www.bkd.be.ch/${portalState.locale.slice(
-              0,
-              2,
-            )}/tools/rechtliches.html`}
-            target="_blank"
-            >${msg("Rechtliche Hinweise")}</a
-          >
-          <a
-            href=${`https://www.bkd.be.ch/${portalState.locale.slice(
-              0,
-              2,
-            )}/tools/impressum.html`}
-            target="_blank"
-            >${msg("Impressum")}</a
-          >
+          ${repeat(
+            settings.footer,
+            (item) => item.key,
+            this.renderFooterLink.bind(this),
+          )}
         </div>
       </footer>
     `;

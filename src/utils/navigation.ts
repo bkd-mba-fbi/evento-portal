@@ -12,6 +12,7 @@ const ungroupedNavigationItems = [
   settings.navigationMySettings,
   settings.navigationPhotoList,
   settings.navigationInputGrades,
+  ...settings.footer,
 ];
 
 /**
@@ -47,6 +48,8 @@ function findNavigationItem(
   navigation: Navigation,
   callback: (item: NavigationItem) => boolean,
 ): { item: NavigationItem; group: NavigationGroup | null } | null {
+  // Although it is not "pure", we reference the `ungroupedNavigationItems` here
+  // directly, because they are not filtered based on the permissions
   let item = ungroupedNavigationItems.find((item) => callback(item));
   if (item) return { item, group: null };
 

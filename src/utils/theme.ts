@@ -33,6 +33,7 @@ export const customProperties = css`
   --bkd-language-switcher-active-border: rgba(234, 22, 31, 0.77);
   --bkd-footer-border: rgba(238, 238, 238, 1);
   --bkd-mobile-nav-shadow: rgba(0, 0, 0, 0.16);
+  --bkd-table-border: rgba(182, 182, 182, 1);
 
   /* Dropdowns */
   --bkd-z-index-dropdown: 1;
@@ -129,6 +130,78 @@ export const theme = css`
   img,
   svg {
     display: block;
+  }
+`;
+
+/**
+ * Styles to be used in content components like <bkd-imprint>
+ */
+export const contentStyles = css`
+  :host {
+    display: block;
+    max-width: 800px;
+  }
+
+  .content-section {
+    margin-bottom: 2.5rem;
+  }
+
+  h2 {
+    font-size: 1.875rem;
+    font-weight: 300;
+    line-height: 2.25rem;
+    margin: 0 0 0.75rem -0.125rem;
+    letter-spacing: 0.01rem;
+    word-spacing: 0.025rem;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.625rem;
+    margin-bottom: 0.9375rem;
+    margin-top: -0.125rem;
+  }
+
+  a {
+    text-decoration: underline;
+    color: var(--bkd-brand-black);
+  }
+
+  a:hover,
+  a:focus {
+    text-decoration: underline;
+    text-decoration-color: var(--bkd-brand-red);
+    color: var(--bkd-brand-black);
+  }
+
+  /* Medium screen */
+
+  @media screen and (max-width: 1200px) {
+    h2 {
+      font-size: 1.5rem;
+      line-height: 1.8125rem;
+      margin: -0.1875rem 0 0.5rem -0.0625rem;
+    }
+  }
+
+  /* Small screen */
+
+  @media screen and (max-width: 767px) {
+    .content-section {
+      margin-bottom: 1.875rem;
+    }
+
+    h2 {
+      font-size: 1.3125rem;
+      line-height: 1.5625rem;
+      margin: -0.125rem 0 0.75rem 0;
+    }
+
+    p,
+    a {
+      font-size: 0.9375rem;
+      line-height: 1.5rem;
+    }
   }
 `;
 

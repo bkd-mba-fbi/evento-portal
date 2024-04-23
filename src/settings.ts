@@ -14,6 +14,7 @@ export type Settings = Readonly<{
   navigationPhotoList: NavigationItem;
   navigationInputGrades: NavigationItem;
   navigation: ReadonlyArray<NavigationGroup>;
+  footer: ReadonlyArray<NavigationItem>;
 }>;
 
 export type App = Readonly<{
@@ -143,6 +144,13 @@ export const settings: Settings = {
       root: "apps/Noteneingabe/index.html",
       heading: false,
     },
+    {
+      // Dummy app entry for the footer pages
+      key: "footer",
+      scope: "Public",
+      root: "",
+      heading: true,
+    },
   ],
   navigationHome: {
     key: "home",
@@ -152,252 +160,324 @@ export const settings: Settings = {
     appKey: "schulverwaltung",
     appPath: "#/dashboard",
   },
-  get navigationPhotoList() {
-    return {
-      key: "photoList",
-      label: msg("Fotoliste"),
-      allowedRolesOrPermissions: ["TeacherRole"],
-      deniedInstanceIds: null,
-      appKey: "fotoliste",
-      appPath: "#/",
-    };
+  navigationPhotoList: {
+    key: "photoList",
+    get label() {
+      return msg("Fotoliste");
+    },
+    allowedRolesOrPermissions: ["TeacherRole"],
+    deniedInstanceIds: null,
+    appKey: "fotoliste",
+    appPath: "#/",
   },
-  get navigationInputGrades() {
-    return {
-      key: "inputGrades",
-      label: msg("Noteneingabe"),
-      allowedRolesOrPermissions: ["TeacherRole"],
-      deniedInstanceIds: null,
-      appKey: "noteneingabe",
-      appPath: "#/",
-    };
+  navigationInputGrades: {
+    key: "inputGrades",
+    get label() {
+      return msg("Noteneingabe");
+    },
+    allowedRolesOrPermissions: ["TeacherRole"],
+    deniedInstanceIds: null,
+    appKey: "noteneingabe",
+    appPath: "#/",
   },
-  get navigationMyProfile() {
-    return {
-      key: "myProfile",
-      label: msg("Mein Profil"),
+  navigationMyProfile: {
+    key: "myProfile",
+    get label() {
+      return msg("Mein Profil");
+    },
+    allowedRolesOrPermissions: null,
+    deniedInstanceIds: null,
+    appKey: "schulverwaltung",
+    appPath: "#/my-profile",
+  },
+  navigationMySettings: {
+    key: "mySettings",
+    get label() {
+      return msg("Einstellungen");
+    },
+    allowedRolesOrPermissions: null,
+    deniedInstanceIds: null,
+    appKey: "schulverwaltung",
+    appPath: "#/my-settings",
+  },
+  navigation: [
+    {
+      get label() {
+        return msg("Unterricht");
+      },
+      items: [
+        {
+          key: "presenceControl",
+          get label() {
+            return msg("Präsenzkontrolle");
+          },
+          allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltung",
+          appPath: "#/presence-control",
+        },
+        {
+          key: "currentEvents",
+          get label() {
+            return msg("Aktuelle Fächer");
+          },
+          allowedRolesOrPermissions: [
+            "TeacherRole",
+            "LessonTeacherRole",
+            "ClassTeacherRole",
+          ],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltung",
+          appPath: "#/events/current",
+        },
+        {
+          key: "tests",
+          get label() {
+            return msg("Tests und Bewertung");
+          },
+          allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltung",
+          appPath: "#/events",
+        },
+        {
+          key: "substitutionsAssign",
+          get label() {
+            return msg("Stellvertretung erfassen");
+          },
+          allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
+          deniedInstanceIds: null,
+          appKey: "stellvertretung",
+          appPath: "#/substitutions/assign",
+        },
+        {
+          key: "substitutionsExecute",
+          get label() {
+            return msg("Stellvertretung ausüben");
+          },
+          allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
+          deniedInstanceIds: null,
+          appKey: "stellvertretung",
+          appPath: "#/substitutions/execute",
+        },
+      ],
+    },
+    {
+      get label() {
+        return msg("Absenzen");
+      },
+      items: [
+        {
+          key: "openAbsences",
+          get label() {
+            return msg("Offene Absenzen entschuldigen");
+          },
+          allowedRolesOrPermissions: [
+            "TeacherRole",
+            "LessonTeacherRole",
+            "ClassTeacherRole",
+          ],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltung",
+          appPath: "#/open-absences",
+        },
+        {
+          key: "editAbsences",
+          get label() {
+            return msg("Absenzen bearbeiten");
+          },
+          allowedRolesOrPermissions: [
+            "TeacherRole",
+            "LessonTeacherRole",
+            "ClassTeacherRole",
+            "AbsenceAdministratorRole",
+          ],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltung",
+          appPath: "#/edit-absences",
+        },
+        {
+          key: "evaluateAbsences",
+          get label() {
+            return msg("Absenzen auswerten");
+          },
+          allowedRolesOrPermissions: [
+            "TeacherRole",
+            "LessonTeacherRole",
+            "ClassTeacherRole",
+            "AbsenceAdministratorRole",
+          ],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltung",
+          appPath: "#/evaluate-absences",
+        },
+      ],
+    },
+    {
+      get label() {
+        return msg("Aus-/Weiterbildung");
+      },
+      items: [
+        {
+          key: "myAbsences",
+          get label() {
+            return msg("Absenzen");
+          },
+          allowedRolesOrPermissions: ["StudentRole"],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltung",
+          appPath: "#/my-absences",
+        },
+        {
+          key: "myGrades",
+          get label() {
+            return msg("Noten");
+          },
+          allowedRolesOrPermissions: ["StudentRole"],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltung",
+          appPath: "#/my-grades",
+        },
+      ],
+    },
+    {
+      get label() {
+        return msg("Angebote");
+      },
+      items: [
+        {
+          key: "coursesAndEvents",
+          get label() {
+            return msg("Kurse und Veranstaltungen");
+          },
+          allowedRolesOrPermissions: null,
+          deniedInstanceIds: null,
+          appKey: "kursausschreibung",
+          appPath: "#/",
+        },
+        {
+          key: "internalTraining",
+          get label() {
+            return msg("Schulinterne Weiterbildung");
+          },
+          allowedRolesOrPermissions: [
+            "TeacherRole",
+            "LessonTeacherRole",
+            "ClassTeacherRole",
+            "AbsenceAdministratorRole",
+            "SubstituteAdministratorRole",
+            "Reservations",
+          ],
+          deniedInstanceIds: null,
+          appKey: "kursausschreibungIntern",
+          appPath: "#/",
+        },
+        {
+          key: "reservations",
+          get label() {
+            return msg("Räume und Geräte reservieren");
+          },
+          allowedRolesOrPermissions: ["Reservations"],
+          deniedInstanceIds: null,
+          appKey: "reservation",
+          appPath: "#/",
+        },
+      ],
+    },
+    {
+      get label() {
+        return msg("Administration");
+      },
+      items: [
+        {
+          key: "substitutionsAdmin",
+          get label() {
+            return msg("Stellvertretungen administrieren");
+          },
+          allowedRolesOrPermissions: ["SubstituteAdministratorRole"],
+          deniedInstanceIds: null,
+          appKey: "stellvertretung",
+          appPath: "#/substitutions/admin",
+        },
+        {
+          key: "personSearch",
+          get label() {
+            return msg("Personen und Institutionen suchen");
+          },
+          allowedRolesOrPermissions: ["PersonRight"],
+          deniedInstanceIds: null,
+          appKey: "schulleiterPersonen",
+          appPath: "#/persons",
+        },
+        {
+          key: "eventRegistration",
+          get label() {
+            return msg("Anmeldedetails einlesen");
+          },
+          allowedRolesOrPermissions: [
+            "PersonRight",
+            "RegistrationRightAusbildungSemester",
+            "RegistrationRightAusbildungKurs",
+            "RegistrationRightAusbildungModulanlass",
+            "RegistrationRightAusbildungModul",
+            "RegistrationRightAusbildungStudiengang",
+            "RegistrationRightAusbildungStudienjahrgang",
+            "RegistrationRightAusbildungVeranstaltung",
+            "RegistrationRightWeiterbildungCAS",
+            "RegistrationRightWeiterbildungCASAnlass",
+            "RegistrationRightWeiterbildungDAS",
+            "RegistrationRightWeiterbildungDASJahrgang",
+            "RegistrationRightWeiterbildungInteressent",
+            "RegistrationRightWeiterbildungKurs",
+            "RegistrationRightWeiterbildungMAS",
+            "RegistrationRightWeiterbildungMASJahrgang",
+            "RegistrationRightWeiterbildungModulanlass",
+            "RegistrationRightWeiterbildungModulbefreiung",
+            "RegistrationRightWeiterbildungSemester",
+            "RegistrationRightWeiterbildungVeranstaltung",
+            "RegistrationRightWeiterbildungEvaluationsanlass",
+            "RegistrationRightWeiterbildungFakturierung",
+            "RegistrationRightWeiterbildungMailingliste",
+            "RegistrationRightWeiterbildungPlatzangebot",
+            "RegistrationRightWeiterbildungReservation",
+          ],
+          deniedInstanceIds: null,
+          appKey: "anmeldedetailsEinlesen",
+          appPath: "#/input",
+        },
+      ],
+    },
+  ],
+  footer: [
+    {
+      key: "contact",
+      get label() {
+        return msg("Kontakt");
+      },
       allowedRolesOrPermissions: null,
       deniedInstanceIds: null,
-      appKey: "schulverwaltung",
-      appPath: "#/my-profile",
-    };
-  },
-  get navigationMySettings() {
-    return {
-      key: "mySettings",
-      label: msg("Einstellungen"),
+      appKey: "footer",
+      appPath: "#/",
+    },
+    {
+      key: "legal",
+      get label() {
+        return msg("Rechtliche Hinweise");
+      },
       allowedRolesOrPermissions: null,
       deniedInstanceIds: null,
-      appKey: "schulverwaltung",
-      appPath: "#/my-settings",
-    };
-  },
-  get navigation(): Navigation {
-    return [
-      {
-        label: msg("Unterricht"),
-        items: [
-          {
-            key: "presenceControl",
-            label: msg("Präsenzkontrolle"),
-            allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/presence-control",
-          },
-          {
-            key: "currentEvents",
-            label: msg("Aktuelle Fächer"),
-            allowedRolesOrPermissions: [
-              "TeacherRole",
-              "LessonTeacherRole",
-              "ClassTeacherRole",
-            ],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/events/current",
-          },
-          {
-            key: "tests",
-            label: msg("Tests und Bewertung"),
-            allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/events",
-          },
-          {
-            key: "substitutionsAssign",
-            label: msg("Stellvertretung erfassen"),
-            allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
-            deniedInstanceIds: null,
-            appKey: "stellvertretung",
-            appPath: "#/substitutions/assign",
-          },
-          {
-            key: "substitutionsExecute",
-            label: msg("Stellvertretung ausüben"),
-            allowedRolesOrPermissions: ["TeacherRole", "LessonTeacherRole"],
-            deniedInstanceIds: null,
-            appKey: "stellvertretung",
-            appPath: "#/substitutions/execute",
-          },
-        ],
+      appKey: "footer",
+      appPath: "#/",
+    },
+    {
+      key: "imprint",
+      get label() {
+        return msg("Impressum");
       },
-      {
-        label: msg("Absenzen"),
-        items: [
-          {
-            key: "openAbsences",
-            label: msg("Offene Absenzen entschuldigen"),
-            allowedRolesOrPermissions: [
-              "TeacherRole",
-              "LessonTeacherRole",
-              "ClassTeacherRole",
-            ],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/open-absences",
-          },
-          {
-            key: "editAbsences",
-            label: msg("Absenzen bearbeiten"),
-            allowedRolesOrPermissions: [
-              "TeacherRole",
-              "LessonTeacherRole",
-              "ClassTeacherRole",
-              "AbsenceAdministratorRole",
-            ],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/edit-absences",
-          },
-          {
-            key: "evaluateAbsences",
-            label: msg("Absenzen auswerten"),
-            allowedRolesOrPermissions: [
-              "TeacherRole",
-              "LessonTeacherRole",
-              "ClassTeacherRole",
-              "AbsenceAdministratorRole",
-            ],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/evaluate-absences",
-          },
-        ],
-      },
-      {
-        label: msg("Aus-/Weiterbildung"),
-        items: [
-          {
-            key: "myAbsences",
-            label: msg("Absenzen"),
-            allowedRolesOrPermissions: ["StudentRole"],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/my-absences",
-          },
-          {
-            key: "myGrades",
-            label: msg("Noten"),
-            allowedRolesOrPermissions: ["StudentRole"],
-            deniedInstanceIds: null,
-            appKey: "schulverwaltung",
-            appPath: "#/my-grades",
-          },
-        ],
-      },
-      {
-        label: msg("Angebote"),
-        items: [
-          {
-            key: "coursesAndEvents",
-            label: msg("Kurse und Veranstaltungen"),
-            allowedRolesOrPermissions: null,
-            deniedInstanceIds: null,
-            appKey: "kursausschreibung",
-            appPath: "#/",
-          },
-          {
-            key: "internalTraining",
-            label: msg("Schulinterne Weiterbildung"),
-            allowedRolesOrPermissions: [
-              "TeacherRole",
-              "LessonTeacherRole",
-              "ClassTeacherRole",
-              "AbsenceAdministratorRole",
-              "SubstituteAdministratorRole",
-              "Reservations",
-            ],
-            deniedInstanceIds: null,
-            appKey: "kursausschreibungIntern",
-            appPath: "#/",
-          },
-          {
-            key: "reservations",
-            label: msg("Räume und Geräte reservieren"),
-            allowedRolesOrPermissions: ["Reservations"],
-            deniedInstanceIds: null,
-            appKey: "reservation",
-            appPath: "#/",
-          },
-        ],
-      },
-      {
-        label: msg("Administration"),
-        items: [
-          {
-            key: "substitutionsAdmin",
-            label: msg("Stellvertretungen administrieren"),
-            allowedRolesOrPermissions: ["SubstituteAdministratorRole"],
-            deniedInstanceIds: null,
-            appKey: "stellvertretung",
-            appPath: "#/substitutions/admin",
-          },
-          {
-            key: "personSearch",
-            label: msg("Personen und Institutionen suchen"),
-            allowedRolesOrPermissions: ["PersonRight"],
-            deniedInstanceIds: null,
-            appKey: "schulleiterPersonen",
-            appPath: "#/persons",
-          },
-          {
-            key: "eventRegistration",
-            label: msg("Anmeldedetails einlesen"),
-            allowedRolesOrPermissions: [
-              "PersonRight",
-              "RegistrationRightAusbildungSemester",
-              "RegistrationRightAusbildungKurs",
-              "RegistrationRightAusbildungModulanlass",
-              "RegistrationRightAusbildungModul",
-              "RegistrationRightAusbildungStudiengang",
-              "RegistrationRightAusbildungStudienjahrgang",
-              "RegistrationRightAusbildungVeranstaltung",
-              "RegistrationRightWeiterbildungCAS",
-              "RegistrationRightWeiterbildungCASAnlass",
-              "RegistrationRightWeiterbildungDAS",
-              "RegistrationRightWeiterbildungDASJahrgang",
-              "RegistrationRightWeiterbildungInteressent",
-              "RegistrationRightWeiterbildungKurs",
-              "RegistrationRightWeiterbildungMAS",
-              "RegistrationRightWeiterbildungMASJahrgang",
-              "RegistrationRightWeiterbildungModulanlass",
-              "RegistrationRightWeiterbildungModulbefreiung",
-              "RegistrationRightWeiterbildungSemester",
-              "RegistrationRightWeiterbildungVeranstaltung",
-              "RegistrationRightWeiterbildungEvaluationsanlass",
-              "RegistrationRightWeiterbildungFakturierung",
-              "RegistrationRightWeiterbildungMailingliste",
-              "RegistrationRightWeiterbildungPlatzangebot",
-              "RegistrationRightWeiterbildungReservation",
-            ],
-            deniedInstanceIds: null,
-            appKey: "anmeldedetailsEinlesen",
-            appPath: "#/input",
-          },
-        ],
-      },
-    ];
-  },
+      allowedRolesOrPermissions: null,
+      deniedInstanceIds: null,
+      appKey: "footer",
+      appPath: "#/",
+    },
+  ],
 };
