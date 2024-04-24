@@ -77,7 +77,7 @@ Cypress.Commands.add(
     cy.intercept(
       "GET",
       "https://eventotest.api/restApi/Configurations/SchoolAppNavigation",
-      { instanceName: "Test" },
+      { instanceName: "Test", guiLanguage: ["de-CH", "fr-CH"] },
     );
 
     cy.intercept(

@@ -7,7 +7,7 @@ import {
   NavigationItem,
   settings,
 } from "../settings";
-import { fetchInstanceName, fetchUserAccessInfo } from "../utils/fetch";
+import { fetchSchoolAppNavigation, fetchUserAccessInfo } from "../utils/fetch";
 import { getInitialLocale, getLocale, updateLocale } from "../utils/locale";
 import { filterAllowed, getApp, getNavigationItem } from "../utils/navigation";
 import { cleanupQueryParams, updateQueryParam } from "../utils/routing";
@@ -261,7 +261,7 @@ class PortalState extends State {
     if (!tokenState.authenticated) return;
 
     try {
-      const instanceName = await fetchInstanceName();
+      const { instanceName } = await fetchSchoolAppNavigation();
       this.instanceName = [msg("Evento"), instanceName]
         .filter(Boolean)
         .join(" | ");
