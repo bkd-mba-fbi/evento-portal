@@ -4,24 +4,11 @@ describe("Service Navigation", () => {
   describe("desktop", () => {
     beforeEach(() => {
       cy.resizeToDesktop();
-      cy.visit("/index.html");
     });
 
     it("open/closes user settings", () => {
-      // User settings menu initially closed
-      cy.get("button[aria-label='Menü Benutzereinstellungen']")
-        .as("toggle")
-        .should("be.visible")
-        .ariaExpanded(false);
-      cy.get("bkd-user-settings")
-        .find('ul[role="menu"]')
-        .as("serviceNav")
-        .should("not.be.visible");
-
-      // Open user settings menu
-      cy.get("@toggle").click();
-      cy.get("@toggle").ariaExpanded(true);
-      cy.get("@serviceNav").should("be.visible");
+      cy.visit("/index.html");
+      openServiceNavigation();
 
       // Close user settings menu
       cy.get("@toggle").click();
@@ -30,20 +17,10 @@ describe("Service Navigation", () => {
     });
 
     it("renders user settings in the service navigation", () => {
-      // User settings menu initially closed
-      cy.get("button[aria-label='Menü Benutzereinstellungen']")
-        .as("toggle")
-        .should("be.visible")
-        .ariaExpanded(false);
-      cy.get("bkd-user-settings")
-        .find('ul[role="menu"]')
-        .as("serviceNav")
-        .should("not.be.visible");
+      cy.visit("/index.html");
+      openServiceNavigation();
 
-      // Open user settings menu
-      cy.get("@toggle").click();
       cy.get("@serviceNav")
-        .should("be.visible")
         .find("a")
         .should((links) =>
           expect(
@@ -60,20 +37,8 @@ describe("Service Navigation", () => {
     // Apparently the triggering of the 'keydown' event does not work
     // when run headless
     it.skip("closes user settings on escape", () => {
-      // User settings menu initially closed
-      cy.get("button[aria-label='Menü Benutzereinstellungen']")
-        .as("toggle")
-        .should("be.visible")
-        .ariaExpanded(false);
-      cy.get("bkd-user-settings")
-        .find('ul[role="menu"]')
-        .as("serviceNav")
-        .should("not.be.visible");
-
-      // Open user settings menu
-      cy.get("@toggle").click();
-      cy.get("@toggle").ariaExpanded(true);
-      cy.get("@serviceNav").should("be.visible");
+      cy.visit("/index.html");
+      openServiceNavigation();
 
       // Close user settings menu
       cy.document().trigger("keydown", { key: "Escape" });
@@ -82,20 +47,8 @@ describe("Service Navigation", () => {
     });
 
     it("closes user settings on select", () => {
-      // User settings menu initially closed
-      cy.get("button[aria-label='Menü Benutzereinstellungen']")
-        .as("toggle")
-        .should("be.visible")
-        .ariaExpanded(false);
-      cy.get("bkd-user-settings")
-        .find('ul[role="menu"]')
-        .as("serviceNav")
-        .should("not.be.visible");
-
-      // Open user settings menu
-      cy.get("@toggle").click();
-      cy.get("@toggle").ariaExpanded(true);
-      cy.get("@serviceNav").should("be.visible");
+      cy.visit("/index.html");
+      openServiceNavigation();
 
       // Close user settings menu
       cy.get("@serviceNav")
@@ -107,20 +60,8 @@ describe("Service Navigation", () => {
     });
 
     it("closes user settings on click away", () => {
-      // User settings menu initially closed
-      cy.get("button[aria-label='Menü Benutzereinstellungen']")
-        .as("toggle")
-        .should("be.visible")
-        .ariaExpanded(false);
-      cy.get("bkd-user-settings")
-        .find('ul[role="menu"]')
-        .as("serviceNav")
-        .should("not.be.visible");
-
-      // Open user settings menu
-      cy.get("@toggle").click();
-      cy.get("@toggle").ariaExpanded(true);
-      cy.get("@serviceNav").should("be.visible");
+      cy.visit("/index.html");
+      openServiceNavigation();
 
       // Close user settings menu
       cy.get("a.logo").click();
@@ -128,7 +69,10 @@ describe("Service Navigation", () => {
       cy.get("@serviceNav").should("not.be.visible");
     });
 
-    it("renders language switcher in the service navigation", () => {
+    it("renders language switcher in the service navigation for multilingual schools", () => {
+      interceptGuiLanguagesRequest(["de-CH", "fr-CH"]);
+
+      cy.visit("/index.html");
       cy.get("bkd-language-switcher")
         .find("a")
         .should((links) =>
@@ -137,28 +81,24 @@ describe("Service Navigation", () => {
           ).to.deep.eq(["de", "fr"]),
         );
     });
+
+    it("does not render language switcher in the service navigation for monolingual schools", () => {
+      interceptGuiLanguagesRequest(["de-CH"]);
+
+      cy.visit("/index.html");
+      cy.get("bkd-language-switcher").should("not.exist");
+    });
   });
 
   describe("mobile", () => {
     beforeEach(() => {
       cy.resizeToMobile();
-      cy.visit("/index.html");
     });
 
-    it("renders user settings and language switcher in the mobile navigation", () => {
-      // Mobile navigation initially closed
-      cy.get("button[aria-label='Menü Benutzereinstellungen']")
-        .should("not.be.visible")
-        .ariaExpanded(false);
-      cy.get("bkd-user-settings")
-        .find('ul[role="menu"]')
-        .should("not.be.visible");
-
-      // Open mobile navigation
-      cy.get("button[aria-label='Menü']").as("toggle");
-      cy.get("@toggle").click();
-      cy.get("@toggle").ariaExpanded(true);
-      cy.get(".service-nav").as("serviceNav").should("be.visible");
+    it("renders user settings and language switcher in the mobile navigation for multilingual schools", () => {
+      interceptGuiLanguagesRequest(["de-CH", "fr-CH"]);
+      cy.visit("/index.html");
+      openMobileNavigation();
 
       cy.get("@serviceNav")
         .find("a")
@@ -175,5 +115,63 @@ describe("Service Navigation", () => {
           ]),
         );
     });
+
+    it("renders user settings in the mobile navigation for monolingual schools", () => {
+      interceptGuiLanguagesRequest(["de-CH"]);
+      cy.visit("/index.html");
+      openMobileNavigation();
+
+      cy.get("@serviceNav")
+        .find("a")
+        .should((links) =>
+          expect(
+            links.toArray().map((link) => link.textContent?.trim()),
+          ).to.deep.eq([
+            "Mein Profil",
+            "Einstellungen",
+            "Video-Tutorials",
+            "Logout",
+          ]),
+        );
+    });
   });
 });
+
+function interceptGuiLanguagesRequest(guiLanguage: string[]) {
+  cy.intercept(
+    "GET",
+    "https://eventotest.api/restApi/Configurations/SchoolAppNavigation",
+    { instanceName: "Test", guiLanguage },
+  );
+}
+
+function openServiceNavigation() {
+  // User settings menu initially closed
+  cy.get("button[aria-label='Menü Benutzereinstellungen']")
+    .as("toggle")
+    .should("be.visible")
+    .ariaExpanded(false);
+  cy.get("bkd-user-settings")
+    .find('ul[role="menu"]')
+    .as("serviceNav")
+    .should("not.be.visible");
+
+  // Open user settings menu
+  cy.get("@toggle").click();
+  cy.get("@toggle").ariaExpanded(true);
+  cy.get("@serviceNav").should("be.visible");
+}
+
+function openMobileNavigation() {
+  // Mobile navigation initially closed
+  cy.get("button[aria-label='Menü Benutzereinstellungen']")
+    .should("not.be.visible")
+    .ariaExpanded(false);
+  cy.get("bkd-user-settings").find('ul[role="menu"]').should("not.be.visible");
+
+  // Open mobile navigation
+  cy.get("button[aria-label='Menü']").as("toggle");
+  cy.get("@toggle").click();
+  cy.get("@toggle").ariaExpanded(true);
+  cy.get(".service-nav").as("serviceNav").should("be.visible");
+}

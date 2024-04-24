@@ -3,6 +3,7 @@ import { customElement, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { map } from "lit/directives/map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import { when } from "lit/directives/when.js";
 import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
 import arrowDownIcon from "../../assets/icons/arrow-down.svg?raw";
@@ -316,7 +317,10 @@ export class MobileNav extends LitElement {
               this.renderSettingsItem.bind(this),
             )}
           </ul>
-          <bkd-language-switcher></bkd-language-switcher>
+          ${when(
+            portalState.guiLanguages.length > 1,
+            () => html`<bkd-language-switcher></bkd-language-switcher>`,
+          )}
         </div>
       </nav>
     `;

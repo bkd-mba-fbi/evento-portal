@@ -30,6 +30,9 @@ class PortalState extends State {
   instanceName!: string;
 
   @property({ value: [] })
+  guiLanguages!: ReadonlyArray<string>;
+
+  @property({ value: [] })
   navigation!: Navigation;
 
   @query({ parameter: NAV_ITEM_QUERY_PARAM })
@@ -159,6 +162,7 @@ class PortalState extends State {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async handleStateChange(key: string, value: any): Promise<void> {
     if (key === "locale") {
+      await this.loadGuiLanguages();
       await this.updateLocale(value);
       await this.loadInstanceName();
     }
@@ -271,6 +275,12 @@ class PortalState extends State {
         error,
       );
     }
+  }
+
+  private async loadGuiLanguages(): Promise<void> {
+    if (!tokenState.authenticated) return;
+    const { guiLanguage } = await fetchSchoolAppNavigation();
+    this.guiLanguages = guiLanguage;
   }
 }
 
