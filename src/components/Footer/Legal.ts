@@ -100,7 +100,7 @@ Kasernenstrasse 27
         </p>
         <p><a href="mailto:fbi.mba@be.ch">${msg("E-Mail")}</a></p>
         <p>
-          <a href="${msg("https://www.be.ch/mba")}"
+          <a href="${msg("https://www.be.ch/mba")}" target="_blank"
             >${msg("https://www.be.ch/mba").replace("https://", "")}</a
           >
         </p>
