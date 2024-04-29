@@ -128,7 +128,7 @@
 </trans-unit>
 <trans-unit id="s41ff2c74cc56bc8f">
   <source>Lernende, Lehrpersonen und Schulmitarbeitende wenden sich bei Fehlermeldungen in Evento Web oder Fragen zu dieser Fachapplikation an die zuständige Stelle in ihrer Schule. Diese wird von der Schule kommuniziert. Im Zweifelsfall kontaktieren Sie bitte das Schulsekretariat.</source>
-  <target state="translated">En cas de message d’erreur dans Evento Web ou de questions au sujet de cette application, les élèves, les membres du corps enseignant et les collaboratrices et collaborateurs des écoles peuvent contacter le service compétent de leur établissement. L’école indique aux élèves le service concerné. En cas de doute, veuillez contacter le secrétariat de l’école.</target>
+  <target state="translated">En cas de message d’erreur dans Evento Web ou de questions au sujet de cette application, les élèves, les membres du corps enseignant et les collaboratrices et collaborateurs des écoles peuvent contacter le service compétent de leur établissement. L’école indique le service concerné. En cas de doute, veuillez contacter le secrétariat de l’école.</target>
 </trans-unit>
 <trans-unit id="s8218de939c80532c">
   <source>Inhaltsverantwortung</source>

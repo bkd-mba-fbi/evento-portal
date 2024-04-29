@@ -22,7 +22,7 @@ export const templates = {
   s321998fa37fe89be: `© Direction de l'instruction publique et de la culture`,
   s3490946cb9fc3368: `Réseaux sociaux`,
   s41d88871e0b18f8b: `Cours et manifestations`,
-  s41ff2c74cc56bc8f: `En cas de message d’erreur dans Evento Web ou de questions au sujet de cette application, les élèves, les membres du corps enseignant et les collaboratrices et collaborateurs des écoles peuvent contacter le service compétent de leur établissement. L’école indique aux élèves le service concerné. En cas de doute, veuillez contacter le secrétariat de l’école.`,
+  s41ff2c74cc56bc8f: `En cas de message d’erreur dans Evento Web ou de questions au sujet de cette application, les élèves, les membres du corps enseignant et les collaboratrices et collaborateurs des écoles peuvent contacter le service compétent de leur établissement. L’école indique le service concerné. En cas de doute, veuillez contacter le secrétariat de l’école.`,
   s44d2798b4a925e79: `Propriété intellectuelle`,
   s4c575b80febcc990: `Gérer les remplacements`,
   s53f771f096f6dee7: `Adresse IP, données techniques relatives au système d’exploitation et au navigateur web, URL référent, nom d’hôte et heure`,
