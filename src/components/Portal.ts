@@ -79,22 +79,29 @@ export class Portal extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    portalState.initialized.then(() => {
-      // When all roles/permissions have been loaded and the current
-      // app does not match the scope of the current token, activate a
-      // token for the app's scope. This can be the case when
-      // previously authenticated as another user and the current user
-      // has no access to the navigation item from the redirect URL,
-      // hence is redirected to home (see
-      // https://github.com/bkd-mba-fbi/evento-portal/issues/106).
-      if (tokenState.scope !== portalState.app.scope) {
-        activateTokenForScope(
-          oAuthClient,
-          portalState.app.scope,
-          portalState.locale,
-        );
-      }
-    });
+    portalState.initialized.then(() =>
+      setTimeout(() => {
+        // When all roles/permissions have been loaded and the current app does
+        // not match the scope of the current token, activate a token for the
+        // app's scope. This can be the case when previously authenticated as
+        // another user and the current user has no access to the navigation
+        // item from the redirect URL, hence is redirected to home (see
+        // https://github.com/bkd-mba-fbi/evento-portal/issues/106).
+        //
+        // Also, escape the callstack with the `setTimeout`, to make sure we are
+        // checking the scope after the `navigate` call in `handleLoginResult`
+        // (which is also executed when the `initialized` promise is resolved).
+        // Without the `setTimeout`, we would check the scope before it is set
+        // correctly.
+        if (tokenState.scope !== portalState.app.scope) {
+          activateTokenForScope(
+            oAuthClient,
+            portalState.app.scope,
+            portalState.locale,
+          );
+        }
+      }),
+    );
 
     this.subscriptions.push(
       portalState.subscribeScopeAndLocale(

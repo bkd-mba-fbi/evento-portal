@@ -181,7 +181,14 @@ class PortalState extends State {
 
   private async updateLocale(locale: PortalState["locale"]): Promise<void> {
     updateQueryParam(LOCALE_QUERY_PARAM, locale);
-    await updateLocale(locale);
+    try {
+      await updateLocale(locale);
+    } catch (error) {
+      console.warn(
+        "Unable to fetch/update locale (this may happen when interrupted by a redirect):",
+        error,
+      );
+    }
   }
 
   private updateNavigation(): void {
@@ -253,10 +260,17 @@ class PortalState extends State {
   private async loadInstanceName(): Promise<void> {
     if (!tokenState.authenticated) return;
 
-    const instanceName = await fetchInstanceName();
-    this.instanceName = [msg("Evento"), instanceName]
-      .filter(Boolean)
-      .join(" | ");
+    try {
+      const instanceName = await fetchInstanceName();
+      this.instanceName = [msg("Evento"), instanceName]
+        .filter(Boolean)
+        .join(" | ");
+    } catch (error) {
+      console.warn(
+        "Unable to fetch/update instance name (this may happen when interrupted by a redirect):",
+        error,
+      );
+    }
   }
 }
 
