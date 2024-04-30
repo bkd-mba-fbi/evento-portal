@@ -1,10 +1,10 @@
 # Evento Portal
 
-[![Lint & Test ✨](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml)
-[![Build & Deploy ZIP 📦](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/zip.yml/badge.svg?branch=main)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/zip.yml)
-[![Build & Push Docker Image 🚀](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/docker.yml/badge.svg)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/docker.yml)
+[![Lint & Test](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/test.yml)
+[![Build & ZIP](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/zip.yml/badge.svg?branch=main)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/zip.yml)
+[![Build & Push Container](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/container-build.yml/badge.svg)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/container-build.yml)
 [![SBOM](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/bom.yml/badge.svg?branch=main)](https://github.com/bkd-mba-fbi/evento-portal/actions/workflows/bom.yml)
-[![Netlify main deploy](https://api.netlify.com/api/v1/badges/fccfe392-ffb5-4e40-b95a-5d319e431559/deploy-status)](https://app.netlify.com/sites/evtapp/deploys)
+[![Build evtapp.netlify.app](https://api.netlify.com/api/v1/badges/fccfe392-ffb5-4e40-b95a-5d319e431559/deploy-status)](https://app.netlify.com/sites/evtapp/deploys)
 
 The _Evento Portal_ is used to integrate various applications for school administration in a single web portal with a common look and feel.
 

@@ -1,10 +1,9 @@
-name: Lint & Test ✨
+name: Lint & Test
 
 on: [push, pull_request]
 
 env:
   DISABLE_SERVICE_WORKER: "true"
-  NODE_VERSION: 20
 
 jobs:
   test:
@@ -14,10 +13,14 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ env.NODE_VERSION }}
+      - name: Read .nvmrc
+        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+        id: nvm
+
+      - name: Use Node.js ${{ steps.nvm.outputs.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies 🔧
@@ -27,7 +30,7 @@ jobs:
         run: npm run lint
 
       - name: Cypress 🔬
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           build: npm run build
           start: npx http-server dist/ -p 3000 -s
