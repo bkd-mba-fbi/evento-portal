@@ -1,11 +1,8 @@
-name: Deploy Test Env 🚀
+name: Build evtapp.netlify.app
 
 on:
   push:
     branches: [main]
-
-env:
-  NODE_VERSION: 20
 
 jobs:
   build:
@@ -15,10 +12,14 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ env.NODE_VERSION }}
+      - name: Read .nvmrc
+        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+        id: nvm
+
+      - name: Use Node.js ${{ steps.nvm.outputs.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies 🔧

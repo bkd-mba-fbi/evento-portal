@@ -1,4 +1,4 @@
-name: Container Build and Push 🐳 ⏏️
+name: Build & Push Container
 
 on:
   workflow_dispatch:
@@ -10,7 +10,6 @@ permissions:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  NODE_VERSION: 20
 
 jobs:
   merge-branches-with-no-ff:
@@ -73,10 +72,14 @@ jobs:
           git checkout HEAD
           git log -n 1
 
-      - name: Use Node.js ${{ env.NODE_VERSION }}
+      - name: Read .nvmrc
+        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+        id: nvm
+
+      - name: Use Node.js ${{ steps.nvm.outputs.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies 🔧
