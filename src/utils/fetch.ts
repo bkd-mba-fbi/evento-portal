@@ -23,14 +23,18 @@ export async function fetchUserAccessInfo(): Promise<UserAccessInfo> {
   };
 }
 
-type SchoolAppNavigation = Readonly<{
+type InstanceInfo = Readonly<{
   instanceName: string;
-  guiLanguage: string[];
+  allowedLocales: ReadonlyArray<string>;
 }>;
 
-export async function fetchSchoolAppNavigation(): Promise<SchoolAppNavigation> {
+export async function fetchInstanceInfo(): Promise<InstanceInfo> {
   const url = `${envSettings.apiServer}/Configurations/SchoolAppNavigation`;
-  return await fetchApi<SchoolAppNavigation>(url);
+  const { instanceName, guiLanguage: allowedLocales } = await fetchApi<{
+    instanceName: string;
+    guiLanguage: ReadonlyArray<string>;
+  }>(url);
+  return { instanceName, allowedLocales };
 }
 
 export type Substitution = Readonly<{

@@ -1,4 +1,3 @@
-import { msg } from "@lit/localize";
 import { State, property, query } from "@lit-app/state";
 import {
   App,
@@ -7,7 +6,7 @@ import {
   NavigationItem,
   settings,
 } from "../settings";
-import { fetchSchoolAppNavigation, fetchUserAccessInfo } from "../utils/fetch";
+import { fetchInstanceInfo, fetchUserAccessInfo } from "../utils/fetch";
 import { getInitialLocale, getLocale, updateLocale } from "../utils/locale";
 import { filterAllowed, getApp, getNavigationItem } from "../utils/navigation";
 import { cleanupQueryParams, updateQueryParam } from "../utils/routing";
@@ -71,6 +70,8 @@ class PortalState extends State {
   );
 
   async init() {
+    await this.loadInstanceInfo();
+
     // Update initially
     await this.handleStateChange("locale", this.locale);
 
@@ -162,9 +163,7 @@ class PortalState extends State {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async handleStateChange(key: string, value: any): Promise<void> {
     if (key === "locale") {
-      await this.loadGuiLanguages();
       await this.updateLocale(value);
-      await this.loadInstanceName();
     }
 
     if (key === "locale" || key === "navigationItemKey") {
@@ -184,9 +183,15 @@ class PortalState extends State {
   }
 
   private async updateLocale(locale: PortalState["locale"]): Promise<void> {
-    updateQueryParam(LOCALE_QUERY_PARAM, locale);
+    // Fall back to allowed language (i.e. for instances that only support one
+    // language)
+    this.locale = this.allowedLocales.includes(locale)
+      ? locale
+      : this.allowedLocales[0];
+
+    updateQueryParam(LOCALE_QUERY_PARAM, this.locale);
     try {
-      await updateLocale(locale);
+      await updateLocale(this.locale);
     } catch (error) {
       console.warn(
         "Unable to fetch/update locale (this may happen when interrupted by a redirect):",
@@ -261,26 +266,19 @@ class PortalState extends State {
     this.rolesAndPermissions = [...roles, ...permissions];
   }
 
-  private async loadInstanceName(): Promise<void> {
+  private async loadInstanceInfo(): Promise<void> {
     if (!tokenState.authenticated) return;
 
     try {
-      const { instanceName } = await fetchSchoolAppNavigation();
-      this.instanceName = [msg("Evento"), instanceName]
-        .filter(Boolean)
-        .join(" | ");
+      const { instanceName, allowedLocales } = await fetchInstanceInfo();
+      this.allowedLocales = allowedLocales;
+      this.instanceName = ["Evento", instanceName].filter(Boolean).join(" | ");
     } catch (error) {
       console.warn(
         "Unable to fetch/update instance name (this may happen when interrupted by a redirect):",
         error,
       );
     }
-  }
-
-  private async loadAllowedLocales(): Promise<void> {
-    if (!tokenState.authenticated) return;
-    const { guiLanguage } = await fetchSchoolAppNavigation();
-    this.allowedLocales = guiLanguage;
   }
 }
 
