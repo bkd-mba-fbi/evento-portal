@@ -30,7 +30,7 @@ class PortalState extends State {
   instanceName!: string;
 
   @property({ value: [] })
-  guiLanguages!: ReadonlyArray<string>;
+  allowedLocales!: ReadonlyArray<string>;
 
   @property({ value: [] })
   navigation!: Navigation;
@@ -277,10 +277,10 @@ class PortalState extends State {
     }
   }
 
-  private async loadGuiLanguages(): Promise<void> {
+  private async loadAllowedLocales(): Promise<void> {
     if (!tokenState.authenticated) return;
     const { guiLanguage } = await fetchSchoolAppNavigation();
-    this.guiLanguages = guiLanguage;
+    this.allowedLocales = guiLanguage;
   }
 }
 

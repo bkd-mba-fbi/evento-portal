@@ -318,7 +318,7 @@ export class MobileNav extends LitElement {
             )}
           </ul>
           ${when(
-            portalState.guiLanguages.length > 1,
+            portalState.allowedLocales.length > 1,
             () => html`<bkd-language-switcher></bkd-language-switcher>`,
           )}
         </div>

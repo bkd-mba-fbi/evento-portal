@@ -69,7 +69,7 @@ export class ServiceNav extends LitElement {
         <bkd-notifications-toggle></bkd-notifications-toggle>
         <bkd-user-settings></bkd-user-settings>
         ${when(
-          portalState.guiLanguages.length > 1,
+          portalState.allowedLocales.length > 1,
           () => html`<bkd-language-switcher></bkd-language-switcher>`,
         )}
         <bkd-hamburger .open=${this.mobileNavOpen}></bkd-hamburger>
