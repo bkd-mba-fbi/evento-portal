@@ -1,6 +1,9 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { when } from "lit/directives/when.js";
 import { localized, msg } from "@lit/localize";
+import { StateController } from "@lit-app/state";
+import { portalState } from "../../state/portal-state.ts";
 import { theme } from "../../utils/theme";
 
 @customElement("bkd-service-nav")
@@ -54,13 +57,21 @@ export class ServiceNav extends LitElement {
     `,
   ];
 
+  constructor() {
+    super();
+    new StateController(this, portalState);
+  }
+
   render() {
     return html`
       <nav role="navigation" aria-label=${msg("Servicenavigation")}>
         <bkd-substitutions-toggle></bkd-substitutions-toggle>
         <bkd-notifications-toggle></bkd-notifications-toggle>
         <bkd-user-settings></bkd-user-settings>
-        <bkd-language-switcher></bkd-language-switcher>
+        ${when(
+          portalState.allowedLocales.length > 1,
+          () => html`<bkd-language-switcher></bkd-language-switcher>`,
+        )}
         <bkd-hamburger .open=${this.mobileNavOpen}></bkd-hamburger>
       </nav>
     `;
