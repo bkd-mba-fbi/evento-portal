@@ -73,7 +73,7 @@ class PortalState extends State {
     await this.loadInstanceInfo();
 
     // Update initially
-    await this.handleStateChange("locale", this.locale);
+    await this.handleStateChange("locale");
 
     // Update on state change
     this.subscribe(this.handleStateChange.bind(this));
@@ -161,9 +161,9 @@ class PortalState extends State {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private async handleStateChange(key: string, value: any): Promise<void> {
+  private async handleStateChange(key: string): Promise<void> {
     if (key === "locale") {
-      await this.updateLocale(value);
+      await this.updateLocale();
     }
 
     if (key === "locale" || key === "navigationItemKey") {
@@ -182,12 +182,15 @@ class PortalState extends State {
     }
   }
 
-  private async updateLocale(locale: PortalState["locale"]): Promise<void> {
+  private async updateLocale(): Promise<void> {
     // Fall back to allowed language (i.e. for instances that only support one
     // language)
-    this.locale = this.allowedLocales.includes(locale)
-      ? locale
-      : this.allowedLocales[0];
+    if (
+      this.allowedLocales.length > 0 &&
+      !this.allowedLocales.includes(this.locale)
+    ) {
+      this.locale = this.allowedLocales[0];
+    }
 
     updateQueryParam(LOCALE_QUERY_PARAM, this.locale);
     try {
