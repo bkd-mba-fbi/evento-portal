@@ -528,7 +528,7 @@ var X = {
                 // * ein "Ungültiger Wert" Fehler angezeigt, wenn die eingegebene Note in der
                 //   Auswahlliste nicht vorkam
                 // * der Wert übertragen und kein Fehler angezeigt
-                $("erz-test-edit-grades table tbody tr:not(:last-child)").each(function() {
+                $("bkd-test-edit-grades table tbody tr:not(:last-child)").each(function() {
                     var name = X.trimName($("td.name span:first-child", this).text());
                     var error = [null, null];
 
@@ -598,7 +598,7 @@ var X = {
     collectNames: function(aView, aIncData) {
         var values = [];
 
-        var nameCell = aView == 4 ? "erz-test-edit-grades tbody td.name span:first-child" :
+        var nameCell = aView == 4 ? "bkd-test-edit-grades tbody td.name span:first-child" :
             aView >= 2 ? "td.validationColumn + td" :
             aView == 0 ? ".tablelabel + .content1" :
             "td.tablelabel:first-child, table.WebPart-Adaptive td:first-child";
@@ -703,7 +703,7 @@ var X = {
      */
     getFirstInput: function(aView, aTest) {
         if (aView == 4 && aTest) {
-            var rows = $("erz-test-edit-grades table tbody tr");
+            var rows = $("bkd-test-edit-grades table tbody tr");
             var cell = $("td.name, td:not(.sticky)", rows.get(0)).get(aTest);
             return $("input[type=number], select", cell).get(0);
         }
@@ -724,7 +724,7 @@ var X = {
      *          (für die Anzeige müssen |null|-Werte herausgefiltert werden)
      */
     collectTestNames: function() {
-        var table = $("erz-test-edit-grades table");
+        var table = $("bkd-test-edit-grades table");
         var thead = table.find("thead th");
         var tbody = table.find("tbody tr:first-child td.name, tbody tr:first-child td:not(.sticky)");
 
@@ -753,7 +753,7 @@ var X = {
         if ($("form[action*='./brn_qualifikationdurchdozenten.aspx']").length > 0) {
             return 2;
         }
-        if ($("erz-test-edit-grades").length > 0) {
+        if ($("bkd-test-edit-grades").length > 0) {
             return 4;
         }
         return -1;
