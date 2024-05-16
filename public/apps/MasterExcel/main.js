@@ -68,7 +68,7 @@ function insertButtonsGrading() {
 
 function insertButtonsTest() {
   // Buttons nicht einfügen, wenn folgendese element nicht vorhanden ist.
-  if ($('erz-test-table-header').length === 0) {
+  if ($('#excel-import').length === 0) {
       return;
   }
   
@@ -82,15 +82,13 @@ function insertButtonsTest() {
   
   var tests = X.collectTestNames();
 
-  $('erz-test-table-header div div div.collapsed').each(function(index) {
-      var test =  $(this).text();
-      test = test.trim();
-      if (dropdownItems.indexOf(test) === -1 && tests.indexOf(test) > 0) {
-          var i = index+1
-          dropdownItems = dropdownItems + '<a onclick="X.showOverlay(4,'+ i +')";>' + test + '</a>';
-      }
-      
-  });              
+  var i = 0
+  tests.forEach(test => {
+    if (dropdownItems.indexOf(test) === -1 && tests.indexOf(test) > 0 && test.length > 0) {
+      i++
+      dropdownItems = dropdownItems + '<a onclick="X.showOverlay(4,'+ i +')";>' + test + '</a>';
+  }
+  });
   
   var buttons_html = '<button id="overlay-toggle-embedded-test" type="button" class="btn btn-outline-primary ms-2 dropdown-toggle excelDropdown">\
       <span>' + X.strings[getLanguage()].views[2].start_dropdown + ' </span>\
