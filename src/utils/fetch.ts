@@ -130,7 +130,7 @@ async function fetchApi<T = unknown>(
   }
 
   const headers = new Headers({
-    "CLX-Authorization": `token_type=urn:ietf:params:oauth:token-type:jwt-bearer, access_token=${accessToken}`,
+    Authorization: `Bearer ${accessToken}`,
     "Content-Type": "application/json",
   });
 
