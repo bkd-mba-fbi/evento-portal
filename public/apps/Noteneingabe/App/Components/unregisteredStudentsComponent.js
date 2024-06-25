@@ -176,7 +176,7 @@ define([
 
         save: framework.Helpers.debounce(500, function() {
             console.log('save', this);
-            //api.updateUnregisteredStudents(this.get("eventId"), this.getItemsToSave());
+            api.updateUnregisteredStudents(this.get("eventId"), this.getItemsToSave());
         }),
 
         actions: {
