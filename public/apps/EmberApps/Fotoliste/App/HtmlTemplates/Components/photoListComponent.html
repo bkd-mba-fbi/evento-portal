@@ -82,12 +82,21 @@
     </div>
     {{/if}}
 </div>
+<div class="input-group formRow" id="searchRow">
+    <div class="input-group-text">
+        <span class="material-icons-outlined">search</span>
+    </div>
+    <input id="txtSearch" name="instanceSearch" type="text" placeholder="{{translate 'search'}}" autofocus>
+</div>
 <div class="photolist__container">
     {{yield}}
     {{#each event.students as |student index|}}
     {{#link-to "photoDetail" student.idPerson class=(concat "photolist__student" " " (if (endOfLine index columnCount) "end-of-line"))}}
         {{student-photo student=student}}
         <span class="photolist__student__label" title={{student.fullname}}>{{student.fullname}}</span>
+        {{#if event.stg}}         
+        <br><span class="photolist__student__label">{{student.status}}</span>
+        {{/if}}
     {{/link-to}}
     {{/each}}
 </div>
