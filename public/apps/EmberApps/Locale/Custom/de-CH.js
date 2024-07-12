@@ -35,5 +35,6 @@ define(function() {
         'contractDateFromTo':              'Lehrzeit',
         'emailsToStudents':                'An alle Teilnehmenden',
         'eventTypeNotSupported':           'Der Anlasstyp wird nicht unterstützt. Unterstütze Anlasstypen: Klasse, Modulanlass, Kurs, CASA',
+        'search':                          'Suche...'
     };
 });

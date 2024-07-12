@@ -35,5 +35,6 @@ define(function() {
         'noSubscriptionFound':             'Aucun commentaire trouvé pour l\'événement',
         'contractDateFromTo':              'Durée de l\'apprentissage',
         'eventTypeNotSupported':           'Le type d\'événement n\'est pas pris en charge. Types d\'événements pris en charge : classe, événement de module, cours, ECPG',
+        'search':                          'Recherche...'
     };
 });

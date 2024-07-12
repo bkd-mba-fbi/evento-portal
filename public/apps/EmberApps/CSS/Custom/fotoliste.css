@@ -88,6 +88,10 @@ html {
   width: 3rem;
 }
 
+#CLX_Root .formRow {
+  margin-bottom: 10px;
+}
+
 #CLX_Root .document {
   padding-bottom: 1rem;
   float: left;
@@ -146,6 +150,9 @@ html {
   max-width: 100%;
   position: relative;
   z-index: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #CLX_Root .photolist__placeholder {
