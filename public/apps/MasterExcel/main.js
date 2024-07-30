@@ -65,7 +65,6 @@ function insertButtonsGrading() {
   }
 }
 
-
 function insertButtonsTest() {
   // Buttons nicht einfügen, wenn folgendese element nicht vorhanden ist.
   if ($('#excel-import').length === 0) {
@@ -73,9 +72,9 @@ function insertButtonsTest() {
   }
   
 
-  // die Buttons nur einfügen, wenn sie nicht bereits da sind
+  // Falls sie vorhanden sind neu einfügen. Damit kann der useCase gelöst werden, falls ein Test publiziert wird das dieser nicht mehr dargestellt wird und umgekehrt.
   if ($('#overlay-toggle-embedded-test').length === 1) {
-      return;
+    $('#excel-import').empty();
   }
   
   var dropdownItems = '';
@@ -105,9 +104,13 @@ function insertButtonsTest() {
 }
 
 
-window.addEventListener("DOMNodeInserted", function (ev) {
-  setTimeout(function(){
-    insertButtonsGrading();
-    insertButtonsTest();
-  },200);
-}, false);
+const observer = new MutationObserver(mutationList =>  
+  mutationList.filter(m => m.type === 'childList').forEach(m => {    
+      setTimeout(function(){
+        insertButtonsGrading();
+        insertButtonsTest();
+      },200);
+  
+  }));  
+observer.observe(window.document,{childList: true, subtree: true});  
+
