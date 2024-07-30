@@ -269,13 +269,13 @@ var X = {
             var tests = X.collectTestNames();
             index = tests.indexOf(aTest);
             if (index == -1 && tests[aTest]) {
-                index = aTest;
+                index = aTest-1; // Es wurde eine leer Spalte eingefugt deswegen darf diese nicht gezählt werden
             }
             if (index == -1) {
                 // ungültiger Wert für aTest
                 return;
             }
-            var kursname = tests[index];
+            var kursname = tests[index+1]; // Die leer Spalte am anfang muss übersprungen werden.
             lines = X.strings[X.lang].views[aView].default_lines.join("\n").replace("%s", kursname) +
                 "\n" + X.collectNames(aView, index).join("\n") + "\n";
         }
@@ -528,8 +528,8 @@ var X = {
                 // * ein "Ungültiger Wert" Fehler angezeigt, wenn die eingegebene Note in der
                 //   Auswahlliste nicht vorkam
                 // * der Wert übertragen und kein Fehler angezeigt
-                $("bkd-test-edit-grades table tbody tr:not(:last-child)").each(function() {
-                    var name = X.trimName($("td.name span:first-child", this).text());
+                $("bkd-test-edit-grades div table tbody tr:not(:last-child)").each(function() {
+                    var name = X.trimName($("td.student-name a div:first-child", this).text());
                     var error = [null, null];
 
                     var cell = $("td.name, td:not(.sticky)", this).get(aTest);
@@ -598,16 +598,15 @@ var X = {
     collectNames: function(aView, aIncData) {
         var values = [];
 
-        var nameCell = aView == 4 ? "bkd-test-edit-grades tbody td.name span:first-child" :
+        var nameCell = aView == 4 ? "bkd-test-edit-grades div table tbody td.student-name a div:first-child" :
             aView >= 2 ? "td.validationColumn + td" :
             aView == 0 ? ".tablelabel + .content1" :
             "td.tablelabel:first-child, table.WebPart-Adaptive td:first-child";
-
         $(nameCell).each(function() {
             var name = X.trimName($(this).text());
             if (name) {
                 var data = "";
-                if (aIncData) {
+                if (aIncData >= 0) {
                     switch (aView) {
                         case 0:
                             var select = $(this).parent().find("select");
@@ -642,7 +641,7 @@ var X = {
                             break;
                         case 4:
                             // Noten/Punkte des gewünschten Tests
-                            var cell = $(this).parents("tr").find("td.name, td:not(.sticky)").get(aIncData);
+                            var cell = $(this).parents("tr").find("td.test-grade, td:not(.sticky)").get(aIncData);
                             var number = $("input[type=number]", cell);
                             if (number.length == 1) {
                                 data = number.val();
@@ -703,8 +702,8 @@ var X = {
      */
     getFirstInput: function(aView, aTest) {
         if (aView == 4 && aTest) {
-            var rows = $("bkd-test-edit-grades table tbody tr");
-            var cell = $("td.name, td:not(.sticky)", rows.get(0)).get(aTest);
+            var rows = $("bkd-test-edit-grades div table tbody tr");
+            var cell = $("td.test-grade, td:not(.sticky)", rows.get(0)).get(aTest);
             return $("input[type=number], select", cell).get(0);
         }
 

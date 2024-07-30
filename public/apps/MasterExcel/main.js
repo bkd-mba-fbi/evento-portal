@@ -74,18 +74,19 @@ function insertButtonsTest() {
   
   var tests = X.collectTestNames();
   var dropdownItems = '';
-  
-  var i = 1
-  tests.forEach(test => {
+  var atworkTests = 0;
+  for (let index = 0; index < tests.length; index++) {
+    const test = tests[index];
+    
     if (dropdownItems.indexOf(test) === -1 && tests.indexOf(test) > 0 && test.length > 0) {
-      i++
-      dropdownItems = dropdownItems + '<a onclick="X.showOverlay(4,'+ i +')";>' + test + '</a>';
+      dropdownItems = dropdownItems + '<a onclick="X.showOverlay(4,'+ index +')";>' + test + '</a>';
+      atworkTests++;
+    }
   }
-  });
 
   // Falls sie vorhanden sind neu einfügen. Damit kann der useCase gelöst werden, falls ein Test publiziert wird das dieser nicht mehr dargestellt wird und umgekehrt.
-  var testslinks = $('#overlay-toggle-embedded-test div').first().children().length+1;
-  if (testslinks != i) {
+  var testslinks = $('#overlay-toggle-embedded-test div').first().children().length;
+  if (testslinks != atworkTests ) {
     $('#excel-import').empty();   
   } else {
     return;
