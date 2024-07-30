@@ -1,0 +1,54 @@
+﻿<div id="ovlPayment">
+    <div class="dialogHeader">
+        <h2 class="dialogTitle">
+            {{translate 'subscriptionPaymentRequestTitle'}}
+        </h2>
+        <div class="buttonContainer">
+        </div>
+    </div>
+
+    <div class="dialogBody">
+        <div class="dialogBlock invoiceContainer">
+            {{#if model.ErrorMessage}}
+            <div class="validationErrorMessage">{{model.ErrorMessage}}</div>
+            {{else}}
+            <h4>{{translate 'itemsToPay'}}</h4>
+            <div class="editControl"></div>
+            <table>
+                {{#each detail in model.SubscriptionPayment.SubscriptionDetailsForPayment}}
+                <tr>
+                    <td>{{detail.VssBezeichnung}}</td>
+                    <td class="right">{{currencyFormat detail.Value}}</td>
+                </tr>
+                {{/each}}
+                <tr>
+                    <td><b>{{translate 'totalAmount'}}</b></td>
+                    <td class="right"><b>{{currencyFormat model.SubscriptionPayment.TotalAmountPending}}</b></td>
+                </tr>
+            </table>
+            <p>{{translate 'amountInCurrency'}}</p>
+            <div class="editControl"></div>
+            {{/if}}
+        </div>
+    </div>
+    <div class="dialogFooter">
+        <div class="buttonContainer">
+            <button id="btnCancel" type="button" class="textButton" {{action 'closeRoute'}}>
+                {{icon 'close'}}
+                <div>{{translate 'cancel'}}</div>
+            </button>
+
+            {{#unless model.ErrorMessage}}
+            <button id="btnNext" type="button" class="textButton" {{action 'doPayment'}}>
+                {{#if isWorking}}
+                {{icon 'loadingAnimation'}}
+                {{else}}
+                {{icon 'invoice'}}
+                {{/if}}
+                <div>{{translate 'payNow'}}</div>
+            </button>
+            {{/unless}}
+        </div>
+    </div>
+
+</div>
