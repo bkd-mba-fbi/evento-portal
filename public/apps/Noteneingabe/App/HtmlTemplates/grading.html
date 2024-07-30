@@ -37,23 +37,25 @@
                 {{#if model.Event.Scale.Designation}}
                     <div class="gradingText">{{translate 'grade_scale'}} {{model.Event.Scale.Designation}}</div>
                 {{/if}}
-                <div class="not-mobile gradesActionButtons">
-                    <button class="btn-action btn-clearGrades" {{action 'triggerModalDialogPrompt' 'clearGrades'}}>{{translate 'deleteAllGrades'}}</button>
-                    <button class="btn-action btn-applyGrade" {{action 'triggerModalDialogPrompt' 'applyGrade'}}>{{translate 'setAsDefault'}}</button>
-                    {{#if model.IsUnregisteredStudentsEnabled}}
+                {{#if model.Event.GradingScaleId}}
+                    <div class="not-mobile gradesActionButtons">
+                        <button class="btn-action btn-clearGrades" {{action 'triggerModalDialogPrompt' 'clearGrades'}}>{{translate 'deleteAllGrades'}}</button>
+                        <button class="btn-action btn-applyGrade" {{action 'triggerModalDialogPrompt' 'applyGrade'}}>{{translate 'setAsDefault'}}</button>
+                        {{#if model.IsUnregisteredStudentsEnabled}}
                         <button class="btn-action btn-addUnregisteredStudent" {{action 'addUnregisteredStudent'}}>{{translate 'addUnregisteredStudent'}}</button>
-                    {{/if}}
-                    {{#if showExcelButton}}
+                        {{/if}}
+                        {{#if showExcelButton}}
                         {{#context-menu-button id='btnExcelGradingList' icon='excel' forceClose='forceCloseExcel' right=true}}
-                            <a href="{{excelUrl}}" target="_blank">{{translate 'downloadExcelGradingList'}}</a>
-                            <div>
-                                {{translate 'uploadExcelGradingList'}}<br />
-                                {{input id='fluExcelGradingList' type="file"}}
-                                <button id="btnUploadExcelGradingList" type="button" {{action 'uploadExcel'}}>{{icon 'continue'}}</button>
-                            </div>
+                        <a href="{{excelUrl}}" target="_blank">{{translate 'downloadExcelGradingList'}}</a>
+                        <div>
+                            {{translate 'uploadExcelGradingList'}}<br />
+                            {{input id='fluExcelGradingList' type="file"}}
+                            <button id="btnUploadExcelGradingList" type="button" {{action 'uploadExcel'}}>{{icon 'continue'}}</button>
+                        </div>
                         {{/context-menu-button}}
-                    {{/if}}
-                </div>
+                        {{/if}}
+                    </div>
+                {{/if}}
             </div>
 
             {{#if model.hasNothingToShow}}
