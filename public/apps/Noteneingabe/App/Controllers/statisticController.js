@@ -119,7 +119,13 @@
             switch((statusProcesses || []).length) {
                 case 0: return null;
                 case 1: return statusProcesses[0].IdStatus;
-                default: return statusProcesses.sort(function (l, r) { return l.IdStatus - r.IdStatus;})[0].IdStatus;
+                default: {
+                    var filtered = statusProcesses.filter(function (sp) { return sp.StatusCodes.includes(20); });
+                    if (filtered)
+                        return filtered[0].IdStatus;
+                    else
+                        return statusProcesses.sort(function (l, r) { return l.IdStatus - r.IdStatus; })[0].IdStatus;
+                }
             }
         },
 
