@@ -72,30 +72,31 @@ function insertButtonsTest() {
       return;
   }
   
-
-  // die Buttons nur einfügen, wenn sie nicht bereits da sind
-  if ($('#overlay-toggle-embedded-test').length === 1) {
-      return;
-  }
-  
-  var dropdownItems = '';
-  
   var tests = X.collectTestNames();
-
-  var i = 0
-  tests.forEach(test => {
+  var dropdownItems = '';
+  var atworkTests = 0;
+  for (let index = 0; index < tests.length; index++) {
+    const test = tests[index];
+    
     if (dropdownItems.indexOf(test) === -1 && tests.indexOf(test) > 0 && test.length > 0) {
-      i++
-      dropdownItems = dropdownItems + '<a onclick="X.showOverlay(4,'+ i +')";>' + test + '</a>';
+      dropdownItems = dropdownItems + '<a onclick="X.showOverlay(4,'+ index +')";>' + test + '</a>';
+      atworkTests++;
+    }
   }
-  });
+
+  // Falls sie vorhanden sind neu einfügen. Damit kann der useCase gelöst werden, falls ein Test publiziert wird das dieser nicht mehr dargestellt wird und umgekehrt.
+  var testslinks = $('#overlay-toggle-embedded-test div').first().children().length;
+  if (testslinks != atworkTests ) {
+    $('#excel-import').empty();   
+  } else {
+    return;
+  }
   
   var buttons_html = '<button id="overlay-toggle-embedded-test" type="button" class="btn btn-outline-primary ms-2 dropdown-toggle excelDropdown">\
       <span>' + X.strings[getLanguage()].views[2].start_dropdown + ' </span>\
       <div class="excelDropdown-content">'
       +dropdownItems+
   '</div> </button>';
-
 
   if(document.getElementsByClassName('desktop').length > 0) {
       var buttons = $(buttons_html);
@@ -104,10 +105,12 @@ function insertButtonsTest() {
   
 }
 
-
-window.addEventListener("DOMNodeInserted", function (ev) {
-  setTimeout(function(){
-    insertButtonsGrading();
-    insertButtonsTest();
-  },200);
-}, false);
+const observer = new MutationObserver(mutationList =>  
+  mutationList.filter(m => m.type === 'childList').forEach(m => {    
+      setTimeout(function(){
+        insertButtonsGrading();
+        insertButtonsTest();
+      },200);
+ 
+  }));  
+observer.observe(window.document,{childList: true, subtree: true});  
