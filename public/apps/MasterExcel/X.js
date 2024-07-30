@@ -727,11 +727,10 @@ var X = {
         var table = $("bkd-test-edit-grades table");
         var thead = table.find("thead th");
         var tbody = table.find("tbody tr:first-child td.name, tbody tr:first-child td:not(.sticky)");
-
         var tests = [null];
-        for (var i = 1; i < tbody.length; i++) {
+        for (var i = 1; i < tbody.length+1; i++) {
             var name = thead.get(i).innerText.split("\n")[0];
-            var isUnlocked = X.contains(thead.get(i).innerText.split("\n"), "lock_open") || $("select[disabled]", tbody.get(i)).length == 0;
+            var isUnlocked = X.contains(thead.get(i).innerText.split("\n"), "lock_open");
             tests.push(isUnlocked ? name : null);
         }
 
