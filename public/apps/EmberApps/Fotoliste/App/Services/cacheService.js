@@ -104,7 +104,8 @@ define([
                     idEvent: subscriptionByEvent[0].EventId,
                     designation: designation,
                     //leadership: responses[1].Leadership,
-                    dateString: responses[1].DateString
+                    dateString: responses[1].DateString,
+                    stg: responses[1].EventTypeId === 1 ? true : false
                 });
 
                 //console.log(event);
@@ -132,6 +133,7 @@ define([
                         subscriptionByEvent.forEach(function(subscription) {
                             if(subscription.PersonId == item.Id) {
                                 item.IdSubscription = subscription.IdSubscription;
+                                item.Status = subscription.Status;
                             } 
                         });
 
@@ -159,6 +161,7 @@ define([
                                 idPerson: item.Id,
                                 photo: api.getPersonPictureUrl(item.Id),
                                 fullname: item.Fullname,
+                                status: item.Status
                             });  
                             return student;
                         }),  
@@ -190,7 +193,6 @@ define([
         getStudentData: function (idPerson) {
             var cache = this.get('cache').people;
             var studentData = this.get('cache').subscriptions[idPerson];
-            //console.log(studentData);
 
             //Its important, if student ist not in cache
             if (studentData === undefined) {
@@ -198,7 +200,6 @@ define([
             }
             //console.log(this.get('cache')); 
             //console.log(event);
-            //console.log(studentData);
             if (cache[idPerson] !== undefined) {
                 return cache[idPerson];
             }

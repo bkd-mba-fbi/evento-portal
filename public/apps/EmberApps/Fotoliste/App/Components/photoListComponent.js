@@ -48,6 +48,15 @@ define([
             
         },
 
+        keyUp: function() {
+            var listItems = document.getElementsByClassName('photolist__student');
+            console.log(listItems);
+            var displayNone = Array.from(listItems).filter(f => f.innerText.toLowerCase().search(event.target.value.toLowerCase()) < 0)
+            setDisplayStyle(displayNone,'none');
+            var displayBlock = Array.from(listItems).filter(f => f.innerText.toLowerCase().search(event.target.value.toLowerCase()) >= 0)
+            setDisplayStyle(displayBlock,'block');
+        },
+
         actions: {
             // calculate how many columns there are and set
             // the 'columnCount' property
@@ -81,4 +90,11 @@ define([
             }
         }
     });
+
+    function setDisplayStyle(elements, disableStyle){
+
+        for (const item of elements) {
+          item.style.display = disableStyle;
+        }
+        }
 });

@@ -56,11 +56,11 @@ Quality categories & qualities according to [ISO/IEC 25010](https://iso25000.com
 
 ## Stakeholders
 
-| _Role_                         | _Organisation/Company_                                                                                          | _Name_                                                                                          |
+| _Role_                         | _Organisation_                                                                                                  | _Name_                                                                                          |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | Specialist Application Manager | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) | [@fbufbi](https://github.com/fbufbi)                                                            |
 | Technical Application Manager  | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) | [@schefbi](https://github.com/schefbi)                                                          |
-| Project Leader/SCRUM Master    | [Puzzle ITC](https://www.puzzle.ch)                                                                             | [@lmathys](https://github.com/lmathys)                                                          |
+| Project Leader/SCRUM Master    | [Puzzle ITC](https://www.puzzle.ch)                                                                             | [@mkrebs](https://www.puzzle.ch/de/blog/articles/author/mkrebs)                                 |
 | Software Engineer & UX         | [Puzzle ITC](https://www.puzzle.ch)                                                                             | [@caebr](https://github.com/caebr)                                                              |
 | Software Engineer & Architect  | [Puzzle ITC](https://www.puzzle.ch)                                                                             | [@hupf](https://github.com/hupf)                                                                |
 | UX Engineer                    | [Puzzle ITC](https://www.puzzle.ch)                                                                             | [@shirsbrunner](https://github.com/shirsbrunner) & [@pmurkowsky](https://github.com/pmurkowsky) |

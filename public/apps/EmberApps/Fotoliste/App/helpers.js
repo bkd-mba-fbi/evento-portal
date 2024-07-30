@@ -21,7 +21,7 @@ define(['constants', 'translate', 'appConfig', 'api'], function (constants, tran
                 var key = value;
                 var items = subscriptionDetail.DropdownItems;
                 for (var i = 0; i < items.length; i++) {
-                    if (items[i].Key === key.toString()) {
+                    if (items[i].Key.toString() === key.toString()) {
                         return items[i].Value;
                     }
                 }
