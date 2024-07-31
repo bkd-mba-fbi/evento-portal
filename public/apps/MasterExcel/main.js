@@ -105,6 +105,14 @@ function insertButtonsTest() {
   
 }
 
+
+setTimeout(function(){
+  document.getElementById('hide-published').addEventListener("click", (e) => {
+  $('#overlay-toggle-embedded-test div').empty();  
+  });
+ },3000);
+
+
 const observer = new MutationObserver(mutationList =>  
   mutationList.filter(m => m.type === 'childList').forEach(m => {    
       setTimeout(function(){
