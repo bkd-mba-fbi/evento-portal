@@ -104,6 +104,10 @@ html {
   height: auto;
 }
 
+#CLX_Root .search {
+  width: 500px;
+}
+
 #CLX_Root .photolist__student {
   display: block;
   width: 130px;

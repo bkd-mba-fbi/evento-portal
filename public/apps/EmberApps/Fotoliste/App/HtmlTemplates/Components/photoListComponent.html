@@ -83,10 +83,12 @@
     {{/if}}
 </div>
 <div class="input-group formRow" id="searchRow">
-    <div class="input-group-text">
-        <span class="material-icons-outlined">search</span>
+    <div class="d-flex search">
+        <div class="input-group-text">
+            <span class="material-icons-outlined">search</span>
+        </div>
+        <input id="txtSearch" class="form-control" name="instanceSearch" type="text" placeholder="{{translate 'search'}}" autofocus>
     </div>
-    <input id="txtSearch" name="instanceSearch" type="text" placeholder="{{translate 'search'}}" autofocus>
 </div>
 <div class="photolist__container">
     {{yield}}
