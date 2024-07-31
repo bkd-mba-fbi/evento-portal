@@ -701,7 +701,7 @@ var X = {
      * @returns das Eingabefeld für den/die erste Schüler:in
      */
     getFirstInput: function(aView, aTest) {
-        if (aView == 4 && aTest) {
+        if (aView == 4 && aTest >= 0) {
             var rows = $("bkd-test-edit-grades div table tbody tr");
             var cell = $("td.test-grade, td:not(.sticky)", rows.get(0)).get(aTest);
             return $("input[type=number], select", cell).get(0);
