@@ -108,7 +108,7 @@ function insertButtonsTest() {
 
 setTimeout(function(){
   document.getElementById('hide-published').addEventListener("click", (e) => {
-  $('#overlay-toggle-embedded-test div').empty();  
+  $('#overlay-toggle-embedded-test div').empty();   
   });
  },3000);
 
@@ -118,6 +118,13 @@ const observer = new MutationObserver(mutationList =>
       setTimeout(function(){
         insertButtonsGrading();
         insertButtonsTest();
+
+        if(document.getElementById('scrollTestTable') != null) {
+          var addOffset = screen.width > 1920 ? 390 : 194;
+          if( document.body.offsetHeight > screen.height-document.getElementsByTagName('bkd-tests-header')[0].offsetHeight-addOffset) {
+            document.getElementById('scrollTestTable').style.height = screen.height-document.getElementsByTagName('bkd-tests-header')[0].offsetHeight-addOffset +'px';
+          } 
+        }
       },200);
  
   }));  
