@@ -531,8 +531,8 @@ var X = {
                 $("bkd-test-edit-grades div table tbody tr:not(:last-child)").each(function() {
                     var name = X.trimName($("td.student-name a div:first-child", this).text());
                     var error = [null, null];
-
-                    var cell = $("td.name, td:not(.sticky)", this).get(aTest);
+                    
+                    var cell = $("td.test-grade, td.test-info-desktop", this).get(aTest);
                     if (name in grades) {
                         var input = $("input[type=number], select", cell);
                         if (/^error-(.*)/.test(grades[name])) {
@@ -641,7 +641,7 @@ var X = {
                             break;
                         case 4:
                             // Noten/Punkte des gewünschten Tests
-                            var cell = $(this).parents("tr").find("td.test-grade").get(aIncData);
+                            var cell = $(this).parents("tr").find("td.test-grade, td.test-info-desktop").get(aIncData);
                             var number = $("input[type=number]", cell);
                             if (number.length == 1) {
                                 data = number.val();
@@ -703,7 +703,7 @@ var X = {
     getFirstInput: function(aView, aTest) {
         if (aView == 4 && aTest >= 0) {
             var rows = $("bkd-test-edit-grades div table tbody tr");
-            var cell = $("td.test-grade, td:not(.sticky)", rows.get(0)).get(aTest);
+            var cell = $("td.test-grade, td.test-info-desktop", rows.get(0)).get(aTest);
             return $("input[type=number], select", cell).get(0);
         }
 
