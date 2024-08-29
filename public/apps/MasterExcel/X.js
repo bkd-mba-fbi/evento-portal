@@ -1,4 +1,4 @@
-﻿/* Evento Excel-Helfer  (C) 2009 - 2023 Simon Bünzli  <simon.buenzli@zeniko.ch> */
+/* Evento Excel-Helfer  (C) 2009 - 2023 Simon Bünzli  <simon.buenzli@zeniko.ch> */
 
 /*
 Zum Testen die folgende Zeile in die Adresszeile des Browsers kopieren:
@@ -223,7 +223,7 @@ var X = {
 	#tsv-overlay-inner { height: 90%; padding: 5% 5%; } \
 	#tsv-overlay-inner-2 { height: 100%; } \
 	/* Bugfix: Google Chrome ändert nur bei display:block Textfeldern mit CSS die Höhe */ \
-	#tsv-data { width: 100%; height: 50%; margin-bottom: 1em; display: block; } \
+	#tsv-data { width: 100%; height: 70%; margin-bottom: 1em; display: block; } \
 	/* Bugfix: MSIE kennt "position: fixed" nicht */ \
 	#tsv-overlay { _position: absolute; } \
 </style>\
@@ -641,7 +641,7 @@ var X = {
                             break;
                         case 4:
                             // Noten/Punkte des gewünschten Tests
-                            var cell = $(this).parents("tr").find("td.test-grade, td:not(.sticky)").get(aIncData);
+                            var cell = $(this).parents("tr").find("td.test-grade").get(aIncData);
                             var number = $("input[type=number]", cell);
                             if (number.length == 1) {
                                 data = number.val();
