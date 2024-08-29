@@ -1,7 +1,5 @@
 window.kursausschreibung = window.kursausschreibung || {};
 window.kursausschreibung.appConfig = {
-    // the token type
-    "tokenType": "urn:ietf:params:oauth:token-type:jwt-bearer",
     // API base URL without trailing slash
     "apiUrl": window.parent.eventoPortal.settings.apiServer, // "https://b17eb32d-b72d-4238-a677-74639b5dbf20.mock.pstmn.io"
     // base Url of the web application without trailing slash (also the redirect url for public clients)
@@ -16,8 +14,6 @@ window.kursausschreibung.appConfig = {
     "instanceId": null,
     // the client id for this application. This value is mandatory when authenticate with CLX.Evento OAuth Server
     "clientId": null,
-    // url to a page that can refresh the session (website and modules)
-    "refreshSessionUrl": "../tools/RefreshSession.aspx",
     // the interval to refresh the session on website and modules (in minutes)
     "refreshInterval": 5,
     // set this to true if you want to use autologin on your page. 

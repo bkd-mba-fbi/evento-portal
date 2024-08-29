@@ -189,7 +189,7 @@ window.kursausschreibung.settings = {
     "displayRightSide": false,
 
     // put event-categories in a dropdown menu (required)
-    "eventCategoryDropdown": true,
+    "eventCategoryDropdown": false,
 
     // default display eventlist as grid(true) oder list(false)
     "displayGrid": true,
