@@ -121,7 +121,7 @@ const observer = new MutationObserver(mutationList =>
 
         if(document.getElementById('scrollTestTable') != null) {
           var addOffset = screen.width > 1920 ? 390 : 194;
-          if( document.body.offsetHeight > screen.height-document.getElementsByTagName('bkd-tests-header')[0].offsetHeight-addOffset) {
+          if( document.body.offsetHeight > screen.height) {
             document.getElementById('scrollTestTable').style.height = screen.height-document.getElementsByTagName('bkd-tests-header')[0].offsetHeight-addOffset +'px';
           } 
         }

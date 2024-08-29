@@ -41,8 +41,7 @@ window.kursausschreibung.locale["fr-CH"] = {
     "backToCourses": "Retour à l'aperçu du cours",
     "lessonExportToIcs": "Exporter pour le calendrier", 
     "noEvents": "Il n'y a actuellement aucun cours disponible.",
-    "invalidInput": "",
-    "useLogin": "Votre inscription sera créée en fonction de votre login {0}.",
+    "useLogin": "Veuillez cliquer sur le bouton \"Inscription\" pour confirmer et finaliser votre inscription.",
     "FilterTagAllEvents": "Tous",
     "notAvailable": "indisponible",
 
@@ -83,6 +82,7 @@ window.kursausschreibung.locale["fr-CH"] = {
     "formAddressLine1": "Adresse",
     "formZip": "NPA",
     "formLocation": "Lieu",
+    "formOptionEmpty": "-- Vide --",
     "duplicateEmailError": "L'adresse e-mail doit être différente, sinon le formulaire ne peut pas être soumis.",
     "addPerson": "Inscrire une autre personne",
     "removePerson": "Enlever la dernière personne",

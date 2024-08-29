@@ -34,7 +34,12 @@
   --bkd-margin-horizontal-small: 20px;
 }
 
-html {
+:root{
+  --mainColor: var(--bkd-brand-red)
+}
+
+html,
+.uk-nav-default {
   font-size: inherit;
   background: inherit;
   font-weight: inherit;
@@ -48,15 +53,31 @@ html {
 }
 
 .uk-scope,
-.uk-label,
 .uk-breadcrumb > * > *,
 .uk-navbar-nav > li > a,
+.uk-nav-default>li>a,
 .uk-button,
 .uk-form-label {
   font-size: inherit !important;
   font-style: inherit !important;
   font-family: inherit !important;
+  color: inherit !important;
 }
+
+.uk-scope a {
+  font-weight: inherit !important;
+}
+.uk-navbar-nav>li>a {
+  text-transform: none;
+  font-size: 1.2rem !important;
+}
+
+
+.uk-scope .details-table{
+    border-collapse: separate;
+    border-spacing: 3px;
+}
+
 .uk-button {
   border-radius: 2.5rem;
 }
@@ -72,21 +93,70 @@ html {
 }
 
 .uk-button-primary:hover {
-  color: #fff;
   background-color: rgba(65, 65, 65, 0.9575);
   border-color: inherit;
 }
 
-.uk-navbar-container {
-  background-color: inherit !important;
+.uk-button-primary {
+  color: #fff !important;
 }
 
-.uk-scope .uk-navbar-nav > li.uk-active > a {
+.uk-scope .uk-navbar-container {
+  background-color: inherit !important;
+  border-bottom: none;
+  min-height: auto;
+}
+
+a.uk-icon-link.uk-hidden\@m.uk-icon {
+  display: none;
+}
+.uk-visible\@m {
+  display: block !important; 
+}
+
+.uk-search-default .uk-search-input:focus {
+  border-color: #abababf9;
+  outline: 0;
+  box-shadow: 0 0 0 .25rem #4e4e4e40;
+}
+
+.uk-scope .uk-navbar-nav > li.uk-active > a,
+.uk-scope .uk-navbar-nav>li.uk-active>a, .uk-scope .uk-navbar-nav>li>a.active {
   border-bottom-color: var(--bkd-language-switcher-active-border);
+  border-bottom: 2px solid var(--bkd-brand-red);
 }
 
 .uk-scope a {
   font-weight: normal;
+}
+
+.uk-grid .uk-first-column:first-child .uk-card {
+  border: 1px solid #B6B6B6;
+  padding: 25px 0;
+}
+
+.uk-grid .uk-first-column:last-child .uk-card {
+  background-color: var(--bkd-brand-sand);
+  margin-left: 25%;
+}
+
+
+#header-naviagtion-area {
+  border-bottom: 1px solid #B6B6B6;
+  margin: 0 25px 16px;
+  padding-bottom: 16px;
+}
+
+
+.uk-scope .uk-nav  a.active {
+  background-color: #FCF8F3;
+  color: var(--bkd-brand-red) !important;
+  font-weight: 500 !important;
+  border-left: var(--bkd-brand-red) solid 5px;
+}
+
+.uk-nav>li>a {
+  padding: 16px 25px;
 }
 
 .uk-scope .uk-button-primary,
@@ -108,6 +178,12 @@ html {
   top: 20%;
   left: 50%;
   position: sticky;
+}
+
+@media (max-width: 959px) {
+  .uk-grid .uk-first-column:last-child .uk-card {
+    margin-left: auto;
+  }
 }
 
 /*
