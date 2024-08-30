@@ -19,6 +19,7 @@ window.kursausschreibung.locale["fr-CH"] = {
     "french": "Français",
     "menu": "Menu",
     "navigation": "",
+    "kursCategoryHeader": "Catégorie",
     "personalData": "Informations personnelles",
     "confirmation": "Acceptation",
     "subscribe": "Inscription",
