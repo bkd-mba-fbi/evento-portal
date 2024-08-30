@@ -1,0 +1,200 @@
+:root {
+  --bkd-brand-white: rgba(255, 255, 255, 0.42);
+  --bkd-brand-red: rgba(234, 22, 31, 1);
+  --bkd-brand-black: rgba(0, 0, 0, 1);
+  --bkd-brand-light-sand: rgba(252, 248, 243, 1);
+  --bkd-brand-sand: rgba(250, 241, 227, 1);
+  --bkd-brand-dark-sand: rgba(247, 233, 210, 1);
+  --bkd-brand-sand-hover: rgba(242, 224, 195, 1);
+  --bkd-brand-cappuchino: rgba(235, 211, 174, 1);
+  --bkd-func-fg-black: rgba(0, 0, 0, 1);
+  --bkd-func-fg-grey: rgba(112, 112, 112, 1);
+  --bkd-func-fg-light-grey: rgba(112, 112, 112, 0.68);
+  --bkd-func-fg-white: rgba(255, 255, 255, 1);
+  --bkd-func-bg-anthrazit-hover: rgba(64, 64, 64, 1);
+  --bkd-func-bg-anthrazit: rgba(78, 78, 78, 0.95);
+  --bkd-func-bg-dark-grey: rgba(112, 112, 112, 1);
+  --bkd-func-bg-line-grey: rgba(112, 112, 112, 0.5);
+  --bkd-func-bg-grey: rgba(222, 222, 222, 1);
+  --bkd-func-bg-light-grey: rgba(242, 242, 242, 1);
+  --bkd-func-bg-very-light-grey: rgba(248, 248, 248, 1);
+  --bkd-func-bg-white: rgba(255, 255, 255, 1);
+  --bkd-func-bg-red: rgba(208, 16, 24, 1);
+  --bkd-func-bg-green: rgba(61, 134, 8, 1);
+  --bkd-language-switcher-active-border: rgba(234, 22, 31, 0.77);
+  --bkd-footer-border: rgba(238, 238, 238, 1);
+  --bkd-mobile-nav-shadow: rgba(0, 0, 0, 0.16);
+  --bkd-z-index-dropdown: 1;
+  --bkd-font-family: "Roboto", sans-serif;
+  --bkd-font-size-base: 16px;
+  --bkd-font-weight-base: 300;
+  --bkd-line-height-base: 1.625;
+  --bkd-margin-horizontal-large: 40px;
+  --bkd-margin-horizontal-medium: 30px;
+  --bkd-margin-horizontal-small: 20px;
+}
+
+:root{
+  --mainColor: var(--bkd-brand-red)
+}
+
+html,
+.uk-nav-default {
+  font-size: inherit;
+  background: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+.uk-scope .uk-card-default {
+  background-color: transparent;
+  box-shadow: 0 0px 0px;
+}
+
+.uk-scope,
+.uk-breadcrumb > * > *,
+.uk-navbar-nav > li > a,
+.uk-nav-default>li>a,
+.uk-button,
+.uk-form-label {
+  font-size: inherit !important;
+  font-style: inherit !important;
+  font-family: inherit !important;
+  color: inherit !important;
+}
+
+.uk-scope a {
+  font-weight: inherit !important;
+}
+.uk-navbar-nav>li>a {
+  text-transform: none;
+  font-size: 1.2rem !important;
+}
+
+
+.uk-scope .details-table{
+    border-collapse: separate;
+    border-spacing: 3px;
+}
+
+.uk-button {
+  border-radius: 2.5rem;
+}
+
+.uk-button-default:hover {
+  background: #e6e6e6;
+}
+
+.uk-button-default {
+  background-color: white;
+  border-color: #000;
+  color: #000;
+}
+
+.uk-button-primary:hover {
+  background-color: rgba(65, 65, 65, 0.9575);
+  border-color: inherit;
+}
+
+.uk-button-primary {
+  color: #fff !important;
+}
+
+.uk-scope .uk-navbar-container {
+  background-color: inherit !important;
+  border-bottom: none;
+  min-height: auto;
+}
+
+a.uk-icon-link.uk-hidden\@m.uk-icon {
+  display: none;
+}
+.uk-visible\@m {
+  display: block !important; 
+}
+
+.uk-search-default .uk-search-input:focus {
+  border-color: #abababf9;
+  outline: 0;
+  box-shadow: 0 0 0 .25rem #4e4e4e40;
+}
+
+.uk-scope .uk-navbar-nav > li.uk-active > a,
+.uk-scope .uk-navbar-nav>li.uk-active>a, .uk-scope .uk-navbar-nav>li>a.active {
+  border-bottom-color: var(--bkd-language-switcher-active-border);
+  border-bottom: 2px solid var(--bkd-brand-red);
+}
+
+.uk-scope a {
+  font-weight: normal;
+}
+
+.uk-grid .uk-first-column:first-child .uk-card {
+  border: 1px solid #B6B6B6;
+  padding: 25px 0;
+}
+
+.uk-grid .uk-first-column:last-child .uk-card {
+  background-color: var(--bkd-brand-sand);
+  margin-left: 25%;
+}
+
+
+#header-naviagtion-area {
+  border-bottom: 1px solid #B6B6B6;
+  margin: 0 25px 16px;
+  padding-bottom: 16px;
+}
+
+
+.uk-scope .uk-nav  a.active {
+  background-color: #FCF8F3;
+  color: var(--bkd-brand-red) !important;
+  font-weight: 500 !important;
+  border-left: var(--bkd-brand-red) solid 5px;
+}
+
+.uk-nav>li>a {
+  padding: 16px 25px;
+}
+
+.uk-scope .uk-button-primary,
+.uk-scope .uk-button-primary:hover {
+  background: var(--bkd-func-fg-grey);
+}
+
+.uk-scope .uk-link,
+.uk-scope a {
+  color: var(--bkd-func-fg-grey);
+}
+
+.uk-subnav-pill > .uk-active > a {
+  background-color: var(--bkd-func-fg-grey);
+  color: #fff;
+}
+
+.centerHorizontalTop20Percent {
+  top: 20%;
+  left: 50%;
+  position: sticky;
+}
+
+@media (max-width: 959px) {
+  .uk-grid .uk-first-column:last-child .uk-card {
+    margin-left: auto;
+  }
+}
+
+/*
+.uk-navbar-nav > .uk-active > a {
+    background: #d5d5d5;
+    border-radius: 0.1rem;
+
+}
+
+
+.uk-navbar-nav > li > a {
+    height: 4.5rem !important;
+}
+*/
