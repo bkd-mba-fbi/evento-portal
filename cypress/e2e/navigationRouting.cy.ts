@@ -9,7 +9,7 @@ describe("Navigation & Routing", () => {
     });
 
     it("does not select any menu entry per default", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get("bkd-nav").as("desktopMenu").should("be.visible");
 
       // No group activated
@@ -60,7 +60,7 @@ describe("Navigation & Routing", () => {
     });
 
     it("selects menu entry from URL", () => {
-      cy.visit("/index.html?module=presenceControl");
+      cy.visitPortal("/index.html?module=presenceControl");
       cy.get("bkd-nav").as("desktopMenu").should("be.visible");
 
       // Activates navigation group
@@ -117,7 +117,7 @@ describe("Navigation & Routing", () => {
     });
 
     it("redirects to home for invalid item key in URL", () => {
-      cy.visit("/index.html?module=asdf");
+      cy.visitPortal("/index.html?module=asdf");
       cy.get("bkd-nav").as("desktopMenu").should("be.visible");
 
       // No group activated
@@ -174,7 +174,7 @@ describe("Navigation & Routing", () => {
     });
 
     it("applies menu entry selection to URL", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get("bkd-nav").as("desktopMenu").should("be.visible");
 
       // Group not active
@@ -242,7 +242,7 @@ describe("Navigation & Routing", () => {
     });
 
     it("visits profile (a specific sub app path of an item)", () => {
-      cy.visit(
+      cy.visitPortal(
         "index.html?locale=de-CH&module=presenceControl#/presence-control/student/5389/absences?returnparams=date%3D2023-07-03%26viewMode%3Dgrid%26lesson%3D291257",
       );
       cy.get("bkd-nav").as("desktopMenu").should("be.visible");
@@ -280,7 +280,7 @@ describe("Navigation & Routing", () => {
     });
 
     it("selects menu item from URL and expands its group", () => {
-      cy.visit("/index.html?module=presenceControl");
+      cy.visitPortal("/index.html?module=presenceControl");
       cy.get("iframe").should(
         "have.attr",
         "src",

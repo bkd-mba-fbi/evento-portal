@@ -1,6 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
-import { map } from "lit/directives/map.js";
+import { repeat } from "lit/directives/repeat.js";
 import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
 import { NavigationGroup } from "../../settings";
@@ -47,11 +47,14 @@ export class Nav extends LitElement {
 
   render() {
     return html`<nav role="navigation" aria-label=${msg("Hauptnavigation")}>
-      ${map(portalState.navigation, (group) =>
-        this.renderGroupToggle(
-          group,
-          group.label === portalState.navigationGroup?.label,
-        ),
+      ${repeat(
+        portalState.navigation,
+        (group) => group.label,
+        (group) =>
+          this.renderGroupToggle(
+            group,
+            group.label === portalState.navigationGroup?.label,
+          ),
       )}
     </nav>`;
   }

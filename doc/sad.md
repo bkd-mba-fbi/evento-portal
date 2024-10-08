@@ -123,7 +123,7 @@ graph LR
   etc --> |HTTP/JSON| evento-api
 
   portal --> |HTTP/JSON| evento-api
-  portal <--> |OAuth 2.0| evento-oauth
+  portal --> |OAuth 2.0| evento-oauth
 ```
 
 | _Element_                     | _Description_                                                                                                                                                                                                                                                                                                                                                                                                                            |
@@ -150,9 +150,56 @@ graph LR
 
 # Runtime View
 
-## Authentication
+## Authentication & Token Handling
 
-If no valid access token for the given app/scope (see next section) and no valid refresh token is available, the authentication flow works as follows:
+A few general things to note about the use of OAuth and scopes:
+
+- The _Evento Portal_ uses the [OAuth 2.0 Authorization Code Flow mit Proof Key for Code Exchange (PKCE)](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Login-OAuth-Server/#authorization-code-flow-mit-proof-key-for-code-exchange-pkce).
+- The refresh and access tokens are bound to a specific [OAuth scope](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/ApplicationScopes_Intro/) that has to be specified when getting a token via login flow or token refresh endpoint. Each _app_ requires a certain scope since the scope determines what the user can access (this app/scope mapping is configured in [settings.ts](../src/settings.ts)).
+- Due to this design of the _Evento API_, it is not possible to acquire and work with a single token for all _apps_/scopes. Hence for each scope, a separate refresh/access token pair has to be fetched and persisted (in localStorage) per scope.
+- We refer to the access token required by the requested _app_/scope as the _current_ token. This _current_ token will be provided by the _Evento Portal_ in sessionStorage to the _app_, as the user can open different _apps_ (requiring different scopes) in different browser tabs.
+- The [token rotation mechanism](https://clx-evento.bitbucket.io/EVT2023.R2_eventodoc/Api/Autorisierung/RefreshToken/#refresh-token-rotation) that is applied whenever we renew an access token (with a still valid refresh token) via the [asynchronous token refresh endpoint](https://clx-evento.bitbucket.io/EVT2023.R2_eventodoc/Api/Autorisierung/RefreshToken/#refresh-uber-token-endpunkt-asynchron), revokes the previous refresh/access token pair of the same scope. Although refresh/access token pairs of other scopes will remain valid.
+- When the language is switched, the _current_ refresh/access token pair is renewed with the new locale.
+
+### Expiration Times
+
+This is a typical procedure with login and renewal of tokens:
+
+```
+L = Login flow
+↺ = Asynchronous access token renewal
+| = Start of lifetime
+⊗ = End of lifetime (expiration)
+
+L·······↺·······↺·······↺······L·······↺...
+
+|------⊗|------⊗|------⊗|-----⊗|------⊗|...
+   ↳ Access token lifetime
+
+|-----------------------------⊗|--------...
+   ↳ Auth session lifetime resp. TokenRotationExpiration
+```
+
+There are several lifetimes that are important:
+
+- _Auth session lifetime and `TokenRotationExpiration`:_ \
+  These two lifetimes are synchronised to the same value. They describe how long tokens of a given chain (per scope) can be renewed, before another login flow must be initiated and a new chain must be started. But there is one session across all scopes. Also, as long as the session is valid, the OAuth provider redirects back without prompting the user for username/password. A typical value would be 720 minutes.
+- _Access token lifetime (`Expiration`):_ \
+  How long an access token is valid before it expires and must be renewed via asynchronous request. A typical value would be 5 minutes.
+- _Refresh token lifetime (`Expiration` + `InactivityTimeout`):_ \
+  How long a refresh token is valid before it expires and another login flow must be initiated. A typical value would be 35 minutes. This is not depicted in the graph above, but when the access token is renewed asynchronously via timer, a new refresh token with extended lifetime is issued as well and it has a longer lifetime than the access token. Therefore the refresh token never expires in practice, except when the session resp. the `TokenRotationExpiration` expires.
+
+See also the [TokenSettings](https://clx-evento.bitbucket.io/master_eventodoc/Betrieb/Systemadministration/OAuthServer/OAuthConfiguration/#consumer) section in the API documentation for a description for the mentioned lifetime settings.
+
+### Login Flow
+
+The following login flow is initiated in these cases:
+
+- The _Evento Portal_ is first visited and a refresh/access token for the required scope is not yet available.
+- The user switches the _app_ (i.e. navigates) and no refresh/access token for the required scope is available.
+- The refresh token of the current scope is expired and renewal is no more possible due to an exceeded `TokenRotationExpiration` time (see [TokenSettings](https://clx-evento.bitbucket.io/master_eventodoc/Betrieb/Systemadministration/OAuthServer/OAuthConfiguration/#consumer)).
+
+Remark: If there still is [a valid session](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/AuthSession/) (and this is typically true for the latter two cases), the user is directly redirected back from the login page (without having to login).
 
 ```mermaid
 sequenceDiagram
@@ -162,10 +209,10 @@ sequenceDiagram
   participant oauth as EVENTO OAuth Provider
   participant api as EVENTO API
 
-  user ->> portal: Visit
+  user ->> portal: Visit app with scope A
 
   activate portal
-  portal ->> portal: Has valid token? → No
+  portal ->> portal: Has valid refresh/access token for scope A in localStorage? → No
   portal ->> portal: Generate random code verifier (CV)
   portal ->> portal: Store code verifier in sessionStorage
   portal ->> oauth: Redirect to /Authorization/Login w/code verifier
@@ -188,7 +235,7 @@ sequenceDiagram
   deactivate portal
 
   activate oauth
-  oauth -->> portal: Return access & refresh token
+  oauth -->> portal: Respond with access & refresh token
   deactivate oauth
 
   activate portal
@@ -199,7 +246,7 @@ sequenceDiagram
   deactivate portal
 
   activate api
-  api -->> portal: Return roles & permissions
+  api -->> portal: Respond with roles & permissions
   deactivate api
 
   activate portal
@@ -221,13 +268,11 @@ sequenceDiagram
   deactivate app
 ```
 
-This flow is implemented with the help of the [@badgateway/oauth2-client](https://www.npmjs.com/package/@badgateway/oauth2-client) library in [auth.ts](../src/utils/auth.ts). The persistance of the tokens in the browser is realized with [token-state.ts](../src/state/token-state.ts). See also the EVENTO documentation page [OAuth 2.0 Authorization Code Flow mit Proof Key for Code Exchange (PKCE)](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Login-OAuth-Server/#authorization-code-flow-mit-proof-key-for-code-exchange-pkce).
+This flow is implemented with the help of the [@badgateway/oauth2-client](https://www.npmjs.com/package/@badgateway/oauth2-client) library in [auth.ts](../src/utils/auth.ts). The persistance of the tokens in the browser is realized with [token-state.ts](../src/state/token-state.ts).
 
-## Switch Apps/Scopes
+### Switch to App/Scope with Valid Cached Token
 
-The access tokens are bound to a specific [OAuth scope](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/ApplicationScopes_Intro/) that is specified when getting a token via login page or refresh token endpoint. Each _app_ requires a certain scope since the scope determines what the user can access. Due to this design by the _Evento API_, it is not possible to acquire and work with a single token for multiple scopes.
-
-The _Evento Portal_ handles tokens & scopes as follows:
+If a valid access token for the requested scope is available, it can be used as _current_ token:
 
 ```mermaid
 sequenceDiagram
@@ -236,11 +281,11 @@ sequenceDiagram
   participant app as App
   participant oauth as EVENTO OAuth Provider
 
-  user ->> portal: Visit app with scope A
+  user ->> portal: Visit app with scope B
 
   activate portal
-  portal ->> portal: Has valid access token for scope A in localStorage? → Yes
-  portal ->> portal: Store access token for scope A in sessionStorage
+  portal ->> portal: Has valid refresh/access token for scope B in localStorage? → Yes
+  portal ->> portal: Store access token for scope B in sessionStorage as "current"
   portal ->> app: Load app via iframe
   deactivate portal
 
@@ -248,21 +293,34 @@ sequenceDiagram
   app ->> app: Read access token from sessionStorage
   app -->> user: Render app contents
   deactivate app
+```
 
-  user ->> portal: Visit app with scope B
+### Switch to App/Scope with Cached but Expired Token
+
+If no access token, but a valid refresh token for the requested scope is available, the _Evento Portal_ will asynchronously fetch a new token pair:
+
+```mermaid
+sequenceDiagram
+  actor user as User
+  participant portal as Evento Portal
+  participant app as App
+  participant oauth as EVENTO OAuth Provider
+
+  user ->> portal: Visit app with scope C
 
   activate portal
-  portal ->> portal: Has valid access token for scope B in localStorage? → No
-  portal ->> oauth: Redirect to /Authorization/RefreshPublic w/refresh token
+  portal ->> portal: Has valid access token for scope C in localStorage? → No
+  portal ->> portal: Has valid refresh token for scope C in localStorage? → Yes
+  portal ->> oauth:  Fetch new access token from /Token w/refresh token (XHR)
   deactivate portal
 
   activate oauth
-  oauth -->> portal: Redirect back with access token for scope B
+  oauth -->> portal: Respond with new access and refresh token for scope C
   deactivate oauth
 
   activate portal
   portal ->> portal: Store tokens (per scope) in localStorage
-  portal ->> portal: Store access token for scope B in sessionStorage
+  portal ->> portal: Store access token for scope C in sessionStorage as "current"
   portal ->> app: Load app via iframe
   deactivate portal
 
@@ -274,49 +332,9 @@ sequenceDiagram
 
 ## Token Refreshing
 
-Apparently, at the time writing this, the _Evento API_ does not provide any way to refresh tokens asynchronously. This means that the tokens can only be renewed with a redirect, interrupting the user. We therefore try to implement the following checks:
+If the refresh or access token of the current scope expires, a timer is fired to fetch a new token pair via the [asynchronous token refresh endpoint](https://clx-evento.bitbucket.io/EVT2023.R2_eventodoc/Api/Autorisierung/RefreshToken/#refresh-uber-token-endpunkt-asynchron). If the renewal request fails (this happens when the `TokenRotationExpiration` time is exceeded, see [TokenSettings](https://clx-evento.bitbucket.io/master_eventodoc/Betrieb/Systemadministration/OAuthServer/OAuthConfiguration/#consumer)), a login flow is initiated (i.e. the user is redirected to the login page).
 
-- Whenever the scope changes, i.e. the user clicked in the navigation:
-  - If the refresh token _fully expired_, redirect to the login page (as described in the "Authentication" flow above).
-  - If the access token _half expired_, redirect to the [refresh token endpoint](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/RefreshToken/#refresh-mit-public-client) to get a new one. Like this, we try to make sure that the token does not expire during usage of the _apps_ (in a potentially unsaved state).
-- Start timers to detect when tokens expire:
-  - If the refresh token expired (timer fires), redirect to the login page (as described in the "Authentication" flow above).
-  - If the access token expired (time fires), redirect to the [refresh token endpoint](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/RefreshToken/#refresh-mit-public-client) to get a new one.
-
-The checks on navigation are implemented in [auth.ts](../src/utils/auth.ts), the renewal on expiration is implemented in [token-renewal.ts](../src/utils/token-renewal.ts).
-
-Here is an example flow of an access token renewal on navigation:
-
-```mermaid
-sequenceDiagram
-  actor user as User
-  participant portal as Evento Portal
-  participant oauth as EVENTO OAuth Provider
-
-  user ->> portal: Visit or switch app
-
-  activate portal
-  portal ->> portal: Is refresh token expired? → No
-  portal ->> portal: Is access token more than half expired? → Yes
-  portal ->> portal: Generate random code verifier (CV)
-  portal ->> portal: Store code verifier in sessionStorage
-  portal ->> oauth: Redirect to /Authorization/RefreshPublic w/refresh token
-  deactivate portal
-
-  activate oauth
-  oauth -->> portal: Redirect back with code
-  deactivate oauth
-
-  activate portal
-  portal ->> oauth: Request tokens with received code (XHR)
-  deactivate portal
-
-  activate oauth
-  oauth -->> portal: Return access & refresh token
-  deactivate oauth
-```
-
-Here is an example flow of a refresh token renewal on expiry (using a timer):
+Here is an example flow of a access token renewal on expiry (using a timer):
 
 ```mermaid
 sequenceDiagram
@@ -326,42 +344,29 @@ sequenceDiagram
 
   activate portal
   portal ->> portal: For each token, start a timer to fire on expiry
-  portal ->> portal: Refresh token expiry timer fires
-  portal ->> portal: Generate random code verifier (CV)
-  portal ->> portal: Store code verifier in sessionStorage
-  portal ->> oauth: Redirect to /Authorization/Login w/code verifier
+  portal ->> portal: Access token expires & timer fires
+  portal ->> oauth:  Fetch new access token from /Token w/refresh token (XHR)
   deactivate portal
 
   activate oauth
-  oauth -->> user: Render login page
-  deactivate oauth
-
-  activate user
-  user ->> oauth: Choose tenant & login
-  deactivate user
-
-  activate oauth
-  oauth -->> portal: Redirect back with code
-  deactivate oauth
-
-  activate portal
-  portal ->> oauth: Request tokens with received code (XHR)
-  deactivate portal
-
-  activate oauth
-  oauth -->> portal: Return access & refresh token
+  oauth -->> portal: Respond with new access and refresh token
   deactivate oauth
 
   activate portal
   portal ->> portal: Store tokens (per scope) in localStorage
-  portal ->> portal: Store access token for current scope in sessionStorage
-  portal -->> user: Render portal & app
+  portal ->> portal: Store new access token in sessionStorage as "current"
   deactivate portal
 ```
+
+To avoid conflicts when multiple tabs try to renew a token of the same scope, the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API) is used to implement a leader election pattern such that only one tab (the "leader" tab) is renewing the token and the others are waiting and then just update their _current_ token, once a new one is available.
+
+The timers are managed in [token-renewal.ts](../src/utils/token-renewal.ts), the renewal logic is implemented in [auth.ts](../src/utils/auth.ts).
 
 ## Substitution Start/Stop
 
 The starting or stopping of a teacher substitution also happens via a redirect and results in a new token (without code verifier). The redirect is implemented in the [SubstitutionsToggle.ts](../src/components/Header/SubstitutionsToggle.ts) component, the handling of the result in [auth.ts](../src/utils/auth.ts).
+
+Due to a restriction of the _Evento API_, the substitution has to be started and stopped with a token of the same scope. Therefore we only allow to start/stop substitutions when on an _app_ with the scope "Tutoring", otherwise the substitution toggle is hidden.
 
 # Deployment View
 

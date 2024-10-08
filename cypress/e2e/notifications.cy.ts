@@ -42,13 +42,13 @@ describe("Notifications", () => {
 
   describe("no notifications", () => {
     it("renders bell without counter", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get('[aria-label="Benachrichtigungen"]').as("toggle");
       cy.get("@toggle").get(".circle").should("be.hidden");
     });
 
     it("opens dropdown without notifications and delete button disabled", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get('[aria-label="Benachrichtigungen"]').as("toggle");
       cy.get("@toggle").click();
       cy.get("#notifications-dropdown").as("dropdown").should("exist");
@@ -68,13 +68,13 @@ describe("Notifications", () => {
     });
 
     it("renders bell with counter", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get('[aria-label="Benachrichtigungen"]').as("toggle");
       cy.get("@toggle").get(".circle").should("be.visible").contains("4");
     });
 
     it("opens dropdown showing notifications and delete button enabled", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get('[aria-label="Benachrichtigungen"]').as("toggle");
       cy.get("@toggle").click();
       cy.get("#notifications-dropdown").as("dropdown").should("exist");
@@ -97,7 +97,7 @@ describe("Notifications", () => {
     });
 
     it("deletes all notifications", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get('[aria-label="Benachrichtigungen"]').as("toggle");
       cy.get("@toggle").click();
       cy.get("#notifications-dropdown").as("dropdown").should("exist");
@@ -110,7 +110,7 @@ describe("Notifications", () => {
     });
 
     it("delete single notification", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get('[aria-label="Benachrichtigungen"]').as("toggle");
       cy.get("@toggle").click();
       cy.get("#notifications-dropdown").as("dropdown").should("exist");
