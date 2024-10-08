@@ -16,11 +16,15 @@ import {
   consumeLoginState,
   getAccessToken,
   getInstance,
+  getRefreshToken,
   storeInstance,
   storeLoginState,
 } from "./storage";
-import { isValidToken } from "./token";
-import { clearTokenRenewalTimers } from "./token-renewal";
+import { isTokenExpired, isValidToken } from "./token";
+import {
+  clearTokenRenewalTimers,
+  initializeTokenRenewal,
+} from "./token-renewal";
 
 const envSettings = getEnvSettings();
 
@@ -57,15 +61,19 @@ export function createOAuthClient(): OAuth2Client {
  * portal. Please refer the README for a detailed description of the
  * flow.
  */
-export async function ensureAuthenticated(
+export async function initAuthentication(
   client: OAuth2Client,
   scope: string,
   locale: string,
 ): Promise<void> {
+  initializeTokenRenewal({
+    renewRefreshToken: (scope, locale) => renewToken(client, scope, locale),
+    renewAccessToken: (scope, locale) => renewToken(client, scope, locale),
+  });
+
   const loginState = consumeLoginState();
   const loginResult = await getTokenAfterLogin(client, loginState);
   if (loginResult) {
-    // Successfully logged in
     log("Successfully logged in");
     handleLoginResult(loginResult, loginState);
     return;
@@ -73,7 +81,6 @@ export async function ensureAuthenticated(
 
   const substitutionResult = getTokenAfterSubstitutionRedirect();
   if (substitutionResult) {
-    // Started or stopped substitution
     log("Successfully started or stopped substitution");
     handleSubstitutionResult(substitutionResult);
     return;
@@ -83,18 +90,9 @@ export async function ensureAuthenticated(
 }
 
 /**
- * Store an access token for the given scope in sessionStorage as
- * "CLX.LoginToken" for the current app to use it. Access tokens for
- * each scope are kept in localStorage, as well is the refresh token.
- *
- * - If the refresh token is expired, it redirects to the login page.
- * - If the currently stored access token already matches the given
- *   scope, we're fine.
- * - If we already have a token for the given scope in localStorage,
- *   use this as the current access token.
- * - If no current or cached access token is present or the token is
- *   expired, perform a refresh request to fetch a new token for the
- *   given scope and set this as the current access token.
+ * Make sure valid access/refresh tokens for the given scope/locale
+ * are present and assigned as "current" token. Otherwise renew the
+ * tokens or redirect to login.
  */
 export async function activateTokenForScope(
   client: OAuth2Client,
@@ -102,37 +100,61 @@ export async function activateTokenForScope(
   locale: string,
 ): Promise<void> {
   log(`Activate token for scope "${scope}" and locale "${locale}"`);
+  updateTokenStateForScope(scope, locale);
 
-  if (tokenState.isRefreshTokenExpired()) {
-    // Not authenticated or refresh token expired, redirect to login
+  if (isTokenExpired(tokenState.refreshTokenPayload)) {
     log("Not authenticated or refresh token expired, redirect to login");
-    return redirect(loginUrl, { client, scope, locale });
+    return login(client, scope, locale);
   }
 
-  const currentAccessToken = tokenState.accessToken;
-  const cachedAccessToken = getAccessToken(scope);
-
-  if (isValidToken(currentAccessToken, scope, locale)) {
-    // Current token for scope/locale already set
+  if (!tokenState.accessToken) {
     log(
-      `Current token for scope "${scope}" and locale "${locale}" already set`,
+      `Token for scope "${scope}" and locale "${locale}" expired or not available, renew`,
     );
-  } else if (isValidToken(cachedAccessToken, scope, locale)) {
-    // Token for scope/locale cached, set as current
-    log(
-      `Token for scope "${scope}" and locale "${locale}" cached, set as current`,
-    );
-    tokenState.accessToken = cachedAccessToken;
-  } else {
-    // No token for scope/locale present or half expired, redirect for
-    // token fetch/refresh
-    log(
-      `No token for scope "${scope}" and locale "${locale}" present or half expired, redirect for token fetch/refresh`,
-    );
-    await redirect(refreshUrl, { client, scope, locale });
+    return renewToken(client, scope, locale);
   }
 }
 
+/**
+ * Redirects to login page (starts PKCE login flow).
+ */
+export async function login(
+  client: OAuth2Client,
+  scope: string,
+  locale: string,
+
+  /**
+   * URL to redirect to when coming back from OAuth provider (default
+   * is current location).
+   */
+  redirectUri = new URL(document.location.href),
+): Promise<void> {
+  // Use the "new locale" (if the user switches language), not the current one
+  redirectUri.searchParams.set(LOCALE_QUERY_PARAM, locale);
+
+  // Apparently we cannot use `client.authorizationCode.getAuthorizeUri`
+  // since the Evento API does not care about common conventions
+  const url = new URL(await client.getEndpoint("authorizationEndpoint"));
+
+  const codeVerifier = await generateCodeVerifier(); // Random PKCE code
+  storeLoginState(codeVerifier, redirectUri.toString());
+  const [codeChallengeMethod, codeChallenge] =
+    await getCodeChallenge(codeVerifier);
+
+  url.searchParams.set("clientId", client.settings.clientId);
+  url.searchParams.set("redirectUrl", redirectUri.toString());
+  url.searchParams.set("culture_info", locale);
+  url.searchParams.set("application_scope", scope);
+  url.searchParams.set("response_type", "code");
+  url.searchParams.set("code_challenge_method", codeChallengeMethod);
+  url.searchParams.set("code_challenge", codeChallenge);
+
+  document.location.href = url.toString();
+}
+
+/**
+ * Revokes all tokens and redirects to login page.
+ */
 export async function logout(client: OAuth2Client): Promise<void> {
   const instance = getInstance();
   if (!instance) throw new Error("No instance available");
@@ -142,13 +164,7 @@ export async function logout(client: OAuth2Client): Promise<void> {
 
   // Logout & reset tokens
   try {
-    await request(
-      client,
-      `${envSettings.oAuthPrefix}/Authorization/${instance}/Logout`,
-      {
-        access_token: accessToken,
-      },
-    );
+    await postLogout(client, instance, accessToken);
   } catch (e) {
     // Only catch if JSON syntax error (API responds with HTML)
     if (!(e instanceof SyntaxError)) {
@@ -159,12 +175,12 @@ export async function logout(client: OAuth2Client): Promise<void> {
     clearTokenRenewalTimers();
 
     // Redirect to login with scope/locale of current token
-    await redirect(loginUrl, {
+    await login(
       client,
       scope,
       locale,
-      redirectUri: new URL(buildUrl(settings.navigationHome)), // Make sure the user lands on home after the next login
-    });
+      new URL(buildUrl(settings.navigationHome)), // Make sure the user lands on home after the next login
+    );
   }
 }
 
@@ -175,97 +191,38 @@ function getAuthorizationEndpoint(): string {
     : `${envSettings.oAuthPrefix}/Authorization/Login`;
 }
 
-type RedirectOptions = {
-  client: OAuth2Client;
-  scope: string;
-  locale: string;
+/**
+ * Assigns a matching access and refresh token for the given
+ * scope/locale on the token state (updating the "current"
+ * token in sessionStorage).
+ */
+function updateTokenStateForScope(scope: string, locale: string): void {
+  // Try state's "current" token (initialized from sessionStorage)
+  if (isValidToken(tokenState.accessToken, scope, locale)) {
+    log(
+      `Current token for scope "${scope}" and locale "${locale}" already set`,
+    );
+    return;
+  }
 
-  /**
-   * URL to redirect to when coming back from OAuth provider (default
-   * is current location).
-   */
-  redirectUri?: URL;
-};
+  // Try cached access token for scope (from localStorage)
+  const cachedAccessToken = getAccessToken(scope);
+  if (isValidToken(cachedAccessToken, scope, locale)) {
+    log(
+      `Token for scope "${scope}" and locale "${locale}" cached, set as current`,
+    );
+    tokenState.accessToken = cachedAccessToken; // Will update "current" token in sessionStorage
+    tokenState.refreshToken = getRefreshToken(scope);
+    return;
+  }
 
-type RedirectUrlBuilder = (
-  options: Required<RedirectOptions> & {
-    codeVerifier: string;
-  },
-) => Promise<URL>;
-
-export async function redirect(
-  buildUrl: RedirectUrlBuilder,
-  {
-    client,
-    scope,
-    locale,
-    redirectUri = new URL(document.location.href),
-  }: RedirectOptions,
-): Promise<void> {
-  const codeVerifier = await generateCodeVerifier(); // Random PKCE code
-  redirectUri.searchParams.set(LOCALE_QUERY_PARAM, locale); // Use the "new locale" (if the user switches language), not the current one
-  storeLoginState(codeVerifier, redirectUri.toString());
-
-  const url = await buildUrl({
-    client,
-    scope,
-    locale,
-    redirectUri,
-    codeVerifier,
-  });
-  document.location.href = url.toString();
-}
-
-export const loginUrl: RedirectUrlBuilder = async ({
-  client,
-  scope,
-  locale,
-  redirectUri,
-  codeVerifier,
-}) => {
-  const url = new URL(await client.getEndpoint("authorizationEndpoint"));
-
-  const [codeChallengeMethod, codeChallenge] =
-    await getCodeChallenge(codeVerifier);
-  url.searchParams.set("clientId", client.settings.clientId);
-  url.searchParams.set("redirectUrl", redirectUri.toString());
-  url.searchParams.set("culture_info", locale);
-  url.searchParams.set("application_scope", scope);
-  url.searchParams.set("response_type", "code");
-  url.searchParams.set("code_challenge_method", codeChallengeMethod);
-  url.searchParams.set("code_challenge", codeChallenge);
-
-  // Apparently we cannot use `client.authorizationCode.getAuthorizeUri`
-  // since the Evento API does not care about common conventions
-  return url;
-};
-
-export const refreshUrl: RedirectUrlBuilder = async ({
-  client,
-  scope,
-  locale,
-  redirectUri,
-  codeVerifier,
-}) => {
-  const url = new URL(
-    `${envSettings.oAuthPrefix}/Authorization/RefreshPublic`,
-    client.settings.server,
+  // No access token for scope/locale or expired
+  log(
+    `Token for scope "${scope}" and locale "${locale}" not present or expired`,
   );
-
-  const [codeChallengeMethod, codeChallenge] =
-    await getCodeChallenge(codeVerifier);
-
-  // url.searchParams.set("clientId", client.settings.clientId);
-  url.searchParams.set("redirectUrl", redirectUri.toString());
-  url.searchParams.set("culture_info", locale);
-  url.searchParams.set("application_scope", scope);
-  url.searchParams.set("refresh_token", tokenState.refreshToken ?? "");
-  url.searchParams.set("response_type", "code");
-  url.searchParams.set("code_challenge_method", codeChallengeMethod);
-  url.searchParams.set("code_challenge", codeChallenge);
-
-  return url;
-};
+  tokenState.accessToken = null;
+  tokenState.refreshToken = getRefreshToken(scope);
+}
 
 async function getTokenAfterLogin(
   client: OAuth2Client,
@@ -349,6 +306,84 @@ function handleSubstitutionResult(token: OAuth2Token): void {
     // Only do this inside iframe, prevents loading the entire portal app inside the iframe
     window.parent.location.assign(url);
   }
+}
+
+/**
+ * Asynchronously renew an access/refresh token pair (the old
+ * access/refresh token will be revoked due to token rotation, tokens
+ * of other scopes stay valid).
+ */
+export async function renewToken(
+  client: OAuth2Client,
+  scope: string,
+  locale: string,
+): Promise<void> {
+  const instance = getInstance();
+  const refreshToken = getRefreshToken(scope);
+  if (!instance || !refreshToken) {
+    log(
+      `Refresh token for scope "${scope}" not present or expired, redirect to login`,
+    );
+    return login(client, scope, locale);
+  }
+
+  log(
+    `Renewing refresh & access token for scope "${scope}" and locale "${locale}"`,
+  );
+  try {
+    const { refreshToken: newRefreshToken, accessToken: newAccessToken } =
+      await postTokenRefresh(client, instance, scope, locale, refreshToken);
+    log("Received renewed tokens");
+    tokenState.refreshToken = newRefreshToken;
+    tokenState.accessToken = newAccessToken;
+  } catch {
+    log("Token renewal failed, redirect to login");
+    return login(client, scope, locale);
+  }
+}
+
+async function postTokenRefresh(
+  client: OAuth2Client,
+  instance: string,
+  scope: string,
+  locale: string,
+  refreshToken: string,
+): Promise<OAuth2Token> {
+  const {
+    access_token: newAccessToken,
+    refresh_token: newRefreshToken,
+    expires_in: expiresIn,
+  } = await request<{
+    token_type: string;
+    expires_in: number;
+    refresh_token: string;
+    access_token: string;
+  }>(client, `${envSettings.oAuthPrefix}/Authorization/${instance}/Token`, {
+    refresh_token: refreshToken,
+    grant_type: "refresh_token",
+    client_id: envSettings.oAuthClientId,
+    culture_info: locale,
+    scope,
+  });
+  return {
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken,
+    expiresAt: expiresIn ? Date.now() + expiresIn * 1000 : null,
+  };
+}
+
+function postLogout(
+  client: OAuth2Client,
+  instance: string,
+  accessToken: string,
+) {
+  return request(
+    client,
+    `${envSettings.oAuthPrefix}/Authorization/${instance}/Logout`,
+    {
+      access_token: accessToken,
+    },
+  );
 }
 
 /**

@@ -1,4 +1,8 @@
-import { storeAccessToken, storeRefreshToken } from "../../src/utils/storage";
+import {
+  storeAccessToken,
+  storeInstance,
+  storeRefreshToken,
+} from "../../src/utils/storage";
 
 /// <reference types="cypress" />
 // ***********************************************
@@ -46,10 +50,13 @@ Cypress.Commands.add(
     permissions = [],
     additionalTokenPayload = {},
   } = {}) => {
-    ["Tutoring", "Public", "NG"].forEach((scope) => {
-      const token = createToken(scope, { locale, additionalTokenPayload });
-      storeRefreshToken(token);
-      storeAccessToken(scope, token);
+    cy.window().then(() => {
+      storeInstance("Test");
+      ["Tutoring", "Public", "NG"].forEach((scope) => {
+        const token = createToken(scope, { locale, additionalTokenPayload });
+        storeRefreshToken(scope, token);
+        storeAccessToken(scope, token);
+      });
     });
 
     // Mock environment settings
@@ -95,14 +102,15 @@ Cypress.Commands.add(
 /**
  * Creates a mock token for testing purposes.
  */
-function createToken(
+export function createToken(
   scope: string,
   {
     locale = "de-CH",
+    expiration = Math.floor(Date.now() / 1000) + 60 * 60, // 1h from now
     additionalTokenPayload = {},
   }: Partial<{
     locale: string;
-    roles: ReadonlyArray<string>;
+    expiration: number;
     additionalTokenPayload: Record<string, unknown>;
   }> = {},
 ) {
@@ -111,12 +119,11 @@ function createToken(
     alg: "HS256",
   };
 
-  const nextHour = Math.floor(Date.now() / 1000) + 60 * 60;
   const body = {
     iss: "oauthpublic",
     aud: "https://cypress/",
-    nbf: nextHour,
-    exp: nextHour,
+    nbf: expiration,
+    exp: expiration,
     token_purpose: "User",
     scope,
     consumer_id: "cypress",
@@ -128,7 +135,7 @@ function createToken(
     id_person: "1234",
     fullname: "Somebody",
     roles: [],
-    token_id: "123456",
+    token_id: uuid(),
     ...additionalTokenPayload,
   };
 
@@ -137,8 +144,12 @@ function createToken(
   )}.signature`;
 }
 
-Cypress.Commands.overwrite("visit", (originalFn, ...args) => {
-  const result = originalFn(...args);
+function uuid() {
+  return Cypress._.uniqueId(Date.now().toString());
+}
+
+Cypress.Commands.add("visitPortal", (...args) => {
+  const result = cy.visit(...args);
 
   // Wait for roles & permissions to be loaded
   return cy.wait("@fetchAccessInfo").then(() => result);
@@ -168,3 +179,15 @@ Cypress.Commands.add(
         return subject;
       }),
 );
+
+Cypress.Commands.add("iframeContains", (...args) => {
+  const selector = args.length == 2 ? args[0] : null;
+  const text = args[args.length - 1];
+  cy.get("iframe").should((iframe) => {
+    const iframeBody = Cypress.$(iframe[0].contentDocument.body);
+    const result = selector
+      ? iframeBody.find(selector).text()
+      : iframeBody.text();
+    expect(result).to.include(text);
+  });
+});

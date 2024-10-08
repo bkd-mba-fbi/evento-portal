@@ -43,10 +43,12 @@ export function getTokenPayload(token: string): TokenPayload {
   };
 }
 
+export const TOKEN_ALMOST_EXPIRY_MS = 10 * 1000;
+
 /**
  * Returns true if the given token matches the given scope/locale & is
- * not half expired to decide wheter or not an access token can be
- * used or should be refreshed.
+ * not expired to decide whether or not an access token can be used or
+ * should be refreshed.
  */
 export function isValidToken(
   token: string | null,
@@ -59,7 +61,7 @@ export function isValidToken(
   return (
     payload.scope === scope &&
     payload.locale === locale &&
-    !isTokenHalfExpired(payload)
+    !isTokenExpired(payload)
   );
 }
 
@@ -67,18 +69,18 @@ export function isTokenExpired(token: TokenPayload | null): boolean {
   if (!token) return true;
 
   const { expirationTime } = token;
-  const now = Math.floor(Date.now() / 1000);
-  return expirationTime < now;
+  return expirationTime * 1000 < Date.now();
 }
 
-export function isTokenHalfExpired(token: TokenPayload | null): boolean {
+/**
+ * Returns false if the given token is expired or expires within the next 10
+ * seconds.
+ */
+export function isTokenAlmostExpired(token: TokenPayload | null): boolean {
   if (!token) return true;
 
-  const { issueTime, expirationTime } = token;
-  const validFor = expirationTime - issueTime;
-  const now = Math.floor(Date.now() / 1000);
-
-  return expirationTime <= now + validFor / 2;
+  const { expirationTime } = token;
+  return expirationTime * 1000 - TOKEN_ALMOST_EXPIRY_MS < Date.now();
 }
 
 /**

@@ -86,7 +86,7 @@ describe("Substitutions", () => {
       });
 
       it("renders inactive toggle & opens dropdown with available substitutions", () => {
-        cy.visit("/index.html");
+        cy.visitPortal("/index.html");
         cy.contains("button", "Stellvertretung ausüben").as("toggle");
 
         cy.get("@toggle").get(".icon").should("not.be.visible");
@@ -124,7 +124,7 @@ describe("Substitutions", () => {
       });
 
       it("renders active toggle & stops substitution on click", () => {
-        cy.visit("/index.html");
+        cy.visitPortal("/index.html");
         cy.contains("button", "John Lennon").as("toggle");
 
         cy.get("@toggle").get(".icon").should("not.be.visible");
@@ -150,7 +150,7 @@ describe("Substitutions", () => {
       });
 
       it("renders inactive toggle & opens dropdown with available substitutions", () => {
-        cy.visit("/index.html");
+        cy.visitPortal("/index.html");
         cy.get('[aria-label="Stellvertretung ausüben"]').as("toggle");
 
         cy.get("@toggle").get(".icon").should("be.visible");
@@ -189,7 +189,7 @@ describe("Substitutions", () => {
       });
 
       it("renders active toggle & stops substitution on click", () => {
-        cy.visit("/index.html");
+        cy.visitPortal("/index.html");
         cy.get('[aria-label="John Lennon"]').as("toggle");
 
         cy.get("@toggle").get(".icon").should("be.visible");

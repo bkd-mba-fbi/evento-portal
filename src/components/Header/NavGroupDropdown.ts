@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { map } from "lit/directives/map.js";
+import { repeat } from "lit/directives/repeat.js";
 import { localized } from "@lit/localize";
 import { StateController } from "@lit-app/state";
 import { NavigationGroup, NavigationItem } from "../../settings";
@@ -125,7 +125,11 @@ export class NavGroupDropdown extends LitElement {
 
     return html`
       <ul role="menu">
-        ${map(this.group.items, this.renderItem.bind(this))}
+        ${repeat(
+          this.group.items,
+          (item) => item.key,
+          this.renderItem.bind(this),
+        )}
       </ul>
     `;
   }

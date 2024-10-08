@@ -7,7 +7,7 @@ describe("Service Navigation", () => {
     });
 
     it("open/closes user settings", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       openServiceNavigation();
 
       // Close user settings menu
@@ -17,7 +17,7 @@ describe("Service Navigation", () => {
     });
 
     it("renders user settings in the service navigation", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       openServiceNavigation();
 
       cy.get("@serviceNav")
@@ -37,7 +37,7 @@ describe("Service Navigation", () => {
     // Apparently the triggering of the 'keydown' event does not work
     // when run headless
     it.skip("closes user settings on escape", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       openServiceNavigation();
 
       // Close user settings menu
@@ -47,7 +47,7 @@ describe("Service Navigation", () => {
     });
 
     it("closes user settings on select", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       openServiceNavigation();
 
       // Close user settings menu
@@ -60,7 +60,7 @@ describe("Service Navigation", () => {
     });
 
     it("closes user settings on click away", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       openServiceNavigation();
 
       // Close user settings menu
@@ -72,7 +72,7 @@ describe("Service Navigation", () => {
     it("renders language switcher in the service navigation for multilingual schools", () => {
       interceptGuiLanguagesRequest(["de-CH", "fr-CH"]);
 
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get("bkd-language-switcher")
         .find("a")
         .should((links) =>
@@ -85,7 +85,7 @@ describe("Service Navigation", () => {
     it("does not render language switcher in the service navigation for monolingual schools", () => {
       interceptGuiLanguagesRequest(["de-CH"]);
 
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get("bkd-language-switcher").should("not.exist");
     });
   });
@@ -97,7 +97,7 @@ describe("Service Navigation", () => {
 
     it("renders user settings and language switcher in the mobile navigation for multilingual schools", () => {
       interceptGuiLanguagesRequest(["de-CH", "fr-CH"]);
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       openMobileNavigation();
 
       cy.get("@serviceNav")
@@ -118,7 +118,7 @@ describe("Service Navigation", () => {
 
     it("renders user settings in the mobile navigation for monolingual schools", () => {
       interceptGuiLanguagesRequest(["de-CH"]);
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       openMobileNavigation();
 
       cy.get("@serviceNav")
