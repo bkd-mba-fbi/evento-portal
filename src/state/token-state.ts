@@ -17,6 +17,19 @@ type State = {
 type Subscriber = (token: TokenPayload | null) => void;
 type Unsubscribe = () => void;
 
+function getInitialState(): State {
+  const accessToken = getCurrentAccessToken();
+  const refreshToken = accessToken
+    ? getRefreshToken(getTokenPayload(accessToken).scope)
+    : null;
+  return {
+    refreshToken,
+    refreshTokenPayload: null,
+    accessToken,
+    accessTokenPayload: null,
+  };
+}
+
 /**
  * A facade to manage the OAuth refresh & access tokens.
  *
@@ -25,19 +38,16 @@ type Unsubscribe = () => void;
  *
  * If assigned, the tokens will be stored in browser storage:
  *   - The refresh token is stored in localStorage
- *   - The access token is stored in sessionStorage and cached per scope in localStorage (see "Authentication via OAuth 2.0" in doc/auth.md)
+ *   - The access token is stored in sessionStorage and cached per scope
+ *     in localStorage (see "Authentication via OAuth 2.0" in
+ *     doc/auth.md)
  *
  * Use `onRefreshTokenUpdate` and `onAccessTokenUpdate` to subscribe
  * to token changes, e.g. for token renewal or other token-dependnant
  * logic.
  */
 class TokenState {
-  private state: State = {
-    refreshToken: getRefreshToken(),
-    refreshTokenPayload: null,
-    accessToken: getCurrentAccessToken(),
-    accessTokenPayload: null,
-  };
+  private state: State = getInitialState();
   private refreshTokenSubscribers: Subscriber[] = [];
   private accessTokenSubscribers: Subscriber[] = [];
 
@@ -165,12 +175,11 @@ class TokenState {
     refreshToken: string | null,
     store = true,
   ): void {
-    this.state.refreshTokenPayload = refreshToken
-      ? getTokenPayload(refreshToken)
-      : null;
+    const payload = refreshToken ? getTokenPayload(refreshToken) : null;
+    this.state.refreshTokenPayload = payload;
 
-    if (refreshToken && store) {
-      storeRefreshToken(refreshToken);
+    if (refreshToken && payload && store) {
+      storeRefreshToken(payload.scope, refreshToken);
     }
 
     this.notifyRefreshTokenSubscribers();

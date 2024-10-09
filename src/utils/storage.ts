@@ -11,8 +11,6 @@ const CURRENT_ACCESS_TOKEN_KEY = "CLX.LoginToken";
 const LOCALE_KEY = "uiCulture";
 const TOKEN_EXPIRE = "CLX.TokenExpire";
 
-///// localStorage /////
-
 export function getInstance(): string | null {
   return localStorage.getItem(INSTANCE_KEY);
 }
@@ -21,18 +19,25 @@ export function storeInstance(instance: string): void {
   localStorage.setItem(INSTANCE_KEY, instance);
 }
 
+export function storeLocale(locale: string) {
+  localStorage.setItem(LOCALE_KEY, locale);
+}
+
+export function getRefreshToken(scope: string): string | null {
+  return localStorage.getItem(`${REFRESH_TOKEN_KEY}_${scope}`);
+}
+
+export function storeRefreshToken(
+  scope: string,
+  refreshToken: string | null,
+): void {
+  if (refreshToken) {
+    localStorage.setItem(`${REFRESH_TOKEN_KEY}_${scope}`, refreshToken);
+  }
+}
+
 export function getAccessToken(scope: string): string | null {
   return localStorage.getItem(`${ACCESS_TOKEN_KEY}_${scope}`);
-}
-
-export function getRefreshToken(): string | null {
-  return localStorage.getItem(REFRESH_TOKEN_KEY);
-}
-
-export function storeRefreshToken(refreshToken: string | null): void {
-  if (refreshToken) {
-    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-  }
 }
 
 export function storeAccessToken(scope: string, accessToken: string): void {
@@ -44,7 +49,7 @@ export function resetAllTokens(): void {
     const key = localStorage.key(i);
     if (
       key &&
-      (key.startsWith(ACCESS_TOKEN_KEY) || key === REFRESH_TOKEN_KEY)
+      (key.startsWith(ACCESS_TOKEN_KEY) || key.startsWith(REFRESH_TOKEN_KEY))
     ) {
       localStorage.removeItem(key);
     }
@@ -52,12 +57,6 @@ export function resetAllTokens(): void {
 
   sessionStorage.removeItem(CURRENT_ACCESS_TOKEN_KEY);
 }
-
-export function storeLocale(locale: string) {
-  localStorage.setItem(LOCALE_KEY, locale);
-}
-
-///// sessionStorage /////
 
 export function getCurrentAccessToken(): string | null {
   const token = sessionStorage.getItem(CURRENT_ACCESS_TOKEN_KEY);
