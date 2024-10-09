@@ -45,8 +45,7 @@ export function storeAccessToken(scope: string, accessToken: string): void {
 }
 
 export function resetAllTokens(): void {
-  new Array(localStorage.length).fill(undefined).forEach((_, i) => {
-    const key = localStorage.key(i);
+  forEachKey(localStorage, (key) => {
     if (
       key &&
       (key.startsWith(ACCESS_TOKEN_KEY) || key.startsWith(REFRESH_TOKEN_KEY))
@@ -120,4 +119,15 @@ export function storeLoginState(
 
 export function getLoginStateRedirectUri(): string | null {
   return sessionStorage.getItem(REDIRECT_URI_KEY);
+}
+
+function forEachKey(storage: Storage, callback: (key: string) => void): void {
+  new Array(storage.length)
+    .fill(undefined)
+    .map((_, i) => storage.key(i)) // Build an array with all keys first, so when keys get deleted in the callback there is no mess with the indices
+    .forEach((key) => {
+      if (key) {
+        callback(key!);
+      }
+    });
 }

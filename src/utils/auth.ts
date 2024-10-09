@@ -100,7 +100,9 @@ export async function activateTokenForScope(
   }
 
   if (!tokenState.accessToken) {
-    log(`Token for scope "${scope}" and locale "${locale}" expired, renew`);
+    log(
+      `Token for scope "${scope}" and locale "${locale}" expired or not available, renew`,
+    );
     return renewToken(client, scope, locale);
   }
 }

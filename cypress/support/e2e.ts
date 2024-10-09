@@ -23,6 +23,14 @@ import "./commands";
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
+      visitWithoutWait(
+        url: string,
+        options?: Partial<VisitOptions>,
+      ): Chainable<AUTWindow>;
+      visitWithoutWait(
+        options: Partial<VisitOptions> & { url: string },
+      ): Chainable<AUTWindow>;
+
       /**
        * Make sure the user is authenticated (i.e. add a token for
        * each scope to localStorage)

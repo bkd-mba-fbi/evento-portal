@@ -1,4 +1,8 @@
-import { storeAccessToken, storeRefreshToken } from "../../src/utils/storage";
+import {
+  storeAccessToken,
+  storeInstance,
+  storeRefreshToken,
+} from "../../src/utils/storage";
 
 /// <reference types="cypress" />
 // ***********************************************
@@ -46,10 +50,13 @@ Cypress.Commands.add(
     permissions = [],
     additionalTokenPayload = {},
   } = {}) => {
-    ["Tutoring", "Public", "NG"].forEach((scope) => {
-      const token = createToken(scope, { locale, additionalTokenPayload });
-      storeRefreshToken(token);
-      storeAccessToken(scope, token);
+    cy.window().then(() => {
+      storeInstance("Test");
+      ["Tutoring", "Public", "NG"].forEach((scope) => {
+        const token = createToken(scope, { locale, additionalTokenPayload });
+        storeRefreshToken(scope, token);
+        storeAccessToken(scope, token);
+      });
     });
 
     // Mock environment settings
@@ -95,14 +102,13 @@ Cypress.Commands.add(
 /**
  * Creates a mock token for testing purposes.
  */
-function createToken(
+export function createToken(
   scope: string,
   {
     locale = "de-CH",
     additionalTokenPayload = {},
   }: Partial<{
     locale: string;
-    roles: ReadonlyArray<string>;
     additionalTokenPayload: Record<string, unknown>;
   }> = {},
 ) {
@@ -136,6 +142,11 @@ function createToken(
     JSON.stringify(body),
   )}.signature`;
 }
+
+const originalVisit = cy.visit;
+Cypress.Commands.add("visitWithoutWait", (...args) => {
+  return originalVisit(...args);
+});
 
 Cypress.Commands.overwrite("visit", (originalFn, ...args) => {
   const result = originalFn(...args);

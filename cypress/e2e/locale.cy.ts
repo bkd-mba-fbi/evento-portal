@@ -1,3 +1,5 @@
+import { createToken } from "../support/commands";
+
 describe("Locale", () => {
   // Apparently, since token refresh is involved, we cannot test the
   // language switching and must make sure that a token for the
@@ -21,6 +23,30 @@ describe("Locale", () => {
       cy.get("bkd-language-switcher").within(() => {
         cy.contains("a", "de").should("have.class", "active");
         cy.contains("a", "fr").should("not.have.class", "active");
+      });
+    });
+
+    it("switches to fr-CH token", () => {
+      cy.resizeToDesktop();
+      cy.visit("/index.html");
+      cy.contains("Unterricht");
+
+      const token = createToken("Tutoring", { locale: "fr-CH" });
+      cy.intercept("https://eventotest.api/OAuth/Authorization/Test/Token", {
+        access_token: token,
+        refresh_token: token,
+        expires_in: 60 * 60,
+      });
+
+      // Switch to fr
+      cy.get("bkd-language-switcher").within(() => {
+        cy.contains("a", "fr").click();
+      });
+
+      cy.contains("Enseignement");
+      cy.get("bkd-language-switcher").within(() => {
+        cy.contains("a", "de").should("not.have.class", "active");
+        cy.contains("a", "fr").should("have.class", "active");
       });
     });
   });
