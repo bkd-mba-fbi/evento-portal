@@ -2,7 +2,6 @@ import { OAuth2Client } from "@badgateway/oauth2-client";
 import { tokenState } from "../state/token-state";
 import { login, renewToken } from "./auth";
 import { log, logLazy } from "./logging";
-import { getInstance } from "./storage";
 import { TokenPayload, getTokenExpireIn } from "./token";
 
 enum TokenType {
@@ -68,15 +67,7 @@ function renewAccessTokenOnExpiration(
     log(
       `Access token for scope "${scope}" and locale "${locale}" expired, renew`,
     );
-    const { refreshToken } = tokenState;
-    const instance = getInstance();
-    if (!refreshToken || !instance) {
-      log(
-        `Unable to renew access token for scope "${scope}" and locale "${locale}", no refresh token is present`,
-      );
-      return;
-    }
-    renewToken(client, instance, locale, scope, refreshToken);
+    renewToken(client, scope, locale);
   });
 }
 

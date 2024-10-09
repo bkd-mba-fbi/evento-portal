@@ -21,7 +21,7 @@ import {
   registerLightDomStyles,
   theme,
 } from "../utils/theme";
-import { initializeTokenRenewal } from "../utils/token-renewal.ts";
+import { initializeTokenRenewal } from "../utils/token-renewal";
 
 const oAuthClient = createOAuthClient();
 initializeTokenRenewal(oAuthClient);

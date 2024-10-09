@@ -16,10 +16,11 @@ import {
   consumeLoginState,
   getAccessToken,
   getInstance,
+  getRefreshToken,
   storeInstance,
   storeLoginState,
 } from "./storage";
-import { isValidToken } from "./token";
+import { getTokenPayload, isTokenExpired, isValidToken } from "./token";
 import { clearTokenRenewalTimers } from "./token-renewal";
 
 const envSettings = getEnvSettings();
@@ -65,7 +66,6 @@ export async function ensureAuthenticated(
   const loginState = consumeLoginState();
   const loginResult = await getTokenAfterLogin(client, loginState);
   if (loginResult) {
-    // Successfully logged in
     log("Successfully logged in");
     handleLoginResult(loginResult, loginState);
     return;
@@ -73,7 +73,6 @@ export async function ensureAuthenticated(
 
   const substitutionResult = getTokenAfterSubstitutionRedirect();
   if (substitutionResult) {
-    // Started or stopped substitution
     log("Successfully started or stopped substitution");
     handleSubstitutionResult(substitutionResult);
     return;
@@ -83,18 +82,9 @@ export async function ensureAuthenticated(
 }
 
 /**
- * Store an access token for the given scope in sessionStorage as
- * "CLX.LoginToken" for the current app to use it. Access tokens for
- * each scope are kept in localStorage, as well is the refresh token.
- *
- * - If the refresh token is expired, it redirects to the login page.
- * - If the currently stored access token already matches the given
- *   scope, we're fine.
- * - If we already have a token for the given scope in localStorage,
- *   use this as the current access token.
- * - If no current or cached access token is present or the token is
- *   expired, perform a refresh request to fetch a new token for the
- *   given scope and set this as the current access token.
+ * Make sure valid access/refresh tokens for the given scope/locale
+ * are present and assigned as "current" token. Otherwise renew the
+ * tokens or redirect to login.
  */
 export async function activateTokenForScope(
   client: OAuth2Client,
@@ -102,35 +92,16 @@ export async function activateTokenForScope(
   locale: string,
 ): Promise<void> {
   log(`Activate token for scope "${scope}" and locale "${locale}"`);
+  updateTokenStateForScope(scope, locale);
 
-  if (tokenState.isRefreshTokenExpired()) {
-    // Not authenticated or refresh token expired, redirect to login
+  if (!tokenState.isRefreshTokenValid()) {
     log("Not authenticated or refresh token expired, redirect to login");
     return login(client, scope, locale);
   }
 
-  const currentAccessToken = tokenState.accessToken;
-  const cachedAccessToken = getAccessToken(scope);
-
-  if (isValidToken(currentAccessToken, scope, locale)) {
-    // Current token for scope/locale already set
-    log(
-      `Current token for scope "${scope}" and locale "${locale}" already set`,
-    );
-  } else if (isValidToken(cachedAccessToken, scope, locale)) {
-    // Token for scope/locale cached, set as current
-    log(
-      `Token for scope "${scope}" and locale "${locale}" cached, set as current`,
-    );
-    tokenState.accessToken = cachedAccessToken;
-  } else {
-    // No token for scope/locale present or half expired, redirect for
-    // token fetch/refresh
-    log(
-      `No token for scope "${scope}" and locale "${locale}" present or half expired, redirect for token fetch/refresh`,
-    );
-    // TODO
-    // await redirect(refreshUrl, { client, scope, locale });
+  if (!tokenState.accessToken) {
+    log(`Token for scope "${scope}" and locale "${locale}" expired, renew`);
+    return renewToken(client, scope, locale);
   }
 }
 
@@ -208,6 +179,39 @@ function getAuthorizationEndpoint(): string {
   return instance
     ? `${envSettings.oAuthPrefix}/Authorization/${instance}/Login`
     : `${envSettings.oAuthPrefix}/Authorization/Login`;
+}
+
+/**
+ * Assigns a matching access and refresh token for the given
+ * scope/locale on the token state (updating the "current"
+ * token in sessionStorage).
+ */
+function updateTokenStateForScope(scope: string, locale: string): void {
+  // Try state's "current" token (initialized from sessionStorage)
+  if (isValidToken(tokenState.accessToken, scope, locale)) {
+    log(
+      `Current token for scope "${scope}" and locale "${locale}" already set`,
+    );
+    return;
+  }
+
+  // Try cached access token for scope (from localStorage)
+  const cachedAccessToken = getAccessToken(scope);
+  if (isValidToken(cachedAccessToken, scope, locale)) {
+    log(
+      `Token for scope "${scope}" and locale "${locale}" cached, set as current`,
+    );
+    tokenState.accessToken = cachedAccessToken; // Will update "current" token in sessionStorage
+    tokenState.refreshToken = getRefreshToken(scope);
+    return;
+  }
+
+  // No access token for scope/locale or expired
+  log(
+    `Token for scope "${scope}" and locale "${locale}" not present or expired`,
+  );
+  tokenState.accessToken = null;
+  tokenState.refreshToken = getRefreshToken(scope);
 }
 
 async function getTokenAfterLogin(
@@ -301,22 +305,38 @@ function handleSubstitutionResult(token: OAuth2Token): void {
  */
 export async function renewToken(
   client: OAuth2Client,
-  instance: string,
-  locale: string,
   scope: string,
-  refreshToken: string,
+  locale: string,
 ): Promise<void> {
-  const { refreshToken: newRefreshToken, accessToken: newAccessToken } =
-    await postTokenRefresh(client, instance, locale, scope, refreshToken);
-  tokenState.refreshToken = newRefreshToken;
-  tokenState.accessToken = newAccessToken;
+  const instance = getInstance();
+  const refreshToken = getRefreshToken(scope);
+  if (
+    !instance ||
+    !refreshToken ||
+    isTokenExpired(getTokenPayload(refreshToken))
+  ) {
+    log(
+      `Refresh token for scope "${scope}" not present or expired, redirect to login`,
+    );
+    return login(client, scope, locale);
+  }
+
+  try {
+    const { refreshToken: newRefreshToken, accessToken: newAccessToken } =
+      await postTokenRefresh(client, instance, scope, locale, refreshToken);
+    tokenState.refreshToken = newRefreshToken;
+    tokenState.accessToken = newAccessToken;
+  } catch {
+    log("Token renewal failed, redirect to login");
+    return login(client, scope, locale);
+  }
 }
 
 async function postTokenRefresh(
   client: OAuth2Client,
   instance: string,
-  locale: string,
   scope: string,
+  locale: string,
   refreshToken: string,
 ): Promise<OAuth2Token> {
   const {

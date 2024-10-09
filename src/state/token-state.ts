@@ -17,19 +17,6 @@ type State = {
 type Subscriber = (token: TokenPayload | null) => void;
 type Unsubscribe = () => void;
 
-function getInitialState(): State {
-  const accessToken = getCurrentAccessToken();
-  const refreshToken = accessToken
-    ? getRefreshToken(getTokenPayload(accessToken).scope)
-    : null;
-  return {
-    refreshToken,
-    refreshTokenPayload: null,
-    accessToken,
-    accessTokenPayload: null,
-  };
-}
-
 /**
  * A facade to manage the OAuth refresh & access tokens.
  *
@@ -47,11 +34,18 @@ function getInitialState(): State {
  * logic.
  */
 class TokenState {
-  private state: State = getInitialState();
+  private state: State = {
+    refreshToken: null,
+    refreshTokenPayload: null,
+    accessToken: null,
+    accessTokenPayload: null,
+  };
   private refreshTokenSubscribers: Subscriber[] = [];
   private accessTokenSubscribers: Subscriber[] = [];
 
   constructor() {
+    this.initState();
+
     // Call after-functions for initial token values
     this.afterRefreshTokenUpdate(this.refreshToken, false);
     this.afterAccessTokenUpdate(this.accessToken, false);
@@ -122,10 +116,10 @@ class TokenState {
   }
 
   /**
-   * Returns true if the refresh token is expired
+   * Returns true if the refresh token is present and not expired
    */
-  isRefreshTokenExpired(): boolean {
-    return isTokenExpired(this.refreshTokenPayload);
+  isRefreshTokenValid(): boolean {
+    return !isTokenExpired(this.refreshTokenPayload);
   }
 
   /**
@@ -168,6 +162,19 @@ class TokenState {
         (s) => s === callback,
       );
       this.accessTokenSubscribers.splice(index, 1);
+    };
+  }
+
+  private initState(): void {
+    const accessToken = getCurrentAccessToken();
+    const refreshToken = accessToken
+      ? getRefreshToken(getTokenPayload(accessToken).scope)
+      : null;
+    this.state = {
+      refreshToken,
+      refreshTokenPayload: null,
+      accessToken,
+      accessTokenPayload: null,
     };
   }
 
