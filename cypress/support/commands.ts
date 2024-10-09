@@ -106,9 +106,11 @@ export function createToken(
   scope: string,
   {
     locale = "de-CH",
+    expiration = Math.floor(Date.now() / 1000) + 60 * 60, // Next hour
     additionalTokenPayload = {},
   }: Partial<{
     locale: string;
+    expiration: number;
     additionalTokenPayload: Record<string, unknown>;
   }> = {},
 ) {
@@ -117,12 +119,11 @@ export function createToken(
     alg: "HS256",
   };
 
-  const nextHour = Math.floor(Date.now() / 1000) + 60 * 60;
   const body = {
     iss: "oauthpublic",
     aud: "https://cypress/",
-    nbf: nextHour,
-    exp: nextHour,
+    nbf: expiration,
+    exp: expiration,
     token_purpose: "User",
     scope,
     consumer_id: "cypress",
@@ -143,13 +144,8 @@ export function createToken(
   )}.signature`;
 }
 
-const originalVisit = cy.visit;
-Cypress.Commands.add("visitWithoutWait", (...args) => {
-  return originalVisit(...args);
-});
-
-Cypress.Commands.overwrite("visit", (originalFn, ...args) => {
-  const result = originalFn(...args);
+Cypress.Commands.add("visitPortal", (...args) => {
+  const result = cy.visit(...args);
 
   // Wait for roles & permissions to be loaded
   return cy.wait("@fetchAccessInfo").then(() => result);

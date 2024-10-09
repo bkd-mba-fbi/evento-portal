@@ -23,11 +23,11 @@ import "./commands";
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      visitWithoutWait(
+      visitPortal(
         url: string,
         options?: Partial<VisitOptions>,
       ): Chainable<AUTWindow>;
-      visitWithoutWait(
+      visitPortal(
         options: Partial<VisitOptions> & { url: string },
       ): Chainable<AUTWindow>;
 

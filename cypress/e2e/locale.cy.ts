@@ -16,7 +16,7 @@ describe("Locale", () => {
 
     it("uses de-CH", () => {
       cy.resizeToDesktop();
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.contains("Unterricht");
       cy.contains("Bildungs- und Kulturdirektion");
 
@@ -28,7 +28,7 @@ describe("Locale", () => {
 
     it("switches to fr-CH token", () => {
       cy.resizeToDesktop();
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.contains("Unterricht");
 
       const token = createToken("Tutoring", { locale: "fr-CH" });
@@ -62,7 +62,7 @@ describe("Locale", () => {
 
     it("uses fr-CH", () => {
       cy.resizeToDesktop();
-      cy.visit("/index.html?locale=fr-CH");
+      cy.visitPortal("/index.html?locale=fr-CH");
       cy.contains("Enseignement");
       cy.contains("Direction de l'instruction publique et de la culture");
 
