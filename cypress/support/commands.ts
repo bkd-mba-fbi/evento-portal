@@ -106,7 +106,7 @@ export function createToken(
   scope: string,
   {
     locale = "de-CH",
-    expiration = Math.floor(Date.now() / 1000) + 60 * 60, // Next hour
+    expiration = Math.floor(Date.now() / 1000) + 60 * 60, // 1h from now
     additionalTokenPayload = {},
   }: Partial<{
     locale: string;
