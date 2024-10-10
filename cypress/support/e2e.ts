@@ -23,6 +23,14 @@ import "./commands";
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
+      visitPortal(
+        url: string,
+        options?: Partial<VisitOptions>,
+      ): Chainable<AUTWindow>;
+      visitPortal(
+        options: Partial<VisitOptions> & { url: string },
+      ): Chainable<AUTWindow>;
+
       /**
        * Make sure the user is authenticated (i.e. add a token for
        * each scope to localStorage)
@@ -50,6 +58,12 @@ declare global {
        * Expect the `aria-expanded` attribute of the current subject to have the given value.
        */
       ariaExpanded(expanded: boolean): Chainable<Subject>;
+
+      /**
+       * Like cy.contains, but operates within the portal iframe.
+       */
+      iframeContains(text: string): Chainable<void>;
+      iframeContains(selector: string, text: string): Chainable<void>;
     }
   }
 }

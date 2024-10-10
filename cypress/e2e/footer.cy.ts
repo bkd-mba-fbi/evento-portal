@@ -9,7 +9,7 @@ describe("Footer", () => {
     });
 
     it("renders the footer with links to contact, legal and imprint pages", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
 
       cy.get("bkd-footer").within(() => {
         cy.get("a").contains("Kontakt");
@@ -19,7 +19,7 @@ describe("Footer", () => {
     });
 
     it("renders the static contact page", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get("bkd-footer").find("a").contains("Kontakt").click();
 
       cy.get("h1").contains("Kontakt", {});
@@ -28,7 +28,7 @@ describe("Footer", () => {
     });
 
     it("renders the static legal page", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get("bkd-footer").find("a").contains("Rechtliche Hinweise").click();
 
       cy.get("h1").contains("Rechtliche Hinweise", {});
@@ -37,7 +37,7 @@ describe("Footer", () => {
     });
 
     it("renders the static imprint page", () => {
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
       cy.get("bkd-footer").find("a").contains("Impressum").click();
 
       cy.get("h1").contains("Impressum", {});
@@ -52,7 +52,7 @@ describe("Footer", () => {
     });
 
     it("renders the footer with links to contact, legal and imprint pages", () => {
-      cy.visit("/index.html?locale=fr-CH");
+      cy.visitPortal("/index.html?locale=fr-CH");
       cy.get("bkd-footer").within(() => {
         cy.get("a").contains("Contact");
         cy.get("a").contains("Mentions légales");
@@ -61,7 +61,7 @@ describe("Footer", () => {
     });
 
     it("renders the static contact page", () => {
-      cy.visit("/index.html?locale=fr-CH");
+      cy.visitPortal("/index.html?locale=fr-CH");
       cy.get("bkd-footer").find("a").contains("Contact").click();
 
       cy.get("h1").contains("Contact", {});
@@ -70,7 +70,7 @@ describe("Footer", () => {
     });
 
     it("renders the static legal page", () => {
-      cy.visit("/index.html?locale=fr-CH");
+      cy.visitPortal("/index.html?locale=fr-CH");
       cy.get("bkd-footer").find("a").contains("Mentions légales").click();
 
       cy.get("h1").contains("Mentions légales", {});
@@ -79,7 +79,7 @@ describe("Footer", () => {
     });
 
     it("renders the static imprint page", () => {
-      cy.visit("/index.html?locale=fr-CH");
+      cy.visitPortal("/index.html?locale=fr-CH");
       cy.get("bkd-footer").find("a").contains("Impressum").click();
 
       cy.get("h1").contains("Impressum", {});
