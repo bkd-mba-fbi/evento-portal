@@ -58,6 +58,12 @@ declare global {
        * Expect the `aria-expanded` attribute of the current subject to have the given value.
        */
       ariaExpanded(expanded: boolean): Chainable<Subject>;
+
+      /**
+       * Like cy.contains, but operates within the portal iframe.
+       */
+      iframeContains(text: string): Chainable<void>;
+      iframeContains(selector: string, text: string): Chainable<void>;
     }
   }
 }

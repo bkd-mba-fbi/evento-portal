@@ -175,3 +175,15 @@ Cypress.Commands.add(
         return subject;
       }),
 );
+
+Cypress.Commands.add("iframeContains", (...args) => {
+  const selector = args.length == 2 ? args[0] : null;
+  const text = args[args.length - 1];
+  cy.get("iframe").should((iframe) => {
+    const iframeBody = Cypress.$(iframe[0].contentDocument.body);
+    const result = selector
+      ? iframeBody.find(selector).text()
+      : iframeBody.text();
+    expect(result).to.include(text);
+  });
+});

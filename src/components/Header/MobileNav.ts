@@ -1,7 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { map } from "lit/directives/map.js";
+import { repeat } from "lit/directives/repeat.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { when } from "lit/directives/when.js";
 import { localized, msg } from "@lit/localize";
@@ -263,7 +263,11 @@ export class MobileNav extends LitElement {
           ${unsafeHTML(open ? arrowDownIcon : arrowUpIcon)}
         </button>
         <ul class="items">
-          ${map(group.items, this.renderNavItem.bind(this))}
+          ${repeat(
+            group.items,
+            (item) => item.label,
+            this.renderNavItem.bind(this),
+          )}
         </ul>
       </li>
     `;
@@ -308,12 +312,17 @@ export class MobileNav extends LitElement {
     return html`
       <nav role="navigation" aria-label=${msg("Mobile Navigation")}>
         <ul class="nav">
-          ${map(portalState.navigation, this.renderGroup.bind(this))}
+          ${repeat(
+            portalState.navigation,
+            (group) => group.label,
+            this.renderGroup.bind(this),
+          )}
         </ul>
         <div class="service-nav">
           <ul>
-            ${map(
+            ${repeat(
               userSettingsItems(portalState.locale),
+              (item) => item.key,
               this.renderSettingsItem.bind(this),
             )}
           </ul>

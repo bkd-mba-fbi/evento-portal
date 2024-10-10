@@ -14,21 +14,22 @@ const HALF_HOUR = 30 * 60 * 1000;
 const ONE_HOUR = 60 * 60 * 1000;
 
 describe("Authentication", () => {
-  beforeEach(() =>
+  beforeEach(() => {
     cy.login({
       locale: "de-CH",
       roles: ["LessonTeacherRole", "TeacherRole"],
       permissions: [],
-    }),
-  );
+    });
+    cy.resizeToDesktop();
+  });
 
-  describe("token handling on initial app loading", () => {
+  describe("token handling on visit", () => {
     it("renders app if current token has correct scope", () => {
       cy.visitPortal("/index.html");
-      cy.contains("Unterricht");
+      cy.iframeContains("h2", "Stundenplan");
     });
 
-    it("renders app if current token has different scope but cached token for required scope is available", () => {
+    it("renders app if current token has different scope and cached token for desired scope is available", () => {
       cy.window().then(() => {
         resetAllTokens();
 
@@ -43,10 +44,10 @@ describe("Authentication", () => {
       });
 
       cy.visitPortal("/index.html");
-      cy.contains("Unterricht");
+      cy.iframeContains("h2", "Stundenplan");
     });
 
-    it("renews token if current token is expired", () => {
+    it("renews token if current token has correct scope but is expired", () => {
       cy.window().then(() => {
         resetAllTokens();
 
@@ -65,11 +66,11 @@ describe("Authentication", () => {
       ).as("tokenRenewal");
 
       cy.visitPortal("/index.html");
-      cy.contains("Unterricht");
+      cy.iframeContains("h2", "Stundenplan");
       cy.wait("@tokenRenewal").its("request").should("exist");
     });
 
-    it("renews token if current token has different scope and cached token for required scope is available but expired", () => {
+    it("renews token if current token has different scope and cached token for desired scope is available but expired", () => {
       cy.window().then(() => {
         resetAllTokens();
 
@@ -92,23 +93,36 @@ describe("Authentication", () => {
       ).as("tokenRenewal");
 
       cy.visitPortal("/index.html");
-      cy.contains("Unterricht");
+      cy.iframeContains("h2", "Stundenplan");
       cy.wait("@tokenRenewal").its("request").should("exist");
+    });
+
+    it("redirects to login page if current token has different scope but cached token for required scope is unavailable", () => {
+      cy.window().then(() => {
+        resetAllTokens();
+
+        const otherToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
+        storeRefreshToken(OTHER_SCOPE, otherToken);
+        storeAccessToken(OTHER_SCOPE, otherToken);
+        storeCurrentAccessToken(otherToken);
+      });
+
+      expectLoginRedirect(() => {
+        cy.visit("/index.html");
+      });
     });
 
     it("redirects to login page if no tokens are available", () => {
       cy.window().then(() => {
         resetAllTokens();
       });
-      interceptLoginRedirect();
 
-      cy.visit("/index.html");
-      cy.origin("https://eventotest.api", () => {
-        cy.contains("Login").should("exist");
+      expectLoginRedirect(() => {
+        cy.visit("/index.html");
       });
     });
 
-    it("redirects to login page if refresh token is expired", () => {
+    it("redirects to login page if refresh token has correct scope but expired", () => {
       cy.window().then(() => {
         resetAllTokens();
 
@@ -124,32 +138,12 @@ describe("Authentication", () => {
         storeAccessToken(SCOPE, accessToken);
         storeCurrentAccessToken(accessToken);
       });
-      interceptLoginRedirect();
-
-      cy.visit("/index.html");
-      cy.origin("https://eventotest.api", () => {
-        cy.contains("Login").should("exist");
+      expectLoginRedirect(() => {
+        cy.visit("/index.html");
       });
     });
 
-    it("redirects to login page if current token has different scope and no cached token for required scope is available", () => {
-      cy.window().then(() => {
-        resetAllTokens();
-
-        const otherToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
-        storeRefreshToken(OTHER_SCOPE, otherToken);
-        storeAccessToken(OTHER_SCOPE, otherToken);
-        storeCurrentAccessToken(otherToken);
-      });
-      interceptLoginRedirect();
-
-      cy.visit("/index.html");
-      cy.origin("https://eventotest.api", () => {
-        cy.contains("Login").should("exist");
-      });
-    });
-
-    it("redirects to login when token renewal fails", () => {
+    it("redirects to login page when token renewal fails", () => {
       cy.window().then(() => {
         resetAllTokens();
 
@@ -170,13 +164,82 @@ describe("Authentication", () => {
         },
         { statusCode: 401, body: { error: "invalid_grant" } },
       ).as("tokenRenewal");
-      interceptLoginRedirect();
 
-      cy.visit("/index.html");
-      cy.origin("https://eventotest.api", () => {
-        cy.contains("Login").should("exist");
+      expectLoginRedirect(() => {
+        cy.visit("/index.html");
       });
       cy.wait("@tokenRenewal").its("request").should("exist");
+    });
+  });
+
+  describe("token handling on navigation", () => {
+    it("renders app when switching to another module of same app (i.e. same scope)", () => {
+      cy.visitPortal("/index.html");
+      cy.iframeContains("h2", "Stundenplan");
+
+      // Switch to another module of same app
+      navigate("Unterricht", "Präsenzkontrolle");
+      cy.iframeContains("h1", "Präsenzkontrolle");
+    });
+
+    it("renders app when switching to app with different scope and cached token is available", () => {
+      cy.visitPortal("/index.html");
+      cy.iframeContains("h2", "Stundenplan");
+
+      // Switch to app with other scope
+      navigate("Angebote", "Kurse und Veranstaltungen");
+      cy.iframeContains("Freie Plätze");
+    });
+
+    it("redirects to login when switching to app with different scope but cached token is unavailable", () => {
+      cy.window().then(() => {
+        resetAllTokens();
+
+        const token = createToken(SCOPE, { locale: "de-CH" });
+        storeRefreshToken(SCOPE, token);
+        storeAccessToken(SCOPE, token);
+        storeCurrentAccessToken(token);
+      });
+
+      cy.visitPortal("/index.html");
+      cy.iframeContains("h2", "Stundenplan");
+
+      // Switch to app with other scope
+      expectLoginRedirect(() => {
+        navigate("Angebote", "Kurse und Veranstaltungen");
+      });
+    });
+
+    it("renews token when switching to app with different scope and cached token is available but expired", () => {
+      cy.window().then(() => {
+        resetAllTokens();
+
+        const token = createToken(SCOPE, { locale: "de-CH" });
+        storeRefreshToken(SCOPE, token);
+        storeAccessToken(SCOPE, token);
+        storeCurrentAccessToken(token);
+
+        const refreshToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
+        const accessToken = createToken(OTHER_SCOPE, {
+          locale: "de-CH",
+          expiration: Math.floor((Date.now() - ONE_HOUR) / 1000),
+        });
+        storeRefreshToken(OTHER_SCOPE, refreshToken);
+        storeAccessToken(OTHER_SCOPE, accessToken);
+      });
+
+      cy.visitPortal("/index.html");
+      cy.iframeContains("h2", "Stundenplan");
+
+      interceptTokenRenewal(
+        createToken(OTHER_SCOPE, { locale: "de-CH" }),
+        createToken(OTHER_SCOPE, { locale: "de-CH" }),
+      ).as("tokenRenewal");
+
+      // Switch to app with other scope
+      navigate("Angebote", "Kurse und Veranstaltungen");
+      cy.wait("@tokenRenewal").its("request").should("exist");
+      cy.iframeContains("Freie Plätze");
     });
   });
 
@@ -229,7 +292,7 @@ describe("Authentication", () => {
 
       // We have valid tokens initially
       cy.visitPortal("/index.html");
-      cy.contains("Unterricht");
+      cy.iframeContains("h2", "Stundenplan");
 
       // Access token expires after 10 minutes and is renewed
       interceptTokenRenewal(refreshToken2, accessToken2).as(
@@ -246,20 +309,22 @@ describe("Authentication", () => {
       cy.wait("@secondTokenRenewal").its("request").should("exist");
 
       // Refresh token expires, redirects to login
-      interceptLoginRedirect();
-      cy.tick(HALF_HOUR);
-      cy.origin("https://eventotest.api", () => {
-        cy.contains("Login").should("exist");
+      expectLoginRedirect(() => {
+        cy.tick(HALF_HOUR);
       });
     });
   });
 });
 
-function interceptLoginRedirect() {
-  return cy.intercept(
+function expectLoginRedirect(callback: () => void) {
+  cy.intercept(
     "https://eventotest.api/OAuth/Authorization/Test/Login?*",
     "<html><body>Login</body></html>",
   );
+  callback();
+  cy.origin("https://eventotest.api", () => {
+    cy.contains("Login").should("exist");
+  });
 }
 
 function interceptTokenRenewal(refreshToken: string, accessToken: string) {
@@ -275,4 +340,16 @@ function interceptTokenRenewal(refreshToken: string, accessToken: string) {
       expires_in: 0, // Not relevant/unused
     },
   );
+}
+
+function navigate(menuName: string, itemName: string) {
+  cy.contains("a", menuName).as("menuToggle").should("exist").click();
+
+  cy.get("@menuToggle")
+    .next("bkd-nav-group-dropdown")
+    .shadow()
+    .find("ul[role='menu']")
+    .contains("a[role='menuitem']", itemName)
+    .should("exist")
+    .click();
 }

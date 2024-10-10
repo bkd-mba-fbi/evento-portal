@@ -17,8 +17,8 @@ describe("Locale", () => {
     it("uses de-CH", () => {
       cy.resizeToDesktop();
       cy.visitPortal("/index.html");
-      cy.contains("Unterricht");
-      cy.contains("Bildungs- und Kulturdirektion");
+      cy.contains("Unterricht").should("exist");
+      cy.iframeContains("Stundenplan");
 
       cy.get("bkd-language-switcher").within(() => {
         cy.contains("a", "de").should("have.class", "active");
@@ -29,7 +29,8 @@ describe("Locale", () => {
     it("switches to fr-CH token", () => {
       cy.resizeToDesktop();
       cy.visitPortal("/index.html");
-      cy.contains("Unterricht");
+      cy.contains("Unterricht").should("exist");
+      cy.iframeContains("Stundenplan");
 
       const token = createToken("Tutoring", { locale: "fr-CH" });
       cy.intercept("https://eventotest.api/OAuth/Authorization/Test/Token", {
@@ -43,7 +44,8 @@ describe("Locale", () => {
         cy.contains("a", "fr").click();
       });
 
-      cy.contains("Enseignement");
+      cy.contains("Enseignement").should("exist");
+      cy.iframeContains("Horaire");
       cy.get("bkd-language-switcher").within(() => {
         cy.contains("a", "de").should("not.have.class", "active");
         cy.contains("a", "fr").should("have.class", "active");
@@ -63,8 +65,8 @@ describe("Locale", () => {
     it("uses fr-CH", () => {
       cy.resizeToDesktop();
       cy.visitPortal("/index.html?locale=fr-CH");
-      cy.contains("Enseignement");
-      cy.contains("Direction de l'instruction publique et de la culture");
+      cy.contains("Enseignement").should("exist");
+      cy.iframeContains("Horaire");
 
       cy.get("bkd-language-switcher").within(() => {
         cy.contains("a", "de").should("not.have.class", "active");
