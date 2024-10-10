@@ -1,10 +1,6 @@
 import { createToken } from "../support/commands";
 
 describe("Locale", () => {
-  // Apparently, since token refresh is involved, we cannot test the
-  // language switching and must make sure that a token for the
-  // desired locale is already present
-
   describe("with de-CH token", () => {
     beforeEach(() =>
       cy.login({
