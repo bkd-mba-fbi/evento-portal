@@ -23,6 +23,10 @@ import "./commands";
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
+      /**
+       * Just like `cy.visit`, but waits for the roles and permissions
+       * to be loaded.
+       */
       visitPortal(
         url: string,
         options?: Partial<VisitOptions>,
@@ -60,7 +64,7 @@ declare global {
       ariaExpanded(expanded: boolean): Chainable<Subject>;
 
       /**
-       * Like cy.contains, but operates within the portal iframe.
+       * Like `cy.contains`, but operates within the portal iframe.
        */
       iframeContains(text: string): Chainable<void>;
       iframeContains(selector: string, text: string): Chainable<void>;
