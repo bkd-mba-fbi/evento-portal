@@ -15,96 +15,113 @@ const ONE_HOUR = 60 * 60 * 1000;
 
 describe("Authentication", () => {
   beforeEach(() => {
+    cy.resizeToDesktop();
     cy.login({
       locale: "de-CH",
       roles: ["LessonTeacherRole", "TeacherRole"],
       permissions: [],
     });
-    cy.resizeToDesktop();
+
+    // Remove all tokens created by cy.login from storage so the
+    // following tests can setup custom scenarios
+    cy.window().then(() => {
+      resetAllTokens();
+    });
   });
 
   describe("token handling on visit", () => {
     it("renders app if current token has correct scope", () => {
-      cy.visitPortal("/index.html");
-      cy.iframeContains("h2", "Stundenplan");
-    });
-
-    it("renders app if current token has different scope and cached token for desired scope is available", () => {
+      const refreshToken = createToken(SCOPE, { locale: "de-CH" });
+      const accessToken = createToken(SCOPE, { locale: "de-CH" });
       cy.window().then(() => {
-        resetAllTokens();
-
-        const token = createToken(SCOPE, { locale: "de-CH" });
-        storeRefreshToken(SCOPE, token);
-        storeAccessToken(SCOPE, token);
-
-        const otherToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
-        storeRefreshToken(OTHER_SCOPE, otherToken);
-        storeAccessToken(OTHER_SCOPE, otherToken);
-        storeCurrentAccessToken(otherToken);
-      });
-
-      cy.visitPortal("/index.html");
-      cy.iframeContains("h2", "Stundenplan");
-    });
-
-    it("renews token if current token has correct scope but is expired", () => {
-      cy.window().then(() => {
-        resetAllTokens();
-
-        const refreshToken = createToken(SCOPE, { locale: "de-CH" });
-        const accessToken = createToken(SCOPE, {
-          locale: "de-CH",
-          expiration: Math.floor((Date.now() - ONE_HOUR) / 1000),
-        });
         storeRefreshToken(SCOPE, refreshToken);
         storeAccessToken(SCOPE, accessToken);
         storeCurrentAccessToken(accessToken);
       });
-      interceptTokenRenewal(
-        createToken(SCOPE, { locale: "de-CH" }),
-        createToken(SCOPE, { locale: "de-CH" }),
-      ).as("tokenRenewal");
 
       cy.visitPortal("/index.html");
       cy.iframeContains("h2", "Stundenplan");
-      cy.wait("@tokenRenewal").its("request").should("exist");
+      expectCurrentToken(accessToken);
     });
 
-    it("renews token if current token has different scope and cached token for desired scope is available but expired", () => {
+    it("renders app if current token has different scope and cached token for desired scope is available", () => {
+      const refreshToken = createToken(SCOPE, { locale: "de-CH" });
+      const accessToken = createToken(SCOPE, { locale: "de-CH" });
+      const otherRefreshToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
+      const otherAccessToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
       cy.window().then(() => {
-        resetAllTokens();
-
-        const refreshToken = createToken(SCOPE, { locale: "de-CH" });
-        const accessToken = createToken(SCOPE, {
-          locale: "de-CH",
-          expiration: Math.floor((Date.now() - ONE_HOUR) / 1000),
-        });
         storeRefreshToken(SCOPE, refreshToken);
         storeAccessToken(SCOPE, accessToken);
 
-        const otherToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
-        storeRefreshToken(OTHER_SCOPE, otherToken);
-        storeAccessToken(OTHER_SCOPE, otherToken);
-        storeCurrentAccessToken(otherToken);
+        storeRefreshToken(OTHER_SCOPE, otherRefreshToken);
+        storeAccessToken(OTHER_SCOPE, otherAccessToken);
+        storeCurrentAccessToken(otherAccessToken);
       });
-      interceptTokenRenewal(
-        createToken(SCOPE, { locale: "de-CH" }),
-        createToken(SCOPE, { locale: "de-CH" }),
-      ).as("tokenRenewal");
+
+      cy.visitPortal("/index.html");
+      cy.iframeContains("h2", "Stundenplan");
+      expectCurrentToken(accessToken);
+    });
+
+    it("renews token if current token has correct scope but is expired", () => {
+      const initialRefreshToken = createToken(SCOPE, { locale: "de-CH" });
+      const initialAccessToken = createToken(SCOPE, {
+        locale: "de-CH",
+        expiration: Math.floor((Date.now() - ONE_HOUR) / 1000),
+      });
+      const renewedRefreshToken = createToken(SCOPE, { locale: "de-CH" });
+      const renewedAccessToken = createToken(SCOPE, { locale: "de-CH" });
+      cy.window().then(() => {
+        storeRefreshToken(SCOPE, initialRefreshToken);
+        storeAccessToken(SCOPE, initialAccessToken);
+        storeCurrentAccessToken(initialAccessToken);
+      });
+
+      interceptTokenRenewal(renewedRefreshToken, renewedAccessToken).as(
+        "tokenRenewal",
+      );
 
       cy.visitPortal("/index.html");
       cy.iframeContains("h2", "Stundenplan");
       cy.wait("@tokenRenewal").its("request").should("exist");
+      expectCurrentToken(renewedAccessToken);
+    });
+
+    it("renews token if current token has different scope and cached token for desired scope is available but expired", () => {
+      const initialRefreshToken = createToken(SCOPE, { locale: "de-CH" });
+      const initialAccessToken = createToken(SCOPE, {
+        locale: "de-CH",
+        expiration: Math.floor((Date.now() - ONE_HOUR) / 1000),
+      });
+      const renewedRefreshToken = createToken(SCOPE, { locale: "de-CH" });
+      const renewedAccessToken = createToken(SCOPE, { locale: "de-CH" });
+      const otherRefreshToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
+      const otherAccessToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
+      cy.window().then(() => {
+        storeRefreshToken(SCOPE, initialRefreshToken);
+        storeAccessToken(SCOPE, initialAccessToken);
+
+        storeRefreshToken(OTHER_SCOPE, otherRefreshToken);
+        storeAccessToken(OTHER_SCOPE, otherAccessToken);
+        storeCurrentAccessToken(otherAccessToken);
+      });
+      interceptTokenRenewal(renewedRefreshToken, renewedAccessToken).as(
+        "tokenRenewal",
+      );
+
+      cy.visitPortal("/index.html");
+      cy.iframeContains("h2", "Stundenplan");
+      cy.wait("@tokenRenewal").its("request").should("exist");
+      expectCurrentToken(renewedAccessToken);
     });
 
     it("redirects to login page if current token has different scope but cached token for required scope is unavailable", () => {
+      const otherRefreshToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
+      const otherAccessToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
       cy.window().then(() => {
-        resetAllTokens();
-
-        const otherToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
-        storeRefreshToken(OTHER_SCOPE, otherToken);
-        storeAccessToken(OTHER_SCOPE, otherToken);
-        storeCurrentAccessToken(otherToken);
+        storeRefreshToken(OTHER_SCOPE, otherRefreshToken);
+        storeAccessToken(OTHER_SCOPE, otherAccessToken);
+        storeCurrentAccessToken(otherAccessToken);
       });
 
       expectLoginRedirect(() => {
@@ -113,45 +130,38 @@ describe("Authentication", () => {
     });
 
     it("redirects to login page if no tokens are available", () => {
-      cy.window().then(() => {
-        resetAllTokens();
-      });
-
       expectLoginRedirect(() => {
         cy.visit("/index.html");
       });
     });
 
     it("redirects to login page if refresh token has correct scope but expired", () => {
+      // Hypothetical case where refresh token is already expired
+      // but access token is not, but it makes sure we test the
+      // correct logic
+      const refreshToken = createToken(SCOPE, {
+        locale: "de-CH",
+        expiration: Math.floor((Date.now() - ONE_HOUR) / 1000),
+      });
+      const accessToken = createToken(SCOPE, { locale: "de-CH" });
       cy.window().then(() => {
-        resetAllTokens();
-
-        // Hypothetical case where refresh token is already expired
-        // but access token is not, but it makes sure we test the
-        // correct logic
-        const refreshToken = createToken(SCOPE, {
-          locale: "de-CH",
-          expiration: Math.floor((Date.now() - ONE_HOUR) / 1000),
-        });
-        const accessToken = createToken(SCOPE, { locale: "de-CH" });
         storeRefreshToken(SCOPE, refreshToken);
         storeAccessToken(SCOPE, accessToken);
         storeCurrentAccessToken(accessToken);
       });
+
       expectLoginRedirect(() => {
         cy.visit("/index.html");
       });
     });
 
     it("redirects to login page when token renewal fails", () => {
+      const refreshToken = createToken(SCOPE, { locale: "de-CH" });
+      const accessToken = createToken(SCOPE, {
+        locale: "de-CH",
+        expiration: Math.floor((Date.now() - ONE_HOUR) / 1000),
+      });
       cy.window().then(() => {
-        resetAllTokens();
-
-        const refreshToken = createToken(SCOPE, { locale: "de-CH" });
-        const accessToken = createToken(SCOPE, {
-          locale: "de-CH",
-          expiration: Math.floor((Date.now() - ONE_HOUR) / 1000),
-        });
         storeRefreshToken(SCOPE, refreshToken);
         storeAccessToken(SCOPE, accessToken);
         storeCurrentAccessToken(accessToken);
@@ -174,35 +184,60 @@ describe("Authentication", () => {
 
   describe("token handling on navigation", () => {
     it("renders app when switching to another module of same app (i.e. same scope)", () => {
-      cy.visitPortal("/index.html");
-      cy.iframeContains("h2", "Stundenplan");
-
-      // Switch to another module of same app
-      navigate("Unterricht", "Präsenzkontrolle");
-      cy.iframeContains("h1", "Präsenzkontrolle");
-    });
-
-    it("renders app when switching to app with different scope and cached token is available", () => {
-      cy.visitPortal("/index.html");
-      cy.iframeContains("h2", "Stundenplan");
-
-      // Switch to app with other scope
-      navigate("Angebote", "Kurse und Veranstaltungen");
-      cy.iframeContains("Freie Plätze");
-    });
-
-    it("redirects to login when switching to app with different scope but cached token is unavailable", () => {
+      const refreshToken = createToken(SCOPE, { locale: "de-CH" });
+      const accessToken = createToken(SCOPE, { locale: "de-CH" });
       cy.window().then(() => {
-        resetAllTokens();
-
-        const token = createToken(SCOPE, { locale: "de-CH" });
-        storeRefreshToken(SCOPE, token);
-        storeAccessToken(SCOPE, token);
-        storeCurrentAccessToken(token);
+        storeRefreshToken(SCOPE, refreshToken);
+        storeAccessToken(SCOPE, accessToken);
+        storeCurrentAccessToken(accessToken);
       });
 
       cy.visitPortal("/index.html");
       cy.iframeContains("h2", "Stundenplan");
+      expectCurrentToken(accessToken);
+
+      // Switch to another module of same app
+      navigate("Unterricht", "Präsenzkontrolle");
+      cy.iframeContains("h1", "Präsenzkontrolle");
+      expectCurrentToken(accessToken);
+    });
+
+    it("renders app when switching to app with different scope and cached token is available", () => {
+      const refreshToken = createToken(SCOPE, { locale: "de-CH" });
+      const accessToken = createToken(SCOPE, { locale: "de-CH" });
+      const otherRefreshToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
+      const otherAccessToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
+      cy.window().then(() => {
+        storeRefreshToken(SCOPE, refreshToken);
+        storeAccessToken(SCOPE, accessToken);
+        storeCurrentAccessToken(accessToken);
+
+        storeRefreshToken(OTHER_SCOPE, otherRefreshToken);
+        storeAccessToken(OTHER_SCOPE, otherAccessToken);
+      });
+
+      cy.visitPortal("/index.html");
+      cy.iframeContains("h2", "Stundenplan");
+      expectCurrentToken(accessToken);
+
+      // Switch to app with other scope
+      navigate("Angebote", "Kurse und Veranstaltungen");
+      cy.iframeContains("Freie Plätze");
+      expectCurrentToken(otherAccessToken);
+    });
+
+    it("redirects to login when switching to app with different scope but cached token is unavailable", () => {
+      const refreshToken = createToken(SCOPE, { locale: "de-CH" });
+      const accessToken = createToken(SCOPE, { locale: "de-CH" });
+      cy.window().then(() => {
+        storeRefreshToken(SCOPE, refreshToken);
+        storeAccessToken(SCOPE, accessToken);
+        storeCurrentAccessToken(accessToken);
+      });
+
+      cy.visitPortal("/index.html");
+      cy.iframeContains("h2", "Stundenplan");
+      expectCurrentToken(accessToken);
 
       // Switch to app with other scope
       expectLoginRedirect(() => {
@@ -211,35 +246,41 @@ describe("Authentication", () => {
     });
 
     it("renews token when switching to app with different scope and cached token is available but expired", () => {
+      const refreshToken = createToken(SCOPE, { locale: "de-CH" });
+      const accessToken = createToken(SCOPE, { locale: "de-CH" });
+      const otherRefreshToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
+      const otherAccessToken = createToken(OTHER_SCOPE, {
+        locale: "de-CH",
+        expiration: Math.floor((Date.now() - ONE_HOUR) / 1000),
+      });
+      const renewedOtherRefreshToken = createToken(OTHER_SCOPE, {
+        locale: "de-CH",
+      });
+      const renewedOtherAccessToken = createToken(OTHER_SCOPE, {
+        locale: "de-CH",
+      });
       cy.window().then(() => {
-        resetAllTokens();
+        storeRefreshToken(SCOPE, refreshToken);
+        storeAccessToken(SCOPE, accessToken);
+        storeCurrentAccessToken(accessToken);
 
-        const token = createToken(SCOPE, { locale: "de-CH" });
-        storeRefreshToken(SCOPE, token);
-        storeAccessToken(SCOPE, token);
-        storeCurrentAccessToken(token);
-
-        const refreshToken = createToken(OTHER_SCOPE, { locale: "de-CH" });
-        const accessToken = createToken(OTHER_SCOPE, {
-          locale: "de-CH",
-          expiration: Math.floor((Date.now() - ONE_HOUR) / 1000),
-        });
-        storeRefreshToken(OTHER_SCOPE, refreshToken);
-        storeAccessToken(OTHER_SCOPE, accessToken);
+        storeRefreshToken(OTHER_SCOPE, otherRefreshToken);
+        storeAccessToken(OTHER_SCOPE, otherAccessToken);
       });
 
       cy.visitPortal("/index.html");
       cy.iframeContains("h2", "Stundenplan");
 
       interceptTokenRenewal(
-        createToken(OTHER_SCOPE, { locale: "de-CH" }),
-        createToken(OTHER_SCOPE, { locale: "de-CH" }),
+        renewedOtherRefreshToken,
+        renewedOtherAccessToken,
       ).as("tokenRenewal");
 
       // Switch to app with other scope
       navigate("Angebote", "Kurse und Veranstaltungen");
       cy.wait("@tokenRenewal").its("request").should("exist");
       cy.iframeContains("Freie Plätze");
+      expectCurrentToken(renewedOtherAccessToken);
     });
   });
 
@@ -283,8 +324,6 @@ describe("Authentication", () => {
       });
 
       cy.window().then(() => {
-        resetAllTokens();
-
         storeRefreshToken(SCOPE, refreshToken1);
         storeAccessToken(SCOPE, accessToken1);
         storeCurrentAccessToken(accessToken1);
@@ -293,6 +332,7 @@ describe("Authentication", () => {
       // We have valid tokens initially
       cy.visitPortal("/index.html");
       cy.iframeContains("h2", "Stundenplan");
+      expectCurrentToken(accessToken1);
 
       // Access token expires after 10 minutes and is renewed
       interceptTokenRenewal(refreshToken2, accessToken2).as(
@@ -300,6 +340,7 @@ describe("Authentication", () => {
       );
       cy.tick(TEN_MINUTES);
       cy.wait("@firstTokenRenewal").its("request").should("exist");
+      expectCurrentToken(accessToken2);
 
       // Access token expires again after 10 minutes and is renewed
       interceptTokenRenewal(refreshToken3, accessToken3).as(
@@ -315,6 +356,13 @@ describe("Authentication", () => {
     });
   });
 });
+
+function expectCurrentToken(accessToken: string) {
+  cy.get("iframe").should((iframe) => {
+    const storage = iframe[0].contentWindow.localStorage;
+    expect(storage.getItem("CLX.LoginToken")).to.eq(`"${accessToken}"`);
+  });
+}
 
 function expectLoginRedirect(callback: () => void) {
   cy.intercept(

@@ -135,13 +135,17 @@ export function createToken(
     id_person: "1234",
     fullname: "Somebody",
     roles: [],
-    token_id: "123456",
+    token_id: uuid(),
     ...additionalTokenPayload,
   };
 
   return `${btoa(JSON.stringify(header))}.${btoa(
     JSON.stringify(body),
   )}.signature`;
+}
+
+function uuid() {
+  return Cypress._.uniqueId(Date.now().toString());
 }
 
 Cypress.Commands.add("visitPortal", (...args) => {
