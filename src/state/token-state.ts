@@ -18,20 +18,18 @@ type Subscriber = (token: TokenPayload | null) => void;
 type Unsubscribe = () => void;
 
 /**
- * A facade to manage the OAuth refresh & access tokens.
+ * A facade to manage the OAuth refresh & access tokens and their persistance.
  *
- * The tokens will be parsed and their payload is available via a
- * member of this class.
+ * The tokens will be parsed and their payload is available via a member of this
+ * class.
  *
  * If assigned, the tokens will be stored in browser storage:
  *   - The refresh token is stored in localStorage
- *   - The access token is stored in sessionStorage and cached per scope
- *     in localStorage (see "Authentication via OAuth 2.0" in
- *     doc/auth.md)
+ *   - The access token is stored in sessionStorage and cached per scope in
+ *     localStorage (see "Authentication & Token Handling" in doc/sad.md)
  *
- * Use `onRefreshTokenUpdate` and `onAccessTokenUpdate` to subscribe
- * to token changes, e.g. for token renewal or other token-dependnant
- * logic.
+ * Use `onRefreshTokenUpdate` and `onAccessTokenUpdate` to subscribe to token
+ * changes, e.g. for token renewal or other token-dependnant logic.
  */
 class TokenState {
   private state: State = {

@@ -1,7 +1,5 @@
-import { OAuth2Client } from "@badgateway/oauth2-client";
 import { tokenState } from "../state/token-state";
-import { login, renewToken } from "./auth";
-import { log, logLazy } from "./logging";
+import { logLazy } from "./logging";
 import { TokenPayload, getTokenExpireIn } from "./token";
 
 enum TokenType {
@@ -17,15 +15,34 @@ const expirationTimers: Record<
   access: undefined,
 };
 
-export function initializeTokenRenewal(client: OAuth2Client): void {
-  renewRefreshTokenOnExpiration(client, tokenState.refreshTokenPayload);
+/**
+ * Initialize the timers to update the current refresh and access token (has to
+ * be called only once). The timers wil restart whenever a new token is set on
+ * the tokenState.
+ */
+export function initializeTokenRenewal({
+  onRefreshTokenExpiration,
+  onAccessTokenExpiration,
+}: {
+  onRefreshTokenExpiration: (refreshToken: TokenPayload | null) => void;
+  onAccessTokenExpiration: (accessToken: TokenPayload | null) => void;
+}): void {
+  // Refresh token renewal
+  renewRefreshTokenOnExpiration(
+    tokenState.refreshTokenPayload,
+    onRefreshTokenExpiration,
+  );
   tokenState.onRefreshTokenUpdate((refreshToken) =>
-    renewRefreshTokenOnExpiration(client, refreshToken),
+    renewRefreshTokenOnExpiration(refreshToken, onRefreshTokenExpiration),
   );
 
-  renewAccessTokenOnExpiration(client, tokenState.accessTokenPayload);
+  // Access token renewal
+  renewAccessTokenOnExpiration(
+    tokenState.accessTokenPayload,
+    onAccessTokenExpiration,
+  );
   tokenState.onAccessTokenUpdate((accessToken) =>
-    renewAccessTokenOnExpiration(client, accessToken),
+    renewAccessTokenOnExpiration(accessToken, onAccessTokenExpiration),
   );
 }
 
@@ -38,37 +55,21 @@ export function clearTokenRenewalTimers(): void {
 }
 
 function renewRefreshTokenOnExpiration(
-  client: OAuth2Client,
   refreshToken: TokenPayload | null,
+  onRefreshTokenExpiration: (refreshToken: TokenPayload | null) => void,
 ): void {
-  onExpiration(TokenType.Refresh, refreshToken, () => {
-    // Get the scope of the "current" access token at the time the
-    // refresh token expires, since the user may have switched scopes
-    // in the meantime
-    const accessToken = tokenState.accessTokenPayload;
-    if (!accessToken) return;
-
-    const { scope, locale } = accessToken;
-    log(
-      `Refresh token for scope "${scope}" and locale "${locale}" expired, redirect to login`,
-    );
-    login(client, scope, locale);
-  });
+  onExpiration(TokenType.Refresh, refreshToken, () =>
+    onRefreshTokenExpiration(refreshToken),
+  );
 }
 
 function renewAccessTokenOnExpiration(
-  client: OAuth2Client,
   accessToken: TokenPayload | null,
+  onAccessTokenExpiration: (accessToken: TokenPayload | null) => void,
 ): void {
-  onExpiration(TokenType.Access, accessToken, () => {
-    if (!accessToken) return;
-
-    const { scope, locale } = accessToken;
-    log(
-      `Access token for scope "${scope}" and locale "${locale}" expired, renew`,
-    );
-    renewToken(client, scope, locale);
-  });
+  onExpiration(TokenType.Access, accessToken, () =>
+    onAccessTokenExpiration(accessToken),
+  );
 }
 
 /**

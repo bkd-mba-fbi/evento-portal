@@ -20,8 +20,16 @@ import {
   storeInstance,
   storeLoginState,
 } from "./storage";
-import { getTokenPayload, isTokenExpired, isValidToken } from "./token";
-import { clearTokenRenewalTimers } from "./token-renewal";
+import {
+  TokenPayload,
+  getTokenPayload,
+  isTokenExpired,
+  isValidToken,
+} from "./token";
+import {
+  clearTokenRenewalTimers,
+  initializeTokenRenewal,
+} from "./token-renewal";
 
 const envSettings = getEnvSettings();
 
@@ -58,11 +66,20 @@ export function createOAuthClient(): OAuth2Client {
  * portal. Please refer the README for a detailed description of the
  * flow.
  */
-export async function ensureAuthenticated(
+export async function initAuthentication(
   client: OAuth2Client,
   scope: string,
   locale: string,
 ): Promise<void> {
+  initializeTokenRenewal({
+    onRefreshTokenExpiration(token) {
+      handleRefreshTokenExpiration(client, token);
+    },
+    onAccessTokenExpiration(token) {
+      handleAccessTokenExpiration(client, token);
+    },
+  });
+
   const loginState = consumeLoginState();
   const loginResult = await getTokenAfterLogin(client, loginState);
   if (loginResult) {
@@ -298,6 +315,43 @@ function handleSubstitutionResult(token: OAuth2Token): void {
     // Only do this inside iframe, prevents loading the entire portal app inside the iframe
     window.parent.location.assign(url);
   }
+}
+
+/**
+ * Redirect to login when refresh token expired.
+ */
+function handleRefreshTokenExpiration(
+  client: OAuth2Client,
+  _refreshToken: TokenPayload | null,
+): void {
+  // TODO: is it still necessary to get scope/local from tokenState or can we just get it from token payload?
+
+  // Get the scope of the "current" access token at the time the
+  // refresh token expires, since the user may have switched scopes
+  // in the meantime
+  const { scope, locale } = tokenState;
+  if (!scope || !locale) return;
+
+  log(
+    `Refresh token for scope "${scope}" and locale "${locale}" expired, redirect to login`,
+  );
+  login(client, scope, locale);
+}
+
+/**
+ * Renew access token when it expired.
+ */
+function handleAccessTokenExpiration(
+  client: OAuth2Client,
+  accessToken: TokenPayload | null,
+): void {
+  if (!accessToken) return;
+
+  const { scope, locale } = accessToken;
+  log(
+    `Access token for scope "${scope}" and locale "${locale}" expired, renew`,
+  );
+  renewToken(client, scope, locale);
 }
 
 /**
