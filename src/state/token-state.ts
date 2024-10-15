@@ -116,8 +116,8 @@ class TokenState {
   /**
    * Returns true if the refresh token is present and not expired
    */
-  isRefreshTokenValid(): boolean {
-    return !isTokenExpired(this.refreshTokenPayload);
+  isRefreshTokenExpired(): boolean {
+    return isTokenExpired(this.refreshTokenPayload);
   }
 
   /**

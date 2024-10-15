@@ -1,6 +1,12 @@
 import { tokenState } from "../state/token-state";
-import { logLazy } from "./logging";
-import { TokenPayload, getTokenExpireIn } from "./token";
+import { log, logLazy } from "./logging";
+import { getAccessToken, getRefreshToken } from "./storage";
+import {
+  TokenPayload,
+  getTokenExpireIn,
+  getTokenPayload,
+  isTokenAlmostExpired,
+} from "./token";
 
 enum TokenType {
   Refresh = "refresh",
@@ -21,28 +27,30 @@ const expirationTimers: Record<
  * the tokenState.
  */
 export function initializeTokenRenewal({
-  onRefreshTokenExpiration,
-  onAccessTokenExpiration,
+  renewRefreshToken,
+  renewAccessToken,
 }: {
-  onRefreshTokenExpiration: (refreshToken: TokenPayload | null) => void;
-  onAccessTokenExpiration: (accessToken: TokenPayload | null) => void;
+  renewRefreshToken: (scope: string, locale: string) => Promise<void>;
+  renewAccessToken: (scope: string, locale: string) => Promise<void>;
 }): void {
   // Refresh token renewal
-  renewRefreshTokenOnExpiration(
+  scheduleExpiration(
+    TokenType.Refresh,
     tokenState.refreshTokenPayload,
-    onRefreshTokenExpiration,
+    renewRefreshToken,
   );
   tokenState.onRefreshTokenUpdate((refreshToken) =>
-    renewRefreshTokenOnExpiration(refreshToken, onRefreshTokenExpiration),
+    scheduleExpiration(TokenType.Refresh, refreshToken, renewRefreshToken),
   );
 
   // Access token renewal
-  renewAccessTokenOnExpiration(
+  scheduleExpiration(
+    TokenType.Access,
     tokenState.accessTokenPayload,
-    onAccessTokenExpiration,
+    renewAccessToken,
   );
   tokenState.onAccessTokenUpdate((accessToken) =>
-    renewAccessTokenOnExpiration(accessToken, onAccessTokenExpiration),
+    scheduleExpiration(TokenType.Access, accessToken, renewAccessToken),
   );
 }
 
@@ -54,42 +62,29 @@ export function clearTokenRenewalTimers(): void {
   });
 }
 
-function renewRefreshTokenOnExpiration(
-  refreshToken: TokenPayload | null,
-  onRefreshTokenExpiration: (refreshToken: TokenPayload | null) => void,
-): void {
-  onExpiration(TokenType.Refresh, refreshToken, () =>
-    onRefreshTokenExpiration(refreshToken),
-  );
-}
-
-function renewAccessTokenOnExpiration(
-  accessToken: TokenPayload | null,
-  onAccessTokenExpiration: (accessToken: TokenPayload | null) => void,
-): void {
-  onExpiration(TokenType.Access, accessToken, () =>
-    onAccessTokenExpiration(accessToken),
-  );
-}
-
 /**
- * Calls the given callback when the given token expires, canceling
+ * Calls the `onExpire` callback when the given token expires, canceling
  * ongoing timers for the given token type (if there are any).
  */
-function onExpiration(
+function scheduleExpiration(
   type: TokenType,
   token: TokenPayload | null,
-  callback: () => void,
+  onRenew: (scope: string, locale: string) => Promise<void>,
 ): void {
   if (expirationTimers[type]) {
     clearTimeout(expirationTimers[type]);
   }
 
-  const expireIn = token && getTokenExpireIn(token);
+  if (!token) return;
+
+  const expireIn = getTokenExpireIn(token);
   // Don't set timer for already expired token since it will be
   // handled by the auth.ts logic and would cause a redirection loop
   if (expireIn && expireIn > 0) {
-    expirationTimers[type] = setTimeout(callback, expireIn);
+    expirationTimers[type] = setTimeout(
+      () => tokenExpired(type, token, onRenew),
+      expireIn,
+    );
     logLazy(() => {
       const { expirationTime } = token;
       const expirationDate = new Date();
@@ -99,4 +94,58 @@ function onExpiration(
       )} minutes (at ${expirationDate})`;
     });
   }
+}
+
+/**
+ * Calls the `renew` of only one tab (i.e. the "leader" tab), while the others
+ * will wait, to make sure we only renew a token once.
+ */
+function tokenExpired(
+  type: TokenType,
+  token: TokenPayload,
+  onRenew: (scope: string, locale: string) => Promise<void>,
+): void {
+  const { scope, locale } = token;
+  log(`Expired ${type} token for scope "${scope}" and locale "${locale}"`);
+
+  // Make sure only one tab will actually renew the token (the "leader"), the
+  // others will wait
+  withLock(type, scope, async () => {
+    const actualToken =
+      type === TokenType.Access
+        ? getAccessToken(scope)
+        : getRefreshToken(scope);
+    const payload = actualToken ? getTokenPayload(actualToken) : null;
+
+    const expirationTime = new Date();
+    if (payload) {
+      expirationTime.setTime(payload.expirationTime * 1000);
+    }
+    if (payload) {
+      if (isTokenAlmostExpired(payload)) {
+        await onRenew(payload.scope, payload.locale);
+      } else {
+        log(
+          `The ${type} token for scope "${scope}" and locale "${locale}" has already been updated by another tab`,
+        );
+        if (type === TokenType.Access) {
+          // Token has already been renewed by another tab
+          tokenState.accessToken = actualToken;
+        } else {
+          // Token has already been renewed by another tab
+          tokenState.refreshToken = actualToken;
+        }
+      }
+    }
+  });
+}
+
+function withLock(
+  type: TokenType,
+  scope: string,
+  callback: () => Promise<void>,
+): void {
+  navigator.locks.request(`bkdTokenRenewal_${type}_${scope}`, async () => {
+    await callback();
+  });
 }

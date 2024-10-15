@@ -72,6 +72,18 @@ export function isTokenExpired(token: TokenPayload | null): boolean {
 }
 
 /**
+ * Returns false if the given token is expired or expires within the next 10
+ * seconds.
+ */
+export function isTokenAlmostExpired(token: TokenPayload | null): boolean {
+  if (!token) return true;
+
+  const { expirationTime } = token;
+  const now = Math.floor(Date.now() / 1000);
+  return expirationTime - 10 < now;
+}
+
+/**
  * Returns the time (in milliseconds) the token will expire from now (0
  * if already expired).
  */

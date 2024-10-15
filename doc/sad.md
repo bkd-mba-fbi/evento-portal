@@ -333,6 +333,8 @@ sequenceDiagram
   deactivate portal
 ```
 
+To avoid conflicts when multiple tabs try to renew a token of the same scope, the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API) is used to implement a leader election pattern such that only one tab (the "leader") is renewing the token and the others are waiting.
+
 ## Substitution Start/Stop
 
 The starting or stopping of a teacher substitution also happens via a redirect and results in a new token (without code verifier). The redirect is implemented in the [SubstitutionsToggle.ts](../src/components/Header/SubstitutionsToggle.ts) component, the handling of the result in [auth.ts](../src/utils/auth.ts).
