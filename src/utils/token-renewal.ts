@@ -2,6 +2,7 @@ import { tokenState } from "../state/token-state";
 import { log, logLazy } from "./logging";
 import { getAccessToken, getRefreshToken } from "./storage";
 import {
+  TOKEN_ALMOST_EXPIRY_MS,
   TokenPayload,
   getTokenExpireIn,
   getTokenPayload,
@@ -77,19 +78,18 @@ function scheduleExpiration(
 
   if (!token) return;
 
-  const expireIn = getTokenExpireIn(token);
+  const expireIn = getTokenExpireIn(token) - TOKEN_ALMOST_EXPIRY_MS;
   // Don't set timer for already expired token since it will be
   // handled by the auth.ts logic and would cause a redirection loop
-  if (expireIn && expireIn > 0) {
+  if (expireIn > 0) {
     expirationTimers[type] = setTimeout(
       () => tokenExpired(type, token, onRenew),
       expireIn,
     );
     logLazy(() => {
-      const { expirationTime } = token;
       const expirationDate = new Date();
-      expirationDate.setTime(expirationTime * 1000);
-      return `Scheduled ${type} token expiration timeout in ${Math.floor(
+      expirationDate.setTime(Date.now() + expireIn);
+      return `Scheduled ${type} token expiration timeout in ${Math.round(
         expireIn / 1000 / 60,
       )} minutes (at ${expirationDate})`;
     });
@@ -117,10 +117,6 @@ function tokenExpired(
         : getRefreshToken(scope);
     const payload = actualToken ? getTokenPayload(actualToken) : null;
 
-    const expirationTime = new Date();
-    if (payload) {
-      expirationTime.setTime(payload.expirationTime * 1000);
-    }
     if (payload) {
       if (isTokenAlmostExpired(payload)) {
         await onRenew(payload.scope, payload.locale);

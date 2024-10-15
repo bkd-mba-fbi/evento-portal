@@ -20,7 +20,12 @@ import {
   storeInstance,
   storeLoginState,
 } from "./storage";
-import { getTokenPayload, isTokenExpired, isValidToken } from "./token";
+import {
+  getTokenPayload,
+  isTokenAlmostExpired,
+  isTokenExpired,
+  isValidToken,
+} from "./token";
 import {
   clearTokenRenewalTimers,
   initializeTokenRenewal,
@@ -104,7 +109,7 @@ export async function activateTokenForScope(
   log(`Activate token for scope "${scope}" and locale "${locale}"`);
   updateTokenStateForScope(scope, locale);
 
-  if (tokenState.isRefreshTokenExpired()) {
+  if (isTokenAlmostExpired(tokenState.refreshTokenPayload)) {
     log("Not authenticated or refresh token expired, redirect to login");
     return login(client, scope, locale);
   }

@@ -114,13 +114,6 @@ class TokenState {
   }
 
   /**
-   * Returns true if the refresh token is present and not expired
-   */
-  isRefreshTokenExpired(): boolean {
-    return isTokenExpired(this.refreshTokenPayload);
-  }
-
-  /**
    * Deletes all tokens, including the ones in localStorage of other scopes
    */
   resetAllTokens(): void {
