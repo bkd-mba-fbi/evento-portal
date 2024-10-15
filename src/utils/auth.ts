@@ -104,7 +104,6 @@ export async function activateTokenForScope(
   log(`Activate token for scope "${scope}" and locale "${locale}"`);
   updateTokenStateForScope(scope, locale);
 
-  console.log("check current refresh token");
   if (tokenState.isRefreshTokenExpired()) {
     log("Not authenticated or refresh token expired, redirect to login");
     return login(client, scope, locale);
@@ -201,7 +200,6 @@ function getAuthorizationEndpoint(): string {
  */
 function updateTokenStateForScope(scope: string, locale: string): void {
   // Try state's "current" token (initialized from sessionStorage)
-  console.log("check current token");
   if (isValidToken(tokenState.accessToken, scope, locale)) {
     log(
       `Current token for scope "${scope}" and locale "${locale}" already set`,
@@ -211,7 +209,6 @@ function updateTokenStateForScope(scope: string, locale: string): void {
 
   // Try cached access token for scope (from localStorage)
   const cachedAccessToken = getAccessToken(scope);
-  console.log("check cached token");
   if (isValidToken(cachedAccessToken, scope, locale)) {
     log(
       `Token for scope "${scope}" and locale "${locale}" cached, set as current`,
