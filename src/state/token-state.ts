@@ -6,7 +6,7 @@ import {
   storeCurrentAccessToken,
   storeRefreshToken,
 } from "../utils/storage";
-import { TokenPayload, getTokenPayload, isTokenExpired } from "../utils/token";
+import { TokenPayload, getTokenPayload } from "../utils/token";
 
 type State = {
   refreshToken: string | null;
@@ -18,30 +18,32 @@ type Subscriber = (token: TokenPayload | null) => void;
 type Unsubscribe = () => void;
 
 /**
- * A facade to manage the OAuth refresh & access tokens.
+ * A facade to manage the OAuth refresh & access tokens and their persistance.
  *
- * The tokens will be parsed and their payload is available via a
- * member of this class.
+ * The tokens will be parsed and their payload is available via a member of this
+ * class.
  *
  * If assigned, the tokens will be stored in browser storage:
  *   - The refresh token is stored in localStorage
- *   - The access token is stored in sessionStorage and cached per scope in localStorage (see "Authentication via OAuth 2.0" in doc/auth.md)
+ *   - The access token is stored in sessionStorage and cached per scope in
+ *     localStorage (see "Authentication & Token Handling" in doc/sad.md)
  *
- * Use `onRefreshTokenUpdate` and `onAccessTokenUpdate` to subscribe
- * to token changes, e.g. for token renewal or other token-dependnant
- * logic.
+ * Use `onRefreshTokenUpdate` and `onAccessTokenUpdate` to subscribe to token
+ * changes, e.g. for token renewal or other token-dependnant logic.
  */
 class TokenState {
   private state: State = {
-    refreshToken: getRefreshToken(),
+    refreshToken: null,
     refreshTokenPayload: null,
-    accessToken: getCurrentAccessToken(),
+    accessToken: null,
     accessTokenPayload: null,
   };
   private refreshTokenSubscribers: Subscriber[] = [];
   private accessTokenSubscribers: Subscriber[] = [];
 
   constructor() {
+    this.initState();
+
     // Call after-functions for initial token values
     this.afterRefreshTokenUpdate(this.refreshToken, false);
     this.afterAccessTokenUpdate(this.accessToken, false);
@@ -112,13 +114,6 @@ class TokenState {
   }
 
   /**
-   * Returns true if the refresh token is expired
-   */
-  isRefreshTokenExpired(): boolean {
-    return isTokenExpired(this.refreshTokenPayload);
-  }
-
-  /**
    * Deletes all tokens, including the ones in localStorage of other scopes
    */
   resetAllTokens(): void {
@@ -161,16 +156,28 @@ class TokenState {
     };
   }
 
+  private initState(): void {
+    const accessToken = getCurrentAccessToken();
+    const refreshToken = accessToken
+      ? getRefreshToken(getTokenPayload(accessToken).scope)
+      : null;
+    this.state = {
+      refreshToken,
+      refreshTokenPayload: null,
+      accessToken,
+      accessTokenPayload: null,
+    };
+  }
+
   private afterRefreshTokenUpdate(
     refreshToken: string | null,
     store = true,
   ): void {
-    this.state.refreshTokenPayload = refreshToken
-      ? getTokenPayload(refreshToken)
-      : null;
+    const payload = refreshToken ? getTokenPayload(refreshToken) : null;
+    this.state.refreshTokenPayload = payload;
 
-    if (refreshToken && store) {
-      storeRefreshToken(refreshToken);
+    if (refreshToken && payload && store) {
+      storeRefreshToken(payload.scope, refreshToken);
     }
 
     this.notifyRefreshTokenSubscribers();

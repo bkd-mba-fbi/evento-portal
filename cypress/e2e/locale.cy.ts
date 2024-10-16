@@ -1,8 +1,6 @@
-describe("Locale", () => {
-  // Apparently, since token refresh is involved, we cannot test the
-  // language switching and must make sure that a token for the
-  // desired locale is already present
+import { createToken } from "../support/commands";
 
+describe("Locale", () => {
   describe("with de-CH token", () => {
     beforeEach(() =>
       cy.login({
@@ -14,13 +12,39 @@ describe("Locale", () => {
 
     it("uses de-CH", () => {
       cy.resizeToDesktop();
-      cy.visit("/index.html");
-      cy.contains("Unterricht");
-      cy.contains("Bildungs- und Kulturdirektion");
+      cy.visitPortal("/index.html");
+      cy.contains("Unterricht").should("exist");
+      cy.iframeContains("Stundenplan");
 
       cy.get("bkd-language-switcher").within(() => {
         cy.contains("a", "de").should("have.class", "active");
         cy.contains("a", "fr").should("not.have.class", "active");
+      });
+    });
+
+    it("switches to fr-CH token", () => {
+      cy.resizeToDesktop();
+      cy.visitPortal("/index.html");
+      cy.contains("Unterricht").should("exist");
+      cy.iframeContains("Stundenplan");
+
+      const token = createToken("Tutoring", { locale: "fr-CH" });
+      cy.intercept("https://eventotest.api/OAuth/Authorization/Test/Token", {
+        access_token: token,
+        refresh_token: token,
+        expires_in: 60 * 60,
+      });
+
+      // Switch to fr
+      cy.get("bkd-language-switcher").within(() => {
+        cy.contains("a", "fr").click();
+      });
+
+      cy.contains("Enseignement").should("exist");
+      cy.iframeContains("Horaire");
+      cy.get("bkd-language-switcher").within(() => {
+        cy.contains("a", "de").should("not.have.class", "active");
+        cy.contains("a", "fr").should("have.class", "active");
       });
     });
   });
@@ -36,9 +60,9 @@ describe("Locale", () => {
 
     it("uses fr-CH", () => {
       cy.resizeToDesktop();
-      cy.visit("/index.html?locale=fr-CH");
-      cy.contains("Enseignement");
-      cy.contains("Direction de l'instruction publique et de la culture");
+      cy.visitPortal("/index.html?locale=fr-CH");
+      cy.contains("Enseignement").should("exist");
+      cy.iframeContains("Horaire");
 
       cy.get("bkd-language-switcher").within(() => {
         cy.contains("a", "de").should("not.have.class", "active");

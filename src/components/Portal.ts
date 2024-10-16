@@ -9,7 +9,7 @@ import { tokenState } from "../state/token-state.ts";
 import {
   activateTokenForScope,
   createOAuthClient,
-  ensureAuthenticated,
+  initAuthentication,
   logout,
 } from "../utils/auth";
 import { getInitialLocale } from "../utils/locale";
@@ -21,14 +21,11 @@ import {
   registerLightDomStyles,
   theme,
 } from "../utils/theme";
-import { initializeTokenRenewal } from "../utils/token-renewal.ts";
 
 const oAuthClient = createOAuthClient();
-initializeTokenRenewal(oAuthClient);
-
 const authReady = (async function () {
   // Start Authorization Code Flow with PKCE
-  await ensureAuthenticated(oAuthClient, getScopeFromUrl(), getInitialLocale());
+  await initAuthentication(oAuthClient, getScopeFromUrl(), getInitialLocale());
   portalState.init();
 })();
 

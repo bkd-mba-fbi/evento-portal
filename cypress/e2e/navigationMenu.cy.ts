@@ -10,7 +10,7 @@ describe("Navigation Menu", () => {
     describe("desktop", () => {
       beforeEach(() => {
         cy.resizeToDesktop();
-        cy.visit("/index.html");
+        cy.visitPortal("/index.html");
       });
 
       it("renders main navigation", () => {
@@ -69,7 +69,7 @@ describe("Navigation Menu", () => {
     describe("mobile", () => {
       beforeEach(() => {
         cy.resizeToMobile();
-        cy.visit("/index.html");
+        cy.visitPortal("/index.html");
       });
 
       it("open/closes hamburger menu by click on hamburger", () => {
@@ -144,7 +144,7 @@ describe("Navigation Menu", () => {
     beforeEach(() => {
       cy.login({ roles: ["StudentRole"], permissions: [] });
       cy.resizeToMobile();
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
     });
 
     it("only renders allowed groups & items", () => {
@@ -169,7 +169,7 @@ describe("Navigation Menu", () => {
         permissions: [],
       });
       cy.resizeToMobile();
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
     });
 
     it("only renders allowed groups & items", () => {
@@ -206,7 +206,7 @@ describe("Navigation Menu", () => {
     beforeEach(() => {
       cy.login({ roles: ["ClassTeacherRole"], permissions: [] });
       cy.resizeToMobile();
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
     });
 
     it("only renders allowed groups & items", () => {
@@ -237,7 +237,7 @@ describe("Navigation Menu", () => {
     beforeEach(() => {
       cy.login({ roles: ["AbsenceAdministratorRole"], permissions: [] });
       cy.resizeToMobile();
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
     });
 
     it("only renders allowed groups & items", () => {
@@ -265,7 +265,7 @@ describe("Navigation Menu", () => {
     beforeEach(() => {
       cy.login({ roles: ["SubstituteAdministratorRole"], permissions: [] });
       cy.resizeToMobile();
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
     });
 
     it("only renders allowed groups & items", () => {
@@ -292,7 +292,7 @@ describe("Navigation Menu", () => {
     beforeEach(() => {
       cy.login({ roles: [], permissions: ["PersonRight"] });
       cy.resizeToMobile();
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
     });
 
     it("only renders allowed groups & items", () => {
@@ -320,7 +320,7 @@ describe("Navigation Menu", () => {
         permissions: ["RegistrationRightWeiterbildungModulanlass"],
       });
       cy.resizeToMobile();
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
     });
 
     it("only renders allowed groups & items", () => {
@@ -345,7 +345,7 @@ describe("Navigation Menu", () => {
         permissions: ["RegistrationRightWeiterbildungKurs"],
       });
       cy.resizeToMobile();
-      cy.visit("/index.html");
+      cy.visitPortal("/index.html");
     });
 
     it("only renders allowed groups & items", () => {

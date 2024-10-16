@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const loggingEnabled = import.meta.env.DEV;
+const loggingEnabled = import.meta.env?.DEV;
 
 /**
  * Outputs the given arguments with console.log, but only in dev mode
