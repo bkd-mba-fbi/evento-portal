@@ -6,7 +6,7 @@ import {
   storeCurrentAccessToken,
   storeRefreshToken,
 } from "../utils/storage";
-import { TokenPayload, getTokenPayload, isTokenExpired } from "../utils/token";
+import { TokenPayload, getTokenPayload } from "../utils/token";
 
 type State = {
   refreshToken: string | null;
