@@ -24,7 +24,7 @@ const expirationTimers: Record<
 
 /**
  * Initialize the timers to update the current refresh and access token (has to
- * be called only once). The timers wil restart whenever a new token is set on
+ * be called only once). The timers will restart whenever a new token is set on
  * the tokenState.
  */
 export function initializeTokenRenewal({
@@ -64,8 +64,9 @@ export function clearTokenRenewalTimers(): void {
 }
 
 /**
- * Calls the `onExpire` callback when the given token expires, canceling
- * ongoing timers for the given token type (if there are any).
+ * Calls the `onRenew` callback when the given token expires,
+ * canceling ongoing timers for the given token type (if there are
+ * any).
  */
 function scheduleExpiration(
   type: TokenType,
@@ -79,7 +80,7 @@ function scheduleExpiration(
   if (!token) return;
 
   const expireIn = getTokenExpireIn(token) - TOKEN_ALMOST_EXPIRY_MS;
-  // Don't set timer for already expired token since it will be
+  // Don't set timer for already expired token since this will be
   // handled by the auth.ts logic and would cause a redirection loop
   if (expireIn > 0) {
     expirationTimers[type] = setTimeout(
@@ -97,8 +98,9 @@ function scheduleExpiration(
 }
 
 /**
- * Calls the `renew` of only one tab (i.e. the "leader" tab), while the others
- * will wait, to make sure we only renew a token once.
+ * Calls the `onRenew` callback of only one tab (i.e. the "leader"
+ * tab), while the others will wait, to make sure we only renew a
+ * token once.
  */
 function tokenExpired(
   type: TokenType,
@@ -108,15 +110,15 @@ function tokenExpired(
   const { scope, locale } = token;
   log(`Expired ${type} token for scope "${scope}" and locale "${locale}"`);
 
-  // Make sure only one tab will actually renew the token (the "leader"), the
-  // others will wait
+  // Create a lock to make sure only the "leader" tab will actually
+  // renew the token, the others will wait and then update their
+  // tokens in `tokenState`
   withLock(type, scope, async () => {
     const actualToken =
       type === TokenType.Access
         ? getAccessToken(scope)
         : getRefreshToken(scope);
     const payload = actualToken ? getTokenPayload(actualToken) : null;
-
     if (payload) {
       if (isTokenAlmostExpired(payload)) {
         await onRenew(payload.scope, payload.locale);
@@ -136,6 +138,13 @@ function tokenExpired(
   });
 }
 
+/**
+ * Creates a lock per type/scope and makes sure only the callback of
+ * one tab at a time will be executed (leader election).
+ *
+ * See also:
+ * https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API
+ */
 function withLock(
   type: TokenType,
   scope: string,
