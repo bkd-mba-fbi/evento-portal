@@ -160,7 +160,6 @@ class PortalState extends State {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async handleStateChange(key: string): Promise<void> {
     if (key === "locale") {
       await this.updateLocale();
