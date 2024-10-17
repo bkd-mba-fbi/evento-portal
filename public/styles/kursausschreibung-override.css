@@ -34,8 +34,8 @@
   --bkd-margin-horizontal-small: 20px;
 }
 
-:root{
-  --mainColor: var(--bkd-brand-red)
+:root {
+  --mainColor: var(--bkd-brand-red);
 }
 
 html,
@@ -55,7 +55,7 @@ html,
 .uk-scope,
 .uk-breadcrumb > * > *,
 .uk-navbar-nav > li > a,
-.uk-nav-default>li>a,
+.uk-nav-default > li > a,
 .uk-button,
 .uk-form-label {
   font-size: inherit !important;
@@ -67,15 +67,14 @@ html,
 .uk-scope a {
   font-weight: inherit !important;
 }
-.uk-navbar-nav>li>a {
+.uk-navbar-nav > li > a {
   text-transform: none;
   font-size: 1.2rem !important;
 }
 
-
-.uk-scope .details-table{
-    border-collapse: separate;
-    border-spacing: 3px;
+.uk-scope .details-table {
+  border-collapse: separate;
+  border-spacing: 3px;
 }
 
 .uk-button {
@@ -111,17 +110,18 @@ a.uk-icon-link.uk-hidden\@m.uk-icon {
   display: none;
 }
 .uk-visible\@m {
-  display: block !important; 
+  display: block !important;
 }
 
 .uk-search-default .uk-search-input:focus {
   border-color: #abababf9;
   outline: 0;
-  box-shadow: 0 0 0 .25rem #4e4e4e40;
+  box-shadow: 0 0 0 0.25rem #4e4e4e40;
 }
 
 .uk-scope .uk-navbar-nav > li.uk-active > a,
-.uk-scope .uk-navbar-nav>li.uk-active>a, .uk-scope .uk-navbar-nav>li>a.active {
+.uk-scope .uk-navbar-nav > li.uk-active > a,
+.uk-scope .uk-navbar-nav > li > a.active {
   border-bottom-color: var(--bkd-language-switcher-active-border);
   border-bottom: 2px solid var(--bkd-brand-red);
 }
@@ -131,7 +131,7 @@ a.uk-icon-link.uk-hidden\@m.uk-icon {
 }
 
 .uk-grid .uk-first-column:first-child .uk-card {
-  border: 1px solid #B6B6B6;
+  border: 1px solid #b6b6b6;
   padding: 25px 0;
 }
 
@@ -140,22 +140,20 @@ a.uk-icon-link.uk-hidden\@m.uk-icon {
   margin-left: 25%;
 }
 
-
 #header-naviagtion-area {
-  border-bottom: 1px solid #B6B6B6;
+  border-bottom: 1px solid #b6b6b6;
   margin: 0 25px 16px;
   padding-bottom: 16px;
 }
 
-
-.uk-scope .uk-nav  a.active {
-  background-color: #FCF8F3;
+.uk-scope .uk-nav a.active {
+  background-color: #fcf8f3;
   color: var(--bkd-brand-red) !important;
   font-weight: 500 !important;
   border-left: var(--bkd-brand-red) solid 5px;
 }
 
-.uk-nav>li>a {
+.uk-nav > li > a {
   padding: 16px 25px;
 }
 

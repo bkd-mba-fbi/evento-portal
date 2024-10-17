@@ -2,6 +2,7 @@
   "project": ["src/**/*.{ts,js}"],
   "ignore": ["public/*"],
   "ignoreBinaries": ["knip", "vite-bundle-visualizer"],
+  "ignoreDependencies": ["eslint-plugin-lit-a11y", "husky"],
   "rules": {
     "exports": "warn",
     "types": "warn"
