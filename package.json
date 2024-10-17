@@ -33,29 +33,29 @@
     "unused": "npx knip"
   },
   "dependencies": {
-    "@badgateway/oauth2-client": "^2.3.0",
-    "@lit-app/state": "^1.0.0",
-    "@lit/localize": "^0.12.1",
-    "dompurify": "^3.1.5",
-    "lit": "^3.1.4"
+    "@badgateway/oauth2-client": "2.4.2",
+    "@lit-app/state": "1.0.0",
+    "@lit/localize": "0.12.2",
+    "dompurify": "3.1.7",
+    "lit": "3.2.1"
   },
   "devDependencies": {
-    "@lit/localize-tools": "~0.7.2",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "@types/dompurify": "^3.0.5",
+    "@lit/localize-tools": "0.8.0",
+    "@trivago/prettier-plugin-sort-imports": "4.3.0",
+    "@types/dompurify": "3.0.5",
     "@typescript-eslint/eslint-plugin": "^7.13.0",
     "@typescript-eslint/parser": "^7.13.0",
-    "@vitejs/plugin-basic-ssl": "^1.1.0",
-    "cypress": "^13.11.0",
+    "@vitejs/plugin-basic-ssl": "1.1.0",
+    "cypress": "13.15.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-lit-a11y": "^4.1.2",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.7",
-    "prettier": "3.3.2",
-    "typescript": "^5.4.5",
-    "vite": "^5.4.6",
-    "vite-plugin-pwa": "^0.20.0"
+    "husky": "9.1.6",
+    "lint-staged": "15.2.10",
+    "prettier": "3.3.3",
+    "typescript": "5.6.3",
+    "vite": "5.4.9",
+    "vite-plugin-pwa": "0.20.5"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

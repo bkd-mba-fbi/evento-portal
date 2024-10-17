@@ -29,7 +29,7 @@ export function getInitialLocale() {
     getLocaleFromLastAccessToken();
   return locale && isValidLocale(locale)
     ? locale
-    : getBrowserLocale() ?? sourceLocale;
+    : (getBrowserLocale() ?? sourceLocale);
 }
 
 /**
