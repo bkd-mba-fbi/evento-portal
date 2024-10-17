@@ -428,5 +428,5 @@ async function request<T = unknown>(
     errorMessage = "HTTP Error " + resp.status + " " + resp.statusText;
     oauth2Code = null;
   }
-  throw new OAuth2Error(errorMessage, oauth2Code, resp.status);
+  throw new OAuth2Error(errorMessage, oauth2Code);
 }
