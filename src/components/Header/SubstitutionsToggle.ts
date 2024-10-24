@@ -43,6 +43,10 @@ export class SubstitutionsToggle extends LitElement {
         background-color: var(--bkd-brand-red);
         color: var(--bkd-func-fg-white);
       }
+       
+      button:disabled {
+        opacity: 0.3;
+      }
 
       .label {
         font-size: calc(14 / 16 * 1rem);
@@ -110,11 +114,52 @@ export class SubstitutionsToggle extends LitElement {
         null) as HTMLElement | null,
   });
 
+  constructor() {
+    super();
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
-
+    this._setupLocationChangeListener();
     this.fetch();
   }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._removeLocationChangeListener();
+  }
+
+// Add event listeners for location changes
+_setupLocationChangeListener() {
+  // Hijack pushState and replaceState to detect URL changes
+  const originalPushState = history.pushState;
+  const originalReplaceState = history.replaceState;
+
+  history.pushState = (...args) => {
+    originalPushState.apply(history, args);
+    window.dispatchEvent(new Event('locationchange'));
+  };
+
+  history.replaceState = (...args) => {
+    originalReplaceState.apply(history, args);
+    window.dispatchEvent(new Event('locationchange'));
+  };
+
+  window.addEventListener('popstate', this._onLocationChange);
+  window.addEventListener('locationchange', this._onLocationChange);
+}
+
+// Remove event listeners to avoid memory leaks
+_removeLocationChangeListener() {
+  window.removeEventListener('popstate', this._onLocationChange);
+  window.removeEventListener('locationchange', this._onLocationChange);
+}
+
+// Handle location changes
+_onLocationChange = () => {
+  this.requestUpdate();  // Request re-render of the component
+};
+
 
   private async fetch(): Promise<void> {
     const currentSubstitutions = await fetchCurrentSubstitutions();
@@ -197,6 +242,17 @@ export class SubstitutionsToggle extends LitElement {
 
   render() {
     if (this.availableSubstitutions.length === 0) return;
+
+    if(tokenState.scope !== 'Tutoring') 
+      return html`
+    <button disabled>
+      <div class="icon">${unsafeHTML(substitutionIcon)}</div>
+      <div class="label">${this.getLabel()}</div>
+      <div class="icon-caret">
+        ${unsafeHTML(this.activeSubstitution ? closeSmallIcon : caretIcon)}
+      </div>
+    </button>
+  `;
 
     return html`
       <button
