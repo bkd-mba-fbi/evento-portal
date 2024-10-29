@@ -3,11 +3,13 @@ import { customElement, query, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
+import { StateController } from "@lit-app/state";
 import caretIcon from "../../assets/icons/caret.svg?raw";
 import closeSmallIcon from "../../assets/icons/close-small.svg?raw";
 import substitutionIcon from "../../assets/icons/substitution.svg?raw";
 import { DropdownController } from "../../controllers/dropdown";
 import { getEnvSettings } from "../../env-settings.ts";
+import { portalState } from "../../state/portal-state.ts";
 import { tokenState } from "../../state/token-state.ts";
 import { Substitution, fetchCurrentSubstitutions } from "../../utils/fetch";
 import { buildUrl } from "../../utils/routing.ts";
@@ -110,6 +112,11 @@ export class SubstitutionsToggle extends LitElement {
         null) as HTMLElement | null,
   });
 
+  constructor() {
+    super();
+    new StateController(this, portalState);
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
 
@@ -195,8 +202,17 @@ export class SubstitutionsToggle extends LitElement {
     return this.activeSubstitution?.Holder || msg("Stellvertretung ausüben");
   }
 
+  /**
+   * Substitutions can only be started or stopped with a token with scope
+   * 'Tutoring'. This is due to a restriction by SLH, see #206.
+   */
+  private isAllowed(): boolean {
+    const scope = portalState.app.scope;
+    return scope === "Tutoring";
+  }
+
   render() {
-    if (this.availableSubstitutions.length === 0) return;
+    if (!this.isAllowed() || this.availableSubstitutions.length === 0) return;
 
     return html`
       <button
