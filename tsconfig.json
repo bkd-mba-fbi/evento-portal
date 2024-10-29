@@ -21,5 +21,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/typings.d.ts", "src", "public/**/*.js"]
+  "include": ["src/typings.d.ts", "src", "public/**/*.js"],
+  "exclude": ["dist", "node_modules", "public/apps"]
 }
