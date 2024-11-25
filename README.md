@@ -34,3 +34,4 @@ Download the [latest build](https://bkd-mba-fbi.github.io/evento-portal/evento-p
 
 - [Deployment](./doc/deployment.md) – Operation environments, releasing & Docker image builds
 - [Release Instructions](./doc/releasing.md) – How to create a new regular or hotfix release
+- Compass Security Test
