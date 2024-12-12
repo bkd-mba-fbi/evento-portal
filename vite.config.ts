@@ -1,5 +1,6 @@
 // vite.config.js
 import basicSsl from "@vitejs/plugin-basic-ssl";
+import { resolve } from "path";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -58,6 +59,14 @@ const commonPlugins = [
 export default defineConfig({
   server: {
     port: 3000,
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+        unrestricted: resolve(__dirname, "unrestricted/index.html"),
+      },
+    },
   },
   plugins: process.env.SSL ? [...commonPlugins, basicSsl()] : commonPlugins,
 });

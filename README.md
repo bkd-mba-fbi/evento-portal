@@ -29,6 +29,7 @@ Download the [latest build](https://bkd-mba-fbi.github.io/evento-portal/evento-p
 - [Browser Testing](./doc/browser-testing.md) – Support & BrowserStack.com
 - [Progressive Web App (PWA)](./doc/pwa.md) – Installability & offline support
 - [iframe Limitations & Workarounds](./doc/iframe.md) – Implementation details (iframe.js)
+- [Unrestricted Content Pages](./doc/unrestricted-content.md) – Footer content
 
 ### Operations
 

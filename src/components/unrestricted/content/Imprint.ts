@@ -2,9 +2,9 @@ import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
-import { portalState } from "../../state/portal-state";
-import { withLineBreaks } from "../../utils/templates";
-import { contentStyles, theme } from "../../utils/theme";
+import { portalState } from "../../../state/portal-state";
+import { withLineBreaks } from "../../../utils/templates";
+import { contentStyles, theme } from "../../../utils/theme";
 
 @customElement("bkd-imprint")
 @localized()

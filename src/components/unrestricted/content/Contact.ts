@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
-import { contentStyles, theme } from "../../utils/theme";
+import { contentStyles, theme } from "../../../utils/theme";
 
 @customElement("bkd-contact")
 @localized()

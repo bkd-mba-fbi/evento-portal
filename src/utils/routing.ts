@@ -64,7 +64,7 @@ export function buildUrl(itemOrKey: NavigationItem | string): string {
 }
 
 function buildItemUrl(item: NavigationItem): URL {
-  const url = new URL(location.origin);
+  const url = new URL(location.origin + location.pathname);
   url.searchParams.set(LOCALE_QUERY_PARAM, portalState.locale);
   url.searchParams.set(NAV_ITEM_QUERY_PARAM, item.key);
   url.hash = item.appPath;

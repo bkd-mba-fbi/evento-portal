@@ -6,6 +6,7 @@ import { DropdownController } from "../../controllers/dropdown";
 import { NavigationGroup } from "../../settings";
 import { theme } from "../../utils/theme";
 import { NavGroupDropdown } from "./NavGroupDropdown";
+import "./NavGroupDropdown";
 
 @customElement("bkd-nav-group-toggle")
 @localized()

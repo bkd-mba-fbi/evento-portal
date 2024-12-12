@@ -9,8 +9,11 @@ import { portalState } from "../state/portal-state";
 import { buildUrl } from "../utils/routing";
 import { theme } from "../utils/theme";
 import { UserSettingsItem } from "../utils/user-settings";
-import { MobileNav } from "./Header/MobileNav";
-import { ServiceNav } from "./Header/ServiceNav";
+import { MobileNav } from "./header/MobileNav";
+import "./header/MobileNav";
+import "./header/Nav";
+import { ServiceNav } from "./header/ServiceNav";
+import "./header/ServiceNav";
 
 @customElement("bkd-header")
 @localized()
