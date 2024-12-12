@@ -5,10 +5,10 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import spinnerIcon from "../../assets/icons/spinner.svg?raw";
 import trashIcon from "../../assets/icons/trash.svg?raw";
-import { NotificationDataEntry } from "../../utils/fetch.ts";
-import { sanitize } from "../../utils/sanitize.ts";
-import { theme } from "../../utils/theme.ts";
-import { NotificationsState } from "./NotificationsToggle.ts";
+import { NotificationDataEntry } from "../../utils/fetch";
+import { sanitize } from "../../utils/sanitize";
+import { theme } from "../../utils/theme";
+import { NotificationsState } from "./NotificationsToggle";
 
 @customElement("bkd-notifications-dropdown")
 @localized()

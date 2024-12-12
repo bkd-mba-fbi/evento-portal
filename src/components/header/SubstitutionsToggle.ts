@@ -8,14 +8,15 @@ import caretIcon from "../../assets/icons/caret.svg?raw";
 import closeSmallIcon from "../../assets/icons/close-small.svg?raw";
 import substitutionIcon from "../../assets/icons/substitution.svg?raw";
 import { DropdownController } from "../../controllers/dropdown";
-import { getEnvSettings } from "../../env-settings.ts";
-import { portalState } from "../../state/portal-state.ts";
-import { tokenState } from "../../state/token-state.ts";
+import { getEnvSettings } from "../../env-settings";
+import { portalState } from "../../state/portal-state";
+import { tokenState } from "../../state/token-state";
 import { Substitution, fetchCurrentSubstitutions } from "../../utils/fetch";
-import { buildUrl } from "../../utils/routing.ts";
+import { buildUrl } from "../../utils/routing";
 import { submit } from "../../utils/submit";
 import { theme } from "../../utils/theme";
 import { SubstitutionsDropdown } from "./SubstitutionsDropdown";
+import "./SubstitutionsDropdown";
 
 @customElement("bkd-substitutions-toggle")
 @localized()

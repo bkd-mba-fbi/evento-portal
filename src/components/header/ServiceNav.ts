@@ -3,8 +3,13 @@ import { customElement, property } from "lit/decorators.js";
 import { when } from "lit/directives/when.js";
 import { localized, msg } from "@lit/localize";
 import { StateController } from "@lit-app/state";
-import { portalState } from "../../state/portal-state.ts";
+import { portalState } from "../../state/portal-state";
 import { theme } from "../../utils/theme";
+import "./Hamburger";
+import "./LanguageSwitcher";
+import "./NotificationsToggle";
+import "./SubstitutionsToggle";
+import "./UserSettings";
 
 @customElement("bkd-service-nav")
 @localized()

@@ -6,6 +6,7 @@ import { StateController } from "@lit-app/state";
 import { NavigationGroup } from "../../settings";
 import { portalState } from "../../state/portal-state";
 import { theme } from "../../utils/theme";
+import "./NavGroupToggle";
 
 @customElement("bkd-nav")
 @localized()

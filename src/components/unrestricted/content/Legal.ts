@@ -1,8 +1,8 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
-import { withLineBreaks } from "../../utils/templates";
-import { contentStyles, theme } from "../../utils/theme";
+import { withLineBreaks } from "../../../utils/templates";
+import { contentStyles, theme } from "../../../utils/theme";
 
 @customElement("bkd-legal")
 @localized()

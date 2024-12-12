@@ -9,14 +9,12 @@ import { StateController } from "@lit-app/state";
 import arrowDownIcon from "../../assets/icons/arrow-down.svg?raw";
 import arrowUpIcon from "../../assets/icons/arrow-up.svg?raw";
 import { NavigationGroup, NavigationItem, settings } from "../../settings";
-import { portalState } from "../../state/portal-state.ts";
+import { portalState } from "../../state/portal-state";
 import { getNavigationItem } from "../../utils/navigation";
-import { buildUrl } from "../../utils/routing.ts";
+import { buildUrl } from "../../utils/routing";
 import { theme } from "../../utils/theme";
-import {
-  UserSettingsItem,
-  userSettingsItems,
-} from "../../utils/user-settings.ts";
+import { UserSettingsItem, userSettingsItems } from "../../utils/user-settings";
+import "./LanguageSwitcher";
 
 @customElement("bkd-mobile-nav")
 @localized()

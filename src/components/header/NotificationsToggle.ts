@@ -3,16 +3,17 @@ import { customElement, query, state } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from "@lit/localize";
 import bellIcon from "../../assets/icons/bell.svg?raw";
-import { DropdownController } from "../../controllers/dropdown.ts";
-import { getEnvSettings } from "../../env-settings.ts";
+import { DropdownController } from "../../controllers/dropdown";
+import { getEnvSettings } from "../../env-settings";
 import {
   NotificationDataEntry,
   fetchNotifications,
   updateNotifications,
-} from "../../utils/fetch.ts";
-import { log } from "../../utils/logging.ts";
-import { theme } from "../../utils/theme.ts";
-import { NotificationsDropdown } from "./NotificationsDropdown.ts";
+} from "../../utils/fetch";
+import { log } from "../../utils/logging";
+import { theme } from "../../utils/theme";
+import { NotificationsDropdown } from "./NotificationsDropdown";
+import "./NotificationsDropdown";
 
 const envSettings = getEnvSettings();
 if (typeof envSettings?.notificationRefreshTime !== "number") {

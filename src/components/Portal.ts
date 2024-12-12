@@ -5,7 +5,7 @@ import { localized } from "@lit/localize";
 import { StateController, Unsubscribe } from "@lit-app/state";
 import { settings } from "../settings";
 import { portalState } from "../state/portal-state";
-import { tokenState } from "../state/token-state.ts";
+import { tokenState } from "../state/token-state";
 import {
   activateTokenForScope,
   createOAuthClient,
@@ -21,6 +21,9 @@ import {
   registerLightDomStyles,
   theme,
 } from "../utils/theme";
+import "./Content";
+import "./Footer";
+import "./Header";
 
 const oAuthClient = createOAuthClient();
 const authReady = (async function () {

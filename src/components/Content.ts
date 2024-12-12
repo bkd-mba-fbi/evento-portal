@@ -8,6 +8,9 @@ import { StateController } from "@lit-app/state";
 import { portalState } from "../state/portal-state";
 import { tokenState } from "../state/token-state";
 import { theme } from "../utils/theme";
+import "./unrestricted/content/Contact";
+import "./unrestricted/content/Imprint";
+import "./unrestricted/content/Legal";
 
 @customElement("bkd-content")
 @localized()
