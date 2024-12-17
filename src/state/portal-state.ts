@@ -8,7 +8,12 @@ import {
 } from "../settings";
 import { fetchInstanceInfo, fetchUserAccessInfo } from "../utils/fetch";
 import { getInitialLocale, getLocale, updateLocale } from "../utils/locale";
-import { filterAllowed, getApp, getNavigationItem } from "../utils/navigation";
+import {
+  filterAllowed,
+  getApp,
+  getNavigationItem,
+  getNavigationItemByAppPath,
+} from "../utils/navigation";
 import { cleanupQueryParams, updateQueryParam } from "../utils/routing";
 import { storeLocale } from "../utils/storage";
 import { tokenState } from "./token-state";
@@ -235,8 +240,15 @@ class PortalState extends State {
         // Consume `actualAppPath`
         this.appPath = this.actualAppPath;
       } else {
-        // Use item's app path
-        this.appPath = item.appPath;
+        // Use item's app path, but don't override the user's path if it's
+        // already within the item's module
+        const previousItem = getNavigationItemByAppPath(
+          this.navigation,
+          this.appPath,
+        );
+        if (this.navigationItem !== previousItem?.item) {
+          this.appPath = item.appPath;
+        }
       }
 
       this.actualAppPath = null; // Only relevant the first time
