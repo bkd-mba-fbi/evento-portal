@@ -1,0 +1,12 @@
+<h1 class="photolist__header">{{event.designation}} - {{event.management}}</h1>
+<div class="photolist__container">
+    <div class="photolist__details">
+        {{person-detail idPerson=idPerson}}
+    </div>
+    {{#each event.students as |student index|}}
+    <div class="photolist__student {{if (eq student.idPerson idPerson) 'active'}} {{if (endOfLine index columnCount) 'end-of-line'}}" {{action "studentClick" student.idPerson}}>
+        <img src={{student.photo}} alt={{student.fullname}} class="photolist__student__photo">
+        <span class="photolist__student__label" title={{student.fullname}}>{{student.fullname}}</span>
+    </div>
+    {{/each}}
+</div>
