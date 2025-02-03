@@ -23,6 +23,7 @@ Download the [latest build](https://bkd-mba-fbi.github.io/evento-portal/evento-p
 ### Development
 
 - [Setup & Development](./doc/development.md) – Start local development, run linting & tests
+- [Lifecycle](./doc/lifecycle.md) – Update Framework and Dependencies
 - [Git Workflow](./doc/git.md) – Branching & commit messages
 - [Internationalization (I18n)](./doc/i18n.md) – Translating texts
 - [Prettier](doc/prettier.md) – Source code formatting
