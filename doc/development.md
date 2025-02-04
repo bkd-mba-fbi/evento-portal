@@ -49,12 +49,6 @@ Verify TypeScript typing and check source files with [ESLint](https://eslint.org
 npm run lint
 ```
 
-Print a report of unused dependencies, files & exports using [Knip](https://github.com/webpro/knip) (for the configuration, see [.knip.json](../.knip.json)):
-
-```
-npm run unused
-```
-
 ### E2E Tests
 
 Run E2E tests interactively:
