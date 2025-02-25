@@ -113,6 +113,8 @@ window.schulverwaltung.settings = {
     { type: "crystal", id: 290049 }, // Fotoliste
     { type: "crystal", id: 290044 }, // Tests pro Fach
     { type: "crystal", id: 230049 }, // Übersicht formative Beurteilung
+    { type: "excel", id: 240001 }, // Notenblatt Absenzenkontrolle Adressliste => nur Berufsfachschulen
+    { type: "excel", id: 250004 }, // Notenblatt Absenzenkontrolle Adressliste => nur Mittelschulen (Gym)
   ],
 
   /**
