@@ -94,10 +94,6 @@
   <source>Personen und Institutionen suchen</source>
   <target state="translated">Rechercher des personnes et des institutions</target>
 </trans-unit>
-<trans-unit id="sec148f76974d9b06">
-  <source>Anmeldedetails einlesen</source>
-  <target state="translated">Saisir des détails d'inscription</target>
-</trans-unit>
 <trans-unit id="sfb4410b48e95fa73">
   <source>Kontakt</source>
   <target state="translated">Contact</target>
@@ -325,6 +321,10 @@ Engehaldenstrasse 12
 <trans-unit id="s269516fd03223694">
   <source>https://www.be.ch/mba</source>
   <target state="translated">https://www.be.ch/omp</target>
+</trans-unit>
+<trans-unit id="safad117145e83ae0">
+  <source>Daten einlesen</source>
+  <target state="translated">Importer des données</target>
 </trans-unit>
 </body>
 </file>
