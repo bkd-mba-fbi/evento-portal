@@ -410,9 +410,9 @@ export const settings: Settings = {
           appPath: "#/persons",
         },
         {
-          key: "eventRegistration",
+          key: "import",
           get label() {
-            return msg("Anmeldedetails einlesen");
+            return msg("Daten einlesen");
           },
           allowedRolesOrPermissions: [
             "PersonRight",
@@ -442,8 +442,8 @@ export const settings: Settings = {
             "RegistrationRightWeiterbildungReservation",
           ],
           deniedInstanceIds: null,
-          appKey: "anmeldedetailsEinlesen",
-          appPath: "#/input",
+          appKey: "schulverwaltung",
+          appPath: "#/import",
         },
       ],
     },
