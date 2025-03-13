@@ -68,7 +68,7 @@ window.schulverwaltung.settings = {
   // intervals afterwards (polling). Refresh time is in seconds and
   // may be set to `null` to disable polling (5 * 60 * 1000 = refresh
   // every 5 minutes).
-  unconfirmedAbsencesRefreshTime: 5 * 60 * 1000,
+  unconfirmedAbsencesRefreshTime: 60 * 60 * 1000,
 
   /**
    * Reports
