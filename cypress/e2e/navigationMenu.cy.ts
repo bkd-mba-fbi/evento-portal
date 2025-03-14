@@ -307,7 +307,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Administration", [
           "Personen und Institutionen suchen",
-          "Anmeldedetails einlesen",
+          "Daten einlesen",
         ]);
       });
     });
@@ -333,7 +333,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", ["Kurse und Veranstaltungen"]);
 
-        expectGroupItems("Administration", ["Anmeldedetails einlesen"]);
+        expectGroupItems("Administration", ["Daten einlesen"]);
       });
     });
   });
@@ -358,7 +358,7 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", ["Kurse und Veranstaltungen"]);
 
-        expectGroupItems("Administration", ["Anmeldedetails einlesen"]);
+        expectGroupItems("Administration", ["Daten einlesen"]);
       });
     });
   });

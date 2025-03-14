@@ -52,6 +52,7 @@ export const templates = {
   sa981ad28edcf81e5: `Il se peut que des éléments figurant dans l’application (images, icônes) soient la propriété de tiers. Leur utilisation est donc interdite. Sur demande, le canton de Berne peut cependant autoriser l’utilisation, en dehors du site web, des éléments dont il détient les droits. Veuillez adresser vos demandes à cet effet au service responsable de l’application, dont les coordonnées figurent dans l’impressum.`,
   saac6cc64d5c17b4f: `Administration`,
   sac1056b6664675ca: `Réserver des salles et des appareils`,
+  safad117145e83ae0: `Importer des données`,
   sb5ffc0faf2cf16da: `Formation continue interne`,
   sb993cc3240e32971: `Aucune notification`,
   sbd4575edfbf5c84f: `Navigation principale`,
@@ -78,7 +79,6 @@ Engehaldenstrasse 12
   se33353371b3ee38b: `Données traitées`,
   sea31a3191cc166f8: `École compétente, voir Contact`,
   seae9439e8d8e58e7: `La présente application renvoie uniquement vers des réseaux sociaux tels que YouTube au moyen de liens et non via l’exécution de programmes (plug-in). Ainsi, aucune donnée personnelle n’est transmise aux réseaux sociaux lorsque vous utilisez l’application.`,
-  sec148f76974d9b06: `Saisir des détails d'inscription`,
   sef3cc5f0adf7abc3: `Application`,
   sf49fc5f227269877: `Le service responsable de l’application au sens de la législation sur la protection des données, et notamment du règlement général de l’UE sur la protection des données (RGPD), est :`,
   sf4fb738671432c9c: `Direction de l’instruction publique et de la culture du canton de Berne
