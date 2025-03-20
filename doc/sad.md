@@ -56,16 +56,18 @@ Quality categories & qualities according to [ISO/IEC 25010](https://iso25000.com
 
 ## Stakeholders
 
-| _Role_                         | _Organisation_                                                                                                  | _Name_                                                                                          |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Specialist Application Manager | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) | [@fbufbi](https://github.com/fbufbi)                                                            |
-| Technical Application Manager  | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) | [@schefbi](https://github.com/schefbi)                                                          |
-| Project Leader/SCRUM Master    | [Puzzle ITC](https://www.puzzle.ch)                                                                             | [@mkrebs](https://www.puzzle.ch/de/blog/articles/author/mkrebs)                                 |
-| Software Engineer & UX         | [Puzzle ITC](https://www.puzzle.ch)                                                                             | [@caebr](https://github.com/caebr)                                                              |
-| Software Engineer & Architect  | [Puzzle ITC](https://www.puzzle.ch)                                                                             | [@hupf](https://github.com/hupf)                                                                |
-| UX Engineer                    | [Puzzle ITC](https://www.puzzle.ch)                                                                             | [@shirsbrunner](https://github.com/shirsbrunner) & [@pmurkowsky](https://github.com/pmurkowsky) |
-| Operations                     | [BEDAG](https://www.bedag.ch/)                                                                                  |                                                                                                 |
-| Backend Engineering            | [Swiss Learning Hub](https://www.swisslearninghub.com/)                                                         |                                                                                                 |
+| _Name_                                                                 | _Role_                         | _Organisation_                                                                                                  |
+| ---------------------------------------------------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| Franziska Bünzli,<br>[@fbufbi](https://github.com/fbufbi)              | Specialist Application Manager | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) |
+| Sandro Scheidt,<br>[@schefbi](https://github.com/schefbi)              | Technical Application Manager  | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) |
+| Walid Boulhazayez,<br>[@WalidBoul](https://github.com/WalidBoul)       | Service Manager                | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) |
+| Matthias Krebs,<br>[@mkrebs](https://github.com/Amasit)                | Project Leader/SCRUM Master    | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
+| Claudia Asti,<br>[@caebr](https://github.com/caebr)                    | Software Engineer & UX         | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
+| Mathis Hofer,<br>[@hupf](https://github.com/hupf)                      | Software Architect             | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
+| Clara, Llorente,<br>[@llorentelemmc](https://github.com/llorentelemmc) | Software Engineer              | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
+| Simon Hirsbrunner,<br>[@shirsbrunner](https://github.com/shirsbrunner) | UX Engineer                    | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
+| Operations                                                             |                                | [BEDAG](https://www.bedag.ch/)                                                                                  |
+| Backend Engineering                                                    |                                | [Swiss Learning Hub](https://www.swisslearninghub.com/)                                                         |
 
 # Architecture Constraints
 
