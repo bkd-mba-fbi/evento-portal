@@ -16,6 +16,9 @@ You can build & deploy new releases with GitHub Actions as described in the foll
 
 ## Hotfix Release
 
+Remark: To create a hotfix for an issue in the _webapp-schulverwaltung_ repository, consider the instructions in [Hotfix webapp-schulverwaltung
+](./hotfix-webapp-schulverwaltung.md).
+
 1. Create a hotfix branch named `hotfix/1234-short-description` from the `production` branch (with `1234` being the issue number and `short-description` being a summary of the purpose of the branch).
 
 1. Test hotfix on your environment.
