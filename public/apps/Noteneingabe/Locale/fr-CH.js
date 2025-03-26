@@ -32,7 +32,7 @@
         'yes': 'Oui',
         'no': 'Non',
         'backToGrading': 'Retourner',
-        'finalizeGrading': 'Finaliser la saisie',
+        'finalizeGrading': 'Finaliser et imprimer',
         'gradingNothingToShow': 'La saisie ne peut pas être fait.',
         'sufficient': 'Suffisant',
         'unsufficient': 'Insuffisant',
