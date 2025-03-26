@@ -30,7 +30,7 @@
         'yes': 'Ja',
         'no': 'Nein',
         'backToGrading': 'Zurück',
-        'finalizeGrading': 'Bewertung abschliessen',
+        'finalizeGrading': 'Abschluss und Druck',
         'gradingNothingToShow': 'Der Anlass kann nicht bewertet werden.',
         'sufficient': 'Genügend',
         'unsufficient': 'Ungenügend',
