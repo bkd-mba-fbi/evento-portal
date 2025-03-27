@@ -56,18 +56,18 @@ Quality categories & qualities according to [ISO/IEC 25010](https://iso25000.com
 
 ## Stakeholders
 
-| _Name_                                                              | _Role_                         | _Organisation_                                                                                                  |
-| ------------------------------------------------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| Franziska Bünzli, [@fbufbi](https://github.com/fbufbi)              | Specialist Application Manager | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) |
-| Sandro Scheidt, [@schefbi](https://github.com/schefbi)              | Technical Application Manager  | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) |
-| Walid Boulhazayez, [@WalidBoul](https://github.com/WalidBoul)       | Service Manager                | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) |
-| Matthias Krebs, [@Amasit](https://github.com/Amasit)                | Project Leader/SCRUM Master    | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
-| Claudia Asti, [@caebr](https://github.com/caebr)                    | Software Engineer & UX         | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
-| Mathis Hofer, [@hupf](https://github.com/hupf)                      | Software Architect             | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
-| Clara, Llorente, [@llorentelemmc](https://github.com/llorentelemmc) | Software Engineer              | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
-| Simon Hirsbrunner, [@shirsbrunner](https://github.com/shirsbrunner) | UX Engineer                    | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
-| Operations                                                          |                                | [BEDAG](https://www.bedag.ch/)                                                                                  |
-| Backend Engineering                                                 |                                | [Swiss Learning Hub](https://www.swisslearninghub.com/)                                                         |
+| _Name_                                                                 | _Role_                         | _Organisation_                                                                                                  |
+| ---------------------------------------------------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| Franziska Bünzli,<br>[@fbufbi](https://github.com/fbufbi)              | Specialist Application Manager | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) |
+| Sandro Scheidt,<br>[@schefbi](https://github.com/schefbi)              | Technical Application Manager  | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) |
+| Walid Boulhazayez,<br>[@WalidBoul](https://github.com/WalidBoul)       | Service Manager                | [BKD-MBA-FBI](https://www.bkd.be.ch/de/start/ueber-uns/die-organisation/mittelschul-und-berufsbildungsamt.html) |
+| Matthias Krebs,<br>[@Amasit](https://github.com/Amasit)                | Project Leader/SCRUM Master    | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
+| Claudia Asti,<br>[@caebr](https://github.com/caebr)                    | Software Engineer & UX         | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
+| Mathis Hofer,<br>[@hupf](https://github.com/hupf)                      | Software Architect             | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
+| Clara, Llorente,<br>[@llorentelemmc](https://github.com/llorentelemmc) | Software Engineer              | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
+| Simon Hirsbrunner,<br>[@shirsbrunner](https://github.com/shirsbrunner) | UX Engineer                    | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
+| Operations                                                             |                                | [BEDAG](https://www.bedag.ch/)                                                                                  |
+| Backend Engineering                                                    |                                | [Swiss Learning Hub](https://www.swisslearninghub.com/)                                                         |
 
 # Architecture Constraints
 
@@ -141,8 +141,15 @@ graph LR
 
 ### Technical Interfaces
 
-- [EVENTO API](https://clx-evento.bitbucket.io/master_eventodoc/Api/) (external documentation)
-- [EVENTO OAuth 2.0 Provider](https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Login-OAuth-Server/) (external documentation)
+[EVENTO Documentation](https://docs.swisslearninghub.help/evento/) (external) – Puzzle members: search for "EVENTO API" in the password vault to login.
+
+Interfaces:
+
+- **EVENTO API** \
+  For documentation, visit _API_ → _Evento Rest API_ (side-menu) → _API Referenz_
+- **EVENTO OAuth 2.0 Provider** \
+  For documentation visit _API_ → _Autorisierung_ (side-menu) \
+  or _API_ → _Komponenten_ (top-menu) → _Evento OAuth Server_ (side-menu)
 - [iframe Limitations & Workarounds](./iframe.md)
 
 # Solution Strategy
