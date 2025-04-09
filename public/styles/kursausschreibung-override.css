@@ -168,8 +168,9 @@ a.uk-icon-link.uk-hidden\@m.uk-icon {
 }
 
 .uk-subnav-pill > .uk-active > a {
-  background-color: var(--bkd-func-fg-grey);
+  background-color: var(--bkd-brand-red);
   color: #fff;
+  border-radius: 1rem;
 }
 
 .centerHorizontalTop20Percent {
