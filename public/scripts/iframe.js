@@ -108,7 +108,7 @@ function getMaxPositionedBottom() {
   return positionedNodes.reduce((maxBottom, node) => {
     const nodeBottom =
       node instanceof HTMLElement
-        ? node.getBoundingClientRect().top + node.clientHeight
+        ? window.scrollY + node.getBoundingClientRect().top + node.clientHeight
         : 0;
     return Math.max(maxBottom, nodeBottom);
   }, 0);
