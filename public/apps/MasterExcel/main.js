@@ -107,9 +107,12 @@ function insertButtonsTest() {
 
 
 setTimeout(function(){
-  document.getElementById('hide-published').addEventListener("click", (e) => {
-  $('#overlay-toggle-embedded-test div').empty();   
-  });
+  const hidePublished = document.getElementById('hide-published')
+  if (hidePublished) {
+    hidePublished.addEventListener("click", (e) => {
+      $('#overlay-toggle-embedded-test div').empty();   
+    });
+  } 
  },3000);
 
 
