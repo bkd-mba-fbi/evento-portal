@@ -6,10 +6,6 @@ Zum Testen die folgende Zeile in die Adresszeile des Browsers kopieren:
 javascript:void(document.body.appendChild(document.createElement("script")).src="https://www.zeniko.ch/evento/X.js")
 */
 
-// jQuery nachladen, sofern noch nicht verfügbar (wird benötigt)
-if (!window.jQuery) {
-    document.body.appendChild(document.createElement("script")).src = "https://www.zeniko.ch/evento/jquery.min.js";
-}
 
 // beim Neuladen des Helfers den bereits geladenen Helfer zuerst deaktivieren
 if (window.X && window.X.uninit) {
