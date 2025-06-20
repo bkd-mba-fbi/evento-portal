@@ -524,7 +524,7 @@ var X = {
                 // * ein "Ungültiger Wert" Fehler angezeigt, wenn die eingegebene Note in der
                 //   Auswahlliste nicht vorkam
                 // * der Wert übertragen und kein Fehler angezeigt
-                $("bkd-test-edit-grades div table tbody tr:not(:last-child)").each(function() {
+                $("bkd-tests-table div table tbody tr:not(:last-child)").each(function() {
                     var name = X.trimName($("td.student-name a div:first-child", this).text());
                     var error = [null, null];
                     
@@ -594,7 +594,7 @@ var X = {
     collectNames: function(aView, aIncData) {
         var values = [];
 
-        var nameCell = aView == 4 ? "bkd-test-edit-grades div table tbody td.student-name a div:first-child" :
+        var nameCell = aView == 4 ? "bkd-tests-table div table tbody td.student-name a div:first-child" :
             aView >= 2 ? "td.validationColumn + td" :
             aView == 0 ? ".tablelabel + .content1" :
             "td.tablelabel:first-child, table.WebPart-Adaptive td:first-child";
@@ -698,7 +698,7 @@ var X = {
      */
     getFirstInput: function(aView, aTest) {
         if (aView == 4 && aTest >= 0) {
-            var rows = $("bkd-test-edit-grades div table tbody tr");
+            var rows = $("bkd-tests-table div table tbody tr");
             var cell = $("td.test-grade, td.test-info-desktop", rows.get(0)).get(aTest);
             return $("input[type=number], select", cell).get(0);
         }
@@ -719,7 +719,7 @@ var X = {
      *          (für die Anzeige müssen |null|-Werte herausgefiltert werden)
      */
     collectTestNames: function() {
-        var table = $("bkd-test-edit-grades table");
+        var table = $("bkd-tests-table table");
         var thead = table.find("thead th");
         var tbody = table.find("tbody tr:first-child td.name, tbody tr:first-child td:not(.sticky)");
         var tests = [null];
@@ -747,7 +747,7 @@ var X = {
         if ($("form[action*='./brn_qualifikationdurchdozenten.aspx']").length > 0) {
             return 2;
         }
-        if ($("bkd-test-edit-grades").length > 0) {
+        if ($("bkd-tests-table").length > 0) {
             return 4;
         }
         return -1;
