@@ -275,12 +275,12 @@ var X = {
             lines = X.strings[X.lang].views[aView].default_lines.join("\n").replace("%s", kursname) +
                 "\n" + X.collectNames(aView, index).join("\n") + "\n";
         }
-        else if (aView >= 2 && $("td.gradeInput").length == 0) {
+        else if (aView >= 2 && $("#grade").length == 0) {
             // "Weiter zur Auswertung" entlädt nicht
             return;
         }
         else {
-            var kursname = $(aView >= 2 ? "td.dialogMainInfo + td" : "span[id$='lblAnlassBezeichnung']").text() || "absent";
+            var kursname = $("bkd-evaluation-header div h1").text() || "absent";
             lines = X.strings[X.lang].views[aView].default_lines.join("\n").replace("%s", kursname) +
                 "\n" + X.collectNames(aView, true).join("\n") + "\n";
         }
@@ -393,116 +393,110 @@ var X = {
             case 2:
                 var validGrades = X.collectValidGrades(aView);
                 var grades = X.parseGradeData(lines, X.collectNames(aView), validGrades);
+                // Fehlermeldungen zurücksetzen
+                $("div.X-error").css("background-color", "").text("");
 
                 // für jede Zeile des Evento-Formulars wird entweder
                 // * ein "Name nicht gefunden" Fehler angezeigt, wenn keine Daten verfügbar waren
                 // * ein "Ungültiger Wert" Fehler angezeigt, wenn die eingegebene Note in der
                 //   Auswahlliste nicht vorkam
                 // * der Wert übertragen und kein Fehler angezeigt
-                $("td.validationColumn + td").each(function() {
-                    var name = X.trimName($(this).text());
-                    var error = [null, null];
+                $("bkd-evaluation-table div table tbody tr:not(:last-child)").each(function() {
+                    if (!$(this).hasClass("criteria")) {
+                        var name = X.trimName($("td.student-name div a span:first-child", this).text());
+                        var error = [null, null];
+                        
+                        var cell = $("bkd-evaluation-grade bkd-select", this).get(0);
+                        if (name in grades && name != "") {
+                            var input = $("select", cell);
+                            if (/^error-(.*)/.test(grades[name])) {
+                                error = [RegExp.$1, name];
+                            } else {
+                                if (validGrades && X.contains(validGrades, grades[name])) {
+                                    // bei Zehntelsnoten müssen ganze Werte auf ".0" enden
+                                    grades[name] = $.grep(validGrades, function(aVal) {
+                                        return aVal == grades[name];
+                                    })[0];
+                                }
+                                
+                                var targetValue = grades[name];
+                                if (input.attr("type") != "number") {
+                                    targetValue = input.find("option").filter(function() {
+                                        return $.trim($(this).text()) == grades[name];
+                                    }).val() || grades[name];
+                                }
 
-                    if (name in grades) {
-                        var input = $(this).parent().find("td.gradeInput input");
-                        if (/^error-(.*)/.test(grades[name])) {
-                            error = [RegExp.$1, name];
-                        } else {
-                            if (validGrades && X.contains(validGrades, grades[name])) {
-                                // bei Zehntelsnoten müssen ganze Werte auf ".0" enden
-                                grades[name] = $.grep(validGrades, function(aVal) {
-                                    return aVal == grades[name];
-                                })[0];
-                            }
-                            // die Eingabe Server-schonend nur bei Änderung vornehmen
-                            if (input.val() != grades[name]) {
-                                input.val(grades[name]);
-                                // Auto-Speicherung durch Simulation einer Eingabe auslösen
-                                input.trigger("keyup").trigger("input").trigger("blur");
+                                var currentValue = input.find(":selected").val();
+                                // die Eingabe Server-schonend nur bei Änderung vornehmen
+                                if (currentValue != targetValue) {
+                                    input.val(targetValue);
+                                    // change- und input-Ereignis auslösen
+                                    input.get(0).dispatchEvent(new Event('change'));
+                                    input.get(0).dispatchEvent(new Event('input'));
+                                }
 
-                                // Bugfix: manchmal ist die Eingabe beim ersten Versuch nicht
-                                // erfolgreich (v.a. Eingabe von Zehntelsnoten)
-                                setTimeout(function() {
-                                    if (input.val() != grades[name]) {
-                                        input.val(grades[name]);
-                                        // Auto-Speicherung durch Simulation einer Eingabe auslösen
-                                        input.trigger("keyup").trigger("input").trigger("blur");
-                                    }
-                                }, 500);
+                                if (validGrades && !X.contains(validGrades, grades[name])) {
+                                    error = ["invalid-value", grades[name]];
+                                } else if (!validGrades && typeof(grades[name]) != "number") {
+                                    error = ["no-number", grades[name]];
+                                }
                             }
-
-                            if (validGrades && !X.contains(validGrades, grades[name])) {
-                                error = ["invalid-value", grades[name]];
-                            } else if (!validGrades && typeof(grades[name]) != "number") {
-                                error = ["no-number", grades[name]];
-                            }
+                        } else if (name != "") {
+                            error = ["not-found", name];
                         }
-                    } else {
-                        error = ["not-found", name];
-                    }
 
-                    if ($(this).parent().find("span.errortext").length == 0) {
-                        var lastCell = $(this).parent().find("td").last();
-                        // falls die letzte Zelle nur Text enthält, wird die Fehlermeldung
-                        // daran angehängt, andernfalls kommt sie in eine neue Zelle
-                        if (lastCell.find("input, textarea, select, [contenteditable]").length > 0) {
-                            lastCell = $("<td></td>").insertAfter(lastCell);
+                        if ($("div.X-error", cell).length == 0) {
+                            $(cell).append("<div class='X-error'></div>");
                         }
-                        lastCell.append(" <span class='errortext'></span>");
+                        var errorString = error[0] && X.strings[X.lang].errors[error[0].replace(/-/g, "_")] || "";
+                        $("div.X-error", cell).css("background-color", errorColors[error[0]] || "").text(errorString.replace("%s", error[1]));
                     }
-
-                    var errorString = error[0] && X.strings[X.lang].errors[error[0].replace(/-/g, "_")] || "";
-                    $(this).parent().children("td").css("background-color", errorColors[error[0]] || "")
-                        .children("span.errortext").text(errorString.replace("%s", error[1]));
                 });
-                break;
-
+                break
             case 3:
-                var absences = X.parseAbsenceData(lines, X.collectNames(aView));
+                var absences = X.parseAbsenceData(lines, X.collectNames(aView));               
+                // Fehlermeldungen zurücksetzen
+                $("div.X-error").css("background-color", "").text("");
 
                 // für jede Zeile des Evento-Formulars wird entweder
                 // * ein "Name nicht gefunden" Fehler angezeigt, wenn keine Daten verfügbar waren
                 // * ein "Keine Zahl" Fehler angezeigt, wenn die eingegebenen Werte keine
                 //   gültigen Absenzen-Daten sind
                 // * der Wert übertragen und kein Fehler angezeigt
-                $("td.validationColumn + td").each(function() {
-                    var name = X.trimName($(this).text());
-                    var error = [null, null];
+                $("bkd-evaluation-table div table tbody tr:not(:last-child)").each(function() {
+                        var name = X.trimName($("td.student-name div a span:first-child", this).text());
+                        var error = [null, null];
+                        
+                        var cell = $("td.subscription-detail bkd-subscription-detail-field bkd-subscription-detail-textfield", this).get(0);
+ 
+                        if (name in absences && name != "") {
+                            var inputs = $(this).find("td.subscription-detail bkd-subscription-detail-field input[type=number]");
+                            if (/^error-(.*)/.test(absences[name])) {
+                                error = [RegExp.$1, name];
+                            } else if (typeof(absences[name][0]) != "number" || typeof(absences[name][1]) != "number") {
+                                error = ["invalid-value", "" + absences[name]];
+                            } else {
 
-                    if (name in absences) {
-                        if (typeof(absences[name]) == "string" && /^error-(.*)/.test(absences[name])) {
-                            error = [RegExp.$1, name];
-                        } else if (typeof(absences[name][0]) != "number" || typeof(absences[name][1]) != "number") {
-                            error = ["invalid-value", "" + absences[name]];
-                        } else {
-                            for (var i = 0; i < 2; i++) {
-                                var el = $(this).parent().find("td:not(.gradeInput) input[type=text]").eq(-2 + i);
                                 // die Eingabe Server-schonend nur bei Änderung vornehmen
-                                if ((el.val() || 0) != absences[name][i]) {
-                                    el.val(absences[name][i]);
-                                    // Auto-Speicherung durch Simulation einer Eingabe auslösen
-                                    el.trigger("keyup").trigger("input").trigger("blur");
+                                for (var i = 0; i < 2; i++) {
+                                    if ((inputs.eq(i).val() || 0) != absences[name][i]) {
+                                    const inputEvent = new Event('input');
+                                        inputs[i].value = absences[name][i];  
+                                        inputs[i].dispatchEvent(inputEvent);
+                                    }
                                 }
                             }
+                        } else if (name != "") {
+                            error = ["not-found", name];
                         }
-                    } else {
-                        error = ["not-found", name];
-                    }
-
-                    if ($(this).parent().find("span.errortext").length == 0) {
-                        var lastCell = $(this).parent().find("td").last();
-                        // falls die letzte Zelle nur Text enthält, wird die Fehlermeldung
-                        // daran angehängt, andernfalls kommt sie in eine neue Zelle
-                        if (lastCell.find("input, textarea, select, [contenteditable]").length > 0) {
-                            lastCell = $("<td></td>").insertAfter(lastCell);
+                        if ($("div.X-error", cell).length == 0) {
+                            $(cell).append("<div class='X-error'></div>");
                         }
-                        lastCell.append(" <span class='errortext'></span>");
-                    }
-
-                    var errorString = error[0] && X.strings[X.lang].errors[error[0].replace(/-/g, "_")] || "";
-                    $(this).parent().children("td").css("background-color", errorColors[error[0]] || "")
-                        .children("span.errortext").text(errorString.replace("%s", error[1]));
-                });
+                        if(cell != undefined && cell != null) {
+                        var errorString = error[0] && X.strings[X.lang].errors[error[0].replace(/-/g, "_")] || "";
+                        $("div.X-error", cell).css("background-color", errorColors[error[0]] || "").text(errorString.replace("%s", error[1]));
+                        }
+                    });
                 break;
 
             case 4:
@@ -594,8 +588,8 @@ var X = {
     collectNames: function(aView, aIncData) {
         var values = [];
 
-        var nameCell = aView == 4 ? "bkd-tests-table div table tbody td.student-name a div:first-child" :
-            aView >= 2 ? "td.validationColumn + td" :
+        var nameCell = aView === 4 ? "bkd-tests-table div table tbody td.student-name a div:first-child" :
+            aView >= 2 ? "bkd-evaluation-table div table tbody td.student-name div a span:first-child" :
             aView == 0 ? ".tablelabel + .content1" :
             "td.tablelabel:first-child, table.WebPart-Adaptive td:first-child";
         $(nameCell).each(function() {
@@ -624,13 +618,16 @@ var X = {
                             data = data.join("") ? data.join("\t") : "";
                             break;
                         case 2:
-                            data = $.trim($(this).parent().find("td.gradeInput input").val());
+                            cell = $(this).parents("tr").find("td.student-grade");
+                            data = $.trim($("select option:selected", cell).text() || "");
                             break;
                         case 3:
                             // Absenzen aus zwei Textfeldern sammeln
                             data = [];
-                            $(this).parent().find("td:not(.gradeInput) input[type=text]").slice(-2).each(function() {
-                                data.push($.trim($(this).val()).replace(/\.0+$/, ""));
+                            $(this).parents("tr").find("td.subscription-detail bkd-subscription-detail-field input[type=number]").each(function() {
+                                if (this.id.search("_3710-") >= 0 || this.id.search("_3720-") >= 0) {
+                                    data.push($.trim($(this).val()).replace(/\.0+$/, ""));
+                                }
                             });
                             data = data.concat(["", ""]).slice(0, 2);
                             data = data.join("") ? data.join("\t") : "";
@@ -703,7 +700,7 @@ var X = {
             return $("input[type=number], select", cell).get(0);
         }
 
-        var firstSelect = $(aView == 2 ? "td.gradeInput select" : ".tablelabel + .content1").parent().find("select").get(0);
+        var firstSelect = $(aView == 2 ? $("#grade").find("select").get(0) : ".tablelabel + .content1").parent().find("select").get(0);
         // JSModul verwendet seit 2019 eine Liste anstelle einer Auswahl
         if (!firstSelect && aView == 2 && $("td.gradeInput ul.dialogContextMenu").length > 0) {
             firstSelect = {
