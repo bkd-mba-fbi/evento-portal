@@ -41,7 +41,7 @@
     background-color: transparent !important;
 }
 
-@media only screen and (max-width: 700px)  {
+@media only screen and (max-width: 767px)  {
     #overlay-toggle-embedded-test, #overlay-toggle-embedded {
         display: none;
     }

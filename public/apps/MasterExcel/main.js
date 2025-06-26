@@ -21,19 +21,7 @@ function getLanguage(){
 
 
   // Funktion um Buttons einzufügen
-function insertButtonsGrading() {
-    // Buttons nicht einfügen, wenn die grading Route nicht aktiv ist
-    var grading = location.hash.substring(0, 10) === "#/grading/" ? true : false
-    if (!grading) {
-      return;
-    }
-
-    // die Buttons nur einfügen, wenn sie nicht bereits da sind
-    if (document.getElementById('overlay-toggle-embedded')) {
-      return;
-    }
-
-    if ($("#CLX_Root .dialog .grading").length === 1) {
+function insertButtonsEvaluation() {
 
     // Element id enthält 3710 oder 3720 AdId
     var inputElements = document.getElementsByTagName('input');
@@ -41,7 +29,7 @@ function insertButtonsGrading() {
 
     var buttons_html =
       '\
-<div id="overlay-toggle-embedded" class="btn-clearGrades ms-2 dropdown-toggle excelDropdown">\
+<button id="overlay-toggle-embedded-test" type="button" class="btn btn-outline-primary ms-2 dropdown-toggle excelDropdown">\
 <span>' +
       X.strings[getLanguage()].views[2].start_dropdown +
       ' </span>\
@@ -56,22 +44,17 @@ function insertButtonsGrading() {
           " </a>"
         : "") +
       "\
-</div> </div>";
+</div> </button>";
 
-    if (document.getElementsByClassName("gradeInput").length > 0) {
+    if ($("#overlay-toggle-embedded-test").length === 0 && document.getElementsByClassName('desktop').length > 0) {
       var buttons = $(buttons_html);
-      $("#CLX_Root .dialog .grading").append(buttons);
+      $("#excel-import").append(buttons);
     }
   }
-}
 
 
 function insertButtonsTest() {
-  // Buttons nicht einfügen, wenn folgendese element nicht vorhanden ist.
-  if ($('#excel-import').length === 0) {
-      return;
-  }
-  
+
   var tests = X.collectTestNames();
   var dropdownItems = '';
   var atworkTests = 0;
@@ -118,16 +101,15 @@ setTimeout(function(){
 
 const observer = new MutationObserver(mutationList =>  
   mutationList.filter(m => m.type === 'childList').forEach(m => {    
-      setTimeout(function(){
-        insertButtonsGrading();
-        insertButtonsTest();
-
-        if(document.getElementById('scrollTestTable') != null) {
-          var addOffset = screen.width > 1920 ? 390 : 194;
-          if( document.body.offsetHeight > screen.height) {
-            document.getElementById('scrollTestTable').style.height = screen.height-document.getElementsByTagName('bkd-tests-header')[0].offsetHeight-addOffset +'px';
-          } 
+            setTimeout(function(){
+              const evaluation = location.hash.search("/evaluation") >= 0 ? true : false;
+        // Buttons nicht einfügen, wenn folgendese element nicht vorhanden ist.
+        if ($('#excel-import').length === 0) {
+            return;
+        } else {
+          evaluation ? insertButtonsEvaluation() : insertButtonsTest();
         }
+    
       },200);
  
   }));  
