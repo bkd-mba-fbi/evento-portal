@@ -153,6 +153,28 @@ window.kursausschreibung.settings = {
                 },
                 { "id": "Birthdate", "dataType": "date", "options": { "required": "true" } },
                 { "id": "Email2", "dataType": "email" }
+            ],
+            //Optional (Invoice address)
+            "companyFields": [{
+                    "id": "Company",
+                    "dataType": "string",
+                    "options": { "required": true }
+                },
+                {
+                    "id": "AddressLine1",
+                    "dataType": "string",
+                    "options": { "required": true }
+                },
+                {
+                    "id": "Zip",
+                    "dataType": "number",
+                    "options": { "required": true }
+                },
+                {
+                    "id": "Location",
+                    "dataType": "string",
+                    "options": { "required": true }
+                }
             ]
         }
 
