@@ -401,7 +401,7 @@ var X = {
                 // * ein "Ungültiger Wert" Fehler angezeigt, wenn die eingegebene Note in der
                 //   Auswahlliste nicht vorkam
                 // * der Wert übertragen und kein Fehler angezeigt
-                $("bkd-evaluation-table div table tbody tr:not(:last-child)").each(function() {
+                $("bkd-evaluation-table div table tbody tr").each(function() {
                     if (!$(this).hasClass("criteria")) {
                         var name = X.trimName($("td.student-name div a span:first-child", this).text());
                         var error = [null, null];
@@ -463,7 +463,7 @@ var X = {
                 // * ein "Keine Zahl" Fehler angezeigt, wenn die eingegebenen Werte keine
                 //   gültigen Absenzen-Daten sind
                 // * der Wert übertragen und kein Fehler angezeigt
-                $("bkd-evaluation-table div table tbody tr:not(:last-child)").each(function() {
+                $("bkd-evaluation-table div table tbody tr").each(function() {
                         var name = X.trimName($("td.student-name div a span:first-child", this).text());
                         var error = [null, null];
                         
