@@ -1,9 +1,9 @@
-import{p as s,v as h,w as l,x as b,S as u,z as x,y as n,l as f,Y as w,B as v,C as p,D as k,A as z,Q as y,R as $,U as _}from"./LanguageSwitcher-Dt1VG3fp.js";var O=Object.getOwnPropertyDescriptor,C=(e,t,d,o)=>{for(var r=o>1?void 0:o?O(t,d):t,a=e.length-1,i;a>=0;a--)(i=e[a])&&(r=i(r)||r);return r};s.init();let g=class extends b{constructor(){super(),new u(this,s)}renderFooterContent(){return n`
+import{p as s,v as h,w as l,x as b,S as u,z as x,y as n,l as f,Y as w,B as v,C as p,D as k,A as z,Q as y,R as $,U as _}from"./LanguageSwitcher-r4pJz5AT.js";var O=Object.getOwnPropertyDescriptor,C=(r,a,d,o)=>{for(var e=o>1?void 0:o?O(a,d):a,t=r.length-1,i;t>=0;t--)(i=r[t])&&(e=i(e)||e);return e};s.init();let g=class extends b{constructor(){super(),new u(this,s)}renderFooterContent(){return n`
       ${x(s.navigationItemKey,[["contact",()=>n`<bkd-contact></bkd-contact>`],["legal",()=>n`<bkd-legal></bkd-legal>`],["imprint",()=>n`<bkd-imprint></bkd-imprint>`]],()=>n``)}
-    `}render(){const e=f.footer.find(({key:d})=>d===s.navigationItemKey),t=e?w(e):null;return n`
+    `}render(){const r=f.footer.find(({key:d})=>d===s.navigationItemKey),a=r?w(r):null;return n`
       <main role="main">
-        ${v(t==null?void 0:t.heading,()=>n`<h1>${e==null?void 0:e.label}</h1>`)}
-        ${v(!e,()=>n`<h1>Not found</h1>`)}
+        ${v(a?.heading,()=>n`<h1>${r?.label}</h1>`)}
+        ${v(!r,()=>n`<h1>Not found</h1>`)}
         ${this.renderFooterContent()}
       </main>
     `}};g.styles=[h,l`
@@ -47,7 +47,7 @@ import{p as s,v as h,w as l,x as b,S as u,z as x,y as n,l as f,Y as w,B as v,C a
           --bkd-content-margin-horizontal: var(--bkd-margin-horizontal-small);
         }
       }
-    `];g=C([p("bkd-content-unrestricted"),k()],g);var D=Object.getOwnPropertyDescriptor,P=(e,t,d,o)=>{for(var r=o>1?void 0:o?D(t,d):t,a=e.length-1,i;a>=0;a--)(i=e[a])&&(r=i(r)||r);return r};let m=class extends b{render(){return n`
+    `];g=C([p("bkd-content-unrestricted"),k()],g);var D=Object.getOwnPropertyDescriptor,P=(r,a,d,o)=>{for(var e=o>1?void 0:o?D(a,d):a,t=r.length-1,i;t>=0;t--)(i=r[t])&&(e=i(e)||e);return e};let m=class extends b{render(){return n`
       <header role="banner">
         <img class="logo" src="../logo.svg" alt=${z("Evento")} />
         <div class="logo-caption">Evento</div>
@@ -123,7 +123,7 @@ import{p as s,v as h,w as l,x as b,S as u,z as x,y as n,l as f,Y as w,B as v,C a
           --bkd-header-margin-horizontal: var(--bkd-margin-horizontal-small);
         }
       }
-    `];m=P([p("bkd-header-unrestricted"),k()],m);var S=Object.getOwnPropertyDescriptor,j=(e,t,d,o)=>{for(var r=o>1?void 0:o?S(t,d):t,a=e.length-1,i;a>=0;a--)(i=e[a])&&(r=i(r)||r);return r};s.init();y(l`
+    `];m=P([p("bkd-header-unrestricted"),k()],m);var S=Object.getOwnPropertyDescriptor,j=(r,a,d,o)=>{for(var e=o>1?void 0:o?S(a,d):a,t=r.length-1,i;t>=0;t--)(i=r[t])&&(e=i(e)||e);return e};s.init();y(l`
     ${$}
     :root {
       ${_}
