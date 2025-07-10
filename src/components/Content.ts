@@ -89,6 +89,7 @@ export class Content extends LitElement {
   }
 
   private handleMessage = (event: MessageEvent) => {
+    if (event.origin !== window.location.origin) return;
     switch (event.data.type) {
       case "bkdAppResize": {
         this.handleResize(event.data.height);
