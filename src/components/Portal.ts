@@ -145,7 +145,8 @@ export class Portal extends LitElement {
       : instanceName;
   }
 
-  private handleMessage = ({ data }: MessageEvent) => {
+  private handleMessage = ({ data, origin }: MessageEvent) => {
+    if (origin !== window.location.origin) return;
     switch (data.type) {
       case "bkdAppPushState": {
         const url = data.args[2];
