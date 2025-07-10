@@ -118,7 +118,7 @@ export class NotificationsToggle extends LitElement {
     try {
       this.notifications = await fetchNotifications();
       this.state = NotificationsState.SUCCESS;
-    } catch (e) {
+    } catch {
       this.state = NotificationsState.ERROR;
     }
   }

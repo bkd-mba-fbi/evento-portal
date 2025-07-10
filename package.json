@@ -20,7 +20,7 @@
     "preview:ssl": "echo \"Don't forget to set oAuthClientId: 'browserstack' in public/settings.js\nThe app will be running on https://bs-local.com:3000\" && (cd dist && HOST=bs-local.com PORT=3000 npx https-localhost)",
     "analyze": "npx vite-bundle-visualizer",
     "lint": "npm run lint:eslint && npm run lint:ts",
-    "lint:eslint": "eslint src/**/*.ts",
+    "lint:eslint": "eslint \"src/**/*.ts\"",
     "lint:ts": "tsc --noEmit",
     "test": "npm run cy:run",
     "cy:run": "cypress run --browser chromium",
