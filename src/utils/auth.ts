@@ -270,8 +270,8 @@ function handleLoginResult(
  * will return with a new token with the adjusted roles/permissions.
  *
  * Documentation:
- * - Start: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-starten
- * - Stop: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-beenden
+ * - Start: https://docs.swisslearninghub.help/evento/EVT2025.R1_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-starten
+ * - Stop: https://docs.swisslearninghub.help/evento/EVT2025.R1_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-beenden
  */
 function getTokenAfterSubstitutionRedirect(): OAuth2Token | null {
   const params = new URLSearchParams(document.location.search);

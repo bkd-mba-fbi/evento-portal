@@ -165,7 +165,7 @@ export class SubstitutionsToggle extends LitElement {
     if (this.activeSubstitution) return;
 
     // Redirect to backend to get a new access token with the substitution's roles/permissions.
-    // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-starten
+    // Details see: https://docs.swisslearninghub.help/evento/EVT2025.R1_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-starten
     this.redirect(substitution, "start");
   }
 
@@ -174,7 +174,7 @@ export class SubstitutionsToggle extends LitElement {
 
     // Redirect to backend to get access token with the user's
     // original roles/permissions, not the substitution's ones.
-    // Details see: https://clx-evento.bitbucket.io/master_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-beenden
+    // Details see: https://docs.swisslearninghub.help/evento/EVT2025.R1_eventodoc/Api/Autorisierung/Stellvertretung/Stellvertretung-Token/#stellvertretung-beenden
     this.redirect(this.activeSubstitution, "stop");
   }
 
