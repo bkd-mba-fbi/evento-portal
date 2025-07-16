@@ -1,0 +1,60 @@
+<div class="dialogBody">
+    {{outlet "navigation"}}
+    <table class="borderTable">
+        <thead>
+            <tr>
+                <th>{{translate "event"}}</th>
+                <th>{{translate "name"}}</th>
+                <th>{{translate "subscriptionDetail"}}</th>
+                <th>{{translate "oldValue"}}</th>
+                <th>{{translate "newValue"}}</th>
+                <th>{{translate "status"}}</th>
+                <th>{{translate "fehler"}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each model.subscriptionDetails as |subscriptionDetail|}}
+            {{#unless subscriptionDetail.error}}
+            <tr>
+                <td>{{subscriptionDetail.event}}</td>
+                <td>{{subscriptionDetail.name}}</td>
+                <td>{{subscriptionDetail.subscriptionDetail}}</td>
+                <td>{{subscriptionDetail.oldValue}}</td>
+                <td>{{subscriptionDetail.newValue}}</td>
+                <td>
+                    <div>
+                        {{#if subscriptionDetail.loading}}
+                        <div class="spinner-border spinner-border-sm" role="status">
+                        </div>
+                        {{else}}
+                        {{#if subscriptionDetail.uploaded}}
+                        <i class="material-icons text-success">check_circle</i>
+                        {{else}}
+                        <i class="material-icons text-danger">cancel</i> <br>
+                        {{/if}}
+                        {{/if}}
+                    </div>
+                </td>
+                <td>{{subscriptionDetail.errorUpload}}</td>
+            </tr>
+            {{/unless}}
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+<div class="dialogFooter">
+    {{#if model.error}}
+    <span class="text-danger">
+        {{translate "goBackToStartError"}}
+    </span>
+    {{else}}
+    <div>
+        {{translate "goBackToStart"}}
+    </div>
+    {{/if}}
+    <div>
+        {{#link-to "input" tagName="button" class="btn btn-primary float-right" disabledWhen=(if model.everythingHasBeenSent false true)}}
+            <div>{{translate "input"}}</div>
+        {{/link-to}}
+    </div>
+</div>
