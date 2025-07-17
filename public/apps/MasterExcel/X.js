@@ -200,6 +200,7 @@ var X = {
     uninit: function() {
         // entferne ggf. bereits eingefügte Elemente
         $("#tsv-overlay").remove();
+        $("#tsv-overlay-style").remove();
     },
 
     /**
@@ -207,13 +208,13 @@ var X = {
      * @param view  welche funktion soll geladen werden
      */
     onFrameLoad: function(view) {
-        
+        this.uninit();
         X.lang = X.language();
         // füge den Knopf und das Textfeld (inkl. Styling) hinzu
         var isModernUI = view == 2 || view == 4;
         var pageEl = $("body");
         $(pageEl).append('\
-<style type="text/css">\
+<style id="tsv-overlay-style" type="text/css">\
 	' + (isModernUI ? 'div.page { position: relative; }' : '') + ' \
 	#tsv-overlay {background: white; position: fixed; top: 0px;' + (!isModernUI ? 'left: 0px;' : 'max-width: 100%;') + 'width: 100%; height: 100%; display: none; } \
 	#tsv-overlay-inner { height: 90%; padding: 5% 5%; } \
