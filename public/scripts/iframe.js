@@ -44,6 +44,7 @@ const mutationObserver = new MutationObserver((mutations) => {
     mutation.addedNodes.forEach((node) => {
       if (isAbsolutePositioned(node)) {
         positionedNodes.push(node);
+
         postAppResize();
       }
     });
@@ -64,12 +65,13 @@ const mutationObserver = new MutationObserver((mutations) => {
  */
 function isAbsolutePositioned(node) {
   if (!(node instanceof HTMLElement)) return false;
-
   // For some nodes we have to consider the computed style to get the
   // correct position value, but to avoid any performance issues we
   // only do this for the nodes where it is a problem.
   const position =
-    node.nodeName === "NG-DROPDOWN-PANEL"
+    node.nodeName === "NG-DROPDOWN-PANEL" ||
+    node.nodeName === "NGB-MODAL-WINDOW" ||
+    node.nodeName === "NGB-MODAL-BACKDROP"
       ? getComputedStyle(node).position
       : node.style?.position;
 
@@ -106,6 +108,10 @@ function postAppResize(height) {
  */
 function getMaxPositionedBottom() {
   return positionedNodes.reduce((maxBottom, node) => {
+    if (node.nodeName === "NGB-MODAL-WINDOW") {
+      return Math.max(maxBottom, document.documentElement.getElementsByClassName('modal-dialog')[0].clientHeight);
+    }
+
     const nodeBottom =
       node instanceof HTMLElement
         ? window.scrollY + node.getBoundingClientRect().top + node.clientHeight
