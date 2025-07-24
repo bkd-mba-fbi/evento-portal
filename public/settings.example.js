@@ -10,12 +10,12 @@ window.eventoPortal = {
     /**
      * Base URL of the Evento API
      */
-    apiServer: "https://eventotest.api/restApi",
+    apiServer: "https://eventoapp-test.apps.be.ch/restApi",
 
     /**
-     * Base URL of the OAuth provider without any path part
+     * Base URL of the OAuth provider
      */
-    oAuthServer: "https://eventotest.api",
+    oAuthServer: "https://eventoapp-test.apps.be.ch",
 
     /**
      * Path prefix for OAuth endpoints
@@ -25,7 +25,7 @@ window.eventoPortal = {
     /**
      * The OAuth client ID
      */
-    oAuthClientId: "example",
+    oAuthClientId: "dev3000", // dev3000 or browserstack
 
     /**
      * Notification refresh time in seconds
