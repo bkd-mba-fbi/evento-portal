@@ -92,22 +92,18 @@ export function getTokenExpireIn(token: TokenPayload): number {
   return Math.max(expirationTime * 1000 - Date.now(), 0);
 }
 
+
 function parseTokenPayload(token: string): RawTokenPayload {
   const base64Url = token.split(".")[1];
-  // 1. Base64URL → Base64
-  let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  // 2. Padding add, if necessary
-  while (base64.length % 4 !== 0) {
-    base64 += "=";
-  }
-  // 3. Base64 → UTF-8 String
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
   const jsonPayload = decodeURIComponent(
-    Array.prototype.map
-      .call(window.atob(base64), (c: string) =>
-        "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2),
-      )
+    window
+      .atob(base64)
+      .split("")
+      .map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
       .join(""),
   );
-  // 4. JSON parsen
   return JSON.parse(jsonPayload);
 }
