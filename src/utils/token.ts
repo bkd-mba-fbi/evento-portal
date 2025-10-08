@@ -92,18 +92,17 @@ export function getTokenExpireIn(token: TokenPayload): number {
   return Math.max(expirationTime * 1000 - Date.now(), 0);
 }
 
-
 function parseTokenPayload(token: string): RawTokenPayload {
-  const base64Url = token.split(".")[1];
-  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  const jsonPayload = decodeURIComponent(
-    window
-      .atob(base64)
-      .split("")
-      .map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join(""),
+  const parts = token.split(".");
+  if (parts.length !== 3) {
+    throw new Error("Invalid JWT token format");
+  }
+  const payload = parts[1];
+  const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+  const decodedData = atob(base64);
+  const decoder = new TextDecoder("utf-8");
+  const decodedString = decoder.decode(
+    Uint8Array.from(decodedData, (c) => c.charCodeAt(0)),
   );
-  return JSON.parse(jsonPayload);
+  return JSON.parse(decodedString);
 }
