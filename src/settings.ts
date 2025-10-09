@@ -97,10 +97,10 @@ export const settings: Settings = {
       heading: false,
     },
     {
-      key: "anmeldedetailsEinlesen",
+      key: "schulverwaltungScopeNg",
       scope: "NG",
-      root: "apps/EmberApps/AnmeldedetailsEinlesen/index.html",
-      heading: true,
+      root: "apps/webapp-schulverwaltung/index.html",
+      heading: false,
     },
     {
       key: "schulleiterPersonen",
@@ -442,7 +442,7 @@ export const settings: Settings = {
             "RegistrationRightWeiterbildungReservation",
           ],
           deniedInstanceIds: null,
-          appKey: "schulverwaltung",
+          appKey: "schulverwaltungScopeNg",
           appPath: "#/import",
         },
       ],
