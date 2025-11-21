@@ -64,6 +64,11 @@ html,
   color: inherit !important;
 }
 
+.uk-breadcrumb > * > * 
+{
+  font-size: 0.875rem !important;
+}
+
 .uk-scope a {
   font-weight: inherit !important;
 }
