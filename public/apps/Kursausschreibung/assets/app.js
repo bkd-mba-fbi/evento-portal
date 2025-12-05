@@ -6089,7 +6089,7 @@ return c((0,o.getCorrectApiUrl)(r),n,!0)}).catch(e=>{e instanceof Error&&console
 let t=""
 try{t=e.responseJSON.Issues[0].Message}catch(r){t=window.kursausschreibung.subscriptionFilesUploadFailed=(0,s.getString)("subscriptionFilesUploadFailed")}throw{message:t}})},e.putPerson=function(e,t){return c("Persons/"+t,e)}
 let a=null
-function l(e,i,o=!0,s=null,l=!1){null===a&&(a=(0,n.getAccessToken)()),!1===l&&(s=null!==s?JSON.stringify(s,null,"\t"):void 0)
+function l(e,i,o=!0,s=null,l=!1){a=(0,n.getAccessToken)(),!1===l&&(s=null!==s?JSON.stringify(s,null,"\t"):void 0)
 let u=t.default.ajax({method:e,dataType:"json",contentType:"GET"===e?"text/javascript":!l&&"application/json",processData:!1,data:s,url:r.default.apiUrl+"/"+i,dataFilter:e=>""===e?"null":e,headers:{Authorization:`Bearer ${a}`}})
 return o&&(u=u.catch(()=>{throw new Error(`${e}-request to ${i} failed`)})),u}function u(e,t){return l("POST",e,!1,t)}function c(e,t,r=!1){return l("PUT",e,!1,t,r)}function d(e,t){return l("GET",e,t)}e.SUBSCRIPTION_DETAIL_ALLOW_MULTIPLE_PEOPLE=10893,e.SUBSCRIPTION_DETAIL_INVOICE_ADRESS=10895
 let h={}}),define("kursausschreibung/framework/app-config",["exports"],function(e){"use strict"
@@ -6458,4 +6458,4 @@ e.default=(0,t.createTemplateFactory)({id:"I4uIwhPc",block:'[[[10,"h2"],[14,1,"h
 Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
 e.default=(0,t.createTemplateFactory)({id:"rpyji6CZ",block:'[[[10,"h2"],[14,1,"headerCategory"],[12],[1,[28,[35,0],["overview"],null]],[13],[1,"\\n"],[8,[39,1],null,[["@events","@page","@queryChanged","@route"],[[30,0,["model","events"]],[30,0,["page"]],[28,[37,2],[[30,0],"queryChanged"],null],"list"]],null],[1,"\\n"]],[],false,["translate","event-list","action"]]',moduleName:"kursausschreibung/templates/list/index.hbs",isStrictMode:!1})})
 define("kursausschreibung/config/environment",[],function(){try{var e="kursausschreibung/config/environment",t=document.querySelector('meta[name="'+e+'"]').getAttribute("content"),r={default:JSON.parse(decodeURIComponent(t))}
-return Object.defineProperty(r,"__esModule",{value:!0}),r}catch(n){throw new Error('Could not read config from meta tag with name "'+e+'".')}}),runningTests||require("kursausschreibung/app").default.create({rootElement:"#kursausschreibung-root",name:"kursausschreibung",version:"3.3.4+69ff8c95"})
+return Object.defineProperty(r,"__esModule",{value:!0}),r}catch(n){throw new Error('Could not read config from meta tag with name "'+e+'".')}}),runningTests||require("kursausschreibung/app").default.create({rootElement:"#kursausschreibung-root",name:"kursausschreibung",version:"3.3.4+74527f42"})
