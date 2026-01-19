@@ -326,6 +326,10 @@ Engehaldenstrasse 12
   <source>Daten einlesen</source>
   <target state="translated">Importer des données</target>
 </trans-unit>
+<trans-unit id="s2a5cc7e40948ddad">
+  <source>Aufnahmeverfahren</source>
+  <target state="translated">Procédure d'admission</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
