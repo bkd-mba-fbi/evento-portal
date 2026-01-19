@@ -410,6 +410,19 @@ export const settings: Settings = {
           appPath: "#/persons",
         },
         {
+          key: "studyCourses",
+          get label() {
+            return msg("Aufnahmeverfahren");
+          },
+          allowedRolesOrPermissions: [
+            "RegistrationRightWeiterbildungMAS",
+            "RegistrationRightAusbildungStudiengang",
+          ],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltungScopeNg",
+          appPath: "#/events/study-courses",
+        },
+        {
           key: "import",
           get label() {
             return msg("Daten einlesen");

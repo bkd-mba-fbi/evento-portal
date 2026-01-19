@@ -1,1 +1,4 @@
 apps
+xliff
+src/locales.ts
+public/locales
