@@ -44,7 +44,7 @@
     "@lit/localize-tools": "0.8.1",
     "@trivago/prettier-plugin-sort-imports": "6.0.2",
     "@vitejs/plugin-basic-ssl": "2.1.4",
-    "cypress": "14.5.4",
+    "cypress": "15.9.0",
     "eslint": "9.39.2",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-lit-a11y": "5.1.1",
