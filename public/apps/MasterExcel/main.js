@@ -19,13 +19,21 @@ function getLanguage(){
   return X.language();
 }
 
+function absencesExists() {
+    // Element id enthält 3710 oder 3720 AdId
+    var inputElements = document.getElementsByTagName('input');
+    return Array.from(inputElements).filter(input => input.id.includes('3710') || input.id.includes('3720'));
+}
+
 
   // Funktion um Buttons einzufügen
 function insertButtonsEvaluation() {
-
-    // Element id enthält 3710 oder 3720 AdId
-    var inputElements = document.getElementsByTagName('input');
-    var appendExcelBt = Array.from(inputElements).filter(input => input.id.includes('3710') || input.id.includes('3720'));
+    
+  
+  //Falls nur ein eintrag vorhanden ist und Absenzen auch nachträglich auch dargestellt werden , soll der button neu aufgebaut werden.
+  if ( $('#overlay-toggle-embedded-test div').first().children().length === 1 && absencesExists().length > 0) {
+    $('#excel-import').empty();   
+  } 
 
     var buttons_html =
       '\
@@ -37,7 +45,7 @@ function insertButtonsEvaluation() {
 <a class="textButton" onclick="X.showOverlay(2);"> ' +
       X.strings[getLanguage()].views[2].start_button +
       " </a>" +
-      (appendExcelBt.length > 0
+      (absencesExists().length > 0
         ? '\
 <a class="textButton" onclick="X.showOverlay(3);"> ' +
           X.strings[getLanguage()].views[3].start_button +
@@ -107,7 +115,7 @@ const observer = new MutationObserver(mutationList =>
         if ($('#excel-import').length === 0) {
             return;
         } else {
-          evaluation ? insertButtonsEvaluation() : insertButtonsTest();
+            evaluation ? insertButtonsEvaluation() : insertButtonsTest();
         }
     
       },200);
