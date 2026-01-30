@@ -109,7 +109,11 @@ function postAppResize(height) {
 function getMaxPositionedBottom() {
   return positionedNodes.reduce((maxBottom, node) => {
     if (node.nodeName === "NGB-MODAL-WINDOW") {
-      return Math.max(maxBottom, document.documentElement.getElementsByClassName('modal-dialog')[0].clientHeight);
+      return Math.max(
+        maxBottom,
+        document.documentElement.getElementsByClassName("modal-dialog")[0]
+          .clientHeight,
+      );
     }
 
     const nodeBottom =
