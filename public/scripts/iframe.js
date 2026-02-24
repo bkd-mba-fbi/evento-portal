@@ -26,10 +26,15 @@ let positionedNodes = [];
  */
 const resizeObserver = new ResizeObserver((entries) => {
   for (const entry of entries) {
-    const height = entry.contentBoxSize
-      ? entry.contentBoxSize[0].blockSize
-      : entry.contentRect.height;
-    postAppResize(height);
+    let documentHeight = undefined;
+    if (entry.target === document.documentElement) {
+      // If the resized element is the document, we can get
+      // its height from the entry as an optimization
+      documentHeight = entry.contentBoxSize
+        ? entry.contentBoxSize[0].blockSize
+        : entry.contentRect.height;
+    }
+    postAppResize(documentHeight);
   }
 });
 
@@ -44,8 +49,24 @@ const mutationObserver = new MutationObserver((mutations) => {
     mutation.addedNodes.forEach((node) => {
       if (isAbsolutePositioned(node)) {
         positionedNodes.push(node);
-
         postAppResize();
+
+        // We are observing the main element and its decendents for
+        // size changes, but unfortunately that does not include size
+        // changes of positioned elements. So start observing the
+        // newly added positioned element for size changes here as
+        // well.
+        if (
+          node.nodeName === "NGB-MODAL-WINDOW" &&
+          node instanceof HTMLElement
+        ) {
+          const modalDialog = node.querySelector(".modal-dialog");
+          if (modalDialog) {
+            resizeObserver.observe(modalDialog);
+          }
+        } else if (node instanceof HTMLElement) {
+          resizeObserver.observe(node);
+        }
       }
     });
 
@@ -54,6 +75,18 @@ const mutationObserver = new MutationObserver((mutations) => {
       if (index >= 0) {
         positionedNodes.splice(index, 1);
         postAppResize();
+
+        if (
+          node.nodeName === "NGB-MODAL-WINDOW" &&
+          node instanceof HTMLElement
+        ) {
+          const modalDialog = node.querySelector(".modal-dialog");
+          if (modalDialog) {
+            resizeObserver.unobserve(modalDialog);
+          }
+        } else if (node instanceof HTMLElement) {
+          resizeObserver.unobserve(node);
+        }
       }
     });
   });
@@ -85,12 +118,12 @@ function isAbsolutePositioned(node) {
  * to the body height, or to the lowest bottom of any absolute
  * positioned element.
  *
- * @param {number=} height
+ * @param {number=} documentHeight
  * @returns {void}
  */
-function postAppResize(height) {
+function postAppResize(documentHeight) {
   const viewportHeight =
-    height ?? document.documentElement.getBoundingClientRect().height;
+    documentHeight ?? document.documentElement.getBoundingClientRect().height;
   const maxBottom = getMaxPositionedBottom();
 
   const tolerance = 10; // Add some tolerance to show complete content of iframe and prevent scrollbar
@@ -108,20 +141,34 @@ function postAppResize(height) {
  */
 function getMaxPositionedBottom() {
   return positionedNodes.reduce((maxBottom, node) => {
+    if (node.nodeName === "NGB-MODAL-BACKDROP") return maxBottom; // Ignore backdrop, we calculate size from modal window
+
+    let relevantNode = node;
     if (node.nodeName === "NGB-MODAL-WINDOW") {
-      return Math.max(
-        maxBottom,
-        document.documentElement.getElementsByClassName("modal-dialog")[0]
-          .clientHeight,
-      );
+      relevantNode =
+        document.documentElement.getElementsByClassName("modal-dialog")[0];
     }
 
-    const nodeBottom =
-      node instanceof HTMLElement
-        ? window.scrollY + node.getBoundingClientRect().top + node.clientHeight
-        : 0;
-    return Math.max(maxBottom, nodeBottom);
+    return Math.max(maxBottom, getNodeBottom(relevantNode));
   }, 0);
+}
+
+/**
+ * @param {Node} node
+ * @returns {number}
+ */
+function getNodeBottom(node) {
+  if (!(node instanceof HTMLElement)) return 0;
+
+  const rect = node.getBoundingClientRect();
+  const computedStyles = window.getComputedStyle(node);
+  const marginBottom = Number(computedStyles.marginBottom.replace("px", ""));
+  return (
+    window.scrollY +
+    rect.top + // `top` already includes the top margin
+    rect.height +
+    marginBottom
+  );
 }
 
 window.addEventListener("load", () => {
