@@ -1,0 +1,106 @@
+﻿<div id="ovlSubscriptionInput" class="overlayDialog flexDialog">
+    <div class="flexDialogHeader dialogHeader">
+        <div class="dialogIcon"></div>
+        <h2 class="dialogTitle">{{translate 'subscribingTo'}} {{model.EventDesignation}}</h2>
+        <div class="buttonContainer">
+            {{#if model.Subscription.EventInformation}}
+            {{tooltip-button text=model.Subscription.EventInformation abosolutePosition=true right=true maxWidth=600 isHtml=true showPopupOnRender=(sessionStore 'isNewSubscription' true)}}
+            {{/if}}
+        </div>
+    </div>
+    <div class="flexDialogNeck">
+        {{work-progress workProgresses=model.WorkProgresses isInput=showInputButton}}
+    </div>
+    <div class="flexDialogBody">
+        <div class="dialogInfo">
+            {{#if model.SelectedWorkProgress.Info}}
+            <p>
+                {{{model.SelectedWorkProgress.Info}}}
+            </p>
+            {{/if}}
+            {{#if hasContent}}
+            {{#if model.SelectedWorkProgress.InfoContent}}
+            <p>
+                {{{model.SelectedWorkProgress.InfoContent}}}
+            </p>
+            {{/if}}
+            {{else}}
+            {{#if model.SelectedWorkProgress.InfoNoContent}}
+            <p>
+                {{{model.SelectedWorkProgress.InfoNoContent}}}
+            </p>
+            {{/if}}
+            {{/if}}
+        </div>
+        <div>
+            {{#each sdGroup in subscriptionDetailGroups}}
+            {{subscription-detail-group group=sdGroup allSDs=model.SubscriptionDetails setReadOnly=false dependencies=model.SubscriptionDetailDependencies isExpanded=areExpanded onValidateAll='onGroupValidated' onDisable='groupDisabled' disabled=allDisabled isPast=model.SelectedWorkProgress.IsPast}}
+            {{/each}}
+            {{#if model.SelectedWorkProgress.IsSubsequentFiling}}
+            {{#each sdGroup in subsequentSDs}}
+            {{subscription-detail-group group=sdGroup allSDs=model.SubscriptionDetails setReadOnly=false dependencies=model.SubscriptionDetailDependencies isExpanded=areExpanded onValidateAll='onGroupValidated' onDisable='groupDisabled' disabled=allDisabled isPast=model.SelectedWorkProgress.IsPast}}
+            {{/each}}
+            {{/if}}
+            {{#if model.SelectedWorkProgress.IsPayment}}
+                {{show-payment subscriptionPayment=model.SubscriptionPayment doPayment='doPayment' payInvoice='payInvoice' isWorking=isWorking}}
+            {{/if}}
+
+            {{#if model.SelectedWorkProgress.IsEligibilityTest}}
+
+            {{#each subscription in model.EligibilitySubscriptions}}
+
+            <div style="font-weight: bold;" class="treeViewNode treeViewSubNode textIcon" data-ember-action="1228">
+                {{subscription.Subscription.EventDesignation}} ({{subscription.Subscription.StatusNameInternet}})
+            </div>
+            
+            {{#if subscription.Subscription.EventNotes}}
+            <div class="formRow treeViewNode">{{{subscription.Subscription.EventNotes}}}</div>
+            {{/if}}
+            
+            <div class="row">
+                <div class="col8">
+                    {{#each subscriptionDetail in subscription.SubscriptionDetails}}
+                    {{#if subscriptionDetail.Value}}
+                    <div class="formRow treeViewNode">
+                        {{subscription-detail model=subscriptionDetail value=subscriptionDetail.Value setReadOnly=true}}
+                    </div>
+                    {{/if}}
+                    {{/each}}
+                </div>
+                <div class="col4">
+                    {{show-payment subscriptionPayment=subscription.SubscriptionPayment doPayment='doPayment' payInvoice='payInvoice' isWorking=isWorking}}
+                </div>
+            </div>
+            {{/each}}
+            {{/if}}
+        </div>
+    </div>
+    <div class="flexDialogFooter dialogFooter">
+        {{#unless dialogDisabled}}
+        {{#if showInputButton}}
+        {{#if invalidated}}
+        <span class="validationErrorMessage">{{validationMessage}}</span>
+        {{/if}}
+        <div class="buttonContainer">
+            {{#if invalidated}}
+            <button id="btnNext" type="button" class="textButton error" disabled="disabled">
+                {{icon 'error'}}
+                <div>{{finalizeInputText}}</div>
+            </button>
+            {{else}}
+            <button id="btnNext" type="button" class="textButton" {{action 'forwardStatus'}}>
+                {{#if isProcessing}}
+                {{icon 'loadingAnimation'}}
+                {{else}}
+                {{icon 'continue'}}
+                {{/if}}
+                <div>{{finalizeInputText}}</div>
+            </button>
+            {{/if}}
+        </div>
+        {{/if}}
+        {{/unless}}
+    </div>
+</div>
+
+{{outlet}}

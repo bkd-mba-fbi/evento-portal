@@ -1,0 +1,78 @@
+﻿<div class="dialog">
+    
+    <div class="dialogBody statistics">
+        <table class="dialogInfoTable">
+            <tr>
+                <td class="dialogMainInfo">{{model.Event.Designation}}</td> 
+                <td>
+                    <div class="buttonContainer">
+                        {{#if showReportButton}}
+                        {{crystal-report-chooser context='Anlass' keys=model.Event.Id}}
+                        {{/if}}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>{{subscriptionCount}} {{translate 'subscriptions'}}</td>
+            </tr>
+        </table>
+         
+        <div>
+            <!-- to calculate invalidated rows we need to run this-->
+            {{#each model.GradingItems as |item|}}
+            <span style="display:none">
+                {{grading-item allSubscriptionDetails=model.SubscriptionDetails model=item scale=model.Event.Scale isReadOnly=true validated='gradingItemValidated' hideControlColumns=true}}
+            </span> 
+            {{/each}}
+        </div>
+        
+
+        {{#if model.hasNothingToShow}}
+        <div class="validationErrorMessage">
+            {{translate 'gradingNothingToShow'}}
+        </div> 
+        {{/if}}
+
+        <div class="row">
+            <div class="col6">
+                <table>
+                    <tr><td>{{translate 'average'}}</td><td>{{averageGrade}}</td></tr>
+                    <tr><td>{{translate 'standardDeviation'}}</td><td>{{standardDeviation}}</td></tr>
+                    <tr><td>{{translate 'numberOfGrades'}}</td><td>{{gradeCount}}</td></tr>
+                    <tr><td>{{translate 'bestGrade'}}</td><td>{{bestGrade}}</td></tr>
+                    <tr><td>{{translate 'worstGrade'}}</td><td>{{worstGrade}}</td></tr>
+                    <tr><td>{{translate 'unsufficient'}}</td><td>{{unsufficientCount}}</td></tr>
+                </table>
+            </div>
+            <div class="col6 graph-info">
+                <div id="flot-legend" class="flotLegend"></div>
+                <div class="not-mobile">
+                    {{flot-graphic series=flotSeries id="graphicNotForMobile" clickable=true ticks=flotTicks legendSelector='#flot-legend' xAxisLabel=(translate 'grade') yAxisLabel=(translate 'count')}}
+                </div>
+                <div class="mobile">
+                    {{flot-graphic series=flotSeries id="graphicForMobile" clickable=false ticks=flotTicks legendSelector='#flot-legend' xAxisLabel=(translate 'grade') yAxisLabel=(translate 'count')}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dialogFooter">
+        {{#if showValidationMessage}}
+            <div class="footerValidation dialogContextMenu">{{validationMessage}}</div>
+        {{/if}}
+        {{#if canProceed}}
+        <div class="buttonDiv">
+            <button type="button" class="textButton" {{action 'finish'}}>
+                <span class="material-icons">arrow_right_alt</span>
+                <div>{{finishButtonText}}</div>
+            </button>
+        </div>
+        {{/if}}
+        <div class="buttonDiv">
+            <button type="button" class="textButton" {{action 'back'}}>
+                <span class="material-icons reverse">arrow_right_alt</span>
+                <div>{{translate 'backToGrading'}}</div>
+            </button>
+        </div>
+    </div>
+</div>

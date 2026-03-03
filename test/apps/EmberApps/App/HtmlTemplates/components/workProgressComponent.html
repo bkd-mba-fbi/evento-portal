@@ -1,0 +1,68 @@
+﻿{{#each progresses as |progress|}}
+<div class="workProgress{{if progress.IsCurrent ' currentWorkProgress'}}{{if progress.IsAdjacent ' adjacentWorkProgress'}}">
+    <div class="workProgressStage stage{{progress.StageDistance}}{{if progress.IsFirstOfStage ' firstOfStage'}}{{if progress.IsLastOfStage ' lastOfStage'}}">
+        <div class="stageName" title="{{progress.Stage}}">
+            {{progress.Stage}}
+        </div>
+        {{#if progress.IsLastOfStage}}
+        <div class="workProgressTip">&nbsp;</div>
+        {{/if}}
+    </div>
+    {{#if progress.IsValid}}
+    <div class="workProgressLine valid" title="{{progress.Name}}">
+        <svg height="14px" width="14px" version="1.1">
+            <circle cx="7" stroke="#666" cy="7" r="6" stroke-width="2" fill="#f0f0f0"></circle>
+        </svg>
+    </div>
+    {{else if progress.IsLast}}
+        {{#if progress.IsSelected}}
+            {{#if isInput}}
+            <div class="workProgressLine" title="{{progress.Name}}">
+                <svg height="14px" width="14px" version="1.1">
+                    <circle cx="7" stroke="#666" cy="7" r="6" stroke-width="2" fill="#f0f0f0"></circle>
+                </svg>
+            </div>
+            {{else}}
+            <div class="workProgressLine valid" title="{{progress.Name}}">
+                <svg height="14px" width="14px" version="1.1">
+                    <circle cx="7" stroke="#666" cy="7" r="6" stroke-width="2" fill="#f0f0f0"></circle>
+                </svg>
+            </div>
+            {{/if}}
+        {{else}}
+        <div class="workProgressLine" title="{{progress.Name}}">
+            <svg height="14px" width="14px" version="1.1">
+                <circle cx="7" stroke="#666" cy="7" r="6" stroke-width="2" fill="#f0f0f0"></circle>
+            </svg>
+        </div>
+        {{/if}}
+    {{else if progress.IsSubsequent}}
+    <div class="workProgressLine subsequent" title="{{progress.Name}}">
+        <svg height="14px" width="14px" version="1.1">
+            <circle cx="7" stroke="#666" cy="7" r="6" stroke-width="2" fill="#f0f0f0"></circle>
+        </svg>
+    </div>
+    {{else if progress.IsError}}
+    <div class="workProgressLine error" title="{{progress.Name}}">
+        <svg height="14px" width="14px" version="1.1">
+            <circle cx="7" stroke="#666" cy="7" r="6" stroke-width="2" fill="#f0f0f0"></circle>
+        </svg>
+    </div>
+    {{else}}
+    <div class="workProgressLine" title="{{progress.Name}}">
+        <svg height="14px" width="14px" version="1.1">
+            <circle cx="7" stroke="#666" cy="7" r="6" stroke-width="2" fill="#f0f0f0"></circle>
+        </svg>
+    </div>
+    {{/if}}
+    <div class="workProgressLabel{{if progress.IsValid ' valid'}}{{if progress.IsError ' error'}}{{if progress.IsSubsequent ' subsequent'}}" title="{{progress.Name}}">
+        {{#if progress.IsPast}}
+        {{#link-to 'subscriptionInput' progress.Id}}{{progress.Name}}{{/link-to}}
+        {{else if progress.IsCurrent}}
+        {{#link-to 'subscriptionInput' progress.Id}}{{progress.Name}}{{/link-to}}
+        {{else}}
+        <div>{{progress.Name}}</div>
+        {{/if}}
+    </div>
+</div>
+{{/each}}
