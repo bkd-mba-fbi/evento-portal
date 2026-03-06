@@ -1,0 +1,463 @@
+﻿@import "_vars.scss";
+@import "_mixins.scss";
+
+.mobile {
+    display: none;
+}
+
+.not-mobile {
+    display: block;
+}
+
+td.not-mobile {
+    display: table-cell;
+}
+
+.hidden {
+    display: none;
+}
+
+.shown {
+    display: initial !important;
+}
+
+.settings-overlay.gradesActionPrompt {
+    .dialogDraggable {
+        min-height: initial !important;
+        min-width: initial !important;
+        width: 34rem !important;
+        height: auto !important;
+        left: calc(45% - 15rem) !important;
+        top: calc(30%) !important;
+
+        .dialog {
+            left: initial !important;
+            top: initial !important;
+            min-width: initial !important;
+            min-height: auto !important;
+        }
+
+        .modal_container {
+            .content_body {
+                padding: 2rem;
+                padding-bottom: 1rem;
+            }
+        }
+    }
+}
+
+.dialogDraggable {
+    .modal_container {
+        > div {
+            > .buttons {
+                padding: 2rem;
+                float: right;
+            }
+        }
+
+        > .default_notes {
+            > .buttons {
+                padding-top: initial;
+            }
+        }
+    }
+}
+        
+// big screen
+@media only screen and (min-width:$breakpointMobileWidth) {
+    .grading-options {
+        > div {
+            position: absolute;
+            right: $dialogPadding;
+            margin-top: -4*$dialogPadding;
+        }
+
+        .more-menus {
+            right: 2*$dialogPadding + 2 * $smallButtonSize;
+        }
+    }
+
+    .divWrapper {
+        display: flex;
+        width: 100%;
+    }
+
+    .infoTable {
+        margin-right: 4 * $dialogVerticalMargin;
+    }
+
+    .flotLegend {
+        margin-left: $flotMargin;
+    }
+
+    #CLX_Root .not-mobile.gradesActionButtons {
+        display: block;
+        float: none;
+        padding-right: 0;
+        position: inherit;
+        line-height: 0;
+        margin: 0.4rem 0 0.4rem 0;
+    }
+}
+
+// Small Screen
+@media only screen and (max-device-width: $breakpointSmallWidth) and (min-device-width: $breakpointMobileWidth), only screen and (max-width: $breakpointSmallWidth) and (min-width: $breakpointMobileWidth) {
+
+    div.col12, div.col6, div.col5, div.col4, div.col3, div.col2 {
+        width: 100%;
+    }
+
+    .dialogDraggable, .dialog, .flexDialog {
+        width: 100% !important;
+        height: 100% !important;
+        left: 0 !important;
+        top: 0 !important;
+        min-width: 0;
+        min-height: 0;
+    }
+
+    .dialogFooter {
+        border-top: none;
+    }
+
+    #ovlPersonalDataSheetEdit .dialogBody {
+        overflow: hidden;
+        white-space: nowrap;
+
+        > div {
+            white-space: normal;
+        }
+    }
+
+    .personalDataSheetColumn {
+        width: 100%;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+        border: none !important;
+        background-color: $windowColor !important;
+        @include pre(transition, all $baseTransitionTime ease-out);
+
+        &:last-child.active {
+            margin-left: 0;
+        }
+
+        &:last-child.inactive {
+            margin-left: 100%;
+
+            > button {
+                display: none !important;
+            }
+        }
+
+        &:first-child.active {
+            margin-left: 0;
+        }
+
+        &:first-child.inactive {
+            margin-left: -100%;
+        }
+    }
+
+    #pnlInfos {
+        margin-top: 2*$dialogPadding;
+
+        > button {
+            display: block;
+            position: absolute;
+            right: 4*$dialogPadding;
+            margin-top: - 2*$dialogPadding;
+        }
+    }
+
+    .dialog {
+        width: 100%;
+        min-width: 0;
+    }
+
+    #CLX_Root table {   
+        td, th {
+            &:nth-child(3) {
+                max-width: 20rem;
+            }
+        }
+    }
+
+}
+
+// Mobile Screen
+@media only screen and (max-width:$breakpointMobileWidth), only screen and (max-device-width:$breakpointMobileWidth) {
+
+    #CLX_Root {
+
+        .content {
+            width: 100%;
+        }
+
+        .topic-title span {
+            margin-left: 0.6rem;
+        }
+
+        .ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            @include pre(text-overflow, ellipsis);
+        }
+
+        .mobile {
+            display: block;
+        }
+
+        td.mobile {
+            display: table-cell;
+        }
+
+        .not-mobile {
+            display: none;
+        }
+
+        td.not-mobile {
+            display: none;
+        }
+
+        .hide-on-mobile {
+            display: none;
+        }
+
+        .option-button {
+            height: 2.6rem;
+            width: auto;
+            border: 2px solid $mediumBlue;
+            padding: 0 5px 0 5px;
+            margin: 6px 4px 0px 0px;
+
+            &.active {
+                background: $mediumBlue;
+                color: $windowColor;
+            }
+        }
+
+        .subscriptionDetail {
+            .blendElement {
+                > div, > input {
+                    clear: left;
+                    width: 100%;
+                }
+            }
+        }
+
+        .small-popup {
+            height: auto !important;
+            min-height: 10rem;
+            width: 80% !important;
+            min-width: 10rem;
+            left: 10% !important;
+            top: calc(50% - 20rem);
+        }
+
+        .dialog {
+            width: 100%;
+            min-width: 0;
+
+            .dialogInfoTable:nth-child(2) {
+                display: none;
+            }
+
+            .dialogBlockFixed.dialogToolbar {
+                display: none;
+            }
+        }
+
+        .noFixedHeader {
+            margin: -40px 0 0 0;
+        }
+
+        .dialogAccordionTable.editTable {
+            td, th {
+                &.hide-column {
+                    display: none;
+                }
+            }
+
+            td, th {
+                &:nth-child(3) {
+                    max-width: 18rem;
+                }
+            }
+
+            .dialogFooter {
+                border-top: 1px solid #dddddd;
+                background: #ffffff;
+                min-height: 4rem;
+                line-height: 4rem;
+                display: flex;
+                justify-content: right;
+                align-items: center;
+                width: calc(100% - 3.6rem );
+
+                .dialogIcon, .auto-save-hint {
+                    display: none;
+                }
+
+                .buttonDiv {
+                    .textButton {
+                        margin-top: 0px;
+                        display: flex;
+                        align-items: center;
+
+                        div {
+                            margin-left: 0px;
+                            font-weight: 300;
+                        }
+
+                        div:hover, span:hover {
+                            color: $selectedColor;
+                        }
+                    }
+
+                    div:hover, span:hover {
+                        color: $selectedColor;
+                    }
+                }
+            }
+
+            .dialogBody.statistics {
+                font-weight: 300;
+
+                .dialogInfoTable {
+                    width: 100%;
+                }
+
+                .ellipsisTable {
+                    display: none;
+                }
+
+                .row {
+                    border-top: 1px solid #dddddd;
+
+                    .graph-info {
+                        margin-top: 0px;
+                        padding: 20px 32px;
+                        border-top: 1px solid #dddddd;
+                    }
+                }
+            }
+
+            .dialogFooter {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-between;
+                padding: 5px 5px;
+                align-items: center;
+                width: calc(100% - 2rem );
+
+                .footerValidation {
+                    width: 32rem !important;
+                }
+
+                .buttonDiv {
+                    display: flex;
+                    justify-content: space-between;
+
+                    div {
+                        margin-left: 5px;
+                    }
+                }
+            }
+        }
+
+        .settings-overlay {
+            display: flex;
+
+            .modal_container {
+                background: #ffffff;
+
+                .default_notes, .delete_notes {
+                    display: flex;
+                    flex-direction: column;
+
+                    &.hide {
+                        display: none;
+                    }
+
+                    &.show {
+                        display: flex;
+                    }
+
+                    .content_body {
+                        flex: 3;
+                        margin: 20px 20px;
+                    }
+
+                    .buttons {
+                        display: flex;
+                        justify-content: end;
+                        flex: 1;
+
+                        button {
+                            margin: 0 8px 16px 8px;
+                        }
+                    }
+                }
+
+                .delete_notes {
+                    &.show {
+                        padding: 1.8rem 1.8rem 0;
+                    }
+                }
+            }
+
+            .dialogDraggable {
+                @extend .small-popup;
+            }
+
+            .dialog {
+                min-height: 10rem;
+            }
+
+            &.show {
+                display: flex !important;
+            }
+
+            &.hide {
+                display: none !important;
+            }
+        }
+
+        .course-list__header {
+            display: none !important;
+        }
+
+        .course-list__item {
+            display: flex !important;
+            flex-direction: column !important;
+            line-height: 2.2rem !important;
+            margin-bottom: 20px;
+            border-bottom: none !important;
+
+            .list__item-label--display {
+                display: inline !important;
+            }
+        }
+
+        .grading-options {
+            .table-options__buttons {
+                float: left;
+                width: 95%;
+            }
+
+            .more-menus {
+                float: right;
+                width: 5%;
+                margin-top: 5px;
+            }
+        }
+    }
+
+    .flotLegend {
+        margin-top: 5 * $flotMargin;
+    }
+
+    .mobileFlot {
+        margin-left: 19px;
+    }
+}

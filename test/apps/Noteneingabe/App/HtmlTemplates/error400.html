@@ -1,0 +1,11 @@
+﻿<div class="errorContainer">
+    {{icon 'error400'}}
+    <h2>Bad Request</h2>
+    <div>{{translate 'errorSorryMessage'}}</div>
+    <div class="urlDiv">{{model.url}}</div>
+    
+    {{#if model.message}}
+    <code class="dialogInfo">{{nl2br model.message}}</code>
+    {{/if}}
+
+</div>
