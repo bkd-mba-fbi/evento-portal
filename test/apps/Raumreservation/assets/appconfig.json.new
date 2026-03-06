@@ -1,0 +1,46 @@
+{
+  "tokenType": "urn:ietf:params:oauth:token-type:jwt-bearer",
+  "webBaseUrl": "https://[rooms.example.com]/",
+  "apiUrl": "https://[rooms.example.com]/CLX.Evento/api",
+  "oauthUrl": "https://[rooms.example.com]/",
+  "clientId": "CLX.Evento.Public.FHLine.Rooms",
+  "instanceId": 0,
+  "appScope": "NG",
+  "useAutoLogin": true,
+  "useLanguageDetection": true,
+  "debug": false,
+  "availableLanguages": [
+    "de-CH",
+    "en-US"
+  ],
+  "copyright": "EFHG Evento Fachhochschulgremium",
+  "qrCodeBaseUrl": "https://[rooms.example.com]/",
+  "showRoomReservation": true,
+  "showDeviceReservation": true,
+  "ShowAvailableRoomsChecked": false,
+  "DefaultTimePeriod": 60,
+  "DefaultTimeFragmentation": 15,
+  "AllowFurtherEvents": true,
+  "RoomColumns": [
+    {
+      "Column": "Room",
+      "Size": 1
+    },
+    {
+      "Column": "RoomType",
+      "Size": 1
+    },
+    {
+      "Column": "Building",
+      "Size": 0
+    },
+    {
+      "Column": "Floor",
+      "Size": 0
+    },
+    {
+      "Column": "NumberPersons",
+      "Size": 0
+    }
+  ]
+}
