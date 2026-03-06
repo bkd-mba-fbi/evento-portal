@@ -1,0 +1,20 @@
+﻿{{#detail-dialog dataClassId=model.DataClassId dataKey=model.DataKey searchListSelector='#divSearch' title=model.Title subTitle=model.DataTypeCaption hideFooter=true closeDialog='closeRoute' resize='dialogResize' transitionTab='transitionTab' addPDFButton=true back='dialogBack'}}
+    <div class="tabBar">
+        <div class="dialogTabs">
+            {{#each model.Items as |item|}}
+                {{dialog-tab model=item}}
+            {{/each}}
+        </div>
+        <div class="{{quickTabsChoiceClassName}}" {{action 'toggleQuickTabs'}}>{{{dropdownIcon}}}</div>
+        {{#if isQuickTabsExpanded}}
+        <div class="dialogQuickTabs dialogContextMenu" style="z-index: 1;">
+            {{#each model.Items as |item|}}
+                {{dialog-tab model=item isQuickTab=true action="closeQuickTabs"}}
+            {{/each}}
+        </div>
+        {{/if}}
+    </div>
+    <div class="dialogBody">
+        {{outlet}}
+    </div>
+{{/detail-dialog}}
