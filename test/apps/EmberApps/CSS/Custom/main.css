@@ -1,0 +1,9 @@
+/* Overwirte css CLX*/
+
+
+
+
+.dialogHeader, .dialogFooter, .dialogToolbar  {
+  background-color: inherit;
+}
+
