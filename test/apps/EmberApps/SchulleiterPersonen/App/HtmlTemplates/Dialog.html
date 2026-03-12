@@ -1,0 +1,16 @@
+﻿{{#if hasFields}}
+<div class="fieldDialog">
+    {{#each model.Fields as |field|}}
+        {{dialog-field model=field openDialog='openDialog'}}
+    {{/each}}
+</div>
+{{/if}}
+{{#if hasHierarchy}}
+{{log model.HierarchyList}}
+{{#each model.HierarchyList as |hierarchyNode|}}
+    {{hierarchy-node node=hierarchyNode}}
+{{/each}}
+{{/if}}
+{{#if hasList}}
+{{evento-search class="dialogList" dataClassId=model.ListDefinition.DataClassId searchDefinition=model.ListDefinition showToolbar=false data=model.List pkColumns=model.ListPkColumns fixHeightTo='.dialogBody > .ember-view' rowChosen='openDialog'}}
+{{/if}}

@@ -1,0 +1,29 @@
+﻿<div class="courses">
+    {{#if hasItems }}
+        <div class="courses__available">
+            <div class="title">{{translate 'zuBenotendeAnlasse'}}:</div>
+            <div class="course-list">
+                <ul class="course-list__container">
+                    <li class="course-list__header">
+                        <div class="header__description">{{translate 'bezeichnung'}}</div>
+                        <div class="header__number">{{translate 'nr'}}</div>
+                        <div class="header__joiner">{{translate 'teiln'}}</div>
+                        <div class="header__appointment">{{translate 'termin'}}</div>
+                    </li>
+                    {{#each events as |item|}}
+                        <li class="course-list__item">
+                            <div class="item__description" {{action 'seeDetails' item}}>{{item.Designation}}</div>
+                            <div class="item__number">{{item.Number}}</div>
+                            <div class="item__joiner">{{item.StudentCount}} <span class="list__item-label--display">{{translate 'subscriptions'}}</span></div>
+                            <div class="item__appointment"><span class="list__item-label--display">{{translate 'termin'}}:</span> {{item.StatusDate}}</div>
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    {{else}}
+        <div class="courses__not-available">
+            {{translate 'keineBenotendeAnlasse'}}  
+        </div>
+    {{/if}} 
+</div>
