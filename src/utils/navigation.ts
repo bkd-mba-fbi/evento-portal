@@ -22,9 +22,8 @@ export function getNavigationItem(
   navigation: Navigation,
   itemKey: string,
 ): { item: NavigationItem; group: NavigationGroup | null } {
-  const navigationItem = findNavigationItem(
-    navigation,
-    ({ key }) => key === itemKey,
+  const navigationItem = collectNavigationItems(navigation).find(
+    ({ item }) => item.key === itemKey,
   );
   return navigationItem
     ? navigationItem
@@ -38,27 +37,52 @@ export function getNavigationItemByAppPath(
   navigation: Navigation,
   appPath: string,
 ): { item: NavigationItem | null; group: NavigationGroup | null } | null {
-  return findNavigationItem(
-    navigation,
-    (item) => item.appPath !== "#/" && appPath.startsWith(item.appPath),
+  // Make sure we search the items by descending appPath length, to
+  // match the more specific items first. I.e. if we are looking for
+  // the /events/study-courses/something path, we don't want the /events
+  // item to match first, instead we want to find the
+  // /events/study-courses item.
+  const navigationItems = sortNavigationItemsByAppPathLengthDesc(
+    collectNavigationItems(navigation),
+  );
+  return (
+    navigationItems.find(
+      ({ item }) => item.appPath !== "#/" && appPath.startsWith(item.appPath),
+    ) ?? null
   );
 }
 
-function findNavigationItem(
-  navigation: Navigation,
-  callback: (item: NavigationItem) => boolean,
-): { item: NavigationItem; group: NavigationGroup | null } | null {
+function collectNavigationItems(navigation: Navigation): ReadonlyArray<{
+  item: NavigationItem;
+  group: NavigationGroup | null;
+}> {
   // Although it is not "pure", we reference the `ungroupedNavigationItems` here
   // directly, because they are not filtered based on the permissions
-  let item = ungroupedNavigationItems.find((item) => callback(item));
-  if (item) return { item, group: null };
+  return [
+    ...ungroupedNavigationItems.map((item) => ({ item, group: null })),
+    ...navigation.flatMap((group) =>
+      group.items.map((item) => ({ item, group })),
+    ),
+  ];
+}
 
-  for (const group of navigation) {
-    item = group.items.find((item) => callback(item));
-    if (item) return { item, group };
-  }
-
-  return null;
+function sortNavigationItemsByAppPathLengthDesc(
+  items: ReadonlyArray<{
+    item: NavigationItem;
+    group: NavigationGroup | null;
+  }>,
+): ReadonlyArray<{
+  item: NavigationItem;
+  group: NavigationGroup | null;
+}> {
+  return [...items].sort((a, b) => {
+    const aPath = a.item.appPath;
+    const bPath = b.item.appPath;
+    if (aPath.length === bPath.length) {
+      return aPath.localeCompare(bPath);
+    }
+    return bPath.length - aPath.length;
+  });
 }
 
 export function getApp(item: NavigationItem): App {
