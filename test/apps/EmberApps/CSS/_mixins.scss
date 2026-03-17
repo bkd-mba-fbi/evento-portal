@@ -1,0 +1,74 @@
+﻿@import "_vars.scss";
+
+// Prefixer
+// Appends all common prefixes
+@mixin pre( $key, $values ) {
+    -webkit-#{$key}: $values;
+    -khtml-#{$key}: $values;
+    -moz-#{$key}: $values;
+    -ms-#{$key}: $values;
+    #{$key}: $values; 
+}
+
+@mixin gradientTop($fallbackColor, $color1, $color2, $color3) {
+    background-color: $fallbackColor; /* fallback color */
+    @if $color3 == null {
+        background-image: -webkit-gradient(linear, left top, left bottom, from($color1), to($color2)); // Chrome, Safari 4+
+        background-image: -webkit-linear-gradient(top, $color1, $color2);       // Chrome 10-25, iOS 5+, Safari 5.1+
+        background-image:    -moz-linear-gradient(top, $color1, $color2);       // Firefox 3.6-15
+        background-image:      -o-linear-gradient(top, $color1, $color2);       // Opera 11.10-12.00
+        background-image:         linear-gradient(to bottom, $color1, $color2); // Chrome 26, Firefox 16+, IE 10+, Opera 12.10+
+    }
+    @else {
+        background-image: -webkit-gradient(linear, left top, left bottom, from($color1), to($color3)); // Chrome, Safari 4+
+        background-image: -webkit-linear-gradient(top, $color1, $color2, $color3);       // Chrome 10-25, iOS 5+, Safari 5.1+
+        background-image:    -moz-linear-gradient(top, $color1, $color2, $color3);       // Firefox 3.6-15
+        background-image:      -o-linear-gradient(top, $color1, $color2, $color3);       // Opera 11.10-12.00
+        background-image:         linear-gradient(to bottom, $color1, $color2, $color3); // Chrome 26, Firefox 16+, IE 10+, Opera 12.10+
+    }
+}
+
+@mixin boxShadow($fallbackColor, $shadowColor, $h, $v, $blur){
+    $fallbackColor: $fallbackShadow !default;
+    $shadowColor: $defaultShadow !default;
+    $h: 0 !default;
+    $v: 1px !default;
+    $blur: 4px !default;
+    -webkit-box-shadow: $h $v $blur $fallbackColor; /* fallback color */
+    -webkit-box-shadow: $h $v $blur $shadowColor; /* Android 2.3+, iOS 4.0.2-4.2, Safari 3-4 */
+            box-shadow: $h $v $blur $fallbackColor; /* fallback color */
+            box-shadow: $h $v $blur $shadowColor; /* Chrome 6+, Firefox 4+, IE 9+, iOS 5+, Opera 10.50+ */
+}
+
+@mixin displayFlex(){
+    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;      /* TWEENER - IE 10 */
+    display: -webkit-flex;     /* NEW - Chrome */
+    display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
+}
+
+@mixin flex($grow, $shrink, $height){
+    -webkit-box-flex: $grow $shrink $height;      /* OLD - iOS 6-, Safari 3.1-6 */
+    -moz-box-flex: $grow $shrink $height;         /* OLD - Firefox 19- */
+    //width: 20%;               /* For old syntax, otherwise collapses. */
+    -webkit-flex: $grow $shrink $height;          /* Chrome */
+    -ms-flex: $grow $shrink $height;              /* IE 10 */
+    flex: $grow $shrink $height;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+}
+
+@mixin flexDirection($direction) {
+    -webkit-flex-direction: $direction;
+    -ms-flex-direction: $direction;
+    flex-direction: $direction;
+}
+
+@mixin fillHeightNavigation($min, $max) {
+    @for $i from $min through $max {
+        $childNumber: $i * 2 - 1;
+        &:nth-last-child(#{$childNumber}),
+        &:nth-last-child(#{$childNumber}) ~ & {
+            max-height: calc(100% - #{$i * $tabHeight});
+        }
+    }
+}
