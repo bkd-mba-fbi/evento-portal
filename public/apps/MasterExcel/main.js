@@ -107,18 +107,42 @@ setTimeout(function(){
  },3000);
 
 
-const observer = new MutationObserver(mutationList =>  
-  mutationList.filter(m => m.type === 'childList').forEach(m => {    
-            setTimeout(function(){
-              const evaluation = location.hash.search("/evaluation") >= 0 ? true : false;
-        // Buttons nicht einfügen, wenn folgendese element nicht vorhanden ist.
-        if ($('#excel-import').length === 0) {
-            return;
-        } else {
-            evaluation ? insertButtonsEvaluation() : insertButtonsTest();
-        }
-    
-      },200);
- 
-  }));  
-observer.observe(window.document,{childList: true, subtree: true});  
+let scheduled = false;
+
+const observer = new MutationObserver(mutations => {
+  // Schnell abbrechen, wenn kein relevantes <i> betroffen ist
+  const hasIChange = mutations.some(m => {
+    if (m.type !== 'childList') return false;
+
+    for (const node of m.addedNodes) {
+      if (node.nodeType !== 1) continue;
+
+      // Direktes <i> oder enthält <i>
+      if (
+        node.tagName === 'I' ||
+        (node.querySelector && node.querySelector('i'))
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  });
+
+  if (!hasIChange) return;
+
+  // Debounce: nur einmal ausführen, egal wie viele Mutations kommen
+  if (scheduled) return;
+  scheduled = true;
+
+  requestAnimationFrame(() => {
+    scheduled = false;
+
+    if (!document.querySelector('#excel-import')) return;
+
+    const evaluation = location.hash.includes("/evaluation");
+    evaluation ? insertButtonsEvaluation() : insertButtonsTest();
+  });
+});
+
+observer.observe(document, { childList: true, subtree: true });
