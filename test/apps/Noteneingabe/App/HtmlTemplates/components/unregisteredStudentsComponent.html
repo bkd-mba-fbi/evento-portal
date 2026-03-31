@@ -1,0 +1,153 @@
+﻿<div>
+  {{#if hasItems }}
+  <h4>{{translate 'unregisteredStudentsTitle'}}</h4>
+<!--
+<h2>Unregistered Students</h2>
+<button class="btn btn=primary" {{action "add" on="click"}}>Add</button>
+<button class="btn btn=primary" {{action "save" on="click"}}>Save</button>
+{{#each items as |item|}}
+  <div style="display: flex; flex-direction: row; white-space: nowrap;">
+    <label>Name</label>
+    {{input type="text" value=item.FullName }}
+
+    <label>Comment</label>
+    {{input type="text" value=item.Comment }}
+  </div>
+{{/each}}
+-->
+
+<table class="dialogAccordionTable editTable gradigTable unregisteredStudents">
+  <thead class="actual-header">
+    <tr>
+        {{#if hasSDsForDetailsView}}
+            <th class="iconColumn">
+                <div style="visibility: hidden;" class="collapseTriangle triangleCollapsed"></div>
+            </th>
+        {{/if}}
+        <th class="iconColumn">
+            <div style="visibility: hidden;">
+                {{icon 'checkmark'}}
+            </div>
+        </th>
+        <th initial-sort is-sortable data-sort-property="PersonFullname">{{translate 'name'}}</th>
+        {{#if Event.Scale}}
+            <th is-sortable data-sort-property="{{if scale.FreeGrading 'GradeValue' 'IdGrade'}}" class="{{unless (eq currentHeaderId 'grade') 'hide-column' ''}}">{{translate 'grade'}}</th>
+
+            {{#if Event.Scale.CommentsAllowed}}
+                <th class="{{unless (eq currentHeaderId 'comment') 'hide-column fix-width' ''}}">{{translate 'comment'}}</th>
+            {{/if}}
+        {{/if}}
+        {{#each headerDetails as |header|}}
+            <th class="{{unless header.isVisible 'hide-column' ''}}">{{header.VssBezeichnung}}</th>
+        {{/each}}
+        <th class="iconColumn">
+        </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each items as |item|}}
+      <tr id="{{model.IdObject}}">
+        {{#unless hideControlColumns}}
+
+          {{#if hasSDsForDetailsView}}
+            {{#if hasRangeDetails}}
+              <td {{action 'toggleRow' item}} style="cursor: pointer;">
+                <div class="{{item.toggleClassName}}"></div>
+              </td>
+            {{else}}
+              <td></td>
+            {{/if}}
+          {{/if}}
+      
+          <td class="validationColumn" title="{{if allValid '' validationErrorExplanation}}" {{action 'toggleRowValidation' model.IdObject}}>
+            {{#if item.isValid}}
+              <span class="material-icons md-24 valid">done</span>
+            {{else}}
+              <span class="material-icons md-24 no-valid">close</span>
+            {{/if}}
+          </td>
+    
+        {{/unless}}
+    
+        <td style="width: 20rem; white-space: nowrap;" title="{{PersonNameTooltip}}">
+          {{input type="text" value=item.FullName class="fullName"}}
+        </td>
+    
+        {{#if scale}}
+          {{#if isReadOnly}}
+    
+            <td style="width: 20rem; white-space: nowrap;" title="{{gradeDesignation}}" class="{{unless (eq currentHeaderId 'grade') 'hide-column' ''}}">{{gradeDesignation}}</td>
+            {{#if scale.CommentsAllowed}}
+              <td title="{{Comment}}" class="{{unless (eq currentHeaderId 'comment') 'hide-column' ''}}">{{input type="text" value=item.Comment disabled=(if item.FullName false true)}}</td>
+            {{/if}}
+    
+          {{else}}
+    
+            <td style="width: 20rem" class="gradeInput {{unless (eq currentHeaderId 'grade') 'hide-column' ''}}">
+              {{#if scale.FreeGrading}}
+                {{number-textbox classBinding='invalidatedClass' number=model.Grade minValue=scale.MinGrade maxValue=scale.MaxGrade disabled=(if item.FullName false true)}}
+              {{else}}
+                {{combo-box classBinding='invalidatedClass' source=scale.Grades keyName="Id" valueName="Designation" value=item.GradeId disabled=(if item.FullName false true)}}
+              {{/if}}
+            </td>
+    
+            {{#if scale.CommentsAllowed}}
+              <td style="width: 20rem" class="{{unless (eq currentHeaderId 'comment') 'hide-column' ''}}">{{textarea maxlength="(constant 'inputSizes.gradeRemark')" value=item.Comment rows='2' disabled=(if item.FullName false true)}}</td>
+            {{/if}}
+    
+          {{/if}}
+        {{/if}}
+    
+        {{#each item.SubscriptionDetailColumns as |contentColumn|}} 
+        <td class="{{unless (eq currentHeaderId contentColumn.VssId) 'hide-column' ''}}">
+          {{subscription-detail overrideControlId=(concat contentColumn.IdObject '_col')
+            model=contentColumn
+            save='saveSD'
+            showLabel=false
+            validated='sdValidated'
+            setReadOnly=isReadOnly
+            setDisabled=(if item.FullName false true)
+            }}
+        </td>
+        {{/each}}
+        <td>
+          <button {{action 'remove' item on='click'}}><span class="material-icons">delete</span></button>
+        </td>
+      </tr>
+      {{#if item.isExpanded}}
+        {{#blend-element tagName='tr' blendType='slideDown' }}
+        <td class="not-mobile" colspan="2"></td>
+      
+        <!--
+          Note: There is a CSS rule that enables overflow hidden with ellipsis for
+          td:nth-child(3) on this table. The expanded SubscriptionDetail controls here
+          also match this selector, and therefore have overflow hidden enabled. This
+          can cause dropdown menus for SubscriptionDetails to be cut off if they
+          extend past the bounds of the td element. As a workaround, we set "overflow:
+          visible" here. For a more permanent solution, the CSS should probably be
+          reworked so it does not apply to this particular element.
+        -->
+        <td colspan="9999" style="overflow: visible;">
+          <div>
+            {{#each item.SubscriptionDetails as |detail|}}
+            <div class="formRow">
+              {{subscription-detail overrideControlId=(concat detail.Id '_rangeMobile') 
+                model=detail 
+                save='saveSD' 
+                validated='sdValidated' 
+                setReadOnly=item.isReadOnly
+                setDisabled=(if item.FullName false true)
+                }}
+            </div>
+            {{else}}
+              {{translate 'noData'}}
+            {{/each}}
+          </div>
+        </td>
+        {{/blend-element}}
+      {{/if}}
+    {{/each}}
+  </tbody>
+</table>
+{{/if}}
+</div>

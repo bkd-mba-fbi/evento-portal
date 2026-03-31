@@ -1,0 +1,48 @@
+#overlay-toggle-embedded {
+    top: 0px;
+    position: absolute;
+    right: 1rem;
+    font-weight: 400;
+  }
+  
+  #overlay-toggle-embedded-test > a {
+    display: inline-block;
+  }
+  
+  .excelDropdown {
+    display: inline-block;
+  }
+  
+  .excelDropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    min-width: 120px;
+    box-shadow: none;
+    padding: 10px 10px;
+    color: var(--bs-btn-color);
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    top: auto;
+    text-align: left;
+    background-color: white;
+  }
+
+  .excelDropdown:hover .excelDropdown-content,
+  .excelDropdown:focus .excelDropdown-content {
+    display: grid;
+  }
+  
+.X-error {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: .875em;
+    color: #d01018;
+    background-color: transparent !important;
+}
+
+@media only screen and (max-width: 767px)  {
+    #overlay-toggle-embedded-test, #overlay-toggle-embedded {
+        display: none;
+    }
+}
