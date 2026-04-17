@@ -338,6 +338,16 @@ export const settings: Settings = {
           appKey: "schulverwaltung",
           appPath: "#/my-grades",
         },
+        {
+          key: "myDossier",
+          get label() {
+            return msg("Dossier");
+          },
+          allowedRolesOrPermissions: ["StudentRole"],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltung",
+          appPath: "#/my-dossier",
+        },
       ],
     },
     {

@@ -21,6 +21,7 @@
 's2ccb1c31fa62fea1': `Absences`,
 's2e7964a3ed3ff4b2': `Saisir un remplacement`,
 's2f3ed4ae7b042337': `Fournisseur de prestations`,
+'s2f697540e39c2b0a': `Dossier`,
 's2faf4f61874da789': `Rechercher des personnes et des institutions`,
 's30329742fbb01b71': `Contrôle des présences`,
 's30c3ae3fb64d10bd': `Si vous avez des questions sur la protection des données en lien avec la présente application, vous pouvez vous adresser au service responsable de l’application, dont les coordonnées figurent dans l’impressum.`,

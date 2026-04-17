@@ -157,7 +157,11 @@ describe("Navigation Menu", () => {
 
         expectGroupItems("Angebote", ["Kurse und Veranstaltungen"]);
 
-        expectGroupItems("Aus-/Weiterbildung", ["Absenzen", "Noten"]);
+        expectGroupItems("Aus-/Weiterbildung", [
+          "Absenzen",
+          "Noten",
+          "Dossier",
+        ]);
       });
     });
   });
