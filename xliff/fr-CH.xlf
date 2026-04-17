@@ -330,6 +330,10 @@ Engehaldenstrasse 12
   <source>Aufnahmeverfahren</source>
   <target state="translated">Procédure d'admission</target>
 </trans-unit>
+<trans-unit id="s2f697540e39c2b0a">
+  <source>Dossier</source>
+  <target state="translated">Dossier</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
