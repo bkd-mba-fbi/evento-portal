@@ -1,0 +1,324 @@
+﻿<div id="ovlPersonalDataSheetEdit" class="overlayDialog flexDialog personalDataSheetDialog">
+    <div class="dialogHeader">
+        {{translate 'evaluationFinancingOfStudy'}}
+        <div class="buttonContainer"></div>
+    </div>
+
+    <div class="dialogBody">
+    {{#auto-scroll-container id="pnlQuestions" class="personalDataSheetColumn active form" dataCollection=model.QuestionAnswerItems waitForOtherAnimation=true}}
+
+    <div class="row">
+        <h4 class="blockTitle">{{translate 'courseOfStudy'}}</h4>
+        <div class="col12">
+            {{form-control type="select" fieldname="CourseIdEvent" content=model.DataSheet.Courses optionValuePath="Key" optionLabelPath="Value" value=courseIdEvent }}
+        </div>
+
+        <div class="col12">
+            <table class="dialogInfoTable" style="width: 100%;">
+                {{#if courseIdEvent}}
+                {{#if model.EventSchoolDesignation}}
+                <tr>
+                    <td style="width: 50%;">{{translate 'universityOfAppliedSciences'}}:</td>
+                    <td style="width: 50%;">{{model.EventSchoolDesignation}}</td>
+                </tr>
+                {{/if}}
+                <tr>
+                    <td style="width: 50%;">{{translate 'startOfStudies'}}:</td>
+                    <td style="width: 50%;">{{dateFormat model.DataSheet.StartOfStudies}}</td>
+                </tr>
+                {{#if model.EventContactInformation}}
+                <tr>
+                    <td style="width: 50%; vertical-align: top;">{{translate 'contact'}}:</td>
+                    <td style="width: 50%;"><pre>{{{model.EventContactInformation}}}</pre></td>
+                </tr>
+                {{/if}}
+                {{/if}}
+            </table>
+        </div>
+    </div>
+
+
+    {{#if isCourseChoosen}}
+    <div class="row">
+        <h4 class="blockTitle">{{translate 'questions'}}</h4>
+    </div>
+    {{#each item in model.QuestionAnswerItems itemController='personalDataSheetQAItem'}}
+    {{#if item.Question.IsParagraph}}
+    <div class="row">
+        <h4 class="blockTitle">{{translate 'dataAcquisition'}}</h4>
+    </div>
+    {{/if}}
+    {{#blend-element class="row" waitForOtherAnimation=true}}
+    <div id="question_{{item.Question.Id}}" class="question startPosition formRow fullWidth{{if item.Question.IsParagraph '' ' col12'}}">
+
+    <label>
+        <b>{{#if item.Question.IsParagraph}}
+            {{translate 'paragraph'}}
+            {{else}}
+            {{translate 'question'}}
+            {{/if}} {{item.Question.Enumeration}}:</b> {{{item.Question.Text}}}
+        {{#if item.HasQuestionInfo}}
+        <button type="button" class="tooltipButton" id="btnShowInfo_{{item.Question.Id}}">{{icon 'info'}}</button>
+        {{/if}}
+    </label>
+    {{#if item.Question.IsParagraph}}
+
+    {{#if item.IsCantonParagraph}}
+
+    <div class="row">
+        <div class="col6">
+            {{form-control fieldname="CantonIdELK" type="select" content=model.Cantons isValid=isParagraphAnswerValid optionValuePath="Key" optionLabelPath="Value" value=item.CantonIdELK label=item.Question.Title }}
+        </div>
+    </div>
+
+
+    {{else if item.IsParagraphD}}
+    <table class="dialogInfoTable" style="width: 100%;">
+        <tr>
+            <th style="width: 50%;">{{translate 'homeCityAndCanton'}}</th>
+            <th style="width: 25%;">{{translate 'from'}}</th>
+            <th style="width: 25%;">{{translate 'to'}}</th>
+        </tr>
+        <tr><td>{{form-control fieldname="CantonIdELK" type="select" content=model.Cantons isValid=isParagraphAnswerValid optionValuePath="Key" optionLabelPath="Value" value=item.cantonIdELKParagraphD placeholder=item.Question.Title}}</td></tr>
+        {{#each parDItem in item.Answer.PersonalDataAnswerParagraphD itemController='personalDataSheetAnswerParagraphD'}}
+        {{#if parDItem.IsCity}}
+        <tr>
+            <td>{{form-control type="select" content=parDItem.Cities optionValuePath="Key" optionLabelPath="Value" value=parDItem.CityIdLFS placeholder=(translate 'town')}}</td>
+            <td>{{date-textbox date=parDItem.DateFrom disabled=false hideButton=false allowEmpty=true yearRange='-100:+0' placeholder=(translate 'from')}}</td>
+            <td>{{date-textbox date=parDItem.DateTo disabled=false hideButton=false allowEmpty=true yearRange='-100:+0' placeholder=(translate 'to')}}</td>
+        </tr>
+        {{/if}}
+        {{/each}}
+    </table>
+
+    {{#unless item.residenceDaysMinimumReached}}
+    <div class="warning">
+        {{translate 'warningDateRangeMustBeMinimum24Months'}}
+    </div>
+    <div class="col12">&nbsp;</div>
+    {{/unless}}
+    {{#unless item.residenceDaysContinuous}}
+    <div class="warning">
+        {{translate 'warningDateRangeMustBeContinuous'}}
+    </div>
+    <div class="col12">&nbsp;</div>
+    {{/unless}}
+
+    <table class="dialogInfoTable" style="width: 100%;">
+        <tr>
+            <th style="width: 50%;">{{translate 'kindOfIndependence'}}</th>
+            <th style="width: 25%;">{{translate 'from'}}</th>
+            <th style="width: 25%;">{{translate 'to'}}</th>
+        </tr>
+        {{#each parDItem in item.Answer.PersonalDataAnswerParagraphD itemController='personalDataSheetAnswerParagraphD'}}
+        {{#unless parDItem.IsCity}}
+        <tr>
+            <td>{{form-control value=parDItem.KindOfIndependence disabled=false placeholder=(translate 'kindOfIndependence')}}</td>
+            <td>{{date-textbox date=parDItem.DateFrom disabled=false hideButton=false allowEmpty=true yearRange='-100:+0' placeholder=(translate 'from')}}</td>
+            <td>{{date-textbox date=parDItem.DateTo disabled=false hideButton=false allowEmpty=true yearRange='-100:+0' placeholder=(translate 'to')}}</td>
+        </tr>
+        {{/unless}}
+        {{/each}}
+    </table>
+
+    {{#unless item.independenceDaysMinimumReached}}
+    <div class="warning">
+        {{translate 'warningDateRangeMustBeMinimum24Months'}}
+    </div>
+    <div class="col12">&nbsp;</div>
+    {{/unless}}
+    {{#unless item.independenceDaysContinuous}}
+    <div class="warning">
+        {{translate 'warningDateRangeMustBeContinuous'}}
+    </div>
+    <div class="col12">&nbsp;</div>
+    {{/unless}}
+
+    {{else if item.IsParagraphF}}
+    <table class="dialogInfoTable" style="width: 100%;">
+        <tr>
+            <td style="width: 50%;">{{item.Question.Title}}:</td>
+            <td style="width: 50%; vertical-align: top;">{{item.nationalityIdLFS}}</td>
+        </tr>
+    </table>
+    <div class="dialogInfo">{{translate 'countryFromPersonDataInformation'}}</div>
+    {{/if}}
+
+    <div class="row">
+        <h4 class="blockTitle">{{translate 'personalData2'}}</h4>
+    </div>
+
+    <div class="row">
+        <table class="dialogInfoTable" style="width: 100%;">
+            <tr>
+                <td style="width: 25%;">{{translate 'name'}}:</td>
+                <td style="width: 25%;">{{model.Person.LastName}}</td>
+                <td style="width: 25%;">{{translate 'nationality'}}:</td>
+                <td style="width: 25%;">{{model.Person.Nationality}}</td>
+            </tr>
+            <tr>
+                <td>{{translate 'firstName'}}:</td>
+                <td>{{model.Person.FirstName}}</td>
+                <td>{{translate 'homeTown'}}:</td>
+                <td>{{model.Person.HomeTown}}</td>
+            </tr>
+            <tr>
+                <td>{{translate 'birthdate'}}:</td>
+                <td>{{dateFormat model.Person.Birthdate}}</td>
+                <td>{{translate 'socialSecurityNumberEx'}}:</td>
+                <td>{{model.Person.SocialSecurityNumber}}</td>
+            </tr>
+        </table>
+        <div class="dialogInfo">{{translate 'paragraphPersonalDataInfoText'}}</div>
+
+    </div>
+
+    <div class="row">
+        <h4 class="blockTitle">{{translate 'homeTownOfStudentOnStartOfStudy'}}</h4>
+    </div>
+
+    <div class="row">
+        <div class="col12">
+            {{form-control fieldname="CandidateStreet" value=candidateStreet label=(translate 'street') requiredFields=model.DataSheet.RequiredFields }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col6">
+            {{form-control fieldname="CandidateZip" value=candidateZip label=(translate 'zip') requiredFields=model.DataSheet.RequiredFields }}
+        </div>
+        <div class="col6">
+            {{form-control fieldname="CandidateLocation" value=candidateLocation label=(translate 'location') requiredFields=model.DataSheet.RequiredFields }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col6">
+            {{form-control type="date" fieldname="CandidateCantonSince" value=candidateCantonSince label=(translate 'livingInCantonSince') requiredFields=model.DataSheet.RequiredFields}}
+        </div>
+        <div class="col6">
+            {{form-control type="select" fieldname="CandidateCantonIdELK" content=cantonsWithNone optionValuePath="Key" optionLabelPath="Value" value=candidateCantonIdELK label=(translate 'canton') requiredFields=model.DataSheet.RequiredFields}}
+        </div>
+    </div>
+
+    <div class="row">
+        <h4 class="blockTitle">{{translate 'parentsOrOwnerOrFormerOwnerOfCustody'}}</h4>
+    </div>
+
+    <div class="row">
+        <div class="col12">
+            {{input type='checkbox' checked=parentless id=(concat 'chkParentless' item.Question.Id)}}
+            <label for="{{concat 'chkParentless' item.Question.Id}}">{{translate 'iAmParentless'}}</label>
+        </div>
+    </div>
+
+    {{#unless parentless}}
+
+    <div class="row">
+        <div class="col12">
+            {{form-control fieldname="ParentsName" value=parentsName label=(translate 'name') requiredFields=model.DataSheet.RequiredFields }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col12">
+            {{input type='checkbox' fieldname="ParentsSameAddress" checked=parentsSameAddress id=(concat 'chkParentsSameAddress' item.Question.Id)}}
+            <label for="{{concat 'chkParentsSameAddress' item.Question.Id}}">{{translate 'sameAddress'}}</label>
+        </div>
+    </div>
+
+    {{#unless parentsSameAddress}}
+    <div class="row">
+        <div class="col12">
+            {{translate 'pleaseEnterAddress'}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col12">
+            {{form-control fieldname="ParentsStreet" value=parentsStreet label=(translate 'street') requiredFields=model.DataSheet.RequiredFields }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col3">
+            {{form-control fieldname="ParentsZip" value=parentsZip label=(translate 'zip') requiredFields=model.DataSheet.RequiredFields }}
+        </div>
+        <div class="col6">
+            {{form-control fieldname="ParentsLocation" value=parentsLocation label=(translate 'location') requiredFields=model.DataSheet.RequiredFields }}
+        </div>
+        <div class="col3">
+            {{form-control fieldname="ParentsCantonIdELK" type="select" content=cantonsWithNone optionValuePath="Key" optionLabelPath="Value" value=parentsCantonIdELK label=(translate 'canton') }}
+        </div>
+    </div>
+
+    {{/unless}}
+    {{/unless}}
+
+    {{else}}
+    <div {{bind-attr class='radioButtonContainer isValid'}}>
+        {{radio-button value=true checkedValue=item.YesNo name=item.Question.Id id=idYes disabled=false data=item.Question.Id}}<label for="{{idYes}}">{{translate 'yes'}}</label>
+        {{radio-button value=false checkedValue=item.YesNo name=item.Question.Id id=idNo disabled=false data=item.Question.Id}}<label for="{{idNo}}">{{translate 'no'}}</label>
+    </div>
+    {{/if}}
+    </div>
+    {{/blend-element}}
+    {{/each}}
+    {{/if}}
+    {{/auto-scroll-container}}
+    {{#auto-scroll-container id="pnlInfos" class="personalDataSheetColumn inactive" activeElementId=newQuestionId}}
+    {{#if isCourseChoosen}}
+            <button id="btnCloseInfos" type="button">{{icon 'close'}}</button>
+        {{#each item in model.QuestionAnswerItems itemController='personalDataSheetQAItem'}}
+        {{#if item.HasQuestionInfo}}
+        <div class="info" id="{{item.Question.Id}}">
+            <h4 class="blockTitle">
+                {{#if item.Question.IsParagraph}}
+                    {{translate 'paragraph'}}
+                {{else}}
+                    {{translate 'question'}}
+                {{/if}}
+                {{item.Question.Enumeration}}    
+            </h4>
+            {{{item.Question.Info}}}
+        </div>
+        {{/if}}
+        {{/each}}
+        <div class="placeholder">&nbsp;</div>
+        {{else}}
+        &nbsp;
+    {{/if}}
+    {{/auto-scroll-container}}
+    </div>
+
+    <div class="dialogFooter flexDialogFooter">
+        <div class="linkDiv">
+            {{#if isLastQuestionParagraph}}
+            {{crystal-report reportContext='Personalienblatt' caption=(translate 'preview') reportId=(settings 'reports.personalDataSheet') dataKey=model.DataSheet.Id target='_blank'}}
+            {{/if}}
+        </div>
+        {{#unless enableSave}}
+        <span class="validationErrorMessage">{{validationErrorMessage}}</span>
+        {{/unless}}
+        <div class="buttonContainer">
+            {{#unless isLastQuestionParagraph}}
+            <button id="btnNext" type="button" class="textButton" disabled="disabled">
+                {{icon 'continue'}}
+                <div>{{translate 'finalize'}}</div>
+            </button>
+            {{else}}
+            {{#if enableSave}}
+            <button id="btnNext" type="button" class="textButton" {{action 'finalize' }}>
+                {{icon 'continue'}}
+                <div>{{translate 'finalize'}}</div>
+            </button>
+            {{else}}
+            <button id="btnNext" type="button" class="textButton error" disabled="disabled">
+                {{icon 'error'}}
+                <div>{{translate 'finalize'}}</div>
+            </button>
+            {{/if}}
+            {{/unless}}
+        </div>
+    </div>
+</div>
