@@ -1,14 +1,14 @@
-# kursausschreibung 3.5.2
+# kursausschreibung 3.6.0
 [![Build 🏭🚀](https://github.com/bkd-mba-fbi/kursausschreibung/actions/workflows/buildDeploy.yml/badge.svg)](https://github.com/bkd-mba-fbi/kursausschreibung/actions/workflows/buildDeploy.yml)
 
 # Documentation
-Go to the [Wiki](https://github.com/bkd-mba-fbi/kursausschreibung/wiki)
+Go to the [FBI GitBook docs](https://fbi-mba-bkd.gitbook.io/github-docs-public)
 
 # How to implement in your page?
 
 ## Configuration (appconfig, settings, locale)
 
-* **appconfig:** The basic configuration for the module must be stored in appconfig. Example: `apiUrl, webBaseUrl, oauthUrl, instanceId, clientId, applicationScope`
+* **appconfig:** The basic configuration for the module must be stored in appconfig. Example: `apiUrl, oauthUrl, instanceId, clientId, applicationScope`
 * **settings:** In this file you will find all settings for the module.
 * **locale:** In the 'locale' folder you will find every translation for the module that does not come from Evento (e.g. labels, status, process...).
 

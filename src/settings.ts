@@ -97,10 +97,10 @@ export const settings: Settings = {
       heading: false,
     },
     {
-      key: "anmeldedetailsEinlesen",
+      key: "schulverwaltungScopeNg",
       scope: "NG",
-      root: "apps/EmberApps/AnmeldedetailsEinlesen/index.html",
-      heading: true,
+      root: "apps/webapp-schulverwaltung/index.html",
+      heading: false,
     },
     {
       key: "schulleiterPersonen",
@@ -338,6 +338,16 @@ export const settings: Settings = {
           appKey: "schulverwaltung",
           appPath: "#/my-grades",
         },
+        {
+          key: "myDossier",
+          get label() {
+            return msg("Dossier");
+          },
+          allowedRolesOrPermissions: ["StudentRole"],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltung",
+          appPath: "#/my-dossier",
+        },
       ],
     },
     {
@@ -410,6 +420,19 @@ export const settings: Settings = {
           appPath: "#/persons",
         },
         {
+          key: "studyCourses",
+          get label() {
+            return msg("Aufnahmeverfahren");
+          },
+          allowedRolesOrPermissions: [
+            "RegistrationRightWeiterbildungMAS",
+            "RegistrationRightAusbildungStudiengang",
+          ],
+          deniedInstanceIds: null,
+          appKey: "schulverwaltungScopeNg",
+          appPath: "#/events/study-courses",
+        },
+        {
           key: "import",
           get label() {
             return msg("Daten einlesen");
@@ -442,7 +465,7 @@ export const settings: Settings = {
             "RegistrationRightWeiterbildungReservation",
           ],
           deniedInstanceIds: null,
-          appKey: "schulverwaltung",
+          appKey: "schulverwaltungScopeNg",
           appPath: "#/import",
         },
       ],

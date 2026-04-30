@@ -14,7 +14,9 @@
       "conflict-title": "Données non valides",
       "conflict-message": "Les données que vous souhaitez enregistrer ne sont pas valides.",
       "server-title": "Erreur du serveur",
-      "server-message": "Une erreur s'est produite lors de la connexion au serveur."
+      "server-message": "Une erreur s'est produite lors de la connexion au serveur.",
+      "maxFileSize": "La taille du fichier est trop grande ({{size}} MB, max. {{maxSize}} MB)",
+      "fileType": "Ce type de fichier n'est pas autorisé"
     },
     "validation-errors": {
       "required": "Ce champ doit être rempli.",
@@ -238,6 +240,10 @@
     "current": {
       "title": "Disciplines actuelles"
     },
+    "study-courses": {
+      "title": "Procédure d'admission",
+      "no-study-courses": "Aucune procedure d'admission disponible"
+    },
     "no-events": "Aucun événement disponible",
     "search": "Rechercher un événement",
     "search-by": "Rechercher...",
@@ -268,7 +274,15 @@
     "study-course-detail": {
       "status": "Statut"
     },
+    "study-course-edit": {
+      "status-dialog": {
+        "title": "Modifier le statut",
+        "save": "Valider",
+        "cancel": "Annuler"
+      }
+    },
     "subscriptionDetails": {
+      "empty": "–",
       "Ja": "Oui",
       "Nein": "Non"
     }
@@ -288,6 +302,7 @@
     "owned-tests": "Mes tests",
     "hide-published": "Masquer tests publiés",
     "points": "Points",
+    "greater-than-max-points-adjusted": "Valeur supérieure aux points possibles",
     "summary": {
       "points": "points"
     },
@@ -295,7 +310,7 @@
     "average": "Moyenne",
     "mean": "Moyenne",
     "set-final-grade": "Saisir la moyenne comme note",
-    "link-to-rating-overview": "Procédér à l'aperçu de l'évaluation",
+    "link-to-rating-overview": "Procéder à l'aperçu de l'évaluation",
     "student": {
       "name": "Nom"
     },
@@ -344,11 +359,13 @@
     "no-event": "L'événement n'a pas été trouvé",
     "no-items": "Aucune donnée disponible",
     "no-evaluation": "L'événement ne peut pas être évalué car il n'existe pas d'échelle de notes ni d'autres critères d'évaluation.",
+    "review-started": "L'évaluation est déjà terminée.",
+    "continue-to-verify": "Procéder au contrôle",
     "finalise": "Terminer l'évaluation",
     "finalise-modal": {
       "title": "Terminer l’évaluation",
       "message": "Souhaitez-vous terminer l’évaluation ?",
-      "note": "Une fois l’évaluation terminée, la discipline n’est plus visible. Pour toute modification, veuillez vous adresser au secrétariat compétent de l’école.",
+      "note": "Une fois l'évaluation terminée, la discipline n'est plus visible. Les modifications ultérieures nécessitent une nouvelle validation par le secrétariat de l'école compétent et entraînent un travail administratif supplémentaire.",
       "open-evaluations": "Des évaluations sont en suspens.",
       "cancel": "Annuler",
       "confirm": "Valider"
@@ -387,36 +404,81 @@
       "amount": "Nombre",
       "sufficient": "Suffisante",
       "unsufficient": "Insuffisante"
+    },
+    "verify": {
+      "open-evaluations": "Des évaluations sont en suspens.",
+      "info": "Veuillez vérifier les données et enregistrer le rapport avant de terminer l'évaluation.",
+      "pdf-fallback": "Ce navigateur ne prend pas en charge les fichiers PDF intégrés. Veuillez utiliser le bouton pour télécharger le fichier."
     }
   },
-  "dossier": {
-    "title": "Dossier",
-    "contact": "Contact",
-    "address": "Adresse du domicile",
-    "absences": "Absences",
-    "grade": "Note",
-    "grades": "Notes",
-    "points": "points",
-    "average": "Moyenne",
-    "no-tests": "Aucun test disponible",
-    "no-grades": "Aucune note disponible",
-    "no-courses": "Aucun événement disponible",
-    "no-absences": "Pas d'absences disponibles",
-    "dialog": {
+  "student": {
+    "contact": {
+      "title": "Contact",
+      "address": "Adresse du domicile"
+    },
+    "absences": {
+      "title": "Absences",
+      "no-absences": "Pas d'absences disponibles"
+    },
+    "grades": {
+      "title": "Notes",
+      "no-courses": "Aucun événement disponible",
+      "no-tests": "Aucun test disponible",
+      "no-grades": "Aucune note disponible",
       "grade": "Note",
-      "points": "Points",
-      "close": "Fermer",
-      "hint": {
-        "grade": "Une modification de la note est automatiquement enregistrée.",
-        "points": "En cas de modification des points, la note est calculée et enregistrée automatiquement."
+      "points": "points",
+      "average": "Moyenne",
+      "edit-dialog": {
+        "grade": "Note",
+        "points": "Points",
+        "close": "Fermer",
+        "hint": {
+          "grade": "Une modification de la note est automatiquement enregistrée.",
+          "points": "En cas de modification des points, la note est calculée et enregistrée automatiquement."
+        }
+      }
+    },
+    "dossier": {
+      "title": "Dossier",
+      "no-entries": "Aucune donnée disponible",
+      "information": "Information",
+      "download": "Afficher",
+      "disadvantage": "Compensation des désavantages",
+      "created": "Créé",
+      "edit": {
+        "title-new": "Ajouter une entrée",
+        "title-update": "Modifier « {{designation}} »",
+        "not-found": "L'entrée n'a pas pu être trouvée.",
+        "type": {
+          "document": "Document",
+          "note": "Note"
+        },
+        "designation": "Titre",
+        "description": "Notes",
+        "category": "Catégorie",
+        "visibility": "Visibilité",
+        "for-teacher-class-teacher-only": "Maître-sse de classe uniquement",
+        "for-teacher-all": "Tous les enseignants de la classe",
+        "for-student": "Visible pour {{ studentName }}",
+        "optional": "optionnel",
+        "cancel": "Annuler",
+        "save": "Valider",
+        "save-success": "L'entrée a été enregistrée",
+        "save-error": "L'entrée n'a pas pu être enregistrée"
+      },
+      "delete": {
+        "confirm-note": "Voulez-vous supprimer cette entrée ?",
+        "confirm-document": "Voulez-vous supprimer cette entrée et le document ?",
+        "yes": "Supprimer",
+        "no": "Annuler",
+        "delete-success": "L'entrée a été supprimée",
+        "delete-error": "L'entrée n'a pas pu être supprimée"
       }
     }
   },
   "import": {
     "title": "Importer des données",
     "file": {
-      "input-label": "Sélectionner ou faire glisser un document dans cette fenêtre",
-      "drop-zone-label": "Faire glisser le document ici",
       "columns-info": "Le document doit contenir les colonnes suivantes dans le bon ordre (les titres de colonnes et les autres colonnes sont ignorés) :",
       "next": "Valider les données",
       "types": {
@@ -555,6 +617,9 @@
     "title": "Mes notes",
     "header": "Les notes des tests sont visibles dès qu'elles ont été publiées par l'enseignant-e."
   },
+  "my-dossier": {
+    "title": "Mein Dossier"
+  },
   "my-settings": {
     "title": "Mes paramètres",
     "notifications": {
@@ -570,6 +635,10 @@
   "shared": {
     "date-select": {
       "default-placeholder": "Sélectionner la date..."
+    },
+    "file-input": {
+      "input-label": "Sélectionner ou faire glisser un fichier dans cette fenêtre",
+      "drop-zone-label": "Faire glisser le fichier ici"
     },
     "daysDifference": {
       "today": "Ajourd'hui",
@@ -607,6 +676,21 @@
     },
     "typeahead": {
       "default-placeholder": "Rechercher..."
+    },
+    "avatar-edit": {
+      "upload": "Télécharger une photo",
+      "dialog": {
+        "title": "Télécharger une photo",
+        "cancel": "Annuler",
+        "close": "Fermer",
+        "next": "Suivant",
+        "save": "Enregistrer",
+        "unchangable": "Une fois enregistrée, la photo ne peut plus être modifiée. Pour toute modification, veuillez contacter le secrétariat de l'école.",
+        "crop": "Veuillez sélectionner la zone précise :",
+        "saving": "La photo est en cours d'enregistrement...",
+        "load-error": "Une erreur s'est produite lors du chargement de la photo.",
+        "upload-error": "Une erreur s'est produite lors de l'enregistrement de la photo."
+      }
     }
   },
   "kitchensink": {

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var headElement = document.querySelector('html > head');
     var scriptPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/' + document.currentScript.getAttribute('src');
     var baseURL = scriptPath.substring(0, scriptPath.lastIndexOf('/')) + '/';
@@ -29,26 +29,26 @@
         "DefaultTimePeriod": 45,
         "DefaultTimeFragmentation": 5,
         "RoomColumns": [
-          {
-            "Column": "Room",
-            "Size": 1
-          },
-          {
-            "Column": "RoomType",
-            "Size": 1
-          },
-          {
-            "Column": "Building",
-            "Size": 0
-          },
-          {
-            "Column": "Floor",
-            "Size": 0
-          },
-          {
-            "Column": "NumberPersons",
-            "Size": 0
-          }
+            {
+                "Column": "Room",
+                "Size": 1
+            },
+            {
+                "Column": "RoomType",
+                "Size": 1
+            },
+            {
+                "Column": "Building",
+                "Size": 0
+            },
+            {
+                "Column": "Floor",
+                "Size": 0
+            },
+            {
+                "Column": "NumberPersons",
+                "Size": 0
+            }
         ]
     };
 
@@ -73,9 +73,9 @@
     // App-Root
     var rootElement = document.createElement('app-root');
     rootElement.innerHTML = [
-    '<div class="text-center" style="margin-top: 10rem;">',
-    '    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>',
-    '</div>'].join('\n');
+        '<div class="text-center" style="margin-top: 10rem;">',
+        '    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>',
+        '</div>'].join('\n');
 
     document.currentScript.parentElement.insertBefore(rootElement, document.currentScript.nextSibling);
 
@@ -102,7 +102,7 @@
 
     // Scripts
     var scripts = [
-        baseURL + 'polyfills.js', 
+        baseURL + 'polyfills.js',
         baseURL + 'runtime.js',
         baseURL + 'main.js'
     ];

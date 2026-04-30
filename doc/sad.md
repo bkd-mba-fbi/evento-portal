@@ -64,8 +64,8 @@ Quality categories & qualities according to [ISO/IEC 25010](https://iso25000.com
 | Matthias Krebs,<br>[@Amasit](https://github.com/Amasit)                | Project Leader/SCRUM Master    | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
 | Claudia Asti,<br>[@caebr](https://github.com/caebr)                    | Software Engineer & UX         | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
 | Mathis Hofer,<br>[@hupf](https://github.com/hupf)                      | Software Architect             | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
+| Stephan Girod,<br>[@StephGit](https://github.com/StephGit)             | Software Engineer              | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
 | Clara, Llorente,<br>[@llorentelemmc](https://github.com/llorentelemmc) | Software Engineer              | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
-| Simon Hirsbrunner,<br>[@shirsbrunner](https://github.com/shirsbrunner) | UX Engineer                    | [Puzzle ITC](https://www.puzzle.ch)                                                                             |
 | Operations                                                             |                                | [BEDAG](https://www.bedag.ch/)                                                                                  |
 | Backend Engineering                                                    |                                | [Swiss Learning Hub](https://www.swisslearninghub.com/)                                                         |
 

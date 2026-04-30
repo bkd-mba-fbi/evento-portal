@@ -25,7 +25,9 @@
       "min": "Bitte geben Sie eine Zahl grösser oder gleich {{min}} ein.",
       "ngbDate": "Bitte geben Sie ein gültiges Datum ein.",
       "invalidPoints": "Bitte einen Wert von 0 bis {{ maxPoints }} eingeben.",
-      "greaterThan": "Bitte geben Sie eine Zahl grösser {{ greaterThanValue }} ein."
+      "greaterThan": "Bitte geben Sie eine Zahl grösser {{ greaterThanValue }} ein.",
+      "maxFileSize": "Die Datei ist zu gross ({{size}} MB, max. {{maxSize}} MB)",
+      "fileType": "Dieser Dateityp ist nicht erlaubt"
     },
     "pagination": {
       "load-more": "Weitere Einträge laden"
@@ -238,6 +240,10 @@
     "current": {
       "title": "Aktuelle Fächer"
     },
+    "study-courses": {
+      "title": "Aufnahmeverfahren",
+      "no-study-courses": "Keine Aufnahmeverfahren vorhanden"
+    },
     "no-events": "Keine Anlässe vorhanden",
     "search": "Anlass suchen",
     "search-by": "Suchen...",
@@ -268,7 +274,15 @@
     "study-course-detail": {
       "status": "Status"
     },
+    "study-course-edit": {
+      "status-dialog": {
+        "title": "Status ändern",
+        "save": "Übernehmen",
+        "cancel": "Abbrechen"
+      }
+    },
     "subscriptionDetails": {
+      "empty": "–",
       "Ja": "Ja",
       "Nein": "Nein"
     }
@@ -288,6 +302,7 @@
     "owned-tests": "Meine Tests",
     "hide-published": "Publizierte Tests ausblenden",
     "points": "Punkte",
+    "greater-than-max-points-adjusted": "Wert grösser als mögliche Punkte",
     "summary": {
       "points": "Punkte"
     },
@@ -344,11 +359,13 @@
     "no-event": "Der Anlass wurde nicht gefunden",
     "no-items": "Keine Einträge vorhanden",
     "no-evaluation": "Der Anlass kann nicht bewertet werden, da weder eine Notenskala noch andere Bewertungskriterien vorhanden sind.",
+    "review-started": "Die Bewertung wurde bereits abgeschlossen.",
+    "continue-to-verify": "Weiter zur Kontrolle",
     "finalise": "Bewertung abschliessen",
     "finalise-modal": {
       "title": "Bewertung abschliessen",
       "message": "Möchten Sie die Bewertung abschliessen?",
-      "note": "Nach dem Abschluss ist das Fach nicht mehr sichtbar. Für Änderungen wenden Sie sich bitte an das zuständige Schulsekretariat.",
+      "note": "Nach dem Abschluss der Bewertung ist das Fach nicht mehr sichtbar. Nachträgliche Änderungen erfordern eine erneute Freigabe durch das zuständige Schulsekretariat und verursachen zusätzlichen administrativen Aufwand.",
       "open-evaluations": "Es sind offene Bewertungen vorhanden.",
       "cancel": "Abbrechen",
       "confirm": "Bestätigen"
@@ -387,36 +404,81 @@
       "amount": "Anzahl",
       "sufficient": "Genügend",
       "unsufficient": "Ungenügend"
+    },
+    "verify": {
+      "open-evaluations": "Es sind offene Bewertungen vorhanden.",
+      "info": "Bitte prüfen Sie die Daten und speichern Sie den Report, bevor Sie die Bewertung abschliessen.",
+      "pdf-fallback": "Dieser Browser unterstützt keine eingebetteten PDFs. Bitte benutzen Sie den Button zum Herunterladen."
     }
   },
-  "dossier": {
-    "title": "Dossier",
-    "contact": "Kontakt",
-    "address": "Wohnadresse",
-    "absences": "Absenzen",
-    "grade": "Note",
-    "grades": "Noten",
-    "points": "Punkte",
-    "average": "Mittelwert",
-    "no-tests": "Keine Tests vorhanden",
-    "no-grades": "Keine Noten vorhanden",
-    "no-courses": "Keine Anlässe vorhanden",
-    "no-absences": "Keine Absenzen vorhanden",
-    "dialog": {
+  "student": {
+    "contact": {
+      "title": "Kontakt",
+      "address": "Wohnadresse"
+    },
+    "absences": {
+      "title": "Absenzen",
+      "no-absences": "Keine Absenzen vorhanden"
+    },
+    "grades": {
+      "title": "Noten",
+      "no-courses": "Keine Anlässe vorhanden",
+      "no-tests": "Keine Tests vorhanden",
+      "no-grades": "Keine Noten vorhanden",
       "grade": "Note",
       "points": "Punkte",
-      "close": "Schliessen",
-      "hint": {
-        "grade": "Eine Änderung an der Note wird automatisch gespeichert.",
-        "points": "Bei der Änderung der Punkte wird die Note automatisch berechnet und gespeichert."
+      "average": "Mittelwert",
+      "edit-dialog": {
+        "grade": "Note",
+        "points": "Punkte",
+        "close": "Schliessen",
+        "hint": {
+          "grade": "Eine Änderung an der Note wird automatisch gespeichert.",
+          "points": "Bei der Änderung der Punkte wird die Note automatisch berechnet und gespeichert."
+        }
+      }
+    },
+    "dossier": {
+      "title": "Dossier",
+      "no-entries": "Keine Einträge vorhanden",
+      "information": "Information",
+      "download": "Anzeigen",
+      "disadvantage": "Nachteilsausgleich",
+      "created": "Erstellt",
+      "edit": {
+        "title-new": "Eintrag hinzufügen",
+        "title-update": "«{{designation}}» bearbeiten",
+        "not-found": "Der Eintrag konnte nicht gefunden werden.",
+        "type": {
+          "document": "Dokument",
+          "note": "Notiz"
+        },
+        "designation": "Titel",
+        "description": "Notizen",
+        "category": "Kategorie",
+        "visibility": "Sichtbarkeit",
+        "for-teacher-class-teacher-only": "Nur Klassenlehrperson",
+        "for-teacher-all": "Alle Lehrpersonen der Klasse",
+        "for-student": "Sichtbar für {{ studentName }}",
+        "optional": "optional",
+        "cancel": "Abbrechen",
+        "save": "Übernehmen",
+        "save-success": "Der Eintrag wurde gespeichert",
+        "save-error": "Der Eintrag konnte nicht gespeichert werden"
+      },
+      "delete": {
+        "confirm-note": "Wollen Sie diesen Eintrag löschen?",
+        "confirm-document": "Wollen Sie diesen Eintrag und das Dokument löschen?",
+        "yes": "Löschen",
+        "no": "Abbrechen",
+        "delete-success": "Der Eintrag wurde gelöscht",
+        "delete-error": "Der Eintrag konnte nicht gelöscht werden"
       }
     }
   },
   "import": {
     "title": "Daten einlesen",
     "file": {
-      "input-label": "Dokument auswählen oder in dieses Fenster ziehen",
-      "drop-zone-label": "Dokument hierhin ziehen",
       "columns-info": "Das Dokument muss folgende Spalten in der korrekten Reihenfolge beinhalten (die Spaltentitel und weitere Spalten werden ignoriert):",
       "next": "Daten validieren",
       "types": {
@@ -555,6 +617,9 @@
     "title": "Meine Noten",
     "header": "Noten aus Tests sind sichtbar, sobald sie von der Lehrperson publiziert wurden."
   },
+  "my-dossier": {
+    "title": "Mein Dossier"
+  },
   "my-settings": {
     "title": "Meine Einstellungen",
     "notifications": {
@@ -570,6 +635,10 @@
   "shared": {
     "date-select": {
       "default-placeholder": "Datum wählen..."
+    },
+    "file-input": {
+      "input-label": "Datei auswählen oder in dieses Fenster ziehen",
+      "drop-zone-label": "Datei hierhin ziehen"
     },
     "daysDifference": {
       "today": "Heute",
@@ -607,6 +676,21 @@
     },
     "typeahead": {
       "default-placeholder": "Suchen..."
+    },
+    "avatar-edit": {
+      "upload": "Foto hochladen",
+      "dialog": {
+        "title": "Foto hochladen",
+        "cancel": "Abbrechen",
+        "close": "Schliessen",
+        "next": "Weiter",
+        "save": "Speichern",
+        "unchangable": "Nach dem Speichern kann das Foto nicht mehr geändert werden. Bitte wenden Sie sich für Änderungen an das zuständige Schulsekretariat.",
+        "crop": "Wählen Sie den passenden Ausschnitt:",
+        "saving": "Foto wird gespeichert...",
+        "load-error": "Beim Laden des Fotos ist ein Fehler aufgetreten.",
+        "upload-error": "Beim Speichern des Fotos ist ein Fehler aufgetreten."
+      }
     }
   },
   "kitchensink": {

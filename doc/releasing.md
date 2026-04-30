@@ -38,7 +38,6 @@ Remark: To create a hotfix for an issue in the _webapp-schulverwaltung_ reposito
 1. Now your hotfix will be deploy automatic to test and production.
 
 1. To complete the process, you have to merge back the hotfix changes to `production`, `test` and `main`, or otherwise they would be missing in the next (regular or hotfix) release.
-
    1. Merge the hotfix branch into `production`:
 
       ```
