@@ -116,10 +116,13 @@ const observer = new MutationObserver(mutations => {
 
     for (const node of m.addedNodes) {
       if (node.nodeType !== 1) continue;
-
       // Direktes <i> oder enthält <i>
+      const className = typeof node.className === 'string'
+        ? node.className
+        : node.className && node.className.baseVal || '';
+
       if (
-        node.tagName === 'I' ||
+        node.tagName === 'I' || className.includes('subscription-detail') ||
         (node.querySelector && node.querySelector('i'))
       ) {
         return true;
