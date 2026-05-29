@@ -209,11 +209,13 @@ window.schulverwaltung.settings = {
     incidentMessage: {
       de: {
         label: "Vorfall erfasst (Lehrperson)",
-        description: "Klassenlehrperson: Eine Fachlehrperson hat einen Vorfall für Ihre Lernenden erfasst.",
+        description:
+          "Klassenlehrperson: Eine Fachlehrperson hat einen Vorfall für Ihre Lernenden erfasst.",
       },
       fr: {
         label: "Incident saisi (enseignant-e)",
-        description: "Maître-sse de classe : un-e enseignant-e a saisi un incident pour vos élèves.",
+        description:
+          "Maître-sse de classe : un-e enseignant-e a saisi un incident pour vos élèves.",
       },
     },
     teacherSubstitutions: {
@@ -288,6 +290,13 @@ window.schulverwaltung.settings = {
   /**
    *  Dossier
    */
+  // Entries with one of the following type ID are displayed in the dossier
+  dossierEntriesTypeIds: [
+    1052, // Information
+    1054, // Protokollierung: Bericht
+    1055, // Protokollierung: E-Mail
+  ],
+
   // Type ID for new entries
   dossierCreateTypeId: 1052,
 
