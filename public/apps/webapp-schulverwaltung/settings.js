@@ -242,12 +242,22 @@ window.schulverwaltung.settings = {
           "Enseignant-e : Dans la discipline enseignée, un-e élève a atteint une présence de <= 85 %.",
       },
     },
+    newDossierItem: {
+      de: {
+        label: "Neuer Eintrag im Dossier",
+        description: "Es wurde ein neuer Eintrag in Ihrem Dossier erfasst.",
+      },
+      fr: {
+        label: "Nouvelle entrée dans le dossier",
+        description: "Une nouvelle entrée a été saisie dans votre dossier.",
+      },
+    },
   },
 
   notificationTypesAssignments: [
     {
       roles: ["StudentRole"],
-      types: ["gradePublish", "BM2Student"],
+      types: ["gradePublish", "newDossierItem", "BM2Student"],
     },
     {
       roles: ["LessonTeacherRole", "ClassTeacherRole", "TeacherRole"],
