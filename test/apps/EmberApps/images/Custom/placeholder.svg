@@ -1,0 +1,12 @@
+<svg viewBox="0 0 240 322" width="240" height="322" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <g>
+  <title>background</title>
+  <rect fill="#7f7f7f" id="background" height="324" width="242" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>person</title>
+  <ellipse stroke="#ffffff" ry="70" rx="70" id="head" cy="149" cx="120" stroke-width="15" fill="none"/>
+  <ellipse stroke="#ffffff" ry="105" rx="105" id="body" cy="330" cx="120" stroke-width="15" fill="none"/>
+ </g>
+</svg>
