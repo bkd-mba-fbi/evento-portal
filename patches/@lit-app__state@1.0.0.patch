@@ -1,0 +1,17 @@
+diff --git a/src/decorators/property.ts b/src/decorators/property.ts
+index 1cb8a44ab97ed7d0a5bdafb60b974f3ace629917..ab962f44c843e35e04ad72af40b1222d55973f8d 100644
+--- a/src/decorators/property.ts
++++ b/src/decorators/property.ts
+@@ -64,10 +64,8 @@ export function property(
+     // define in createProperty() with the original descriptor. We don't do this
+     // for fields, which don't have a descriptor, because this could overwrite
+     // descriptor defined by other decorators.
+-    // @ts-ignore
+-    return hasOwnProperty
+-      ? Object.getOwnPropertyDescriptor(proto, name)
+-      : undefined;
++    // @ts-expect-error - decorator return type workaround
++    return hasOwnProperty ? Object.getOwnPropertyDescriptor(proto, name) : undefined;
+   }
+ 
+ }
