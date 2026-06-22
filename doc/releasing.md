@@ -40,7 +40,7 @@ Remark: To create a hotfix for an issue in the _webapp-schulverwaltung_ reposito
 1. To complete the process, you have to merge back the hotfix changes to `production`, `test` and `main`, or otherwise they would be missing in the next (regular or hotfix) release.
    1. Merge the hotfix branch into `production`:
 
-      ```
+      ```bash
       git checkout production
       git merge hotfix/1234-short-description
       git push
@@ -48,7 +48,7 @@ Remark: To create a hotfix for an issue in the _webapp-schulverwaltung_ reposito
 
    1. Merge the hotfix branch into `test`:
 
-      ```
+      ```bash
       git checkout test
       git merge hotfix/1234-short-description
       git push
@@ -56,7 +56,7 @@ Remark: To create a hotfix for an issue in the _webapp-schulverwaltung_ reposito
 
    1. Merge the hotfix branch into `main`:
 
-      ```
+      ```bash
       git checkout main
       git merge hotfix/1234-short-description
       # Resolve possible merge conflicts & `git commit` them...

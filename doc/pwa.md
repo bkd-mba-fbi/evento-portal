@@ -12,8 +12,8 @@ The _Evento Portal_ is installable and offers a simple offline page when no inte
 
 To test the _Evento Portal_ with the Service Worker locally, you have to serve the app with a valid SSL certificate using the following command (with `browserstack` as `oAuthClientId` in `public/settings.js`):
 
-```
-npm run build && npm run preview:ssl
+```bash
+pnpm build && pnpm preview:ssl
 ```
 
 The application is served under https://bs-local.com:3000.

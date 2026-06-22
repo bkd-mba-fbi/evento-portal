@@ -13,26 +13,29 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v5
 
-      - name: Read .nvmrc
-        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
-        id: nvm
+      - name: Read Node.js version from .node-version
+        run: echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_OUTPUT
+        id: node-version
 
-      - name: Use Node.js ${{ steps.nvm.outputs.NODE_VERSION }}
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js ${{ steps.node-version.outputs.NODE_VERSION }}
         uses: actions/setup-node@v5
         with:
-          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
-          cache: "npm"
+          node-version: ${{ steps.node-version.outputs.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: Install dependencies 🔧
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Lint 🔍
-        run: npm run lint
+        run: pnpm lint
 
       - name: Cypress 🔬
         uses: cypress-io/github-action@v7
         with:
-          build: npm run build
+          build: pnpm build
           start: npx http-server dist/ -p 3000 -s
           wait-on: http://localhost:3000
           config: baseUrl=http://localhost:3000

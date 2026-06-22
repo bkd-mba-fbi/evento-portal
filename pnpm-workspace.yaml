@@ -1,0 +1,4 @@
+allowBuilds:
+  cypress: true
+
+minimumReleaseAge: 1440 # Keep in sync with cooldown.default-days in .github/dependabot.yml
