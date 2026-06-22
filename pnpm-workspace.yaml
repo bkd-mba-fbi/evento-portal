@@ -2,3 +2,6 @@ allowBuilds:
   cypress: true
 
 minimumReleaseAge: 1440 # Keep in sync with cooldown.default-days in .github/dependabot.yml
+
+patchedDependencies:
+  "@lit-app/state@1.0.0": patches/@lit-app__state@1.0.0.patch
