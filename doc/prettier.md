@@ -19,14 +19,14 @@ Prettier is pinned to an exact version to avoid automatic updates that might cau
 
 To manually update Prettier you should execute the following command, which will update and pin Prettier to the latest version and reformat the source code with new version:
 
-```
-npm run format:upgrade
+```bash
+pnpm format:upgrade
 git commit -a -m "Reformat sources after Prettier update"
 ```
 
 You can also just reformat the source code:
 
-```
-npm run format
+```bash
+pnpm format
 git commit -a -m "Reformat sources after Prettier update"
 ```

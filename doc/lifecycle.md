@@ -20,7 +20,7 @@ To update to a newer version of Angular, see the official [Update Guide](https:/
 
 The easiest way to update the dependencies is to use [npm-check-updates](https://www.npmjs.com/package/npm-check-updates).
 
-- You can use the interactive mode to selectively apply the updates: `npx npm-check-updates -i`
+- You can use the interactive mode to selectively apply the updates: `pnpm upgrade --latest -i`
 - Patch / minor updates can usually be applied without problems
 - For major updates, check each package's changelog / migration guide for breaking changes
 - When Prettier is updated, the source code needs to be reformatted, see [Update Prettier Version](./prettier.md#update-prettier-version)
@@ -31,6 +31,6 @@ The easiest way to update the dependencies is to use [npm-check-updates](https:/
 
 Print a report of unused dependencies, files & exports using [Knip](https://github.com/webpro/knip) (for the configuration, see [.knip.json](../.knip.json)):
 
-```
-npm run unused
+```bash
+pnpm unused
 ```
