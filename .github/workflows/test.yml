@@ -18,7 +18,7 @@ jobs:
         id: node-version
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Use Node.js ${{ steps.node-version.outputs.NODE_VERSION }}
         uses: actions/setup-node@v5
