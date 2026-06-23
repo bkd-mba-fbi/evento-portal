@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https@github.com:bkd-mba-fbi/evento-portal.git"
+    "url": "git+https://github.com/bkd-mba-fbi/evento-portal.git"
   },
   "type": "module",
   "packageManager": "pnpm@11.8.0",
