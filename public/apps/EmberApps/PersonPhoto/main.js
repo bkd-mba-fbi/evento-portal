@@ -244,7 +244,8 @@ function startPerson(idperson,token){
       "AdditionalInformation": {
         "ObjectId": idPerson,
         "ObjectTypeId": 3,
-        "Designation": "Photo"
+        "Designation": "Photo",
+        "TypeId": 1011,
       },
       "FileStreamInfo": {
         "Filename": filename
