@@ -29,8 +29,8 @@
     "cy:open": "cypress open --e2e",
     "locale:extract": "lit-localize extract",
     "locale:build": "lit-localize build",
-    "format": "prettier --write --ignore-unknown \"./**/*.*\"",
-    "format:upgrade": "pnpm install --save-exact prettier@latest && pnpm format",
+    "format": "pnpm exec prettier . --write --ignore-unknown",
+    "format:check": "pnpm exec prettier . --check --ignore-unknown",
     "unused": "npx knip"
   },
   "dependencies": {

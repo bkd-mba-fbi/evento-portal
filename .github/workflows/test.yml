@@ -33,7 +33,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint 🔍
-        run: pnpm lint
+        run: |
+          pnpm format:check
+          pnpm lint
 
       - name: Cypress 🔬
         uses: cypress-io/github-action@v7
