@@ -26,9 +26,10 @@ export class Content extends LitElement {
       :host {
         --bkd-content-margin-top: 3rem;
         --bkd-content-margin-horizontal: var(--bkd-margin-horizontal-large);
-        padding: var(--bkd-content-margin-top)
-          var(--bkd-content-margin-horizontal) 0
-          var(--bkd-content-margin-horizontal);
+        padding-top: var(--bkd-content-margin-top);
+        /* Instead of defining the horizontal and bottom padding in the portal,
+           we inject it into the iframe to avoid cropping of outlines, see
+           injectIframePaddingStyles() */
       }
 
       h1 {
@@ -37,7 +38,8 @@ export class Content extends LitElement {
         line-height: 2.25rem;
         letter-spacing: 0.01rem;
         word-spacing: 0.025rem;
-        margin: 0 0 calc(3.375rem / 2) 0;
+        margin: 0 var(--bkd-content-margin-horizontal) calc(3.375rem / 2)
+          var(--bkd-content-margin-horizontal);
       }
 
       iframe {
@@ -119,9 +121,55 @@ export class Content extends LitElement {
           id="app"
           title=${portalState.app.key}
           src=${`/${portalState.app.root}${portalState.appPath}`}
+          @load=${this.injectIframePaddingStyles}
         ></iframe>
       `,
     )}`;
+  }
+
+  /**
+   * To not crop outlines of elements in the iframe, we inject and apply a
+   * horizontal and bottom padding to the iframe's body.
+   */
+  private injectIframePaddingStyles(event: Event): void {
+    const iframe = event.target as HTMLIFrameElement;
+    const doc = iframe.contentDocument;
+    if (!doc) return;
+
+    // Only inject styles if not present already
+    let style = doc.getElementById("bkd-portal-injected-styles");
+    if (!style) {
+      style = doc.createElement("style");
+      style.id = "bkd-portal-injected-styles";
+      doc.head.appendChild(style);
+    }
+    const rootStyles = window.getComputedStyle(document.documentElement);
+    const paddingLarge = rootStyles
+      .getPropertyValue("--bkd-margin-horizontal-large")
+      .trim();
+    const paddingMedium = rootStyles
+      .getPropertyValue("--bkd-margin-horizontal-medium")
+      .trim();
+    const paddingSmall = rootStyles
+      .getPropertyValue("--bkd-margin-horizontal-small")
+      .trim();
+    style.textContent = `
+      body {
+        padding-left: ${paddingLarge};
+        padding-right: ${paddingLarge};
+        padding-bottom: 0.25rem;
+
+        @media screen and (max-width: 1200px) {
+          padding-left: ${paddingMedium};
+          padding-right: ${paddingMedium};
+        }
+
+        @media screen and (max-width: 767px) {
+          padding-left: ${paddingSmall};
+          padding-right: ${paddingSmall};
+        }
+      }
+    `;
   }
 
   private renderFooterContent() {
