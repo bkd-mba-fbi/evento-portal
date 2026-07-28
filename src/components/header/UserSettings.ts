@@ -126,9 +126,11 @@ export class UserSettings extends LitElement {
       >
         ${item.label}</a
       >
-      ${item.img
-        ? html`<img src=${item.img} alt="" width="24" height="24" />`
-        : nothing}
+      ${
+        item.img
+          ? html`<img src=${item.img} alt="" width="24" height="24" />`
+          : nothing
+      }
     </li>`;
   }
 

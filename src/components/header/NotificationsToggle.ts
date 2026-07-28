@@ -134,8 +134,10 @@ export class NotificationsToggle extends LitElement {
         ${unsafeHTML(bellIcon)}
         <span
           class="circle"
-          ?hidden=${this.state !== NotificationsState.SUCCESS ||
-          this.notifications?.length === 0}
+          ?hidden=${
+            this.state !== NotificationsState.SUCCESS ||
+            this.notifications?.length === 0
+          }
         >
           ${this.notifications?.length}
         </span>
