@@ -26,7 +26,6 @@
     "CONFIRM_CANCEL_RESERVATION": "Voulez-vous annuler la réservation '{{designation}}' ?",
     "CREATE_DEVICE_RESERVATION": "Créer une réservation d'appareil",
     "CREATE_ROOM_RESERVATION": "Créer une réservation de salle",
-    "DATA_LODING_ERROR_GENERAL": "Une erreur inattendue s'est produite lors du chargement des données.",
     "DATE": "Date",
     "DATES": "Dates",
     "DAY_CHAR": "j",

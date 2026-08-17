@@ -10,10 +10,8 @@
     "user.logout-button-label": "Logout",
     "user.login-button-label": "Anmelden"
   },
-
   "substitutions.title": "Meine Stellvertretungen",
   "substitutions/current.title": "Stellvertretung Ausüben",
-
   "substitution-model": {
     "Holder": "Für Lehrperson",
     "Substitute": "Stellvertretung",
@@ -21,28 +19,22 @@
     "DateTo": "Datum bis",
     "Remarks": "Kommentar"
   },
-
   "substitution-edit": {
     "title-holder-prefix": "für",
-
     "field-date-from-label": "Datum von",
     "field-date-from-placeholder": "Datum wählen...",
     "field-date-to-label": "Datum bis",
     "field-date-to-placeholder": "Datum wählen...",
     "field-remarks-label": "Kommentar",
     "field-remarks-placeholder": "Kommentar...",
-
     "cancel-button-label": "Abbrechen",
     "save-button-label": "Speichern",
-
     "confirm-delete-message": "Wollen Sie diese Stellvertretung löschen?",
     "confirm-delete-cancel-button-label": "Abbrechen",
     "confirm-delete-confirm-button-label": "Löschen",
-
     "save-success-message": "Die Stellvertretung wurde gespeichert.",
     "delete-success-message": "Die Stellvertretung wurde gelöscht."
   },
-
   "substitution-create": {
     "field-holder-label": "Für Lehrperson",
     "field-holder-placeholder": "Name suchen...",
@@ -54,17 +46,13 @@
     "field-date-to-placeholder": "Datum wählen...",
     "field-remarks-label": "Kommentar",
     "field-remarks-placeholder": "Kommentar...",
-    
     "cancel-button-label": "Abbrechen",
     "save-button-label": "Übernehmen",
-
     "confirm-delete-message": "Wollen Sie diese Stellvertretung löschen?",
     "confirm-delete-cancel-button-label": "Abbrechen",
     "confirm-delete-confirm-button-label": "Löschen",
-
     "save-success-message": "Die Stellvertretung wurde gespeichert."
   },
-
   "substitution-create-ad-hoc": {
     "title": "Sofort-Stellvertretung ausüben",
     "field-holder-label": "Für Lehrperson",
@@ -72,50 +60,38 @@
     "cancel-button-label": "Abbrechen",
     "save-button-label": "Ausüben"
   },
-
   "page-substitution-list": {
     "title-message": "Von Ihnen erfasste Stellvertretung: Die Person ist berechtigt, in der definierten Zeitspanne Ihre Funktion zu übernehmen.",
     "empty-message": "Erfassen Sie eine Stellvertretung mit Klick auf +."
   },
-
   "substitution-list": {
     "column-title-substitute": "Stellvertretung",
     "column-title-date-range": "Zeitspanne",
     "column-title-remarks": "Kommentar",
     "column-title-holder": "Für Lehrperson"
   },
-
   "substitution-list-admin": {
     "count-label": "Anzahl aktive und zukünftige Stellvertretungen: ",
     "search-placeholder": "Name suchen...",
     "create-ad-hoc-button-label": "Sofort-Stellvertretung",
-
     "column-title-substitute": "Stellvertretung",
     "column-title-holder": "Für Lehrperson",
     "column-title-date-range": "Zeitspanne",
     "column-title-remarks": "Kommentar ",
-
     "substitution-holder-prefix": "Für "
   },
-
   "execute-substitution-list": {
     "substitution-inactive-title-message": "Sie üben zurzeit keine Stellvertretung aus.",
     "substitution-active-title-message": "Sie üben zurzeit eine Stellvertretung aus.",
-
     "substitution-holder-prefix": "Für ",
-
     "column-title-holder": "Für Lehrperson",
     "column-title-date-range": "Zeitspanne",
     "column-title-remarks": "Kommentar",
-
     "start-button-label": "Ausüben",
     "stop-button-label": "Beenden",
-
     "active-label": "Aktiv",
-
     "empty-list-message": "Keine Lehrpersonen vorhanden"
   },
-
   "global": {
     "app-errors": {
       "exception-title": "Fehler",
