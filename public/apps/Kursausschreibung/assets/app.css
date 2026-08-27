@@ -12622,6 +12622,10 @@ iframe.uk-cover {
   background: #eaf3ff;
 }
 
+.uk-scope .freeform-typeahead__match {
+  font-weight: 900;
+}
+
 .uk-scope #subscriptionProcess {
   padding: 20px 0 20px 0;
   border-bottom: 1px solid #e5e5e5;
