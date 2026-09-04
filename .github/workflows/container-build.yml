@@ -91,6 +91,8 @@ jobs:
       - name: Build application 🏭
         run: |
           pnpm build
+          VERSION="$(date -u +'%y.%m').$(git rev-parse --short=7 HEAD)"
+          sed -i "s/__APP_VERSION__/${VERSION}/g" dist/index.html dist/unrestricted/index.html
           mv dist evento-portal
           mkdir dist
           mv evento-portal dist
