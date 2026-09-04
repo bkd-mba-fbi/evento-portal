@@ -112,15 +112,19 @@ export class Footer extends LitElement {
   }
 
   render() {
-    const appVersion = document.querySelector('meta[name="app-version"]')?.getAttribute("content");
+    const appVersion = document
+      .querySelector('meta[name="app-version"]')
+      ?.getAttribute("content");
 
     return html`
       <footer role="contentinfo">
         <div class="copyright">
           ${msg("© Bildungs- und Kulturdirektion")}
-          ${appVersion && appVersion !== "__APP_VERSION__"
-            ? html`<span> ${appVersion}</span>`
-            : ""}
+          ${
+            appVersion && appVersion !== "__APP_VERSION__"
+              ? html`<span> ${appVersion}</span>`
+              : ""
+          }
         </div>
         <div class="footer-nav">
           ${repeat(
