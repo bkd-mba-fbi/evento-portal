@@ -39,6 +39,15 @@ export class Footer extends LitElement {
         word-spacing: 0.05rem;
       }
 
+      .footer-version {
+        margin-top: 0.25rem;
+        visibility: hidden;
+      }
+
+      .copyright:hover .footer-version {
+        visibility: visible;
+      }
+
       .footer-nav {
         display: flex;
         gap: 2.5rem;
@@ -112,9 +121,22 @@ export class Footer extends LitElement {
   }
 
   render() {
+    const appVersion = document
+      .querySelector('meta[name="app-version"]')
+      ?.getAttribute("content");
+
     return html`
       <footer role="contentinfo">
-        <div class="copyright">${msg("© Bildungs- und Kulturdirektion")}</div>
+        <div class="copyright">
+          ${msg("© Bildungs- und Kulturdirektion")}
+          <span class="copyright footer-version">
+            ${
+              appVersion && appVersion !== "__APP_VERSION__"
+                ? html`${appVersion}`
+                : ""
+            }
+          </span>
+        </div>
         <div class="footer-nav">
           ${repeat(
             settings.footer,

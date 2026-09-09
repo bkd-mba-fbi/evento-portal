@@ -31,6 +31,8 @@ jobs:
       - name: Build 🏭
         run: |
           pnpm build
+          VERSION="$(date -u +'%y.%m').$(git rev-parse --short=7 HEAD)"
+          sed -i "s/__APP_VERSION__/${VERSION}/g" dist/index.html dist/unrestricted/index.html
           sed -i "s/example/schoolWeb/" dist/settings.example.js
           sed -i "s/eventotest.api/eventoapp-test.apps.be.ch/" dist/settings.example.js
           mv  dist/settings.example.js  dist/settings.js
