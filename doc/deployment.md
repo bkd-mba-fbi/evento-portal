@@ -16,6 +16,14 @@ Here is an overview of the operation environments the _Evento Portal_ will be de
 
 See [Git Workflow](./git.md) for the general branching concept and workflow.
 
+### Application Version in the Footer
+
+The application version is displayed in the portal footer when hovering over the copyright notice. The version is read from the `app-version` meta tag in [`index.html`](../index.html) and [`unrestricted/index.html`](../unrestricted/index.html).
+
+The HTML files contain the `__APP_VERSION__` placeholder during development.
+The release workflows replace this placeholder with the automatically generated release version before deployment. If the placeholder has not been
+replaced, no version is displayed.
+
 ### Development Environment
 
 - The latest commit from the `main` branch will be automatically deployed to a _development_ environment on Netlify (on push), based on the [testBuildEnv.yml](../.github/workflows/testBuildEnv.yml) GitHub Actions workflow.
