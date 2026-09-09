@@ -129,13 +129,13 @@ export class Footer extends LitElement {
       <footer role="contentinfo">
         <div class="copyright">
           ${msg("© Bildungs- und Kulturdirektion")}
-            <span class="copyright footer-version">
+          <span class="copyright footer-version">
             ${
               appVersion && appVersion !== "__APP_VERSION__"
                 ? html`${appVersion}`
                 : ""
             }
-            </span>
+          </span>
         </div>
         <div class="footer-nav">
           ${repeat(
