@@ -1,0 +1,1640 @@
+﻿@import "_vars.scss";
+@import "_mixins.scss";
+
+//////////////// browser default overwrites
+*:focus {
+    outline: none;
+}
+
+/*Firefox*/
+:invalid {
+    box-shadow: none;
+}
+
+:-moz-submit-invalid {
+    box-shadow: none;
+}
+
+:-moz-ui-invalid {
+    box-shadow: none;
+}
+
+//////////////// jquery ui overwrites
+.ui-autocomplete {
+    @extend .dialogContextMenu;
+}
+
+.ui-state-active, .ui-state-focus {
+    background-color: $lineColor;
+}
+
+//////////////// text
+
+html {
+    font-size: 62.5%;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body, input, textarea, select, a, pre, button {
+    font-family: Arial;
+    font-size: 1.4rem;
+    color: $textColor;
+}
+
+.flot-text, .legendLabel {
+    font-size: 1.4rem !important;
+}
+
+h1 {
+    font-size: 20px;
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 18px;
+    font-size: 1.8rem;
+}
+
+h3 {
+    font-size: 16px;
+    font-size: 1.6rem;
+}
+
+h4 {
+    font-size: 14px;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.searchHit {
+    font-weight: bold;
+}
+
+//////////////// html elements
+html, body {
+    background-color: $windowColor;
+}
+
+header {
+    background-color: $mediumBlue;
+    color: $activeTextColor;
+    width: 100%;
+    height: 7rem;
+    line-height: 7rem;
+    position: relative;
+
+    #page_title {
+        padding-left: 1rem;
+        margin: 0;
+    }
+
+    .user_info {
+        position: absolute;
+        right: 0;
+        top: 0;
+        line-height: initial;
+        height: 7rem;
+
+        > div {
+            float: right;
+            clear: right;
+            margin: 0.3rem 0;
+        }
+    }
+
+    button {
+        background: transparent;
+        border: none;
+        color: $activeTextColor;
+        white-space: nowrap;
+        transition: all linear 0.3s;
+        width: auto;
+        cursor: pointer;
+
+        &:hover {
+            color: $selectedColor;
+            text-shadow: 0 0 3px $selectedColor;
+        }
+
+        > * {
+            float: right;
+        }
+
+        > div {
+            margin: 0.4rem 0.4rem 0 0;
+        }
+    }
+}
+
+#CLX_Root {
+    p {
+        margin: $dialogPadding 0;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    textarea {
+        width: 100%;
+        height: $textareaHeightSmall;
+    }
+
+    pre {
+        margin: 0;
+        white-space: pre-wrap; // css-3
+        white-space: -moz-pre-wrap; // Mozilla, since 1999
+        white-space: -pre-wrap; // Opera 4-6
+        white-space: -o-pre-wrap; // Opera 7
+        word-wrap: break-word; // Internet Explorer 5.5+
+    }
+
+    input[type=text], textarea, select, .combobox, .textBox {
+        border: 1px solid $lineColorMedium;
+        padding: $inputPadding;
+        box-sizing: border-box;
+        min-width: $minimalInputSize;
+        background-color: $controlBackgroundColor;
+
+        + button {
+            margin-left: $inputPadding;
+        }
+    }
+
+    table {
+        border-spacing: 0;
+        border-collapse: separate;
+
+        th {
+            font-weight: 600;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        td, th {
+            padding: $cellPadding ($cellPadding/2);
+
+            .material-icons {
+                font-size: $mediumButtonSize;
+                margin-left: -0.3rem;
+            }
+
+            &:nth-child(3) {
+                @extend .ellipsis;
+                max-width: 30rem;
+            }
+        }
+
+        .iconColumn {
+            width: $mediumButtonSize !important;
+            max-width: $mediumButtonSize !important;
+        }
+    }
+
+    svg {
+        width: $smallButtonSize;
+        height: $smallButtonSize;
+    }
+
+    button, a.textButton {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        width: $mediumButtonSize;
+        height: $mediumButtonSize;
+
+        svg {
+            height: $mediumButtonSize;
+            width: $mediumButtonSize;
+        }
+        // only change stroke if it actually was stroked (hover and context menu shown = .active)
+        &:hover {
+            path[stroke="#666"], rect[stroke="#666"], circle[stroke="#666"], ellipse[stroke="#666"] {
+                stroke: $selectedColor;
+            }
+
+            path[fill="#666"], rect[fill="#666"], circle[fill="#666"], ellipse[fill="#666"] {
+                fill: $selectedColor;
+            }
+        }
+
+        &:active, &.active {
+            path[stroke="#666"], rect[stroke="#666"], circle[stroke="#666"], ellipse[stroke="#666"] {
+                stroke: $selectedColor;
+            }
+
+            path[fill="#666"], rect[fill="#666"], circle[fill="#666"], ellipse[fill="#666"] {
+                fill: $selectedColor;
+            }
+        }
+        // only change stroke if it actually was stroked
+        &[disabled] {
+            path[stroke="#666"], rect[stroke="#666"], circle[stroke="#666"], ellipse[stroke="#666"] {
+                stroke: $inactiveColor !important;
+            }
+
+            path[fill="#666"], rect[fill="#666"], circle[fill="#666"], ellipse[fill="#666"] {
+                fill: $inactiveColor !important;
+            }
+        }
+
+        &:active svg {
+            margin: $buttonIndent 0 0 $buttonIndent;
+            height: $smallButtonSize;
+            width: $smallButtonSize;
+        }
+
+        path, rect, circle {
+            @include pre(transition, all $baseTransitionTime ease-out);
+        }
+
+        .loadingAnimation {
+            min-height: $mediumButtonSize;
+            min-width: $mediumButtonSize;
+        }
+    }
+
+    label.required::after {
+        content: " *";
+    }
+
+    .formRow .combobox button {
+        height: 1.6rem;
+    }
+
+    .row {
+        clear: both;
+        float: left;
+        width: 100%;
+
+        .dialogInfo {
+            margin: 2*$dialogPadding 0 0 0 !important;
+        }
+
+        > div {
+            float: left;
+            box-sizing: border-box;
+            margin: 2*$dialogPadding $dialogPadding 0 0;
+
+            &:last-child {
+                margin: 2*$dialogPadding 0 0 0 !important;
+            }
+
+            .colLine {
+                margin: 2*$dialogPadding 0 !important;
+            }
+
+            h4.rowTitle {
+                font-weight: bold;
+                margin: 0 0 $dialogPadding / 2 0;
+            }
+        }
+
+        &:first-child {
+            margin-top: -$dialogPadding !important;
+        }
+
+        .rowTitle, .blockTitle {
+            margin: 3*$dialogPadding 0 0 0;
+        }
+    }
+
+    .option-button {
+        height: 2.6rem;
+        width: auto;
+        border: 2px solid $mediumBlue;
+        padding: 0 5px 0 5px; 
+    }
+
+    .option-button.active {
+        background: $mediumBlue;
+        color: $windowColor;
+    }
+
+    .gradesActionButtons {
+        width: auto;
+        float: right; 
+        padding-right: .7rem; 
+        position: relative; 
+        line-height: 30px;
+        margin-right: 1rem;
+        
+        .btn-clearGrades,
+        .btn-applyGrade,
+        .btn-addUnregisteredStudent {
+            width: auto;
+            height: auto;
+            border: 2px solid $mediumBlue;
+            padding: .5rem 1rem;
+        }
+    }
+
+    // .settings-overlay {
+    //     height: auto !important;
+    //     min-height: 10rem;
+    //     width: 80% !important;
+    //     min-width: 10rem;
+    //     left: 10% !important;
+    //     top: calc(50% - 20rem);
+    // }
+    // .option-button {
+    //     height: 2.6rem;
+    //     width: auto;
+    //     border: 2px solid #005189;
+    //     padding: 0 5px 0 5px; 
+    // }
+    // .option-button.active {
+    //     background: #005189;
+    //     color: #fff; 
+    // }
+
+    .groupContainer {
+        margin-bottom: 20px;
+    }
+}   
+
+//////////////// specialized html elements
+.material-icons {
+    line-height: inherit !important;
+    &.reverse {
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+}
+
+.dialogMainInfo {
+    font-weight: bold;
+}
+
+.grading-options {
+    clear: left;
+
+    #grade_methods {
+        width: $smallButtonSize;
+        height: $smallButtonSize;
+    }
+}
+
+@mixin icon-colors {
+    .no-valid {
+        color: #f45b5b;
+    }
+
+    .valid {
+        color: #5fd35f;
+    }
+}
+
+//////// buttons
+
+.textButton {
+    line-height: $mediumButtonSize;
+    width: auto !important;
+    white-space: nowrap;
+    display: flex; 
+
+    svg, div.loadingAnimation {
+        float: left;
+        height: $mediumButtonSize;
+        width: $mediumButtonSize;
+    }
+
+    div:not(.loadingAnimation), h3 {
+        font-weight: bold;
+        margin-left: $dialogPadding + $mediumButtonSize;
+        @include pre(transition, all $baseTransitionTime ease-out);
+    }
+
+    &:hover {
+        div, h3, span {
+            color: $selectedColor;
+        }
+    }
+
+    path, rect, circle {
+        @include pre(transition, all $baseTransitionTime ease-out);
+    }
+
+    &[disabled] {
+
+        > div {
+            color: $inactiveColor !important;
+        }
+
+        svg {
+            height: $mediumButtonSize !important;
+            width: $mediumButtonSize !important;
+            margin: 0 !important;
+        }
+
+    }
+
+    &.error div {
+        color: $errorColor !important;
+    }
+}
+
+//////// tables
+.editTable {
+    @extend .borderTable;
+
+    td {
+        padding: $cellPaddingLarge ($cellPaddingLarge / 2) !important;
+
+        > input:not([type="checkbox"]), > .combobox input, > select, > textarea {
+            height: auto;
+        }
+    }
+
+    input.dateTextBox {
+        width: calc(100% - #{$mediumButtonSize + $dialogPadding +$cellPaddingLarge});
+    }
+
+    .textBox {
+        width: 100%;
+    }
+}
+
+ul.noBullets {
+  list-style-type: none;
+}
+
+.noIndent {
+    padding-left: 0;
+}
+
+//////// titles
+h4.blockTitle {
+    color: $textColorBright;
+    font-style: italic;
+    border-bottom: solid 1px $lineColorMedium;
+    padding-bottom: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+//////////////// comon and base definitions for SCSS
+
+#CLX_Root, #CLX_Root > .ember-view {
+    height: 100%;
+}
+
+#CLX_Root a, .overlayDialog a, .contextMenu a {
+    text-decoration: none;
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    @include pre(text-overflow, ellipsis);
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    @include pre(user-select, none);
+}
+
+.defaultShadow {
+    @include boxShadow(null, null, null, null, null);
+}
+
+.borderBox {
+    @include pre(box-sizing, border-box);
+}
+
+.blockNote {
+    font-style: italic;
+    margin: $dialogPadding / 2 0;
+}
+
+.buttonRight {
+    float: right;
+    margin-left: $dialogPadding;
+}
+
+.buttonLeft {
+    float: left;
+    margin-right: $dialogPadding;
+}
+
+//////////////// ember components
+
+.fileChooser {
+    float: left;
+
+    > button, > div, > input {
+        float: left;
+        margin-right: $dialogPadding;
+    }
+    .deleteButton {
+        margin-right: 2*$dialogPadding;
+
+        svg {
+            width: $smallButtonSize;
+            height: $smallButtonSize;
+            margin-top: ($mediumButtonSize - $smallButtonSize) / 2;
+        }
+    }
+}
+
+// defines filter color (background-color), rectangle border (always use px) and errorColor (color) of the foto filter tool
+.fotoFilterRectangle {
+    background-color: $overlayColor;
+    border: 2px solid $selectedColor;
+    color: $errorColor;
+}
+
+.blendElement {
+    @include pre(transition, all $baseTransitionTime ease-out);
+
+    &.slideIn {
+        margin-left: -100% !important;
+    }
+
+    &.fadeIn {
+        opacity: 0;
+    }
+}
+
+//////////////// evento widgets
+
+.dateTextbox {
+    max-width: $smallInputSize;
+    min-width: $minimalInputSize + 3rem; // extra space for calendar icon
+
+    input {
+        width: calc(100% - #{$mediumButtonSize + $dialogPadding});
+        float: left;
+        min-width: $minimalInputSize - $mediumButtonSize - $dialogPadding;
+    }
+    input.noButton {
+        width: 100%;
+    }
+}
+
+.combobox {
+    position: relative;
+    height: 2.7rem;
+
+    input, > div {
+        width: calc(100% - #{$inputPadding + $mediumButtonSize});
+        border: none !important;
+        padding: 0 !important;
+        box-sizing: border-box;
+    }
+
+    input {
+        @extend .ellipsis;
+        min-width: auto !important;
+    }
+
+    button {
+        float: right;
+    }
+}
+
+//***clean up***//
+#httpErrorIcon {
+    height: $errorIconHeight;
+    width: $errorIconWidth;
+}
+
+.errorContainer {
+    float: left;
+    padding: 5%;
+    width: 90%;
+
+    #httpErrorIcon {
+        margin-right: 2*$dialogPadding;
+    }
+
+    > div, > h2, #httpErrorIcon {
+        float: left;
+    }
+
+    > div, > h2 {
+        width: calc(100% - #{$errorIconWidth + 2*$dialogPadding});
+    }
+
+    > h2 {
+        font-size: 2.6rem;
+        color: $selectedColor;
+        font-weight: bold;
+        margin-bottom: 2*$dialogPadding;
+        border-bottom: 1px solid $lineColorMedium;
+    }
+
+    > .dialogInfo {
+        float: left;
+    }
+}
+
+.error {
+    color: $errorColor;
+}
+.warning {
+    color: $warningColor;
+}
+
+.urlDiv {
+    word-break: break-all;
+}
+
+.bodyContainer a, .dialogBody a, .dialogFooter .buttonDiv .textButton {
+    color: $linkColor;
+}
+
+.borderTable {
+    width: 100%;
+
+    td {
+        border-bottom: 1px solid $lineColor;
+    }
+
+    tr:last-child > td {
+        border-bottom: none;
+    }
+
+    th {
+        border-bottom: 1px solid $lineColorDark;
+    }
+}
+
+.ellipsisTable {
+    table-layout: fixed;
+
+    th, td {
+        @extend .ellipsis;
+    }
+}
+
+.radioButtonList {
+    display: inline-block;
+
+    input[type="radio"] {
+        float: left;
+    }
+
+    label {
+        float: left;
+        vertical-align: middle;
+        margin-right: $dialogPadding;
+    }
+
+    > div {
+        line-height: $mediumButtonSize;
+        float: left;
+        white-space: nowrap;
+    }
+}
+
+.dialogContextMenu td {
+    padding: ($cellPadding/2) $cellPadding;
+}
+
+.toggleIcon svg {
+    height: $tinyButtonSize;
+    width: $tinyButtonSize;
+}
+//###clean up###//
+
+//////////////// modal overlay
+.modalOverlay {
+    background-color: $overlayFallbackColor;
+    background-color: $overlayColor;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.dialogDraggable {
+    position: fixed !important;
+    min-width: $minDialogWidth;
+    min-height: $minDialogHeight;
+    background-color: $windowColor;
+    width: $dialogWidth;
+    height: $dialogHeight;
+    left: calc((100% - #{$dialogWidth}) / 2);
+    top: calc((100% - #{$dialogHeight}) / 2);
+}
+
+.informationPopup {
+    max-width: $breakpointWidth;
+    max-height: $breakpointWidth;
+    padding: $dialogPadding;
+}
+
+//////////////// loading template
+
+.centerWrapper {
+    margin: auto;
+    display: table;
+    height: 600px;
+}
+
+.middleWrapper {
+    display: table-cell;
+    vertical-align: middle;
+    height: 100%;
+}
+
+.loadingAnimation {
+    background-image: url(images/ember_loading.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100px 100px;
+    min-height: 100px;
+    min-width: 100px;
+}
+
+.fullScreenLoading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $windowColor;
+
+    .loadingAnimation, .loadingText {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+//////////////// dialog
+.dialog {
+    @include icon-colors;
+
+    .noFixedHeader {
+        .editTable {
+            th {
+                border-bottom: none;
+            }
+        }
+    }
+}
+
+.dialogFlexContainer {
+    height: 100%;
+    @include displayFlex();
+    @include flexDirection(column);
+
+    > div {
+        padding: 0 $dialogPadding;
+        margin: $dialogPadding 0;
+    }
+
+    > div:first-child {
+        margin-top: 0;
+    }
+
+    > div:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.dialogBlock, .oneHalfBlock, .oneThirdBlock, .dialogBody hr, .dialogPart, .dialogBody {
+    float: left;
+}
+
+.dialogElement, hr {
+    width: 100%;
+}
+
+.dialogBlock {
+    padding: $dialogPadding;
+    width: calc(100% - #{2*$dialogPadding});
+}
+
+.dialogBlockFlex {
+    @include flex(1, 1, auto);
+}
+
+.dialogBlockFixed {
+    @include flex(0, 1, auto);
+}
+
+.columnLeft {
+    margin-right: 10%;
+}
+
+.dialogColumnContainer {
+    position: relative;
+    @include displayFlex();
+    @include flexDirection(row);
+}
+
+.dialogColumnFixed {
+    @extend .dialogBlockFixed;
+}
+
+.dialogColumnFlex {
+    @extend .dialogBlockFlex;
+}
+
+.dialogTitle svg, .searchToolbar svg {
+    width: $mediumButtonSize;
+    height: $mediumButtonSize;
+}
+
+.dialogBody {
+    padding: $dialogPadding;
+    width: 100%;
+    overflow-y: auto;
+    @include flex(1, 1, auto);
+    @extend .dialogElement;
+
+    hr {
+        margin: $dialogVerticalMargin 0;
+    }
+
+    > div.ember-view {
+        height: 100%;
+    }
+
+    > .dialogToolbar {
+        margin-left: - $dialogPadding;
+        width: 100%;
+    }
+}
+
+.dialogTitle {
+
+    h2 {
+        font-style: normal;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: inline;
+    }
+
+    button {
+        @extend .buttonRight;
+    }
+}
+
+.dialogElement 
+{
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dialogHeader {
+    padding: $dialogPadding;
+    background-color: $barColor;
+    font-weight: bold;
+    border-bottom: solid 1px $lineColorMedium;
+    @extend .dialogElement;
+    @include flex(0, 1, auto);
+    min-height: $minDialogHeaderHeight;
+
+    h2 {
+        color: $textColor; 
+        font-size: 1.5rem;
+    }
+}
+
+.dialogFooter {
+   
+    line-height: $footerHeight;
+    padding: 0 $dialogPadding + 1;
+    position: relative;
+    border-top: solid 1px $lineColorMedium;
+    background-color: $barColor;
+    min-height: $footerHeight; // needed for IE
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    align-items: center;
+
+    .textIcon {
+        float: none;
+        display: inline-block;
+    }
+
+    .pdfReport {
+        margin: 0;
+    }
+
+    .linkDiv {
+        float: left;
+        margin-left: $dialogPadding;
+    }
+
+    .buttonDiv {
+        float: right;
+        margin-left: 2*$dialogPadding;
+    }
+
+    .validationErrorMessage {
+        border: none;
+        padding: 0 $dialogPadding;
+    }
+
+    .buttonContainer {
+        padding-right: $dialogPadding;
+    }
+
+    .buttonDiv {
+        display: flex;
+        justify-content: center;
+        margin-left: 0px;
+
+        .textButton {
+            margin-top: 0px;
+
+            div {
+                margin-left: 0px;
+                font-weight: normal;
+            }
+
+            span {
+                font-weight: normal;
+            }
+        }
+    }
+}
+
+.footerValidation {
+    color: $errorColor;
+    position: absolute;
+    right: $dialogPadding;
+    bottom: $footerHeight + $dialogPadding;
+    width: $footerValidationWidth;
+    padding: $dialogPadding;
+    white-space: normal !important;
+}
+
+.sectionTitle {
+    color: $mediumBlue;
+    margin-top: $dialogPadding / 2;
+    text-align: center;
+    width: 100%;
+    clear: both;
+}
+
+.fillVertical {
+    height: 100%;
+}
+
+.dialogSubTitle {
+    margin-bottom: $dialogPadding;
+}
+
+.dialogInfoTable {
+    margin-bottom: $dialogPadding;
+    width: 100%;
+    td {
+        padding-left: 0 !important;
+        padding-right: 2 * $dialogPadding !important;
+    }
+}
+
+.dialogToolbar {
+    line-height: $dialogToolbarHeight;
+    height: $dialogToolbarHeight;
+    border-top: 1px solid $lineColorMedium;
+    background-color: $barColor;
+    padding: 0 $dialogPadding;
+
+    > div:not(.buttonContainer) {
+        margin-right: $dialogPadding;
+        float: left;
+    }
+
+    .combobox button {
+        top: $tabHeight / 2 - $smallButtonSize / 2;
+    }
+
+    .verticalSpacer {
+        border-left: $lineColorDark 1px solid;
+        height: $dialogToolbarHeight - 2*$inputPadding;
+        margin-top: $inputPadding;
+    }
+}
+
+.dialog {
+    background-color: $windowColor;
+    width: 100%;
+    height: 100%;
+    min-width: $minDialogWidth;
+    min-height: $minDialogHeight; 
+    @include displayFlex();
+    @include flexDirection(column);
+}
+
+.smartDialog {
+    top: 50%;
+    left: 50%;
+    min-height: 100px;
+    min-width: 200px;
+    margin-top: -50px;
+    margin-left: -100px;
+
+    > div {
+        float: left;
+        clear: left;
+        width: 100%;
+    }
+
+    .dialogHeader {
+        box-sizing: border-box;
+    }
+
+    .dialogBody {
+        padding: 0;
+    }
+
+    h4 {
+        margin: $dialogPadding 0;
+    }
+
+    .dialogToolbar {
+        padding: 0 $dialogPadding;
+    }
+
+    .dialogFooter { 
+        button {
+            margin: 0 $dialogPadding;
+        }
+    }
+
+    .dialogBlock {
+        float: none;
+        padding: $dialogPadding;
+        margin: 0;
+    }
+}
+
+.flexDialogNeck {
+    margin: $dialogPadding;
+    @include flex(0, 1, auto);
+}
+
+/*detail dialog*/
+
+.dialogTab, .dialogIcon, .dialogTitle, .dialogQuickTabsChoice, .browseText {
+    float: left;
+}
+
+.buttonContainer {
+    float: right;
+
+    button {
+        float: right;
+        margin-left: 0.8rem;
+    }
+}
+
+.detailDialog .dialogTitle {
+    @extend .ellipsis;
+}
+
+.dialogIcon {
+    margin-right: $dialogPadding;
+
+    img {
+        max-height: $mediumButtonSize;
+        max-width: $mediumButtonSize;
+        cursor: pointer;
+    }
+}
+
+.tabBar {
+    height: $tabHeight;
+    @extend .dialogElement;
+    @include gradientTop($buttonColor2, $buttonColor1, $buttonColor2, null);
+    @include boxShadow($fallbackShadow, transparentize($defaultShadow, 0.4), 0, 2px, 3px);
+}
+
+a.active .dialogTab {
+    color: $activeTextColor;
+    font-weight: bold;
+    @include gradientTop($activeColor1, $activeColor1, $activeColor2, $activeColor3);
+}
+
+.dialogTab {
+    text-align: center;
+    cursor: pointer;
+    height: $tabHeight;
+    padding: $tabPadding;
+    border-right: 1px solid $lineColorMedium;
+    @extend .borderBox;
+}
+
+.dialogQuickTabsChoice {
+    cursor: pointer;
+    padding: $tabPadding;
+    width: 1.4rem + (2*$tabPadding);
+    height: $tabHeight;
+    @extend .borderBox;
+}
+
+.dialogQuickTabs {
+    right: 0;
+    margin-top: $tabHeight !important;
+
+    a {
+        text-decoration: none;
+        padding: 0 !important;
+    }
+}
+
+.dialogContextMenu {
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: $windowColor;
+    position: absolute;
+    padding: $dialogPadding/2 $dialogPadding;
+    margin: 0;
+    line-height: normal;
+    font-weight: normal;
+    white-space: nowrap;
+    @extend .defaultShadow;
+
+    &.tooltipMenu {
+        overflow-x: auto;
+        white-space: pre-wrap;
+        text-align: left;
+    }
+
+    &.htmlTooltipMenu {
+        overflow-x: auto;
+        white-space: normal;
+        text-align: left;
+    }
+
+    a, div, li {
+        display: block;
+        padding: $dialogPadding/2;
+        cursor: pointer;
+        text-decoration: none;
+        white-space: nowrap;
+        width: calc(100% - #{$dialogPadding});
+        float: left;
+        clear: left;
+        border-bottom: 1px solid $lineColor;
+
+        &:last-child {
+            border: none;
+        }
+
+        &:hover, &.itemHover {
+            background-color: $lineColor;
+        }
+    }
+
+    li a {
+        border-bottom: 1px solid $lineColor !important;
+    }
+
+    li:last-child a {
+        border: none !important;
+    }
+}
+
+.dialogAccordionTable {
+    margin-top: 2 * $dialogPadding;
+    width: 100%;
+}
+
+.hierarchyNode {
+    height: auto !important;
+}
+
+/*detail dialog list dialog*/
+
+.groupRow {
+    background-color: $lineColorMedium;
+    font-weight: bold;
+}
+
+.toggleIcon {
+    float: left;
+    margin-right: $dialogPadding;
+}
+
+/*detail dialog field dialog*/
+
+.fieldDialogSection {
+    float: left;
+}
+
+.fieldDialog {
+    overflow-y: auto;
+    height: 100%;
+}
+
+.dialogValue {
+    padding: $dialogPadding / 4;
+    margin: $dialogPadding / 4;
+    @extend .ellipsis;
+}
+
+.dialogLabel {
+    @extend .dialogValue;
+    @extend .ellipsis;
+    @extend .groupRow;
+}
+
+.browseText {
+    @extend .ellipsis;
+    width: calc(100% - #{$mediumButtonSize + $dialogPadding});
+    margin-right: $dialogPadding;
+}
+
+//////////////// form controls 
+
+.form {
+    float: left;
+}
+
+.formRow {
+    clear: left;
+    margin: $dialogPadding / 2 0;
+    float: left;
+    width: 100%;
+    min-height: 2.6rem;
+
+    .subscriptionDetail > .blendElement > label {
+        float: left;
+        width: 30%;
+        min-width: 200px;
+        position: relative;
+        margin-bottom: 0.4rem;
+    }
+
+    &.fullWidth > label, &.fullWidth > input {
+        width: 100%;
+        margin-bottom: $dialogPadding;
+    }
+
+    > input:Not([type="checkbox"]), > select, > .radioButtonContainer, .radioButtonList,
+    .subscriptionDetail > .blendElement > * {
+        float: left;
+        width: 70%;
+        min-width: $smallInputSize;
+    }
+
+    input.dateTextBox {
+        width: calc(40% - #{$mediumButtonSize + $dialogPadding});
+    }
+
+    .subscriptionDetailValue {
+        padding: $inputPadding;
+    }
+
+    input:checked + label {
+        color: $mediumBlue;
+    }
+
+    .combobox {
+        float: left;
+    }
+}
+
+.formLabelTop {
+    @extend .ellipsis;
+}
+
+.formControl {
+    > input, > span.combobox, > div, > textarea, > select {
+        display: block;
+        width: 100%;
+        margin-top: 2px;
+    }
+
+    > span.combobox input {
+        width: 100%;
+    }     
+}
+
+div.col12 {
+    width: calc(100% - #{$dialogPadding});
+}
+
+div.col8 {
+    width: calc(66.7% - #{$dialogPadding});
+}
+
+div.col6 {
+    width: calc(50% - #{$dialogPadding});
+}
+
+div.col5 {
+    width: calc(41.66% - #{$dialogPadding});
+}
+
+div.col4 {
+    width: calc(33.3% - #{$dialogPadding});
+}
+
+div.col3 {
+    width: calc(25% - #{$dialogPadding});
+}
+
+div.col2 {
+    width: calc(16.66% - #{$dialogPadding});
+}
+
+.colLine {
+    margin: $dialogPadding 0 !important;
+    border-bottom: 1px solid $lineColorDark;
+}
+
+pre.address {
+    padding: $dialogPadding 0;
+}
+
+.editControl {
+    position: relative;
+
+    .textButton {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        display: inline-block;
+        background-color: $textColor;
+        border-radius: $buttonBorderRadius $buttonBorderRadius 0 0;
+        padding: $dialogPadding/4;
+        color: $windowColor;
+
+        div {
+            font-weight: normal;
+        }
+
+        svg {
+            path[stroke="#666"], rect[stroke="#666"], circle[stroke="#666"], ellipse[stroke="#666"] {
+                stroke: $windowColor;
+            }
+
+            path[fill="#666"], rect[fill="#666"], circle[fill="#666"], ellipse[fill="#666"] {
+                fill: $windowColor;
+            }
+        }
+
+        &:hover svg {
+
+            path[stroke="#666"], rect[stroke="#666"], circle[stroke="#666"], ellipse[stroke="#666"] {
+                stroke: $selectedColor;
+            }
+
+            path[fill="#666"], rect[fill="#666"], circle[fill="#666"], ellipse[fill="#666"] {
+                fill: $selectedColor;
+            }
+        }
+    }
+}
+
+.formControl {
+    position: relative;
+
+    .textButton {
+        float: right;
+        margin: 0 $dialogPadding;
+    }
+}
+
+.tooltipButton {
+    position: absolute;
+    overflow: visible;
+    margin-left: $dialogPadding / 2;
+
+    svg {
+        height: $smallButtonSize;
+        width: $smallButtonSize;
+    }
+}
+
+.buttonContainer {
+    .tooltipButton {
+        position: static;
+        svg {
+            height: $mediumButtonSize;
+            width: $mediumButtonSize;
+        }
+    }
+}
+
+.radioButtonContainer {
+    display: inline-block;
+
+    input, label {
+        float: left;
+        width: auto;
+    }
+
+    label {
+        margin: 0 $dialogPadding 0 $dialogPadding / 2;
+    }
+}
+
+//////////////// validation & error
+
+.validationError {
+    @include pre(transition, border-color $baseTransitionTime ease-out);
+
+    &.showError {
+        border: 1px solid $errorColor !important;
+    }
+}
+
+.validationErrorMessage {
+    color: $errorColor;
+    border-bottom: 1px solid $lineColorMedium;
+    padding: $dialogPadding/2;
+    width: auto;
+
+    &.warning {
+        color: $warningColor;
+    }
+}
+
+//////////////// grading template
+
+.collapseTriangle {
+    width: 0;
+    height: 0;
+    border-width: 0 0.6rem 0.6rem 0.6rem;
+    border-color: transparent;
+    border-style: solid;
+    float: left;
+    padding: 0;
+    border-bottom-color: #666;
+    @include pre(transition, all $baseTransitionTime ease-out);
+}
+
+.triangleCollapsed {
+    @include pre(transform, rotate(90deg));
+}
+
+.triangleExpanded {
+    @include pre(transform, rotate(135deg));
+}
+
+//////////////// flot
+.flotThumb {
+    height: 20rem;
+    width: 30rem;
+    margin-bottom: 3rem;
+}
+
+.flotFull {
+    height: calc(100% - #{6*$dialogPadding});
+    width: calc(100% - #{6*$dialogPadding});
+    margin: auto;
+}
+
+.flotDialog {
+    float: left;
+    background-color: $flotBackground;
+    @extend .defaultShadow;
+
+    .flotLegend {
+        margin: 0;
+        float: left;
+    }
+
+    .dialogTitle {
+        float: left;
+        width: calc(100% - #{2 * $dialogPadding});
+    }
+
+    .flotFull {
+        float: left;
+        margin: 0 4 * $dialogPadding 4 * $dialogPadding;
+    }
+}
+
+.flotColumnContainer {
+    height: 26rem;
+}
+
+.flotLegendOverlay {
+    float: left;
+}
+
+.legendLabel {
+    padding-right: $dialogPadding;
+}
+
+.flotPointLabel {
+    font-weight: bold;
+}
+
+.flot-tick-label {
+    font-weight: normal;
+}
+
+.axisLabel {
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+}
+
+.yaxisLabel {
+    top: 50%;
+    left: -2rem;
+    transform: rotate(-90deg);
+    transform-origin: 0 0;
+}
+
+.xaxisLabel {
+    bottom: -2.5rem;
+    left: 50%;
+}
+
+.noteContainer {
+    border: 1px solid $lineColorMedium;
+    padding: $dialogPadding;
+    margin-bottom: $dialogPadding;
+}
+
+.noteTitle {
+    font-weight: bold;
+    margin-bottom: $dialogPadding;
+}
+
+.checkBoxContainer {
+    float: left;
+}
+
+.dialogTitleInfo {
+    font-weight: bold;
+}
+//////////////// course list
+.courses {
+    padding: 1.6rem;
+
+    .courses__available, .courses__not-available {
+        font-size: 1.4rem;
+
+        .course-list__container {
+            padding: 0;
+
+            .course-list__header, .course-list__item {
+                width: 100%;
+                line-height: 3.2rem;
+                display: flex;
+
+                .header__description, .item__description {
+                    flex: 3;
+                }
+
+                .header__number, .item__number {
+                    flex: 4;
+                }
+
+                .header__joiner, .item__joiner {
+                    flex: 1;
+                }
+
+                .header__appointment, .item__appointment {
+                    flex: 2;
+                }
+            }
+
+            .course-list__header {
+                border-bottom: 0.1rem solid $gray;
+            }
+
+            .course-list__item {
+                border-bottom: 0.1rem solid $lineColor;
+            }
+
+            .course-list__item {
+                .item__description {
+                    text-decoration: underline;
+                    cursor: pointer;
+                    font-weight: bold;
+                }
+
+                .list__item-label--display {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.gradingText {
+    flex: 1;
+    word-break: break-all;
+    min-height: 2.6rem;
+    margin: 0.4rem 2rem 0.4rem 0 !important;
+}
+
+.displayFlex {
+    width: 100%;
+    display: flex;
+}

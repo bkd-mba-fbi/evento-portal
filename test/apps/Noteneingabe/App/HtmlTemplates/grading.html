@@ -1,0 +1,183 @@
+﻿{{#if applyingValue}}
+    <div class="centerWrapper loadingWrapper">
+        <div class="middleWrapper">
+            <div class="loadingText">{{translate 'valueIsApplied'}}</div>
+            <div class="alignedContent loadingAnimation"></div>
+        </div>
+    </div>
+{{else}}
+
+    <div class="dialog">
+        <div class="container" style="width: 100%; max-height: 400px">
+
+            {{#each errorMsgs as |msg i|}}
+                <div class="d-block"
+                    style="padding: 5px 10px; margin: 6px 12px; background-color: #f6d7da; border: 1px solid #f5c6cb; border-radius: .25rem;">
+
+                    <button {{action 'dismissNotice' msg i}}
+                            style="float: right; clear: both; background-color: #721c24; color: #fff; border-radius: 10px">
+                        X
+                    </button>
+
+                    <h3 style="color: #721c24">{{msg.header}}</h3>
+
+                    <div class="validationErrorMessage" style="padding: 0.5rem; border-bottom: 0; display: inline-block; color: #721c24; max-width: calc(100% - 30px);">
+                        {{{coerce-whitespace msg}}}
+                    </div>
+
+                </div>
+            {{/each}}
+            
+        </div>
+
+        <div class="dialogBody grading">
+            <div class="formRow dialogTitleInfo">{{model.Event.Designation}}</div>
+            <div class="formRow">{{subscriptionCount}} {{translate 'subscriptions'}}</div>
+            <div class="content displayFlex">
+                {{#if model.Event.Scale.Designation}}
+                    <div class="gradingText">{{translate 'grade_scale'}} {{model.Event.Scale.Designation}}</div>
+                {{/if}}
+                {{#if model.Event.GradingScaleId}}
+                    <div class="not-mobile gradesActionButtons">
+                        <button class="btn-action btn-clearGrades" {{action 'triggerModalDialogPrompt' 'clearGrades'}}>{{translate 'deleteAllGrades'}}</button>
+                        <button class="btn-action btn-applyGrade" {{action 'triggerModalDialogPrompt' 'applyGrade'}}>{{translate 'setAsDefault'}}</button>
+                        {{#if model.IsUnregisteredStudentsEnabled}}
+                        <button class="btn-action btn-addUnregisteredStudent" {{action 'addUnregisteredStudent'}}>{{translate 'addUnregisteredStudent'}}</button>
+                        {{/if}}
+                        {{#if showExcelButton}}
+                        {{#context-menu-button id='btnExcelGradingList' icon='excel' forceClose='forceCloseExcel' right=true}}
+                        <a href="{{excelUrl}}" target="_blank">{{translate 'downloadExcelGradingList'}}</a>
+                        <div>
+                            {{translate 'uploadExcelGradingList'}}<br />
+                            {{input id='fluExcelGradingList' type="file"}}
+                            <button id="btnUploadExcelGradingList" type="button" {{action 'uploadExcel'}}>{{icon 'continue'}}</button>
+                        </div>
+                        {{/context-menu-button}}
+                        {{/if}}
+                    </div>
+                {{/if}}
+            </div>
+
+            {{#if model.hasNothingToShow}}
+                <div class="validationErrorMessage">
+                    {{translate 'gradingNothingToShow'}}
+                </div>
+            {{else}}
+
+            <div class="grading-options">
+                {{#if availableHeaders.data}}
+                    <div class="mobile table-options__buttons">
+                        {{#each availableHeaders.data as |item|}}
+                            <button {{action 'setSelectedColumn' item}} class="{{if item.isActive 'active' ''}} option-button">{{item.header}}</button>
+                        {{/each}}
+                    </div>
+                {{/if}}
+
+                {{#if model.Event.Scale}}
+                    <div class="mobile more-menus">
+                        <button class="grade_methods_container">
+                            <span id="grade_methods" class="material-icons md-24">more_vert</span>
+                        </button>
+                    </div>
+                {{/if}}
+            </div>
+
+            {{#fixed-header-table headerDetails=headerDetails class="dialogAccordionTable editTable gradigTable" calculateHeight=false currentSelecteIndex=currentHeaderIndex includeElementsAfterParentForCalculation='.dialogBlockFixed' noFixedHeader=true useCustomSort=true onSort='customTableSort'}}
+                <thead class="actual-header">
+                    <tr>
+                        {{#if hasSDsForDetailsView}}
+                            <th class="iconColumn">
+                                <div style="visibility: hidden;" class="collapseTriangle triangleCollapsed"></div>
+                            </th>
+                        {{/if}}
+                        <th class="iconColumn">
+                            <div style="visibility: hidden;">
+                                {{icon 'checkmark'}}
+                            </div>
+                        </th>
+                        <th initial-sort is-sortable data-sort-property="PersonFullname">{{translate 'name'}}</th>
+                        {{#if model.Event.Scale}}
+                            <th is-sortable data-sort-property="{{if scale.FreeGrading 'GradeValue' 'IdGrade'}}" class="{{unless availableHeaders.grade.isVisible 'hide-column' '' }}">{{translate 'grade'}}</th>
+
+                            {{#if model.Event.Scale.CommentsAllowed}}
+                                <th style="width: 46%" class="{{unless availableHeaders.comment.isVisible 'hide-column fix-width' '' }}">{{translate 'comment'}}</th>
+                            {{/if}}
+                        {{/if}}
+                        {{#each headerDetails as |header|}}
+                            <th class="{{unless header.isVisible 'hide-column' ''}}">{{header.VssBezeichnung}}</th>
+                        {{/each}}
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each model.GradingItems as |item|}}
+                        {{grading-item model=item columnVisibility=availableHeaders allSubscriptionDetails=model.SubscriptionDetails scale=model.Event.Scale hasADsForDetailsView=hasADsForDetailsView save='saveGradingItem' saveSubscriptionDetail='saveSubscriptionDetail' hadNothingToShow='gradingItemHadNothingToShow' isReadOnly=isReadOnly}}
+                    {{/each}}
+                </tbody>
+                {{/fixed-header-table}}
+                
+                {{unregistered-students currentHeaderId=currentHeaderId Event=model.Event eventId=model.Event.Id items=model.UnregisteredStudents allSubscriptionDetails=model.SubscriptionDetails scale=model.Event.Scale hasADsForDetailsView=hasADsForDetailsView hadNothingToShow='gradingItemHadNothingToShow' isReadOnly=isReadOnly }}
+            {{/if}}
+        </div>
+
+        <div class="dialogFooter">
+            {{#unless hasNothingToShow}}
+                <div class="buttonDiv">
+                    {{#if model.Event.Scale}}
+                        <button type="button" class="textButton" {{action 'continue'}}>
+                            {{#if isWaiting}}
+                            {{icon 'loadingAnimation'}}
+                            {{else}}
+                            <span class="material-icons">arrow_right_alt</span>
+                            {{/if}}
+                            <div>{{translate 'continueToStatistics'}}</div>
+                        </button>
+                    {{else}}
+                        <button type="button" class="textButton" {{action 'finish'}}>
+                            <span class="material-icons">arrow_right_alt</span>
+                            <div>{{translate 'finalizeGrading'}}</div>
+                        </button>
+                    {{/if}}
+                </div>
+                <div class="buttonDiv">
+                    <button type="button" class="textButton" {{action 'back'}}>
+                        <span class="material-icons reverse">arrow_right_alt</span>
+                        <div>{{translate 'backToGrading'}}</div>
+                    </button>
+                </div>
+            {{/unless}}
+        </div>
+    </div>
+    {{#if toggleModal}}
+        <div class="settings-overlay gradesActionPrompt">
+            {{#overlay-dialog  hideFooter=true  title=modalHeaderText hideClose=true}}
+            <div class="modal_container">
+                {{#if showDeleteNoteModal}}
+                    <div class="delete_notes">
+                        <div class="buttons">
+                            <button class="option-button" {{action 'cancelClicked'}}>{{translate 'cancel'}}</button>
+                            <button class="option-button active" {{action 'deleteAllGrades'}}>{{translate 'deleteAllGrades'}}</button>
+                        </div>
+                    </div>
+                {{/if}}
+                {{#if showDefaultNoteModal}}
+                    <div class="default_notes">
+                        <div class="content_body">
+                            <div>
+                                {{#if model.Event.Scale.FreeGrading}}
+                                    {{number-textbox value=applyToAllValue number=model.GradeValue minValue=model.Event.Scale.MinGrade maxValue=model.Event.Scale.MaxGrade}}
+                                {{else}}
+                                    {{combo-box value=applyToAllValue source=model.Event.Scale.Grades keyName="Id" valueName="Designation" }}
+                                {{/if}}
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <button class="option-button" {{action 'cancelClicked'}}>{{translate 'cancel'}}</button>
+                            <button class="option-button active" {{action 'setAsDefault'}}>{{translate 'setAsDefault'}}</button>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+            {{/overlay-dialog}}
+        </div>
+    {{/if}}
+{{/if}}

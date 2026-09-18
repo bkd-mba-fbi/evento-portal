@@ -1,0 +1,22 @@
+﻿<div class="errorContainer">
+    {{icon 'error401'}}
+    <h2 class="errorTitle">{{translate 'unauthorized'}}</h2>
+    <div>{{translate 'errorSorryMessage'}}</div>
+    <div>
+        {{#if model.isGet}}
+        {{translate 'noAccessToGetObject'}}
+        {{else if model.isPost}}
+        {{translate 'noAccessToCreateObject'}}
+        {{else if model.isPut}}
+        {{translate 'noAccessToChangeObject'}}
+        {{else if model.isDelete}}
+        {{translate 'noAccessToDeleteObject'}}
+        {{/if}}
+        
+    </div>
+    
+    {{#if model.message}}
+    <code class="dialogInfo">{{nl2br model.message}}</code>
+    {{/if}}
+
+</div>

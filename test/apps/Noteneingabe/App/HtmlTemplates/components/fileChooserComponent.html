@@ -1,0 +1,36 @@
+{{#if showFileInput}}
+        {{file-input accept=fileAccept autofocus=true action='chooseFile'}}
+        {{#if showConfirmButton}}
+            <button type="button" class="confirmButton" {{action 'confirmFile'}}>{{icon 'confirm'}}</button>
+        {{/if}}
+        <button type="button" class="cancelButton" {{action 'cancelFile'}}>{{icon 'close'}}</button>
+{{else}}
+    {{#if fileChosen}}
+        <div class="textIcon">
+            {{{fileIcon}}}
+            {{#if showModal}}
+            <button type="button" {{action 'showModalFile'}}>{{filename}}</button>
+            {{else}}
+            <a target="_blank" href="{{fileUrl}}">{{filename}}</a>
+            {{/if}}
+        </div>
+        {{#unless disabled}}
+            <button type="button" class="deleteButton" {{action 'deleteFile'}}>{{icon 'delete'}}</button>
+        {{/unless}}
+    {{/if}}
+    {{#unless disabled}}
+        {{#if fileChosen}}
+            {{#if addTextMerge}}
+            <button type="button" class="textButton" {{action 'addFile'}}>
+                {{icon 'upload'}}
+                <div>{{addTextMerge}}</div>
+            </button>
+            {{/if}}
+        {{else}}
+        <button type="button" class="textButton" {{action 'addFile'}}>
+            {{icon 'upload'}}
+            <div>{{addTextNew}}</div>
+        </button>
+        {{/if}}
+    {{/unless}}
+{{/if}}
