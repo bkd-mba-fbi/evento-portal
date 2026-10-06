@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <title>{{'APPTITLE'|translate}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="icon" sizes="64x64" href="./assets/icons/appicon.png">
+</head>
+
+<body>
+    <div id="fbi-root"></div>
+    <app-root singleModule="room-info-screen"></app-root>
+</div>
+
+
+</body>
+
+<script>
+    window._RoomReservationConfig = {
+    "tokenType": "urn:ietf:params:oauth:token-type:jwt-bearer",
+    "webBaseUrl": location.protocol + '//' + location.host + '/bstest/JSMODULES/Raumreservation/infoscreen.html',
+    "apiUrl": location.protocol + '//' + location.host + '/restApi',
+    "oauthUrl": location.protocol + '//' + location.host + '/OAuth',
+    "clientId": "Roomreservation",
+    "instanceId": "BsSCHE",
+    "appScope": "Public",
+    "useAutoLogin": false,
+    "useLanguageDetection": true,
+    "debug": false,
+    "availableLanguages": [
+    "de-CH",
+    "fr-CH"
+    ],
+    "copyright": "EFHG Evento Fachhochschulgremium",
+    "qrCodeBaseUrl": "",
+    "showRoomReservation": true,
+    "showDeviceReservation": true,
+    "language": "de-CH",
+    "initialPath": location.href.search('ressourceidra=3') > 0 ? 'devices' : ''
+    };
+    
+    </script>
+    <script src="embed.js"></script>
+    <script>
+        var root = document.getElementById('fbi-root');
+        var appRoot = document.getElementsByTagName('app-root')[0];
+        root.insertBefore(appRoot, null);
+          document.head.childNodes.forEach( element => {
+            if (element.nodeName === 'LINK') {
+    
+                if (element.href.search('bootstrap-clx.min.css') > 0) {
+                    element.href = element.href.replace('bootstrap-clx.min.css','fbi.css');
+                }
+                else if (element.href.search('JSModules/CSS/main.css') > 0) {
+                    element.remove();
+                }        
+            }
+            
+        });
+
+    </script>
+
+</html>
