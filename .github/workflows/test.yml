@@ -37,10 +37,15 @@ jobs:
           pnpm format:check
           pnpm lint
 
+      - name: Build application 🏭
+        run: |
+          pnpm build
+          VERSION="$(date -u +'%y.%m').$(git rev-parse --short=7 HEAD)"
+          sed -i "s/__APP_VERSION__/${VERSION}/g" dist/index.html dist/unrestricted/index.html
+
       - name: Cypress 🔬
         uses: cypress-io/github-action@v7
         with:
-          build: pnpm build
           start: npx http-server dist/ -p 3000 -s
           wait-on: http://localhost:3000
           config: baseUrl=http://localhost:3000
