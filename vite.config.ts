@@ -62,17 +62,29 @@ const commonPlugins = [
 ];
 
 /**
- * Returns the application version in the format `YY.MM.<short-sha>`,
- * or the value of the `APP_VERSION` environment variable if set.
+ * Returns the application version in the format
+ * `<short-sha> (dd.mm.YYYY HH:mm)` (build time in Swiss local time), or the
+ * value of the `APP_VERSION` environment variable if set.
  */
 function getAppVersion(): string {
   if (process.env.APP_VERSION) return process.env.APP_VERSION;
   try {
     const sha = execSync("git rev-parse --short=7 HEAD").toString().trim();
-    const now = new Date();
-    const year = String(now.getUTCFullYear()).slice(-2);
-    const month = String(now.getUTCMonth() + 1).padStart(2, "0");
-    return `${year}.${month}.${sha}`;
+    const parts = Object.fromEntries(
+      new Intl.DateTimeFormat("de-CH", {
+        timeZone: "Europe/Zurich",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      })
+        .formatToParts(new Date())
+        .map(({ type, value }) => [type, value]),
+    );
+    const { day, month, year, hour, minute } = parts;
+    return `${sha} (${day}.${month}.${year} ${hour}:${minute})`;
   } catch {
     return "";
   }

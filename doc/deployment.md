@@ -18,7 +18,7 @@ See [Git Workflow](./git.md) for the general branching concept and workflow.
 
 ### Application Version
 
-The deployed application version is displayed in the portal footer when hovering over the copyright notice. It has the format `YY.MM.<short-sha>` (e.g. `26.10.c61fbe2`) and is injected at build time as the `__APP_VERSION__` constant via Vite's [`define`](https://vite.dev/config/shared-options.html#define) option in [`vite.config.ts`](../vite.config.ts).
+The deployed application version is displayed in the portal footer when hovering over the copyright notice. It has the format `<short-sha> (dd.mm.YYYY HH:mm)` with the build time in Swiss local time (e.g. `c61fbe2 (15.10.2026 14:30)`) and is injected at build time as the `__APP_VERSION__` constant via Vite's [`define`](https://vite.dev/config/shared-options.html#define) option in [`vite.config.ts`](../vite.config.ts).
 
 The version can be overridden by setting the `APP_VERSION` environment variable when running `pnpm build`. On the development server (`pnpm dev`) no version is displayed.
 
