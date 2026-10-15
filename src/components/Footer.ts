@@ -32,7 +32,8 @@ export class Footer extends LitElement {
         justify-content: space-between;
       }
 
-      .copyright, .app-version {
+      .copyright,
+      .app-version {
         font-size: 0.8125rem;
         font-weight: 300;
         letter-spacing: 0.02rem;
