@@ -1,0 +1,21 @@
+﻿  /////////////////////////////////////////////////////////////////////////////
+ /////////////    DARK THEME     /////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+@import "../../_vars.scss";
+
+//colors
+$gray: #888;
+$gray1: #666;
+$gray2: #333;
+$windowColor: #191919; // the base background color for html, body and all dialogs
+$barColor: #333; // color of title bars
+$infoBgColor: #222233; // background of info panels
+$lineColor: $gray2; // used for table lines
+$lineColorMedium: $gray1; // used for label line, textbox border
+$lineColorDark: $gray; // used for table headlines
+$linkColor: #007acc;
+$overlayColor: rgba(80, 80, 100, 0.5);
+$overlayFallbackColor: #666688;
+$defaultShadow: rgba(125, 125, 125, 1);
+$fallbackShadow: #666 !default;
