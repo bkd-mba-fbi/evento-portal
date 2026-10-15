@@ -1,5 +1,6 @@
 // vite.config.js
 import basicSsl from "@vitejs/plugin-basic-ssl";
+import { execSync } from "child_process";
 import { resolve } from "path";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
@@ -60,7 +61,28 @@ const commonPlugins = [
   }),
 ];
 
-export default defineConfig({
+/**
+ * Returns the application version in the format `YY.MM.<short-sha>`,
+ * or the value of the `APP_VERSION` environment variable if set.
+ */
+function getAppVersion(): string {
+  if (process.env.APP_VERSION) return process.env.APP_VERSION;
+  try {
+    const sha = execSync("git rev-parse --short=7 HEAD").toString().trim();
+    const now = new Date();
+    const year = String(now.getUTCFullYear()).slice(-2);
+    const month = String(now.getUTCMonth() + 1).padStart(2, "0");
+    return `${year}.${month}.${sha}`;
+  } catch {
+    return "";
+  }
+}
+
+export default defineConfig(({ command }) => ({
+  define: {
+    // Only show the version in builds, not on the dev server
+    __APP_VERSION__: JSON.stringify(command === "build" ? getAppVersion() : ""),
+  },
   server: {
     port: 3000,
   },
@@ -73,4 +95,4 @@ export default defineConfig({
     },
   },
   plugins: process.env.SSL ? [...commonPlugins, basicSsl()] : commonPlugins,
-});
+}));

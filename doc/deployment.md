@@ -16,13 +16,11 @@ Here is an overview of the operation environments the _Evento Portal_ will be de
 
 See [Git Workflow](./git.md) for the general branching concept and workflow.
 
-### Application Version in the Footer
+### Application Version
 
-The application version is displayed in the portal footer when hovering over the copyright notice. The version is read from the `app-version` meta tag in [`index.html`](../index.html) and [`unrestricted/index.html`](../unrestricted/index.html).
+The deployed application version is displayed in the portal footer when hovering over the copyright notice. It has the format `YY.MM.<short-sha>` (e.g. `26.10.c61fbe2`) and is injected at build time as the `__APP_VERSION__` constant via Vite's [`define`](https://vite.dev/config/shared-options.html#define) option in [`vite.config.ts`](../vite.config.ts).
 
-The HTML files contain the `__APP_VERSION__` placeholder during development.
-The release workflows replace this placeholder with the automatically generated release version before deployment. If the placeholder has not been
-replaced, no version is displayed.
+The version can be overridden by setting the `APP_VERSION` environment variable when running `pnpm build`. On the development server (`pnpm dev`) no version is displayed.
 
 ### Development Environment
 
