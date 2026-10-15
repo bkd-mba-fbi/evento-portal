@@ -1,0 +1,30 @@
+﻿{{#accordion-navigation forceOpenActive=refreshNavigation openNavigation=openNavigation}}
+    {{#link-to 'personOverview'}}
+    <div class="textIcon">
+        {{icon 'person'}}
+        <h3>{{translate 'personalData'}}</h3>
+    </div>
+    {{/link-to}}
+    <div id="personNavigation" class="navigationContent" style="display: none;">
+        {{outlet 'person'}}
+    </div>
+    {{#link-to 'subscriptions'}}
+    <div class="textIcon">
+        {{icon 'subscription'}}
+        <h3>{{translate 'subscriptions'}}</h3>
+    </div>
+    {{/link-to}}
+    <div id="subscriptionNavigation" class="navigationContent" style="display: none;">
+        {{outlet 'subscriptions'}}
+    </div>
+    {{#link-to 'personalDataSheet'}}
+    <div class="textIcon">
+        {{icon 'personalDataSheet'}}
+        <h3>{{translate 'personalDataSheet'}}</h3>
+    </div>
+    {{/link-to}}
+<div id="personalDataSheetNavigation" class="navigationContent" style="display: none;">
+    {{outlet 'personalDataSheet'}}
+</div>
+{{outlet}}
+{{/accordion-navigation}}
