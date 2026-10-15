@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { localized, msg } from "@lit/localize";
@@ -39,12 +39,12 @@ export class Footer extends LitElement {
         word-spacing: 0.05rem;
       }
 
-      .footer-version {
-        margin-top: 0.25rem;
+      .app-version {
+        margin-left: 0.5rem;
         visibility: hidden;
       }
 
-      .copyright:hover .footer-version {
+      .copyright:hover .app-version {
         visibility: visible;
       }
 
@@ -121,21 +121,15 @@ export class Footer extends LitElement {
   }
 
   render() {
-    const appVersion = document
-      .querySelector('meta[name="app-version"]')
-      ?.getAttribute("content");
-
     return html`
       <footer role="contentinfo">
         <div class="copyright">
           ${msg("© Bildungs- und Kulturdirektion")}
-          <span class="copyright footer-version">
-            ${
-              appVersion && appVersion !== "__APP_VERSION__"
-                ? html`${appVersion}`
-                : ""
-            }
-          </span>
+          ${
+            __APP_VERSION__
+              ? html`<span class="app-version">${__APP_VERSION__}</span>`
+              : nothing
+          }
         </div>
         <div class="footer-nav">
           ${repeat(
