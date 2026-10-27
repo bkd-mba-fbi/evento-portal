@@ -1,0 +1,7 @@
+﻿<div id="divAddCommentaryTitle" class="dialogSubTitle">{{translate 'addCommentary'}}</div>
+<div id="divCommentaryTitle" class="dialogSubTitle" style="display: none;">{{translate 'commentary'}}</div>
+<div class="dialogElement">
+    {{textarea autofocus="autofocus" value=model.newCommentary disabled=disabled id="txtCommentary"}}
+    {{icon-button id="btnSaveCommentary" class="buttonRight" title=(translate 'save') action='postCommentary' icon='save' shortcut='Ctrl+S' isWorking=isWorking disabled=disabled}}
+</div>
+<div id="divCommentary" class="dialogElement"><pre>{{model.Commentary}}</pre></div>
