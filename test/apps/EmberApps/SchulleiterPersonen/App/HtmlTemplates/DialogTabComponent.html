@@ -1,0 +1,29 @@
+﻿{{#if HasSubstitute}}
+{{#link-to DialogType}}
+<div id="s{{DialogType}}" class="{{if isQuickTab 'dialogQuickTab' 'dialogTab'}}" title="{{Caption}}">
+    {{#if isQuickTab}}
+    {{Caption}}
+    {{else}}
+    {{ShortCaption}}
+    {{/if}}
+    {{#if hasRowCount}}
+    <br/>({{RowCount}})
+    {{/if}}
+</div>
+{{/link-to}}
+{{else}}
+{{#link-to 'dialog' model.DialogType}}
+<div id="s{{DialogType}}" class="{{if isQuickTab 'dialogQuickTab' 'dialogTab'}}" title="{{Caption}}">
+    {{#if isQuickTab}}
+        {{Caption}}
+    {{else}}
+        {{ShortCaption}}
+    {{/if}}
+    {{#unless isQuickTab}}
+    {{#if hasRowCount}}
+    <br />({{RowCount}})
+    {{/if}}
+    {{/unless}}
+</div>
+{{/link-to}}
+{{/if}}
