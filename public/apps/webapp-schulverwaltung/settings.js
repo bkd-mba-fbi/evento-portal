@@ -143,9 +143,9 @@ window.schulverwaltung.settings = {
     presenceControl: "LessonTeacherRole;TeacherRole;ClassTeacherRole",
     openAbsences: "LessonTeacherRole;ClassTeacherRole;TeacherRole",
     editAbsences:
-      "LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole,SchoolLeaderRole,DepartmentLeaderRole",
+      "LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole;SchoolLeaderRole;DepartmentLeaderRole",
     evaluateAbsences:
-      "LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole,SchoolLeaderRole,DepartmentLeaderRole",
+      "LessonTeacherRole;ClassTeacherRole;TeacherRole;AbsenceAdministratorRole;SchoolLeaderRole;DepartmentLeaderRole",
   },
 
   /**
