@@ -1,0 +1,75 @@
+<div class="form">
+    {{#if showValidationErrorMessage}}
+    <div class="validationErrorMessage" style="display: none;">{{validationErrorMessage}}</div>
+    {{/if}}
+
+    <div class="row">
+        <h4 class="rowTitle">{{title}}</h4>
+
+        {{#if showCompany}}
+        <div class="col6">
+            {{form-control fieldname="Company" value=model.address.Company label=(translate 'company') requiredFields=model.address.RequiredFields }}
+        </div>
+        <div class="col6">
+            {{form-control fieldname="Department" value=model.address.Department label=(translate 'department') requiredFields=model.address.RequiredFields }}
+        </div>
+        {{/if}}
+        <div class="col4">
+            {{form-control fieldname="FormOfAddress_Id" type="select" content=model.formsOfAddress optionValuePath="Key" optionLabelPath="Value" value=model.address.FormOfAddress_Id label=(translate 'formOfAddress') requiredFields=model.address.RequiredFields}}
+        </div>
+
+        <div class="col4">
+            {{form-control fieldname="FirstName" value=model.address.FirstName label=(translate 'firstName') requiredFields=model.address.RequiredFields}}
+        </div>
+
+        <div class="col4">
+            {{form-control fieldname="LastName" value=model.address.LastName label=(translate 'lastName') requiredFields=model.address.RequiredFields}}
+        </div>
+
+        <div class="col6">
+            {{form-control fieldname="AddressLine1" value=model.address.AddressLine1 label=(translate 'streetAndNumber') requiredFields=model.address.RequiredFields}}
+        </div>
+
+        <div class="col6">
+            {{form-control fieldname="AddressLine2" value=model.address.AddressLine2 label=(translate 'careOfPostBox') requiredFields=model.address.RequiredFields}}
+        </div>
+
+        <div class="col2">
+            {{form-control fieldname="Zip" value=model.address.Zip label=(translate 'zip') requiredFields=model.address.RequiredFields}}
+        </div>
+
+        <div class="col5">
+            {{form-control fieldname="Location" value=model.address.Location label=(translate 'location') requiredFields=model.address.RequiredFields}}
+        </div>
+
+        <div class="col5">
+            {{form-control fieldname='Country_Id' type="select" content=model.countries optionValuePath="Key" optionLabelPath="Value" value=model.address.Country_Id label=(translate 'country') requiredFields=model.address.RequiredFields}}
+        </div>
+
+        <div class="col12">
+            {{form-control fieldname='Remark' isMultiline=true value=model.address.Remark label=(translate 'comments') requiredFields=model.address.RequiredFields}}
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col12">
+            <div class="formControl">
+
+                <button id="buttonSave" class="textButton" type="button" {{action 'save'}}>
+                    {{#if isWorking}}
+                    {{icon 'loadingAnimation'}}
+                    {{else}}
+                    {{icon 'save'}}
+                    {{/if}}
+                    <div>{{translate 'save'}}</div>
+                </button>
+                <button class="textButton" type="button" {{action 'cancel'}}>
+                    {{icon 'close'}}
+                    <div>{{translate 'cancel'}}</div>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
